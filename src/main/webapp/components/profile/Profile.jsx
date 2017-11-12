@@ -4,7 +4,14 @@ import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 
 const Profile = ({profile}) => {
+
+  profile = {
+    firstname: 'Max',
+    lastname: 'Muster'
+  };
+
   const {firstname, lastname} = profile;
+
   return (
     <Grid container spacing={16} justify="center" style={{width: '100%'}}>
       <Grid item xs={12}>

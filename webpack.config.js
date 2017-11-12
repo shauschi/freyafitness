@@ -7,7 +7,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/main/webapp/index.html',
   filename: 'index.html',
   inject: 'body'
-})
+});
 
 process.env.NODE_ENV = 'development';
 
@@ -17,7 +17,8 @@ module.exports = {
   entry: "./src/main/webapp/index.js",
   devServer: {
     inline: true,
-    port: 3333
+    host: '212.227.174.51',
+    port: 8080
   },
   module: {
     loaders: [
