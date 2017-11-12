@@ -1,0 +1,104 @@
+{
+  "name": "stefanhauschildt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shauschi/stafanhauschildt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shauschi/stafanhauschildt/issues"
+  },
+  "homepage": "https://github.com/shauschi/stafanhauschildt#readme",
+  "dependencies": {
+    "babel-plugin-react-css-modules": "^3.0.0",
+    "babel-preset-react-app": "^3.1.0",
+    "material-ui": "^1.0.0-beta.17",
+    "material-ui-icons": "^1.0.0-beta.17",
+    "moment": "^2.19.1",
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-icons": "^2.2.7",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-swipeable-routes": "^0.3.0",
+    "react-swipeable-views": "^0.12.10",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-thunk": "^2.2.0",
+    "typeface-roboto": "0.0.29"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-jest": "^21.2.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-react-html-attrs": "^2.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-react-hmre": "^1.1.1",
+    "enzyme": "^3.1.0",
+    "eslint": "^4.10.0",
+    "html-webpack-plugin": "^2.30.1",
+    "jest": "^21.2.1",
+    "jest-enzyme": "^4.0.1",
+    "jest-fetch-mock": "^1.3.3",
+    "jsdom": "^11.3.0",
+    "jsdom-global": "^3.0.2",
+    "promise": "^8.0.1",
+    "react-dev-utils": "^4.2.1",
+    "react-test-renderer": "^16.0.0",
+    "redux-logger": "^3.0.6",
+    "webpack": "^3.7.1",
+    "webpack-dev-server": "^2.9.2"
+  },
+  "jest": {
+    "automock": false,
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/jest/setup.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.js?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).js?(x)"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
+    }
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react",
+      "react-app"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  }
+}
