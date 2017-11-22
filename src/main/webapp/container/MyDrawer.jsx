@@ -41,7 +41,7 @@ class MyDrawer extends Component {
             <MenuLink to='/about/stall' label='Der Stall' icon={<FaInfo/>} onClick={toggleDrawer}/>
             <MenuLink to='/agb' label='AGB' icon={<FaHandGrabO/>} onClick={toggleDrawer}/>
             <MenuLink to='/impressum' label='Impressum' icon={<FaInfo/>} onClick={toggleDrawer}/>
-            <MenuLink to='/signout' label='Sign-Out' icon={<FaSignOut/>} onClick={toggleDrawer}/>
+            <MenuLink to='/logout' label='Logout' icon={<FaSignOut/>} onClick={toggleDrawer}/>
           </List>
         </div>
       </div>

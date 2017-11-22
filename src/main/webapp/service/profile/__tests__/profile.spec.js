@@ -1,8 +1,8 @@
-import {getProfil} from '../';
+import {getProfile} from '../';
 
 describe('profile Service', () => {
 
-  describe('getJobList', () => {
+  describe('getProfile', () => {
     const profile = {firstname: 'Testee', lastname: 'Foobar'};
     let apiCall;
 
@@ -12,8 +12,8 @@ describe('profile Service', () => {
     });
 
     it('should extract response body', async () => {
-      const result = await getProfil();
-      expect(apiCall).toHaveBeenCalledWith('http://127.0.0.1:8080/profile');
+      const result = await getProfile(123456);
+      expect(apiCall).toHaveBeenCalledWith('http://127.0.0.1:8080/profile/123456');
       expect(result).toEqual(profile);
     });
 
@@ -21,7 +21,7 @@ describe('profile Service', () => {
       fetch.mockResponse('', {status: 404});
 
       try {
-        await getProfil()
+        await getProfile();
       } catch (err) {
         expect(err.message).toEqual('Response not ok');
       }

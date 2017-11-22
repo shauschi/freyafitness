@@ -1,22 +1,23 @@
 {
-  "name": "stefanhauschildt",
+  "name": "freyafitness",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot"
+    "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot",
+    "dev": "webpack-dev-server --progress --inline --hot --config webpack.dev.config.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shauschi/stafanhauschildt.git"
   },
-  "author": "",
+  "author": "Stefan Hauschildt",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shauschi/stafanhauschildt/issues"
+    "url": "https://github.com/shauschi/freyafitness/issues"
   },
-  "homepage": "https://github.com/shauschi/stafanhauschildt#readme",
+  "homepage": "https://github.com/shauschi/freyafitness#readme",
   "dependencies": {
     "babel-plugin-react-css-modules": "^3.0.0",
     "babel-preset-react-app": "^3.1.0",

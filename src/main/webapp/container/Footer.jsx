@@ -104,7 +104,7 @@ class Footer extends Component {
       case '/profile':
         return 2;
       default:
-        return -1;
+        return false;
     }
   }
 

@@ -9,7 +9,7 @@ import {lightBlue, green, red} from 'material-ui/colors';
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
-import {Home, FooComponent, ProfileSite} from "./sites";
+import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
 import {actions as drawerActions} from './model/drawer';
 
 import init from './model/init.js';
@@ -89,9 +89,13 @@ class App extends Component {
             <MyDrawer classes={classes} toggleDrawer={actions.toggleDrawer} {...drawer}/>
             <div style={{marginTop: '56px', marginBottom: '46px', position: 'relative', height: 'calc(100% - 102px)'}}>
               <Switch>
-                <Redirect from='/index' to='/' />
-                <Redirect from='/home' to='/' />
-                <Route exact path='/signout' render={() => <div>Du bist jetzt wieder draußen</div>} />
+                <Redirect from='/index' to='/'/>
+                <Redirect from='/home' to='/'/>
+                <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>} />
+                <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>} />
+                <Route exact path='/agb' render={() => <Agb {...this.props}/>} />
+                <Route exact path='/impressum' render={() => <Impressum{...this.props}/>} />
+                <Route exact path='/logout' render={() => <Logout {...this.props}/>} />
                 <SwipeableRoutes
                   resistance
                   style={{height: '100%'}}
@@ -101,7 +105,7 @@ class App extends Component {
                   }}
                 >
                   <Route exact path='/' render={() => <Home {...this.props}/>} />
-                  <Route exact path='/courses/all' render={() => <FooComponent {...this.props}/>} />
+                  <Route exact path='/courses/all' render={() => <Courses {...this.props}/>} />
                   <Route exact path='/profile' render={() => <ProfileSite pending={profile.pending} profile={profile.current}/>} />
                 </SwipeableRoutes>
               </Switch>

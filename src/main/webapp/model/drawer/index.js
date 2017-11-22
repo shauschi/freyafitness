@@ -1,5 +1,4 @@
 import {createActions, handleActions} from 'redux-actions';
-import {getJobList} from '../../service/profile';
 
 const initialState = {
   open: false
