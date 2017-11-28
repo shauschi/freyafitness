@@ -24,7 +24,7 @@ pipeline {
     }
     stage('build docker') {
       steps {
-        sh '.\gardlew buildDocker'
+        sh 'gradlew buildDocker'
       }
     }
     stage('start container') {
