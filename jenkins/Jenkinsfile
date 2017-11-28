@@ -7,6 +7,11 @@ pipeline {
     
   }
   stages {
+    stage('checkout') {
+      steps {
+        checkout sc,
+      }
+    }
     stage('npm install') {
       steps {
         sh 'npm install'
@@ -24,7 +29,7 @@ pipeline {
     }
     stage('build docker') {
       steps {
-        sh 'gradlew buildDocker'
+        sh './gradlew buildDocker'
       }
     }
     stage('start container') {
