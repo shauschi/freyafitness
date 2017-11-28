@@ -19,7 +19,17 @@ pipeline {
     }
     stage('build production') {
       steps {
-        sh 'npm test'
+        sh 'npm run build:production'
+      }
+    }
+    stage('build docker') {
+      steps {
+        sh '.\gardlew buildDocker'
+      }
+    }
+    stage('start container') {
+      steps {
+        sh 'docker run stefanhauschildt/freyafitness'
       }
     }
   }
