@@ -7,11 +7,6 @@ pipeline {
     
   }
   stages {
-    stage('checkout') {
-      steps {
-        checkout sc,
-      }
-    }
     stage('npm install') {
       steps {
         sh 'npm install'
