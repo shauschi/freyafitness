@@ -1,4 +1,4 @@
-package de.freyaheine.fitness;
+package freya.fitness;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

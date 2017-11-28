@@ -25,7 +25,7 @@ const Profile = ({profile}) => {
       <Grid item xs={12} md={6}>
         <TextField id="lastname" label="Nachname" value={lastname} fullWidth/>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={12}>
         <TextField id="mail" label="E-Mail" value={""} fullWidth/>
       </Grid>
     </Grid>

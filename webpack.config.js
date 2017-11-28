@@ -1,7 +1,11 @@
-const debug = process.env.NODE_ENV !== "production";
+'use strict';
+process.env.NODE_ENV = 'production';
+
 const webpack = require('webpack');
 const path = require('path');
 
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/main/webapp/index.html',
@@ -9,17 +13,15 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: 'body'
 });
 
-process.env.NODE_ENV = 'development';
-
 module.exports = {
   context: __dirname,
-  devtool: debug ? "inline-sourcemap" : null,
-  entry: "./src/main/webapp/index.js",
-  devServer: {
-    inline: true,
-    host: '212.227.174.51',
-    port: 8080
-  },
+  devtool: 'eval',
+  entry: './src/main/webapp/index.js',
+  plugins: [
+    new CleanWebpackPlugin([__dirname + '/src/main/resources/static/']),
+    new UglifyJSPlugin(),
+    HtmlWebpackPluginConfig
+  ],
   module: {
     loaders: [
       {
@@ -27,17 +29,14 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015', 'react-hmre'],
+          presets: ['react', 'es2015'],
           plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
         }
       }
     ]
   },
   output: {
-    path: __dirname + "/dist/",
-    filename: "bundle.min.js"
-  },
-  plugins: [
-    HtmlWebpackPluginConfig
-  ],
+    path: __dirname + '/src/main/resources/static/',
+    filename: 'bundle.min.js'
+  }
 };

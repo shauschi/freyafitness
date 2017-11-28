@@ -1,4 +1,4 @@
-package de.freyaheine.fitness.controller;
+package freya.fitness.controller;
 
 public class ProfileDto {
 

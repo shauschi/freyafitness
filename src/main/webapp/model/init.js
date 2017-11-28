@@ -1,5 +1,5 @@
 import {fetchProfile} from './profile';
 
 export default (dispatch) => {
-  dispatch(fetchProfile(/* TODO ID setzen */));
+  dispatch(fetchProfile(10 /* TODO ID setzen */));
 }
