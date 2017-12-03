@@ -33,7 +33,18 @@ pipeline {
         }
       }
       steps {
-        sh './gradlew build docker'
+        sh './gradlew build'
+      }
+    }
+    stage('docker test') {
+      agent {
+        docker {
+          image 'openjdk:8-jdk-alpine'
+          args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+      }
+      steps {
+        sh 'docker ps -a'
       }
     }
   }
