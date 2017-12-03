@@ -47,7 +47,7 @@ task buildDocker(type: Docker) {
         from jar
         rename {'app.jar'}
     }
-    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
+    entryPoint(['java', '-jar', '/app.jar'])
     // exposePort(8080)
 }
 
