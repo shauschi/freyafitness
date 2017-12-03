@@ -27,7 +27,7 @@ pipeline {
     }
     stage('build docker') {
       agent {
-        docker { image 'java:oracle-java8' }
+        docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
         sh './gradlew buildDocker'
@@ -35,7 +35,7 @@ pipeline {
     }
     stage('start container') {
       agent {
-        docker { image 'java:oracle-java8' }
+        docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
         sh 'docker run stefanhauschildt/freyafitness'
