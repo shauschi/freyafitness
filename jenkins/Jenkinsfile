@@ -30,7 +30,7 @@ pipeline {
         docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
-        sh './gradlew bootRun'
+        sh './gradlew build docker'
       }
     }
   }
