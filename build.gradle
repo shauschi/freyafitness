@@ -21,10 +21,10 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 jar {
-	baseName = 'freaya-fitness'
+	baseName = 'freaya.fitness'
 	version =  '0.0.1'
 }
-group = 'freya.fitness'
+group = 'stefanhauschildt'
 sourceCompatibility = 1.8
 targetCompatibility  = 1.8
 
