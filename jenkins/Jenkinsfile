@@ -1,33 +1,42 @@
 pipeline {
-  agent {
-    docker {
-      args '-p 3000:3000'
-      image 'node:9-alpine'
-    }
-    
-  }
+  agent none
   stages {
     stage('npm install') {
+      agent {
+        docker { image 'node:9-alpine' }
+      }
       steps {
         sh 'npm install'
       }
     }
     stage('npm test') {
+      agent {
+        docker { image 'node:9-alpine' }
+      }
       steps {
         sh 'npm test'
       }
     }
     stage('build production') {
+      agent {
+        docker { image 'node:9-alpine' }
+      }
       steps {
         sh 'npm run build:production'
       }
     }
     stage('build docker') {
+      agent {
+        docker { image 'openjdk-8u111-alpine' }
+      }
       steps {
         sh './gradlew buildDocker'
       }
     }
     stage('start container') {
+      agent {
+        docker { image 'openjdk-8u111-alpine' }
+      }
       steps {
         sh 'docker run stefanhauschildt/freyafitness'
       }
