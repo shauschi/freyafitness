@@ -35,11 +35,11 @@ pipeline {
             }
           }
           steps {
-            sh './gradlew build docker'
+            sh './gradlew build docker dockerRun'
           }
         }
         stage('dockerfile test') {
-          agent { dockerfile true }
+          agent { dockerfile { dir 'docker' } }
           steps {
             sh 'echo "use dockerfile"'
           }
