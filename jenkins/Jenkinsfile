@@ -37,9 +37,7 @@ pipeline {
       }
     }
     stage('docker test') {
-      agent {
-        dockerfile {true}
-      }
+      agent { dockerfile true }
       steps {
         sh 'echo "use dockerfile"'
       }
