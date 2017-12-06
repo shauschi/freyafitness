@@ -26,11 +26,9 @@ pipeline {
       }
     }
     stage('build docker') {
-      stage('dockerfile test') {
-        agent { dockerfile { dir 'docker' } }
-        steps {
-          sh 'echo "use dockerfile"'
-        }
+      agent { dockerfile { dir 'docker' } }
+      steps {
+        sh 'echo "use dockerfile"'
       }
     }
   }
