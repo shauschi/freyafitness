@@ -26,23 +26,10 @@ pipeline {
       }
     }
     stage('build docker') {
-      parallel {
-        stage('gradlew build docker') {
-          agent {
-            docker {
-              image 'openjdk:8-jdk-alpine'
-              args '-v /var/run/docker.sock:/var/run/docker.sock'
-            }
-          }
-          steps {
-            sh './gradlew build docker dockerRun'
-          }
-        }
-        stage('dockerfile test') {
-          agent { dockerfile { dir 'docker' } }
-          steps {
-            sh 'echo "use dockerfile"'
-          }
+      stage('dockerfile test') {
+        agent { dockerfile { dir 'docker' } }
+        steps {
+          sh 'echo "use dockerfile"'
         }
       }
     }
