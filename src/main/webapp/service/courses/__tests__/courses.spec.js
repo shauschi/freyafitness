@@ -1,4 +1,5 @@
 import {getCourses} from '../';
+import moment from 'moment';
 
 describe('courses Service', () => {
 
@@ -16,7 +17,7 @@ describe('courses Service', () => {
 
     it('should extract response body', async () => {
       const result = await getCourses();
-      expect(apiCall).toHaveBeenCalledWith(__API__ + '/courses/');
+      expect(apiCall).toHaveBeenCalledWith(__API__ + '/courses/' + moment().format('YYYY-MM-DD'));
       expect(result).toEqual(courses);
     });
 

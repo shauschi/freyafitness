@@ -2,6 +2,7 @@ package freya.fitness.controller;
 
 import freya.fitness.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class CourseController {
 
   @RequestMapping("/{from}")
   @ResponseBody
-  public List<CourseDto> getCourses(@PathParam("from") final String from) {
+  public List<CourseDto> getCourses(@PathVariable("from") final String from) {
     return courseService.getCourses(LocalDate.parse(from), null)
         .stream()
         .map(CourseDto::new)
@@ -30,8 +31,8 @@ public class CourseController {
   @RequestMapping("/{from}/to/{to}")
   @ResponseBody
   public List<CourseDto> getCourses(
-      @PathParam("from") final String from,
-      @PathParam("to") final String to) {
+      @PathVariable("from") final String from,
+      @PathVariable("to") final String to) {
     return courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to))
         .stream()
         .map(CourseDto::new)

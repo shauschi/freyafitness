@@ -20,8 +20,8 @@ public class CourseService {
     final Course c4 = mock(103L, date, LocalTime.of(20, 30), CourseType.HARD);
     final Course c5 = mock(103L, date.plusDays(1), LocalTime.of(19, 30), CourseType.SOFT);
     final Course c6 = mock(103L, date.plusDays(1), LocalTime.of(20, 30), CourseType.NORMAL);
-    final Course c7 = mock(103L, to, LocalTime.of(19, 30), CourseType.SOFT);
-    final Course c8 = mock(103L, to, LocalTime.of(20, 30), CourseType.NORMAL);
+    final Course c7 = mock(103L, date.plusDays(3), LocalTime.of(19, 30), CourseType.SOFT);
+    final Course c8 = mock(103L, date.plusDays(3), LocalTime.of(20, 30), CourseType.NORMAL);
     return Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8);
   }
 
