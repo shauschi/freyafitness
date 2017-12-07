@@ -10,7 +10,7 @@ import {FaCloud, FaBolt, FaInfo, FaBattery1} from 'react-icons/lib/fa';
 import {green, red} from 'material-ui/colors';
 
 
-class SimpleDialog extends React.Component {
+class SimpleDialog extends Component {
   handleRequestClose = () => {
     this.props.onRequestClose(this.props.selectedValue);
   };

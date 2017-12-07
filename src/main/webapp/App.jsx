@@ -12,7 +12,7 @@ import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
 
 import {actions as drawerActions} from './model/drawer';
-import {fetchCourses} from './model/courses';
+import {fetchCourses, showCourseDetails, hideCourseDetails} from './model/courses';
 import init from './model/init.js';
 
 const theme = createMuiTheme({
@@ -106,7 +106,15 @@ class App extends Component {
                   }}
                 >
                   <Route exact path='/' render={() => <Home {...this.props}/>} />
-                  <Route exact path='/courses/all' render={() => <Courses pending={courses.pending} courses={courses.data}/>} />
+                  <Route exact path='/courses/all' render={() =>
+                    <Courses
+                      pending={courses.pending}
+                      courses={courses.data}
+                      showCourseDetails={actions.showCourseDetails}
+                      hideCourseDetails={actions.hideCourseDetails}
+                      courseDetails={courses.courseDetails}
+                    />}
+                  />
                   <Route exact path='/profile' render={() => <ProfileSite pending={profile.pending} profile={profile.data}/>} />
                 </SwipeableRoutes>
               </Switch>
@@ -132,7 +140,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     toggleDrawer: drawerActions.toggleDrawer,
-    fetchCourses: fetchCourses
+    fetchCourses: fetchCourses,
+    showCourseDetails: showCourseDetails,
+    hideCourseDetails: hideCourseDetails
   }, dispatch),
   dispatch
 });

@@ -17,7 +17,7 @@ describe('courses Service', () => {
 
     it('should extract response body', async () => {
       const result = await getCourses();
-      expect(apiCall).toHaveBeenCalledWith(__API__ + '/courses/' + moment().format('YYYY-MM-DD'));
+      expect(apiCall).toHaveBeenCalledWith(__API__ + '/courses/from/' + moment().format('YYYY-MM-DD'));
       expect(result).toEqual(courses);
     });
 

@@ -1,9 +1,13 @@
-package freya.fitness.domain;
+package freya.fitness.controller;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import freya.fitness.domain.Course;
+import freya.fitness.domain.CourseType;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Course {
+public class CourseDetailDto {
 
   private Long id;
   private CourseType type;
@@ -11,6 +15,15 @@ public class Course {
   private Long minutes;
   private String instructor;
   private List<String> attendees;
+
+  public CourseDetailDto(Course course) {
+    this.id = course.getId();
+    this.type = course.getType();
+    this.start = course.getStart();
+    this.minutes = course.getMinutes();
+    this.instructor = course.getInstructor();
+    this.attendees = course.getAttendees();
+  }
 
   public Long getId() {
     return id;
@@ -28,6 +41,7 @@ public class Course {
     this.type = type;
   }
 
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   public LocalDateTime getStart() {
     return start;
   }

@@ -22,7 +22,7 @@ module.exports = {
     new UglifyJSPlugin(),
     HtmlWebpackPluginConfig,
     new webpack.DefinePlugin({
-      __API__: "'http://93.90.205.170:9000'"
+      __API__: "'http://www.fitness.freya:9000'"
     })
   ],
   module: {

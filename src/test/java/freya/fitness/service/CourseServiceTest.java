@@ -27,6 +27,6 @@ public class CourseServiceTest {
     List<Course> result = testee.getCourses(start, end);
 
     // TODO Tests anpassen, sobald die Repository-Schicht angebunden ist
-    assertThat(result.size(), equalTo(8));
+    assertThat(result.size(), equalTo(12));
   }
 }

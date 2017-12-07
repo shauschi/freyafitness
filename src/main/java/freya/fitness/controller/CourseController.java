@@ -19,7 +19,15 @@ public class CourseController {
   @Autowired
   private CourseService courseService;
 
-  @RequestMapping("/{from}")
+  @RequestMapping("/{id}")
+  @ResponseBody
+  public CourseDetailDto getCourseDetails(@PathVariable("id") final Long id) {
+    return courseService.getCourse(id)
+        .map(CourseDetailDto::new)
+        .orElse(null);
+  }
+
+  @RequestMapping("/from/{from}")
   @ResponseBody
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
     return courseService.getCourses(LocalDate.parse(from), null)
@@ -28,7 +36,7 @@ public class CourseController {
         .collect(Collectors.toList());
   }
 
-  @RequestMapping("/{from}/to/{to}")
+  @RequestMapping("from/{from}/to/{to}")
   @ResponseBody
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
