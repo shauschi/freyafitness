@@ -24,10 +24,10 @@ const MyAppBar = (props) => {
         </Hidden>
         <Typography type="title" color="inherit" style={{flex: 1}}>
           <Hidden smUp>
-            Freya Fitness
+            freya.fitness
           </Hidden>
           <Hidden xsDown>
-            Willkommen beim Fitnessprogramm mit Freya
+            freya.fitness - Willkommen beim Fitnessprogramm mit Freya
           </Hidden>
         </Typography>
       </Toolbar>

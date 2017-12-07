@@ -37,6 +37,9 @@ module.exports = {
     filename: "bundle.min.js"
   },
   plugins: [
-    HtmlWebpackPluginConfig
+    HtmlWebpackPluginConfig,
+    new webpack.DefinePlugin({
+      __API__: "'http://127.0.0.1:9000'"
+    })
   ],
 };

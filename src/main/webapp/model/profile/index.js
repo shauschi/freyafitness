@@ -3,7 +3,7 @@ import {getProfile} from '../../service/profile';
 
 const initialState = {
   pending: false,
-  current: undefined
+  data: undefined
 };
 
 export const actions = createActions({
@@ -30,7 +30,7 @@ export default handleActions({
     {}, state, {pending: true}
   ),
   [actions.profile.load.success]: (state, {payload}) => Object.assign(
-    {}, state, {current: payload, pending: false}
+    {}, state, {data: payload, pending: false}
   ),
   [actions.profile.load.error]: (state, {payload}) => Object.assign(
     {}, state, {pending: false, errorMessage: payload.message}

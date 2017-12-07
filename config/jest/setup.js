@@ -7,3 +7,4 @@ global.Headers = Headers;
 global.Request = Request;
 
 global.fetch = require('jest-fetch-mock');
+global.__API__ = 'backend';

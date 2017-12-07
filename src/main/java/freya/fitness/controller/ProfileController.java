@@ -8,9 +8,10 @@ import javax.websocket.server.PathParam;
 import java.io.IOException;
 
 @RestController
+@RequestMapping("/profile")
 public class ProfileController {
 
-  @RequestMapping("/profile/{id}")
+  @RequestMapping("/{id}")
   @ResponseBody
   public ProfileDto getProfil(@PathParam("id") Long id) throws IOException {
     ProfileDto profile = new ProfileDto();

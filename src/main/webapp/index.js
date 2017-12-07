@@ -7,7 +7,7 @@ import store from './model';
 import moment from 'moment';
 import deLocale from 'moment/locale/de';
 
-moment.locale("de-de", deLocale);
+moment.locale("de", deLocale);
 
 ReactDOM.render(
   <Provider store={store}>
