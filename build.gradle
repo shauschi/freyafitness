@@ -37,6 +37,8 @@ repositories {
 
 
 dependencies {
+  compileOnly('org.projectlombok:lombok:1.16.18')
+
   compile('org.springframework.boot:spring-boot-starter')
   compile('org.springframework.boot:spring-boot-starter-web')
   compile("org.springframework.boot:spring-boot-starter-thymeleaf")
