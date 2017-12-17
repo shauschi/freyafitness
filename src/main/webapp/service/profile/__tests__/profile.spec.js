@@ -13,7 +13,7 @@ describe('profile Service', () => {
 
     it('should extract response body', async () => {
       const result = await getProfile(123456);
-      expect(apiCall).toHaveBeenCalledWith('http://127.0.0.1:8080/profile/123456');
+      expect(apiCall).toHaveBeenCalledWith(__API__ + '/profile/123456');
       expect(result).toEqual(profile);
     });
 

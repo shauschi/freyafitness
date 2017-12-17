@@ -20,7 +20,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin([__dirname + '/src/main/resources/static/']),
     new UglifyJSPlugin(),
-    HtmlWebpackPluginConfig
+    HtmlWebpackPluginConfig,
+    new webpack.DefinePlugin({
+      __API__: "'http://www.freya.fitness:9000'"
+    })
   ],
   module: {
     loaders: [

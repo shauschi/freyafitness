@@ -10,8 +10,9 @@ import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
-import {actions as drawerActions} from './model/drawer';
 
+import {actions as drawerActions} from './model/drawer';
+import {fetchCourses, showCourseDetails, hideCourseDetails} from './model/courses';
 import init from './model/init.js';
 
 const theme = createMuiTheme({
@@ -80,14 +81,14 @@ class App extends Component {
   };
 
   render() {
-    const {classes, drawer, actions, profile} = this.props;
+    const {classes, drawer, actions, profile, courses} = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div className={classes.root}>
           <div className={classes.appFrame}>
             <MyAppBar classes={classes} toggleDrawer={actions.toggleDrawer} {...this.props}/>
             <MyDrawer classes={classes} toggleDrawer={actions.toggleDrawer} {...drawer}/>
-            <div style={{marginTop: '56px', marginBottom: '46px', position: 'relative', height: 'calc(100% - 102px)'}}>
+            <div style={{marginTop: '56px', marginBottom: '46px', position: 'relative', width: '100%', height: 'calc(100% - 102px)'}}>
               <Switch>
                 <Redirect from='/index' to='/'/>
                 <Redirect from='/home' to='/'/>
@@ -105,8 +106,16 @@ class App extends Component {
                   }}
                 >
                   <Route exact path='/' render={() => <Home {...this.props}/>} />
-                  <Route exact path='/courses/all' render={() => <Courses {...this.props}/>} />
-                  <Route exact path='/profile' render={() => <ProfileSite pending={profile.pending} profile={profile.current}/>} />
+                  <Route exact path='/courses/all' render={() =>
+                    <Courses
+                      pending={courses.pending}
+                      courses={courses.data}
+                      showCourseDetails={actions.showCourseDetails}
+                      hideCourseDetails={actions.hideCourseDetails}
+                      courseDetails={courses.courseDetails}
+                    />}
+                  />
+                  <Route exact path='/profile' render={() => <ProfileSite pending={profile.pending} profile={profile.data}/>} />
                 </SwipeableRoutes>
               </Switch>
             </div>
@@ -124,11 +133,17 @@ App.contextTypes = {
 
 const mapStateToProps = state => ({
   profile: state.profile,
-  drawer: state.drawer
+  drawer: state.drawer,
+  courses: state.courses,
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators({toggleDrawer: drawerActions.toggleDrawer}, dispatch),
+  actions: bindActionCreators({
+    toggleDrawer: drawerActions.toggleDrawer,
+    fetchCourses: fetchCourses,
+    showCourseDetails: showCourseDetails,
+    hideCourseDetails: hideCourseDetails
+  }, dispatch),
   dispatch
 });
 

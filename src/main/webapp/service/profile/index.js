@@ -1,10 +1,5 @@
-const baseURL = 'http://127.0.0.1:8080';
+'use strict';
+import {GET} from '../HttpUtils';
+const baseURL = __API__;
 
-export const getProfile = id => {
-  return fetch(`${baseURL}/profile/${id}`)
-    .then(response => {
-      if (!response.ok)
-        throw new Error('Response not ok');
-      return response.json()
-    });
-};
+export const getProfile = id => GET(`${baseURL}/profile/${id}`);
