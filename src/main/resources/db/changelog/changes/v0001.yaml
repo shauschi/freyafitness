@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: bigserial
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: type
+              type: varchar(255)
+          - column:
+              name: start
+              type: timestamp
+          - column:
+              name: minutes
+              type: int
+          - column:
+              name: instructor
+              type: varchar(255)
+          schemaName: public
+          tableName: course
