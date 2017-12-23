@@ -5,14 +5,12 @@ import compose from 'recompose/compose';
 import {withStyles} from 'material-ui/styles';
 import withWidth from 'material-ui/utils/withWidth';
 import Paper from 'material-ui/Paper';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import {withRouter} from 'react-router-dom'
 
 import {FaHome, FaCalendar, FaUser} from 'react-icons/lib/fa';
 
-import blue from 'material-ui/colors/blue';
+import {blueGrey} from 'material-ui/colors';
 
 const drawerWidth = 240;
 
@@ -112,7 +110,7 @@ class Footer extends Component {
     const {classes} = this.props;
     const value = this.fromRoute();
     return (
-      <Paper style={{position: 'absolute', bottom: '0px', left: '0px', width: '100%'}}>
+      <Paper style={{position: 'absolute', bottom: '0px', left: '0px', width: '100%', background: blueGrey.A700}}>
         <div className={classes.appBar2}>
           <Tabs
             value={value}

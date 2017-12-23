@@ -8,10 +8,12 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import Hidden from 'material-ui/Hidden';
 
+import {blueGrey, amber} from 'material-ui/colors';
+
 const MyAppBar = (props) => {
   const {classes, toggleDrawer} = props;
   return (
-    <AppBar color="primary" className={classes.appBar}>
+    <AppBar style={{background: blueGrey.A700}} className={classes.appBar}>
       <Toolbar>
         <Hidden smUp>
           <IconButton
@@ -22,9 +24,9 @@ const MyAppBar = (props) => {
             <MenuIcon/>
           </IconButton>
         </Hidden>
-        <Typography type="title" color="inherit" style={{flex: 1}}>
+        <Typography type="title" style={{flex: 1, textAlign: 'center'}}>
           <Hidden smUp>
-            freya.fitness
+            <span style={{color: 'white'}}>freya</span><span style={{color: amber.A400}}>.fitness</span>
           </Hidden>
           <Hidden xsDown>
             freya.fitness - Willkommen beim Fitnessprogramm mit Freya

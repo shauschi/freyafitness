@@ -7,12 +7,16 @@ import Dialog, {
   DialogTitle,
   DialogContent,
   DialogActions,
-  DialogContentText,
   withMobileDialog
 } from 'material-ui/Dialog';
+import Slide from 'material-ui/transitions/Slide';
 import {TypeMapper} from ".";
 
 import {FaCalendarO, FaClockO, FaMapMarker, FaUser} from 'react-icons/lib/fa';
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 class CourseDetails extends Component {
   handleRequestClose = () => {
@@ -35,6 +39,7 @@ class CourseDetails extends Component {
       <Dialog
         onRequestClose={this.handleRequestClose}
         fullScreen={fullScreen}
+        transition={Transition}
         open={courseDetails.show}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
