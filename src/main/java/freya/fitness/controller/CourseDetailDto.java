@@ -6,6 +6,7 @@ import freya.fitness.domain.CourseType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -25,6 +26,6 @@ public class CourseDetailDto {
     this.start = course.getStart();
     this.minutes = course.getMinutes();
     this.instructor = course.getInstructor();
-    this.attendees = course.getAttendees();
+    this.attendees = new ArrayList<>();
   }
 }
