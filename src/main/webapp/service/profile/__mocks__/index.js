@@ -1,4 +1,4 @@
-export const getProfile = (param) => {
+export const getOwnProfile = (param) => {
   return new Promise((resolve, reject) => {
     if(param instanceof Error) {
       reject(param)

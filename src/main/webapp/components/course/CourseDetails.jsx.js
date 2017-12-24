@@ -9,10 +9,14 @@ import Dialog, {
   DialogActions,
   withMobileDialog
 } from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import Collapse from 'material-ui/transitions/Collapse';
+import Avatar from 'material-ui/Avatar';
 import Slide from 'material-ui/transitions/Slide';
 import {TypeMapper} from ".";
 
-import {FaCalendarO, FaClockO, FaMapMarker, FaUser} from 'react-icons/lib/fa';
+import {FaCalendarO, FaClockO, FaMapMarker, FaUser, FaUserMd} from 'react-icons/lib/fa';
+import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -23,8 +27,30 @@ class CourseDetails extends Component {
     this.props.onRequestClose();
   };
 
+  signInOut = () => {
+    const id = this.props.courseDetails.details.id;
+    if (this.props.courseDetails.details.signedIn) {
+      this.props.signOut(id);
+      this.handleRequestClose();
+    } else {
+      this.props.signIn(id);
+      this.handleRequestClose();
+    }
+  };
+
   render() {
-    const {courseDetails, fullScreen} = this.props;
+    const {courses, courseDetails, fullScreen, toggleAttendeeList} = this.props;
+    const details = courseDetails.details || {};
+    const {id} = details;
+    let course = {};
+    for (const c of courses) {
+      if (c.id === id){
+        course = c;
+        break;
+      }
+    }
+    const {start, minutes, attendees = [], instructor, maxParticipants, signedIn} = course;
+
     let title = 'pending...';
     if (!courseDetails.show || courseDetails.pending) {
       return null;
@@ -33,6 +59,19 @@ class CourseDetails extends Component {
     if (!courseDetails.pending && courseDetails.show) {
       const {label, icon, color} = TypeMapper[courseDetails.details.type];
       title = (<span><span>{icon({color: color, style: {marginRight: '12px'}})}</span><span>{label}</span></span>);
+    }
+
+    const attendeesList = [];
+    for (const idx in attendees) {
+      const user = attendees[idx];
+      attendeesList.push(
+        <ListItem key={idx}>
+          <Avatar>
+            <FaUser />
+          </Avatar>
+          <ListItemText inset primary={user.firstname + " " + user.lastname} />
+        </ListItem>
+      );
     }
 
     return (
@@ -48,19 +87,33 @@ class CourseDetails extends Component {
               <ListItemIcon>
                 <FaCalendarO/>
               </ListItemIcon>
-              <ListItemText
-                inset
-                primary={moment(courseDetails.details.start).format('DD.MM.YYYY HH:mm')}
-                secondary={moment(courseDetails.details.start).format('dddd')}/>
+              <div>
+                <TextField id="start_date" label="Kursdatum" type="date" value={moment(start).format("YYYY-MM-DD")} fullWidth/>
+              </div>
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <FaClockO/>
               </ListItemIcon>
-              <ListItemText
-                inset
-                primary={courseDetails.details.minutes + " Minuten"}
-                secondary={"Mit " + courseDetails.details.instructor}/>
+              <div>
+                <TextField id="start_time" label="Kursbeginn" type="time" value={moment(start).format("hh:mm")} fullWidth/>
+              </div>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <FaClockO/>
+              </ListItemIcon>
+              <div>
+                <TextField id="end_time" label="Kursende" type="time" value={moment(start).add(minutes, 'minute').format("hh:mm")} fullWidth/>
+              </div>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <FaUserMd/>
+              </ListItemIcon>
+              <div>
+                <TextField id="instructor" label="Kursleiter" value={instructor.firstname + " " + instructor.lastname} fullWidth/>
+              </div>
             </ListItem>
             <ListItem>
               <ListItemIcon>
@@ -75,19 +128,33 @@ class CourseDetails extends Component {
               <ListItemIcon>
                 <FaUser/>
               </ListItemIcon>
+              <div>
+                <TextField id="maxParticipanrs" label="Max. Kursteilnehmer" type="number" value={maxParticipants} fullWidth/>
+              </div>
+            </ListItem>
+            <ListItem button onClick={toggleAttendeeList}>
+              <ListItemIcon>
+                <FaUser/>
+              </ListItemIcon>
               <ListItemText
                 inset
-                primary={"Teilnemer"}
-                secondary={courseDetails.details.attendees.concat(', ')}/>
+                primary={"Teilnemer (" + attendees.length + ")"}/>
+              {courseDetails.showAttendees ? <MdExpandLess /> : <MdExpandMore />}
             </ListItem>
+
+            <Collapse component="li" in={courseDetails.showAttendees} timeout="auto" unmountOnExit>
+              <List disablePadding>
+                {attendeesList}
+              </List>
+            </Collapse>
           </List>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleRequestClose} color="primary">
             Schließen
           </Button>
-          <Button onClick={this.handleRequestClose} color="primary">
-            Teilnehmen
+          <Button onClick={this.signInOut} color="primary">
+            {signedIn ? "Abmelden" : "Teilnehmen"}
           </Button>
         </DialogActions>
       </Dialog>

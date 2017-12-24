@@ -12,7 +12,7 @@ import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
 
 import {actions as drawerActions} from './model/drawer';
-import {fetchCourses, showCourseDetails, hideCourseDetails} from './model/courses';
+import {fetchCourses, showCourseDetails, hideCourseDetails, toggleAttendeeList, signIn, signOut} from './model/courses';
 import init from './model/init.js';
 
 const theme = createMuiTheme({
@@ -113,6 +113,9 @@ class App extends Component {
                       showCourseDetails={actions.showCourseDetails}
                       hideCourseDetails={actions.hideCourseDetails}
                       courseDetails={courses.courseDetails}
+                      toggleAttendeeList={actions.toggleAttendeeList}
+                      signIn={actions.signIn}
+                      signOut={actions.signOut}
                     />}
                   />
                   <Route exact path='/profile' render={() => <ProfileSite pending={profile.pending} profile={profile.data}/>} />
@@ -142,7 +145,10 @@ const mapDispatchToProps = dispatch => ({
     toggleDrawer: drawerActions.toggleDrawer,
     fetchCourses: fetchCourses,
     showCourseDetails: showCourseDetails,
-    hideCourseDetails: hideCourseDetails
+    hideCourseDetails: hideCourseDetails,
+    toggleAttendeeList: toggleAttendeeList,
+    signIn: signIn,
+    signOut: signOut
   }, dispatch),
   dispatch
 });

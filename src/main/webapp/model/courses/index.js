@@ -1,10 +1,10 @@
 import {createActions, handleActions} from 'redux-actions';
-import {getCourses, getCourseDetails} from '../../service/courses';
+import {getCourses, getCourseDetails, signIn as signInApiCall, signOut as signOutApiCall} from '../../service/courses';
 
 const initialState = {
   pending: false,
   data: [],
-  courseDetails: {show: false}
+  courseDetails: {show: false, showAttendees: false}
 };
 
 export const actions = createActions({
@@ -17,8 +17,19 @@ export const actions = createActions({
     COURSE_DETAILS: {
       SHOW: undefined,
       HIDE: undefined,
+      TOGGLE_ATTENDEE_LIST: undefined,
       PENDING: undefined,
       SUCCESS: details => details,
+      ERROR: error => error
+    },
+    SIGN_IN: {
+      PENDING: undefined,
+      SUCCESS: course => course,
+      ERROR: error => error
+    },
+    SIGN_OUT: {
+      PENDING: undefined,
+      SUCCESS: course => course,
       ERROR: error => error
     }
   }
@@ -49,6 +60,40 @@ export const hideCourseDetails = () => {
   }
 };
 
+export const toggleAttendeeList = () => {
+  return dispatch => dispatch(actions.courses.courseDetails.toggleAttendeeList());
+};
+
+export const signIn = courseId => {
+  return dispatch => {
+    dispatch(actions.courses.signIn.pending());
+    return signInApiCall(courseId)
+      .then(course => dispatch(actions.courses.signIn.success(course)))
+      .catch(error => dispatch(actions.courses.signIn.error(error)));
+  }
+};
+
+export const signOut = courseId => {
+  return dispatch => {
+    dispatch(actions.courses.signOut.pending());
+    return signOutApiCall(courseId)
+      .then(course => dispatch(actions.courses.signOut.success(course)))
+      .catch(error => dispatch(actions.courses.signOut.error(error)));
+  }
+};
+
+const updateCourse = (state, course) => {
+  console.warn("UPDATE COURSE", course);
+  const courses = Object.assign({}, state.data);
+  for (const idx in courses) {
+    if (courses[idx].id === course.id) {
+      const coursesChanged = Object.assign([], state.data, {[idx]: course});
+      return Object.assign({}, state, {data: coursesChanged});
+    }
+  }
+  return state;
+};
+
 export default handleActions({
   [actions.courses.load.pending]: (state, {payload}) => Object.assign(
     {}, state, {pending: true}
@@ -73,5 +118,11 @@ export default handleActions({
   ),
   [actions.courses.courseDetails.error]: (state, {payload}) => Object.assign(
     {}, state, {courseDetails: Object.assign({}, state.courseDetails, {pending: false, errorMessage: payload.message})}
-  )
+  ),
+  [actions.courses.courseDetails.toggleAttendeeList]: (state, {payload}) => Object.assign(
+    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {showAttendees: !state.courseDetails.showAttendees})}
+  ),
+  [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
+  [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload)
+
 }, initialState);

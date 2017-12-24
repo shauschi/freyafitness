@@ -3,9 +3,14 @@ package freya.fitness.controller;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import freya.fitness.domain.Course;
 import freya.fitness.domain.CourseType;
+import freya.fitness.domain.User;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 public class CourseDto {
@@ -14,14 +19,22 @@ public class CourseDto {
   private CourseType type;
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime start;
-  private Long minutes;
-  private String instructor;
+  private Integer minutes;
+  private ProfileDto instructor;
+  private boolean signedIn;
+  private Integer maxParticipants;
+  private List<ProfileDto> attendees;
 
-  public CourseDto(Course course) {
+  public CourseDto(User user, Course course) {
+    Long userId = user.getId();
     this.id = course.getId();
     this.type = course.getType();
     this.start = course.getStart();
     this.minutes = course.getMinutes();
-    this.instructor = course.getInstructor();
+    User instructor = course.getInstructor();
+    this.instructor = new ProfileDto(instructor);
+    this.signedIn = course.getAttendees().stream().anyMatch(attendee -> Objects.equals(attendee.getId(), userId));
+    this.maxParticipants = course.getMaxParticipants();
+    this.attendees = course.getAttendees().stream().map(ProfileDto::new).collect(Collectors.toList());
   }
 }

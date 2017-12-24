@@ -1,14 +1,12 @@
 package freya.fitness.service;
 
 import freya.fitness.domain.Course;
-import freya.fitness.domain.CourseType;
+import freya.fitness.domain.User;
 import freya.fitness.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -29,4 +27,27 @@ public class CourseService {
     return courseRepository.findByStartBetween(from.atStartOfDay(), to.atTime(23, 59, 59));
   }
 
+  public Course update(Course course) {
+    return courseRepository.save(course);
+  }
+
+  public Course addUserToCourse(User user, Long courseId) {
+    Optional<Course> courseOpt = getCourse(courseId);
+    if (courseOpt.isPresent()) {
+      Course course = courseOpt.get();
+      course.getAttendees().add(user);
+      return update(course);
+    }
+    return null;
+  }
+
+  public Course removeUserFromCourse(User user, Long courseId) {
+    Optional<Course> courseOpt = getCourse(courseId);
+    if (courseOpt.isPresent()) {
+      Course course = courseOpt.get();
+      course.getAttendees().remove(user);
+      return update(course);
+    }
+    return null;
+  }
 }

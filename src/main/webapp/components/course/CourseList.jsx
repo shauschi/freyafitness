@@ -18,9 +18,6 @@ const compareCourseByStartDate = (c1, c2) => {
 const CourseList = ({courses, showCourseDetails}) => {
   const elements = [];
   courses.sort(compareCourseByStartDate);
-
-  console.warn("SORTED", courses);
-
   let lastFormatted = undefined;
   for (const idx in courses) {
     const course = courses[idx];

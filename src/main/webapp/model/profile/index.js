@@ -1,5 +1,5 @@
 import {createActions, handleActions} from 'redux-actions';
-import {getProfile} from '../../service/profile';
+import {getOwnProfile} from '../../service/profile';
 
 const initialState = {
   pending: false,
@@ -16,10 +16,10 @@ export const actions = createActions({
   }
 });
 
-export const fetchProfile = (filterOptions) => {
+export const fetchOwnProfile = (filterOptions) => {
   return dispatch => {
     dispatch(actions.profile.load.pending())
-    return getProfile(filterOptions)
+    return getOwnProfile(filterOptions)
       .then(profile => dispatch(actions.profile.load.success(profile)))
       .catch(error => dispatch(actions.profile.load.error(error)))
   }
