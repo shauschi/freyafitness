@@ -19,6 +19,7 @@ export const actions = createActions({
       HIDE: undefined,
       TOGGLE_ATTENDEE_LIST: undefined,
       TOGGLE_EDIT_COURSE: undefined,
+      ON_COURSE_DETAILS_CHANGE: (id, value) => ({id: id, value: value}),
       PENDING: undefined,
       SUCCESS: details => details,
       ERROR: error => error
@@ -69,6 +70,10 @@ export const toggleEditCourse = () => {
   return dispatch => dispatch(actions.courses.courseDetails.toggleEditCourse());
 };
 
+export const onCourseDetailsChange = (id, value) => {
+  return dispatch => dispatch(actions.courses.courseDetails.onCourseDetailsChange(id, value));
+};
+
 export const signIn = courseId => {
   return dispatch => {
     dispatch(actions.courses.signIn.pending());
@@ -88,7 +93,6 @@ export const signOut = courseId => {
 };
 
 const updateCourse = (state, course) => {
-  console.warn("UPDATE COURSE", course);
   const courses = Object.assign({}, state.data);
   for (const idx in courses) {
     if (courses[idx].id === course.id) {
@@ -129,6 +133,10 @@ export default handleActions({
   ),
   [actions.courses.courseDetails.toggleEditCourse]: (state, {payload}) => Object.assign(
     {}, state, {courseDetails: Object.assign({}, state.courseDetails, {edit: !state.courseDetails.edit})}
+  ),
+  [actions.courses.courseDetails.onCourseDetailsChange]: (state, {payload}) => Object.assign(
+    {}, state, {courseDetails: Object.assign({}, state.courseDetails,
+      {details: Object.assign({}, state.courseDetails.details, {[payload.id]: payload.value})})}
   ),
   [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload)

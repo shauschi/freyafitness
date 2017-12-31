@@ -26,7 +26,7 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-const Row = ({icon, id, label, type, value, endAdornment, readonly}) => {
+const Row = ({icon, id, label, type, value, endAdornment, onChange, readonly}) => {
   return (
     <ListItem>
       <ListItemIcon>
@@ -37,6 +37,7 @@ const Row = ({icon, id, label, type, value, endAdornment, readonly}) => {
         <Input id={id} type={type}
                endAdornment={endAdornment}
                value={value}
+               onChange={event => onChange(event.target.value)}
                disabled={readonly}/>
       </FormControl>
     </ListItem>
@@ -61,6 +62,12 @@ const getAttendeeList = attendees => {
 
 class CourseDetails extends Component {
   handleRequestClose = () => {
+    // TODO unsaved changes?
+    this.props.onRequestClose();
+  };
+
+  handleRequestSave = () => {
+    // TODO onRequestSave
     this.props.onRequestClose();
   };
 
@@ -76,7 +83,7 @@ class CourseDetails extends Component {
   };
 
   render() {
-    const {courses, courseDetails, fullScreen, toggleAttendeeList, toggleEditCourse} = this.props;
+    const {courses, courseDetails, fullScreen, toggleAttendeeList, toggleEditCourse, onCourseDetailsChange} = this.props;
     const details = courseDetails.details || {};
     const {id} = details;
     const readonly = !courseDetails.edit;
@@ -87,7 +94,7 @@ class CourseDetails extends Component {
         break;
       }
     }
-    const {start, minutes, attendees = [], instructor, maxParticipants, signedIn} = course;
+    const {start, minutes, attendees = [], instructor, maxParticipants, signedIn} = details;
 
     let title = 'pending...';
     if (!courseDetails.show || courseDetails.pending) {
@@ -121,14 +128,27 @@ class CourseDetails extends Component {
         <DialogContent>
           <List>
             <Row id="start_date" label="Kursdatum" type="date" value={moment(start).format("YYYY-MM-DD")}
-                 readonly={readonly} icon={<FaCalendarO/>}/>
-            <Row id="start_time" label="Kursbeginn" type="time" value={moment(start).format("hh:mm")}
-                 readonly={readonly} icon={<FaClockO/>}/>
+                 readonly={readonly}
+                 onChange={value => {
+                   const date = moment(value, "YYYY-MM-DD");
+                   const newStart = moment(start).set({'year': date.year(), 'month': date.month(), 'day': date.day()});
+                   onCourseDetailsChange('start', newStart.format('YYYY-MM-DD HH:mm:ss'));
+                 }}
+                 icon={<FaCalendarO/>}/>
+            <Row id="start_time" label="Kursbeginn" type="time" value={moment(start).format("HH:mm")}
+                 readonly={readonly}
+                 onChange={value => {
+                   const time = moment(value, "HH:mm");
+                   const newStart = moment(start).set({'hour': time.hour(), 'minute': time.minute()});
+                   onCourseDetailsChange('start', newStart.format('YYYY-MM-DD HH:mm:ss'));
+                 }}
+                 icon={<FaClockO/>}/>
             <Row id="duration" label="Dauer" type="number" value={minutes}
                  endAdornment={<InputAdornment position="end">Minuten</InputAdornment>}
-                 readonly={readonly} icon={<FaClockO/>}/>
+                 readonly={readonly} onChange={value => onCourseDetailsChange('minutes', Number.parseInt(value))}
+                 icon={<FaClockO/>}/>
             <Row id="instructor" label="Kursleitung" value={instructor.firstname + " " + instructor.lastname}
-                 readonly={readonly} icon={<FaUserMd/>}/>
+                 readonly={true} onChange={value => onCourseDetailsChange('instructor')} icon={<FaUserMd/>}/>
             <ListItem>
               <ListItemIcon>
                 <FaMapMarker/>
@@ -139,7 +159,8 @@ class CourseDetails extends Component {
                 secondary={"irgendwo in Toppenstedt"}/>
             </ListItem>
             <Row id="maxParticipanrs" label="Max. Kursteilnehmer" type="number" value={maxParticipants}
-                 readonly={readonly} icon={<FaUser/>}/>
+                 readonly={readonly}
+                 onChange={value => onCourseDetailsChange('maxParticipants', Number.parseInt(value))} icon={<FaUser/>}/>
             <ListItem button onClick={toggleAttendeeList}>
               <ListItemIcon>
                 <FaUser/>
@@ -158,16 +179,16 @@ class CourseDetails extends Component {
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleRequestClose} color="primary">
-            Schließen
-          </Button>
+          {readonly ?
+            (<Button onClick={this.handleRequestClose} color="primary">Schließen</Button>) :
+            (<Button onClick={this.handleRequestSave} color="primary">Speichern</Button>)}
           <Button onClick={this.signInOut} color="primary">
             {signedIn ? "Abmelden" : "Teilnehmen"}
           </Button>
         </DialogActions>
       </Dialog>
     );
-  }
+  };
 }
 
 export default withMobileDialog()(CourseDetails);
