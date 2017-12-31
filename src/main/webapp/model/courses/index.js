@@ -4,7 +4,7 @@ import {getCourses, getCourseDetails, signIn as signInApiCall, signOut as signOu
 const initialState = {
   pending: false,
   data: [],
-  courseDetails: {show: false, showAttendees: false}
+  courseDetails: {show: false, showAttendees: false, edit: false}
 };
 
 export const actions = createActions({
@@ -18,6 +18,7 @@ export const actions = createActions({
       SHOW: undefined,
       HIDE: undefined,
       TOGGLE_ATTENDEE_LIST: undefined,
+      TOGGLE_EDIT_COURSE: undefined,
       PENDING: undefined,
       SUCCESS: details => details,
       ERROR: error => error
@@ -62,6 +63,10 @@ export const hideCourseDetails = () => {
 
 export const toggleAttendeeList = () => {
   return dispatch => dispatch(actions.courses.courseDetails.toggleAttendeeList());
+};
+
+export const toggleEditCourse = () => {
+  return dispatch => dispatch(actions.courses.courseDetails.toggleEditCourse());
 };
 
 export const signIn = courseId => {
@@ -121,6 +126,9 @@ export default handleActions({
   ),
   [actions.courses.courseDetails.toggleAttendeeList]: (state, {payload}) => Object.assign(
     {}, state, {courseDetails: Object.assign({}, state.courseDetails, {showAttendees: !state.courseDetails.showAttendees})}
+  ),
+  [actions.courses.courseDetails.toggleEditCourse]: (state, {payload}) => Object.assign(
+    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {edit: !state.courseDetails.edit})}
   ),
   [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload)

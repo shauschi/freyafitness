@@ -5,7 +5,7 @@ import {CourseDetails, CourseList} from './../components/course';
 
 class Courses extends Component {
   render() {
-    const {courses, showCourseDetails, hideCourseDetails, courseDetails, toggleAttendeeList, signIn, signOut} = this.props;
+    const {courses, showCourseDetails, hideCourseDetails, courseDetails, toggleAttendeeList, toggleEditCourse, signIn, signOut} = this.props;
     return (
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
         <CourseDetails
@@ -13,6 +13,7 @@ class Courses extends Component {
           courseDetails={courseDetails}
           onRequestClose={hideCourseDetails}
           toggleAttendeeList={toggleAttendeeList}
+          toggleEditCourse={toggleEditCourse}
           signIn={signIn}
           signOut={signOut}
         />

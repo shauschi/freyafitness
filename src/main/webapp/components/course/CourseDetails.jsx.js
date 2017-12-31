@@ -1,26 +1,63 @@
 'use strict';
 import React, {Component} from 'react';
 import moment from 'moment';
+import Typography from 'material-ui/Typography';
 import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
+import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Dialog, {
-  DialogTitle,
   DialogContent,
   DialogActions,
+  DialogTitle,
   withMobileDialog
 } from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
+import {FormControl} from 'material-ui/Form';
+import Input, {InputLabel, InputAdornment} from 'material-ui/Input';
 import Collapse from 'material-ui/transitions/Collapse';
 import Avatar from 'material-ui/Avatar';
 import Slide from 'material-ui/transitions/Slide';
 import {TypeMapper} from ".";
 
-import {FaCalendarO, FaClockO, FaMapMarker, FaUser, FaUserMd} from 'react-icons/lib/fa';
+import {FaCalendarO, FaClockO, FaMapMarker, FaUser, FaUserMd, FaClose, FaPencil, FaEye} from 'react-icons/lib/fa';
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
+import {blueGrey} from 'material-ui/colors';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
+
+const Row = ({icon, id, label, type, value, endAdornment, readonly}) => {
+  return (
+    <ListItem>
+      <ListItemIcon>
+        {icon}
+      </ListItemIcon>
+      <FormControl>
+        <InputLabel htmlFor={id}>{label}</InputLabel>
+        <Input id={id} type={type}
+               endAdornment={endAdornment}
+               value={value}
+               disabled={readonly}/>
+      </FormControl>
+    </ListItem>
+  );
+};
+
+const getAttendeeList = attendees => {
+  const attendeesList = [];
+  for (const idx in attendees) {
+    const user = attendees[idx];
+    attendeesList.push(
+      <ListItem key={idx}>
+        <Avatar>
+          <FaUser/>
+        </Avatar>
+        <ListItemText inset primary={user.firstname + " " + user.lastname}/>
+      </ListItem>
+    );
+  }
+  return attendeesList;
+};
 
 class CourseDetails extends Component {
   handleRequestClose = () => {
@@ -39,12 +76,13 @@ class CourseDetails extends Component {
   };
 
   render() {
-    const {courses, courseDetails, fullScreen, toggleAttendeeList} = this.props;
+    const {courses, courseDetails, fullScreen, toggleAttendeeList, toggleEditCourse} = this.props;
     const details = courseDetails.details || {};
     const {id} = details;
+    const readonly = !courseDetails.edit;
     let course = {};
     for (const c of courses) {
-      if (c.id === id){
+      if (c.id === id) {
         course = c;
         break;
       }
@@ -60,19 +98,7 @@ class CourseDetails extends Component {
       const {label, icon, color} = TypeMapper[courseDetails.details.type];
       title = (<span><span>{icon({color: color, style: {marginRight: '12px'}})}</span><span>{label}</span></span>);
     }
-
-    const attendeesList = [];
-    for (const idx in attendees) {
-      const user = attendees[idx];
-      attendeesList.push(
-        <ListItem key={idx}>
-          <Avatar>
-            <FaUser />
-          </Avatar>
-          <ListItemText inset primary={user.firstname + " " + user.lastname} />
-        </ListItem>
-      );
-    }
+    const attendeesList = getAttendeeList(attendees);
 
     return (
       <Dialog
@@ -80,41 +106,29 @@ class CourseDetails extends Component {
         fullScreen={fullScreen}
         transition={Transition}
         open={courseDetails.show}>
-        <DialogTitle>{title}</DialogTitle>
+        <DialogTitle disableTypography
+                     style={{color: 'white', background: blueGrey.A700, display: 'flex', padding: '4px 24px'}}>
+          <IconButton style={{color: 'white'}} onClick={this.handleRequestClose} aria-label="Close">
+            <FaClose/>
+          </IconButton>
+          <Typography type="title" style={{color: 'white', flex: 1, textAlign: 'center', padding: '14px 0'}}>
+            {readonly ? 'Kurs betrachten' : 'Kurs bearbeiten'}
+          </Typography>
+          <IconButton style={{color: 'white'}} onClick={toggleEditCourse}>
+            {readonly ? <FaPencil/> : <FaEye/>}
+          </IconButton>
+        </DialogTitle>
         <DialogContent>
           <List>
-            <ListItem>
-              <ListItemIcon>
-                <FaCalendarO/>
-              </ListItemIcon>
-              <div>
-                <TextField id="start_date" label="Kursdatum" type="date" value={moment(start).format("YYYY-MM-DD")} fullWidth/>
-              </div>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <FaClockO/>
-              </ListItemIcon>
-              <div>
-                <TextField id="start_time" label="Kursbeginn" type="time" value={moment(start).format("hh:mm")} fullWidth/>
-              </div>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <FaClockO/>
-              </ListItemIcon>
-              <div>
-                <TextField id="end_time" label="Kursende" type="time" value={moment(start).add(minutes, 'minute').format("hh:mm")} fullWidth/>
-              </div>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <FaUserMd/>
-              </ListItemIcon>
-              <div>
-                <TextField id="instructor" label="Kursleiter" value={instructor.firstname + " " + instructor.lastname} fullWidth/>
-              </div>
-            </ListItem>
+            <Row id="start_date" label="Kursdatum" type="date" value={moment(start).format("YYYY-MM-DD")}
+                 readonly={readonly} icon={<FaCalendarO/>}/>
+            <Row id="start_time" label="Kursbeginn" type="time" value={moment(start).format("hh:mm")}
+                 readonly={readonly} icon={<FaClockO/>}/>
+            <Row id="duration" label="Dauer" type="number" value={minutes}
+                 endAdornment={<InputAdornment position="end">Minuten</InputAdornment>}
+                 readonly={readonly} icon={<FaClockO/>}/>
+            <Row id="instructor" label="Kursleitung" value={instructor.firstname + " " + instructor.lastname}
+                 readonly={readonly} icon={<FaUserMd/>}/>
             <ListItem>
               <ListItemIcon>
                 <FaMapMarker/>
@@ -124,14 +138,8 @@ class CourseDetails extends Component {
                 primary={"Kuhstall"}
                 secondary={"irgendwo in Toppenstedt"}/>
             </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <FaUser/>
-              </ListItemIcon>
-              <div>
-                <TextField id="maxParticipanrs" label="Max. Kursteilnehmer" type="number" value={maxParticipants} fullWidth/>
-              </div>
-            </ListItem>
+            <Row id="maxParticipanrs" label="Max. Kursteilnehmer" type="number" value={maxParticipants}
+                 readonly={readonly} icon={<FaUser/>}/>
             <ListItem button onClick={toggleAttendeeList}>
               <ListItemIcon>
                 <FaUser/>
@@ -139,7 +147,7 @@ class CourseDetails extends Component {
               <ListItemText
                 inset
                 primary={"Teilnemer (" + attendees.length + ")"}/>
-              {courseDetails.showAttendees ? <MdExpandLess /> : <MdExpandMore />}
+              {courseDetails.showAttendees ? <MdExpandLess/> : <MdExpandMore/>}
             </ListItem>
 
             <Collapse component="li" in={courseDetails.showAttendees} timeout="auto" unmountOnExit>

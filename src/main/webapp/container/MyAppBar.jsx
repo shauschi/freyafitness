@@ -24,12 +24,12 @@ const MyAppBar = (props) => {
             <MenuIcon/>
           </IconButton>
         </Hidden>
-        <Typography type="title" style={{flex: 1, textAlign: 'center'}}>
-          <Hidden smUp>
-            <span style={{color: 'white'}}>freya</span><span style={{color: amber.A400}}>.fitness</span>
-          </Hidden>
+        <Typography type="title" style={{left: 0, position: 'absolute', width: '100%', textAlign: 'center'}}>
+          <span style={{color: 'white'}}>freya</span>
+          <span style={{color: '#03a9f4'}}>.</span>
+          <span style={{color: amber.A400}}>fitness</span>
           <Hidden xsDown>
-            freya.fitness - Willkommen beim Fitnessprogramm mit Freya
+            <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
           </Hidden>
         </Typography>
       </Toolbar>

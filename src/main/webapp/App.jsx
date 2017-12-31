@@ -12,7 +12,7 @@ import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
 
 import {actions as drawerActions} from './model/drawer';
-import {fetchCourses, showCourseDetails, hideCourseDetails, toggleAttendeeList, signIn, signOut} from './model/courses';
+import {fetchCourses, showCourseDetails, hideCourseDetails, toggleAttendeeList, toggleEditCourse, signIn, signOut} from './model/courses';
 import init from './model/init.js';
 
 const theme = createMuiTheme({
@@ -114,6 +114,7 @@ class App extends Component {
                       hideCourseDetails={actions.hideCourseDetails}
                       courseDetails={courses.courseDetails}
                       toggleAttendeeList={actions.toggleAttendeeList}
+                      toggleEditCourse={actions.toggleEditCourse}
                       signIn={actions.signIn}
                       signOut={actions.signOut}
                     />}
@@ -147,6 +148,7 @@ const mapDispatchToProps = dispatch => ({
     showCourseDetails: showCourseDetails,
     hideCourseDetails: hideCourseDetails,
     toggleAttendeeList: toggleAttendeeList,
+    toggleEditCourse: toggleEditCourse,
     signIn: signIn,
     signOut: signOut
   }, dispatch),
