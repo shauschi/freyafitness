@@ -16,6 +16,7 @@ import {
   fetchCourses,
   showCourseDetails,
   hideCourseDetails,
+  saveCourseDetails,
   toggleAttendeeList,
   toggleEditCourse,
   onCourseDetailsChange,
@@ -127,6 +128,7 @@ class App extends Component {
                       courses={courses.data}
                       showCourseDetails={actions.showCourseDetails}
                       hideCourseDetails={actions.hideCourseDetails}
+                      saveCourseDetails={actions.saveCourseDetails}
                       courseDetails={courses.courseDetails}
                       toggleAttendeeList={actions.toggleAttendeeList}
                       toggleEditCourse={actions.toggleEditCourse}
@@ -164,6 +166,7 @@ const mapDispatchToProps = dispatch => ({
     fetchCourses: fetchCourses,
     showCourseDetails: showCourseDetails,
     hideCourseDetails: hideCourseDetails,
+    saveCourseDetails: saveCourseDetails,
     toggleAttendeeList: toggleAttendeeList,
     toggleEditCourse: toggleEditCourse,
     onCourseDetailsChange: onCourseDetailsChange,

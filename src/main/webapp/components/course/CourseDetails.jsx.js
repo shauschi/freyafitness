@@ -61,6 +61,7 @@ const getAttendeeList = attendees => {
 };
 
 class CourseDetails extends Component {
+
   handleRequestClose = () => {
     // TODO unsaved changes?
     this.props.onRequestClose();
@@ -68,6 +69,7 @@ class CourseDetails extends Component {
 
   handleRequestSave = () => {
     // TODO onRequestSave
+    this.props.onRequestSave(this.props.courseDetails.details);
     this.props.onRequestClose();
   };
 
@@ -94,7 +96,7 @@ class CourseDetails extends Component {
         break;
       }
     }
-    const {start, minutes, attendees = [], instructor, maxParticipants, signedIn} = details;
+    const {start, type, minutes, attendees = [], instructor, maxParticipants, signedIn} = details;
 
     let title = 'pending...';
     if (!courseDetails.show || courseDetails.pending) {
@@ -106,6 +108,8 @@ class CourseDetails extends Component {
       title = (<span><span>{icon({color: color, style: {marginRight: '12px'}})}</span><span>{label}</span></span>);
     }
     const attendeesList = getAttendeeList(attendees);
+
+    const {label, icon, color} = TypeMapper[type];
 
     return (
       <Dialog
@@ -127,6 +131,10 @@ class CourseDetails extends Component {
         </DialogTitle>
         <DialogContent>
           <List>
+            <Row id="type" label="Kurstyp" value={label}
+                 readonly={true}
+                 onChange={value => {/*TODO*/}}
+                 icon={icon({color: color})}/>
             <Row id="start_date" label="Kursdatum" type="date" value={moment(start).format("YYYY-MM-DD")}
                  readonly={readonly}
                  onChange={value => {

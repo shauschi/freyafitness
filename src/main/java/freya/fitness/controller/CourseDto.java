@@ -5,6 +5,7 @@ import freya.fitness.domain.Course;
 import freya.fitness.domain.CourseType;
 import freya.fitness.domain.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 public class CourseDto {
 
   private Long id;

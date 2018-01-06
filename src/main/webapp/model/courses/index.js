@@ -1,5 +1,5 @@
 import {createActions, handleActions} from 'redux-actions';
-import {getCourses, getCourseDetails, signIn as signInApiCall, signOut as signOutApiCall} from '../../service/courses';
+import {getCourses, getCourseDetails, saveCourse, signIn as signInApiCall, signOut as signOutApiCall} from '../../service/courses';
 
 const initialState = {
   pending: false,
@@ -12,6 +12,11 @@ export const actions = createActions({
     LOAD: {
       PENDING: undefined,
       SUCCESS: courses => courses,
+      ERROR: error => error
+    },
+    SAVE: {
+      PENDING: undefined,
+      SUCCESS: course => course,
       ERROR: error => error
     },
     COURSE_DETAILS: {
@@ -37,22 +42,22 @@ export const actions = createActions({
   }
 });
 
-export const fetchCourses = (filterOptions) => {
+export const fetchCourses = filterOptions => {
   return dispatch => {
     dispatch(actions.courses.load.pending());
     return getCourses(filterOptions)
       .then(courses => dispatch(actions.courses.load.success(courses)))
-      .catch(error => dispatch(actions.courses.load.error(error)))
+      .catch(error => dispatch(actions.courses.load.error(error)));
   };
 };
 
-export const showCourseDetails = (id) => {
+export const showCourseDetails = id => {
   return dispatch => {
     dispatch(actions.courses.courseDetails.pending());
     dispatch(actions.courses.courseDetails.show());
     return getCourseDetails(id)
       .then(details => dispatch(actions.courses.courseDetails.success(details)))
-      .catch(error => dispatch(actions.courses.courseDetails.error(error)))
+      .catch(error => dispatch(actions.courses.courseDetails.error(error)));
   };
 };
 
@@ -60,6 +65,15 @@ export const hideCourseDetails = () => {
   return dispatch => {
     dispatch(actions.courses.courseDetails.hide());
   }
+};
+
+export const saveCourseDetails = course => {
+  return dispatch => {
+    dispatch(actions.courses.save.pending());
+    return saveCourse(course)
+      .then(updatedCourse => dispatch(actions.courses.save.success(updatedCourse)))
+      .catch(error=> dispatch(actions.courses.save.error(error)));
+  };
 };
 
 export const toggleAttendeeList = () => {
@@ -139,6 +153,7 @@ export default handleActions({
       {details: Object.assign({}, state.courseDetails.details, {[payload.id]: payload.value})})}
   ),
   [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
-  [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload)
+  [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload),
+  [actions.courses.save.success]: (state, {payload}) => updateCourse(state, payload)
 
 }, initialState);

@@ -1,6 +1,8 @@
 package freya.fitness.service;
 
+import freya.fitness.controller.CourseDto;
 import freya.fitness.domain.Course;
+import freya.fitness.domain.CourseDtoToCourseMapper;
 import freya.fitness.domain.User;
 import freya.fitness.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,10 @@ public class CourseService {
 
   @Autowired
   private CourseRepository courseRepository;
+
+  @Autowired
+  private CourseDtoToCourseMapper courseDtoToCourseMapper;
+
 
   public Optional<Course> getCourse(final Long id) {
     return courseRepository.findById(id);
@@ -29,6 +35,12 @@ public class CourseService {
 
   public Course update(Course course) {
     return courseRepository.save(course);
+  }
+
+  public Course update(CourseDto courseDto) {
+    Course existingCourse = getCourse(courseDto.getId()).orElse(null);
+    Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
+    return update(course);
   }
 
   public Course addUserToCourse(User user, Long courseId) {

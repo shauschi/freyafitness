@@ -1,6 +1,7 @@
 package freya.fitness.controller;
 
 import freya.fitness.domain.Course;
+import freya.fitness.domain.CourseDtoToCourseMapper;
 import freya.fitness.domain.User;
 import freya.fitness.service.CourseService;
 import freya.fitness.service.CurrentUserService;
@@ -29,6 +30,15 @@ public class CourseController {
     return courseService.getCourse(id)
         .map(course -> new CourseDto(user, course))
         .orElse(null);
+  }
+
+  @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+  @ResponseBody
+  public CourseDto saveCourse(@RequestBody final CourseDto courseDto) {
+    // TODO user rights?
+    User user = currentUserService.getCurrentUser();
+    Course updatedCourse = courseService.update(courseDto);
+    return new CourseDto(user, updatedCourse);
   }
 
   @RequestMapping("/from/{from}")

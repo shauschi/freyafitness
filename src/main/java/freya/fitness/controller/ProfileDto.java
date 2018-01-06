@@ -2,8 +2,10 @@ package freya.fitness.controller;
 
 import freya.fitness.domain.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ProfileDto {
 
   private String firstname;
