@@ -26,6 +26,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         query: {
+          cacheDirectory: true,
           presets: ['react', 'es2015', 'react-hmre'],
           plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
         }

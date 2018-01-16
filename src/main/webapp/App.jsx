@@ -12,7 +12,17 @@ import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
 
 import {actions as drawerActions} from './model/drawer';
-import {fetchCourses, showCourseDetails, hideCourseDetails} from './model/courses';
+import {
+  fetchCourses,
+  showCourseDetails,
+  hideCourseDetails,
+  saveCourseDetails,
+  toggleAttendeeList,
+  toggleEditCourse,
+  onCourseDetailsChange,
+  signIn,
+  signOut
+} from './model/courses';
 import init from './model/init.js';
 
 const theme = createMuiTheme({
@@ -88,15 +98,21 @@ class App extends Component {
           <div className={classes.appFrame}>
             <MyAppBar classes={classes} toggleDrawer={actions.toggleDrawer} {...this.props}/>
             <MyDrawer classes={classes} toggleDrawer={actions.toggleDrawer} {...drawer}/>
-            <div style={{marginTop: '56px', marginBottom: '46px', position: 'relative', width: '100%', height: 'calc(100% - 102px)'}}>
+            <div style={{
+              marginTop: '56px',
+              marginBottom: '46px',
+              position: 'relative',
+              width: '100%',
+              height: 'calc(100% - 102px)'
+            }}>
               <Switch>
                 <Redirect from='/index' to='/'/>
                 <Redirect from='/home' to='/'/>
-                <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>} />
-                <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>} />
-                <Route exact path='/agb' render={() => <Agb {...this.props}/>} />
-                <Route exact path='/impressum' render={() => <Impressum{...this.props}/>} />
-                <Route exact path='/logout' render={() => <Logout {...this.props}/>} />
+                <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
+                <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
+                <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
+                <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
+                <Route exact path='/logout' render={() => <Logout {...this.props}/>}/>
                 <SwipeableRoutes
                   resistance
                   style={{height: '100%'}}
@@ -105,17 +121,24 @@ class App extends Component {
                     WebkitOverflowScrolling: 'touch',
                   }}
                 >
-                  <Route exact path='/' render={() => <Home {...this.props}/>} />
+                  <Route exact path='/' render={() => <Home {...this.props}/>}/>
                   <Route exact path='/courses/all' render={() =>
                     <Courses
                       pending={courses.pending}
                       courses={courses.data}
                       showCourseDetails={actions.showCourseDetails}
                       hideCourseDetails={actions.hideCourseDetails}
+                      saveCourseDetails={actions.saveCourseDetails}
                       courseDetails={courses.courseDetails}
+                      toggleAttendeeList={actions.toggleAttendeeList}
+                      toggleEditCourse={actions.toggleEditCourse}
+                      onCourseDetailsChange={actions.onCourseDetailsChange}
+                      signIn={actions.signIn}
+                      signOut={actions.signOut}
                     />}
                   />
-                  <Route exact path='/profile' render={() => <ProfileSite pending={profile.pending} profile={profile.data}/>} />
+                  <Route exact path='/profile'
+                         render={() => <ProfileSite pending={profile.pending} profile={profile.data}/>}/>
                 </SwipeableRoutes>
               </Switch>
             </div>
@@ -142,7 +165,13 @@ const mapDispatchToProps = dispatch => ({
     toggleDrawer: drawerActions.toggleDrawer,
     fetchCourses: fetchCourses,
     showCourseDetails: showCourseDetails,
-    hideCourseDetails: hideCourseDetails
+    hideCourseDetails: hideCourseDetails,
+    saveCourseDetails: saveCourseDetails,
+    toggleAttendeeList: toggleAttendeeList,
+    toggleEditCourse: toggleEditCourse,
+    onCourseDetailsChange: onCourseDetailsChange,
+    signIn: signIn,
+    signOut: signOut
   }, dispatch),
   dispatch
 });

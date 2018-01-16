@@ -1,14 +1,14 @@
 package freya.fitness.controller;
 
 import freya.fitness.domain.Course;
+import freya.fitness.domain.CourseDtoToCourseMapper;
+import freya.fitness.domain.User;
 import freya.fitness.service.CourseService;
+import freya.fitness.service.CurrentUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,18 +20,32 @@ public class CourseController {
   @Autowired
   private CourseService courseService;
 
+  @Autowired
+  private CurrentUserService currentUserService;
+
   @RequestMapping("/{id}")
   @ResponseBody
-  public CourseDetailDto getCourseDetails(@PathVariable("id") final Long id) {
+  public CourseDto getCourseDetails(@PathVariable("id") final Long id) {
+    User user = currentUserService.getCurrentUser();
     return courseService.getCourse(id)
-        .map(CourseDetailDto::new)
+        .map(course -> new CourseDto(user, course))
         .orElse(null);
+  }
+
+  @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+  @ResponseBody
+  public CourseDto saveCourse(@RequestBody final CourseDto courseDto) {
+    // TODO user rights?
+    User user = currentUserService.getCurrentUser();
+    Course updatedCourse = courseService.update(courseDto);
+    return new CourseDto(user, updatedCourse);
   }
 
   @RequestMapping("/from/{from}")
   @ResponseBody
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
-    return toDtos(courseService.getCoursesFrom(LocalDate.parse(from)));
+    User user = currentUserService.getCurrentUser();
+    return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
   }
 
   @RequestMapping("from/{from}/to/{to}")
@@ -39,12 +53,35 @@ public class CourseController {
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
       @PathVariable("to") final String to) {
-    return toDtos(courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
+    User user = currentUserService.getCurrentUser();
+    return toDtos(user, courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
   }
 
-  private List<CourseDto> toDtos(List<Course> courses) {
+  //@PutMapping
+  @RequestMapping("{courseId}/signin")
+  public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final Long courseId) {
+    User user = currentUserService.getCurrentUser();
+    Course changedCourse = courseService.addUserToCourse(user, courseId);
+    if (changedCourse != null) {
+      return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
+    }
+    return ResponseEntity.badRequest().build();
+  }
+
+  //@PutMapping
+  @RequestMapping("{courseId}/signout")
+  public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final Long courseId) {
+    User user = currentUserService.getCurrentUser();
+    Course changedCourse = courseService.removeUserFromCourse(user, courseId);
+    if (changedCourse != null) {
+      return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
+    }
+    return ResponseEntity.badRequest().build();
+  }
+
+  private List<CourseDto> toDtos(User user, List<Course> courses) {
     return courses.stream()
-        .map(CourseDto::new)
+        .map(course -> new CourseDto(user, course))
         .collect(Collectors.toList());
   }
 }

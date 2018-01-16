@@ -8,26 +8,29 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import Hidden from 'material-ui/Hidden';
 
+import {blueGrey, amber} from 'material-ui/colors';
+
 const MyAppBar = (props) => {
   const {classes, toggleDrawer} = props;
   return (
-    <AppBar color="primary" className={classes.appBar}>
+    <AppBar style={{background: blueGrey.A700}} className={classes.appBar}>
       <Toolbar>
         <Hidden smUp>
           <IconButton
             color="contrast"
             aria-label="Navigation"
             onClick={toggleDrawer}
+            style={{zIndex: 20}}
           >
             <MenuIcon/>
           </IconButton>
         </Hidden>
-        <Typography type="title" color="inherit" style={{flex: 1}}>
-          <Hidden smUp>
-            freya.fitness
-          </Hidden>
+        <Typography type="title" style={{zIndex: 10, left: 0, position: 'absolute', width: '100%', textAlign: 'center'}}>
+          <span style={{color: 'white'}}>freya</span>
+          <span style={{color: '#03a9f4'}}>.</span>
+          <span style={{color: amber.A400}}>fitness</span>
           <Hidden xsDown>
-            freya.fitness - Willkommen beim Fitnessprogramm mit Freya
+            <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
           </Hidden>
         </Typography>
       </Toolbar>

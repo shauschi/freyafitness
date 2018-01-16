@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "course", schema="public")
 public class Course {
 
   @Id
@@ -19,10 +20,19 @@ public class Course {
 
   private LocalDateTime start;
 
-  private Long minutes;
+  private Integer minutes;
 
-  private String instructor;
+  @ManyToOne
+  @JoinColumn(name = "instructor_id")
+  private User instructor;
 
-  @Transient
-  private List<String> attendees;
+  private Integer maxParticipants;
+
+  @ManyToMany
+  @JoinTable(
+      name="course_user",
+      joinColumns=@JoinColumn(name="course_id", referencedColumnName="id"),
+      inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id"))
+  private List<User> attendees;
+
 }

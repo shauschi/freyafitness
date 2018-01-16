@@ -22,7 +22,77 @@ databaseChangeLog:
               name: minutes
               type: int
           - column:
-              name: instructor
-              type: varchar(255)
+              name: max_participants
+              type: int
+          - column:
+              name: instructor_id
+              type: bigserial
           schemaName: public
           tableName: course
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: bigserial
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: email
+              type: varchar(255)
+          - column:
+              name: first_name
+              type: varchar(255)
+          - column:
+              name: family_name
+              type: varchar(255)
+          - column:
+              name: password
+              type: varchar(255)
+          - column:
+              name: last_login
+              type: timestamp
+          - column:
+              name: account_creation_time
+              type: timestamp
+          schemaName: public
+          tableName: user
+      - createTable:
+          columns:
+          - column:
+              name: user_id
+              type: bigserial
+              constraints:
+                nullable: false
+          - column:
+              name: course_id
+              type: bigserial
+              constraints:
+                nullable: false
+          schemaName: public
+          tableName: course_user
+      - addForeignKeyConstraint:
+          baseColumnNames: instructor_id
+          baseTableName: course
+          constraintName: fk_course_instructor
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: user
+      - addForeignKeyConstraint:
+          baseColumnNames: user_id
+          baseTableName: course_user
+          constraintName: fk_course_user_user
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: user
+      - addForeignKeyConstraint:
+          baseColumnNames: course_id
+          baseTableName: course_user
+          constraintName: fk_course_user_course
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: course

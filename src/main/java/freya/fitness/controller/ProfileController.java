@@ -1,5 +1,7 @@
 package freya.fitness.controller;
 
+import freya.fitness.service.CurrentUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,12 +13,12 @@ import java.io.IOException;
 @RequestMapping("/profile")
 public class ProfileController {
 
-  @RequestMapping("/{id}")
+  @Autowired
+  private CurrentUserService currentUserService;
+
+  @RequestMapping("/own")
   @ResponseBody
-  public ProfileDto getProfil(@PathParam("id") Long id) throws IOException {
-    ProfileDto profile = new ProfileDto();
-    profile.setFirstname("Max");
-    profile.setLastname("Muster");
-    return profile;
+  public ProfileDto getOwnProfil() throws IOException {
+    return new ProfileDto(currentUserService.getCurrentUser());
   }
 }
