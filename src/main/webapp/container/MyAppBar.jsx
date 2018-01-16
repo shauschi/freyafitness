@@ -20,11 +20,12 @@ const MyAppBar = (props) => {
             color="contrast"
             aria-label="Navigation"
             onClick={toggleDrawer}
+            style={{zIndex: 20}}
           >
             <MenuIcon/>
           </IconButton>
         </Hidden>
-        <Typography type="title" style={{left: 0, position: 'absolute', width: '100%', textAlign: 'center'}}>
+        <Typography type="title" style={{zIndex: 10, left: 0, position: 'absolute', width: '100%', textAlign: 'center'}}>
           <span style={{color: 'white'}}>freya</span>
           <span style={{color: '#03a9f4'}}>.</span>
           <span style={{color: amber.A400}}>fitness</span>
