@@ -35,6 +35,7 @@ const theme = createMuiTheme({
 
 const drawerWidth = 240;
 
+// TODO styles auslagern
 const styles = theme => ({
   root: {
     width: '100%',
