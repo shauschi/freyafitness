@@ -12,32 +12,47 @@ export const TypeMapper = {
   HARD: {label: 'harter Kurs', icon: FaBolt, color: red['A200']}
 };
 
-const getAvailability = (participants, maxParticipants) => {
-  if (maxParticipants === participants) {
-    return <Typography style={{color: 'red', display: 'inline-block', float: 'right'}}>Ausgebucht</Typography> /*TODO Warteliste*/
-  } else {
-    const color = maxParticipants - participants > 2 ? 'grey' : 'orange';
-    return <Typography style={{color: color, display: 'inline-block', float: 'right'}}>{maxParticipants - participants} freie Plätze</Typography>
+const getAvailability = (participants, maxParticipants, textDecoration) => {
+  const free = maxParticipants - participants;
+  let color = free > 2 ? 'grey' : 'orange';
+  let text = (free) + (free === 1 ? ' freier Platz' : ' freie Plätze');
+  if (free <= 0) {
+    color = 'red';
+    text = 'Warteliste';
   }
+  return (
+    <Typography style={{color: color, display: 'inline-block', float: 'right', textDecoration: textDecoration}}>
+      {text}
+    </Typography>
+  );
 };
 
 const Course = ({course, showCourseDetails}) => {
-  const {id, type, start, minutes, instructor, signedIn, attendees = [], maxParticipants} = course;
+  const {id, type, start, minutes, instructor, signedIn, attendees = [], maxParticipants, canceled} = course;
   const {label, icon, color} = TypeMapper[type];
+  const textDecoration = canceled ? 'line-through' : undefined;
 
   const title = (<div>
-    <Typography type='title'>{label}</Typography>
+    <Typography type='title' style={{textDecoration: textDecoration}}>{label}</Typography>
   </div>);
   const details = (<div>
-    <Typography style={{display: 'inline-block'}}>{moment(start).format("HH:mm") + " mit " + instructor.firstname + " (" + minutes + " min)"}</Typography>
-    {getAvailability(attendees.length, maxParticipants)}
+    <Typography style={{display: 'inline-block', textDecoration: textDecoration}}>{moment(start).format("HH:mm") + " mit " + instructor.firstname + " (" + minutes + " min)"}</Typography>
+    {getAvailability(attendees.length, maxParticipants, textDecoration)}
   </div>);
   const additional = signedIn ? (<div>
-    <Typography style={{color: 'green'}}>Du nimmst teil</Typography>
+    <Typography style={{color: 'green'}}>Du bist angemeldet</Typography>
+  </div>) : undefined;
+  const infos = canceled ? (<div>
+    <Typography style={{color: 'red'}}>Der Kurs wurde abgesagt</Typography>
   </div>) : undefined;
 
+  let backgroundColor;
+  if (!canceled) {
+    backgroundColor = signedIn ? 'rgba(200, 255, 200, 0.75)' : 'rgba(255, 255, 255, 0.75)';
+  }
+
   return (
-    <ListItem button onClick={() => showCourseDetails(id)}>
+    <ListItem button onClick={() => showCourseDetails(id)} style={{backgroundColor: backgroundColor}}>
       <ListItemIcon>
         {icon({color: color})}
       </ListItemIcon>
@@ -45,6 +60,7 @@ const Course = ({course, showCourseDetails}) => {
         {title}
         {details}
         {additional}
+        {infos}
       </div>
     </ListItem>
   );

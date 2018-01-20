@@ -26,9 +26,9 @@ const MyAppBar = (props) => {
           </IconButton>
         </Hidden>
         <Typography type="title" style={{zIndex: 10, left: 0, position: 'absolute', width: '100%', textAlign: 'center'}}>
-          <span style={{color: 'white'}}>freya</span>
-          <span style={{color: '#03a9f4'}}>.</span>
-          <span style={{color: amber.A400}}>fitness</span>
+          <span style={{color: 'white', fontSize: '31px', fontWeight: 'bold', textShadow: '-2px -2px 0px #444'}}>freya</span>
+          <span style={{color: '#03a9f4', fontSize: '42px', fontWeight: 'bold', textShadow: '-2px -2px 0px #444'}}>.</span>
+          <span style={{color: 'white', fontSize: '31px', fontWeight: 'bold', textShadow: '-2px -2px 0px #444'}}>fitness</span>
           <Hidden xsDown>
             <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
           </Hidden>
