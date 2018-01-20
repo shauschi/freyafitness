@@ -36,6 +36,7 @@
     "material-ui-icons": "^1.0.0-beta.17",
     "moment": "^2.19.1",
     "prop-types": "^15.6.0",
+    "ramda": "^0.25.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-icons": "^2.2.7",

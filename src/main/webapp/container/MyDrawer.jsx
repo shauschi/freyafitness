@@ -55,7 +55,7 @@ class MyDrawer extends Component {
             anchor="left"
             open={open}
             classes={{paper: classes.drawerPaper}}
-            onRequestClose={toggleDrawer}
+            onClose={toggleDrawer}
             ModalProps={{
               keepMounted: true // Better open performance on mobile.
             }}
@@ -63,7 +63,7 @@ class MyDrawer extends Component {
             {drawer}
           </Drawer>
         </Hidden>
-        <Hidden smDown implementation="css">
+        <Hidden only='xs' implementation="css">
           <Drawer type="permanent" open classes={{paper: classes.drawerPaper}}>
             {drawer}
           </Drawer>

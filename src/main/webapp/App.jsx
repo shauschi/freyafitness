@@ -4,13 +4,12 @@ import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {MuiThemeProvider, createMuiTheme, withStyles} from 'material-ui/styles';
-import {lightBlue, green, red} from 'material-ui/colors';
+import {MuiThemeProvider, withStyles} from 'material-ui/styles';
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
-
+import * as Style from './utils/Style.jsx';
 import {actions as drawerActions} from './model/drawer';
 import {
   fetchCourses,
@@ -25,65 +24,6 @@ import {
 } from './model/courses';
 import init from './model/init.js';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: lightBlue,
-    secondary: green,
-    error: red,
-  }
-});
-
-const drawerWidth = 240;
-
-// TODO styles auslagern
-const styles = theme => ({
-  root: {
-    width: '100%',
-    height: '100%',
-    marginTop: 0,
-    zIndex: 1,
-    overflow: 'hidden',
-  },
-  appFrame: {
-    position: 'relative',
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-  },
-  appBar: {
-    position: 'absolute',
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
-  },
-  navIconHide: {
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  drawerHeader: theme.mixins.toolbar,
-  drawerPaper: {
-    width: 250,
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      position: 'relative',
-      height: '100%',
-    },
-  },
-  content: {
-    backgroundColor: theme.palette.background.default,
-    width: '100%',
-    padding: theme.spacing.unit * 3,
-    height: 'calc(100% - 56px)',
-    marginTop: 56,
-    [theme.breakpoints.up('sm')]: {
-      height: 'calc(100% - 64px)',
-      marginTop: 64,
-    },
-  },
-});
-
 class App extends Component {
 
   componentDidMount() {
@@ -94,7 +34,7 @@ class App extends Component {
   render() {
     const {classes, drawer, actions, profile, courses} = this.props;
     return (
-      <MuiThemeProvider theme={theme}>
+      <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
           <div className={classes.appFrame}>
             <MyAppBar classes={classes} toggleDrawer={actions.toggleDrawer} {...this.props}/>
@@ -179,6 +119,6 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   withRouter,
-  withStyles(styles, {withTheme: true}),
+  withStyles(Style.APP_STYLES, {withTheme: true}),
   connect(mapStateToProps, mapDispatchToProps)
 )(App);

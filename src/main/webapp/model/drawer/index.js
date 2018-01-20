@@ -1,4 +1,5 @@
 import {createActions, handleActions} from 'redux-actions';
+import {togglePath} from "../../utils/RamdaUtils";
 
 const initialState = {
   open: false
@@ -9,7 +10,5 @@ export const actions = createActions({
 });
 
 export default handleActions({
-  [actions.toggleDrawer]: (state, {payload}) => Object.assign(
-    {}, state, {open: !state.open}
-  )
+  [actions.toggleDrawer]: state => togglePath(['open'], state)
 }, initialState)
