@@ -28,6 +28,8 @@ public class Course {
 
   private Integer maxParticipants;
 
+  private boolean canceled;
+
   @ManyToMany
   @JoinTable(
       name="course_user",

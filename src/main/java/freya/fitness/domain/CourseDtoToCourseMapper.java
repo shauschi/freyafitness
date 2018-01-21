@@ -27,6 +27,7 @@ public class CourseDtoToCourseMapper implements BiFunction<CourseDto, Course, Co
     // TODO
     // course.setInstructor(courseDto.getInstructorId());
     course.setMaxParticipants(courseDto.getMaxParticipants());
+    course.setCanceled(courseDto.isCanceled());
     // TODO
     //course.setAttendees(courseDto.getAttendees());
 

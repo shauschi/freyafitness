@@ -25,6 +25,7 @@ public class CourseDto {
   private ProfileDto instructor;
   private boolean signedIn;
   private Integer maxParticipants;
+  private boolean canceled;
   private List<ProfileDto> attendees;
 
   public CourseDto(User user, Course course) {
@@ -37,6 +38,7 @@ public class CourseDto {
     this.instructor = new ProfileDto(instructor);
     this.signedIn = course.getAttendees().stream().anyMatch(attendee -> Objects.equals(attendee.getId(), userId));
     this.maxParticipants = course.getMaxParticipants();
+    this.canceled = course.isCanceled();
     this.attendees = course.getAttendees().stream().map(ProfileDto::new).collect(Collectors.toList());
   }
 }
