@@ -1,6 +1,7 @@
 import React from 'react';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
+import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 
 const Profile = ({profile}) => {
@@ -38,6 +39,9 @@ const Profile = ({profile}) => {
       </Grid>
       <Grid item xs={12} md={12}>
         <TextField id="mobil" label="Mobil" value={"0176 ...."} fullWidth/>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Button raised={true}>Change Password</Button>
       </Grid>
       <Grid item xs={12} md={12}>
         <h2>Anschrift</h2>

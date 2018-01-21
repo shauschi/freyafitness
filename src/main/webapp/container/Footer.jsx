@@ -7,71 +7,10 @@ import withWidth from 'material-ui/utils/withWidth';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import {withRouter} from 'react-router-dom'
-
+import * as Style from '../utils/Style.jsx';
 import {FaHome, FaCalendar, FaUser} from 'react-icons/lib/fa';
 
 import {blueGrey} from 'material-ui/colors';
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-  root: {
-    width: '100%',
-    height: '100%',
-    marginTop: 0,
-    zIndex: 1,
-    overflow: 'hidden',
-  },
-  appFrame: {
-    position: 'relative',
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-  },
-  appBar: {
-    position: 'absolute',
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
-  },
-  appBar2: {
-    position: 'relative',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
-    [theme.breakpoints.down('xs')]: {
-      marginLeft: '0px',
-      width: '100%',
-    },
-  },
-  navIconHide: {
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  drawerHeader: theme.mixins.toolbar,
-  drawerPaper: {
-    width: 250,
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      position: 'relative',
-      height: '100%',
-    },
-  },
-  content: {
-    backgroundColor: theme.palette.background.default,
-    width: '100%',
-    padding: theme.spacing.unit * 3,
-    height: 'calc(100% - 56px)',
-    marginTop: 56,
-    [theme.breakpoints.up('sm')]: {
-      height: 'calc(100% - 64px)',
-      marginTop: 64,
-    },
-  },
-});
 
 class Footer extends Component {
 
@@ -134,4 +73,7 @@ Footer.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default compose(withRouter, withStyles(styles, {withTheme: true}), withWidth())(Footer);
+export default compose(
+  withRouter,
+  withStyles(Style.APP_STYLES, {withTheme: true}),
+  withWidth())(Footer);

@@ -1,5 +1,6 @@
 import {getCourses} from '../';
 import moment from 'moment';
+import * as Format from "../../../utils/Format.jsx";
 
 describe('courses Service', () => {
 
@@ -17,7 +18,7 @@ describe('courses Service', () => {
 
     it('should extract response body', async () => {
       const result = await getCourses();
-      expect(apiCall).toHaveBeenCalledWith(__API__ + '/courses/from/' + moment().format('YYYY-MM-DD'));
+      expect(apiCall).toHaveBeenCalledWith(__API__ + '/courses/from/' + moment().format(Format.ISO_DATE_FORMAT));
       expect(result).toEqual(courses);
     });
 

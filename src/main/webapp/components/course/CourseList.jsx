@@ -3,17 +3,13 @@ import React from 'react';
 import moment from 'moment';
 import List, {ListSubheader} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import {comparingMod} from '../../utils/Comparator.jsx';
+import * as Format from '../../utils/Format.jsx';
 import Course from '.';
 
 import {blueGrey} from 'material-ui/colors';
 
-const compareCourseByStartDate = (c1, c2) => {
-  const c1Start = moment(c1.start);
-  const c2Start = moment(c2.start);
-  if (c1Start > c2Start) return 1;
-  else if (c1Start < c2Start) return -1;
-  else return 0;
-};
+const compareCourseByStartDate = comparingMod('start', moment);
 
 const CourseList = ({courses, showCourseDetails}) => {
   const elements = [];
@@ -21,7 +17,7 @@ const CourseList = ({courses, showCourseDetails}) => {
   let lastFormatted = undefined;
   for (const idx in courses) {
     const course = courses[idx];
-    const formattedDayOfCourse = moment(course.start).format("dddd, DD.MM.YYYY");
+    const formattedDayOfCourse = moment(course.start).format(Format.DAY_OF_WEEK_DATE_FORMAT);
     if (lastFormatted !== formattedDayOfCourse) {
       lastFormatted = formattedDayOfCourse;
       elements.push(
