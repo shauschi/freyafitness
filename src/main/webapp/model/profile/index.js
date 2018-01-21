@@ -1,6 +1,6 @@
 import {createActions, handleActions} from 'redux-actions';
 import {getOwnProfile} from '../../service/profile';
-import {setPath, assignPath} from "../../utils/RamdaUtils";
+import {setPath, assignPath} from "../../utils/RamdaUtils.jsx";
 
 const initialState = {
   pending: false,

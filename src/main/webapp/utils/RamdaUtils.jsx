@@ -39,7 +39,7 @@ export const setPath = (path, value, obj) => {
  */
 export const assignPath = (path, valueObj, obj) => {
   const lens = ramda.lensPath(path);
-  const oldValueObj = ramda.find(path, obj);
+  const oldValueObj = ramda.view(lens, obj);
   return ramda.set(lens, Object.assign({}, oldValueObj, valueObj), obj);
 };
 
@@ -48,6 +48,6 @@ export const assignPath = (path, valueObj, obj) => {
  */
 export const togglePath = (path, obj) => {
   const lens = ramda.lensPath(path);
-  const oldValue = ramda.find(path, obj);
+  const oldValue = ramda.view(lens, obj);
   return ramda.set(lens, !oldValue, obj);
-}
+};

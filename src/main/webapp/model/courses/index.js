@@ -1,6 +1,6 @@
 import {createActions, handleActions} from 'redux-actions';
 import {getCourses, getCourseDetails, saveCourse, signIn as signInApiCall, signOut as signOutApiCall} from '../../service/courses';
-import {setPath, assignPath, togglePath} from "../../utils/RamdaUtils";
+import {setPath, assignPath, togglePath} from "../../utils/RamdaUtils.jsx";
 
 const initialState = {
   pending: false,

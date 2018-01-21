@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot",
     "dev": "webpack-dev-server --progress --inline --hot --config webpack.dev.config.js",
     "build:production": "webpack --config webpack.config.js"
