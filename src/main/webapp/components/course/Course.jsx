@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import * as Format from '../../utils/Format.jsx';
 import Typography from 'material-ui/Typography';
 import {ListItem, ListItemIcon} from 'material-ui/List';
 import {FaCloud, FaRocket, FaBolt} from 'react-icons/lib/fa';
@@ -29,7 +30,7 @@ const Course = ({course, showCourseDetails}) => {
     <Typography type='title'>{label}</Typography>
   </div>);
   const details = (<div>
-    <Typography style={{display: 'inline-block'}}>{moment(start).format("HH:mm") + " mit " + instructor.firstname + " (" + minutes + " min)"}</Typography>
+    <Typography style={{display: 'inline-block'}}>{moment(start).format(Format.HOUR_MINUTE) + " mit " + instructor.firstname + " (" + minutes + " min)"}</Typography>
     {getAvailability(attendees.length, maxParticipants)}
   </div>);
   const additional = signedIn ? (<div>

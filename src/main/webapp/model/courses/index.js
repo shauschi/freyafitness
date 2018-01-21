@@ -1,5 +1,6 @@
 import {createActions, handleActions} from 'redux-actions';
 import {getCourses, getCourseDetails, saveCourse, signIn as signInApiCall, signOut as signOutApiCall} from '../../service/courses';
+import {setPath, assignPath, togglePath} from "../../utils/RamdaUtils.jsx";
 
 const initialState = {
   pending: false,
@@ -110,50 +111,35 @@ const updateCourse = (state, course) => {
   const courses = Object.assign({}, state.data);
   for (const idx in courses) {
     if (courses[idx].id === course.id) {
-      const coursesChanged = Object.assign([], state.data, {[idx]: course});
-      return Object.assign({}, state, {data: coursesChanged});
+      return setPath(['data', idx], course, state);
     }
   }
   return state;
 };
 
 export default handleActions({
-  [actions.courses.load.pending]: (state, {payload}) => Object.assign(
-    {}, state, {pending: true}
-  ),
-  [actions.courses.load.success]: (state, {payload}) => Object.assign(
-    {}, state, {data: payload, pending: false}
-  ),
-  [actions.courses.load.error]: (state, {payload}) => Object.assign(
-    {}, state, {pending: false, errorMessage: payload.message}
-  ),
-  [actions.courses.courseDetails.show]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {show: true})}
-  ),
-  [actions.courses.courseDetails.hide]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {show: false})}
-  ),
-  [actions.courses.courseDetails.pending]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {pending: true, details: {}})}
-  ),
-  [actions.courses.courseDetails.success]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {pending: false, details: payload})}
-  ),
-  [actions.courses.courseDetails.error]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {pending: false, errorMessage: payload.message})}
-  ),
-  [actions.courses.courseDetails.toggleAttendeeList]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {showAttendees: !state.courseDetails.showAttendees})}
-  ),
-  [actions.courses.courseDetails.toggleEditCourse]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails, {edit: !state.courseDetails.edit})}
-  ),
-  [actions.courses.courseDetails.onCourseDetailsChange]: (state, {payload}) => Object.assign(
-    {}, state, {courseDetails: Object.assign({}, state.courseDetails,
-      {details: Object.assign({}, state.courseDetails.details, {[payload.id]: payload.value})})}
-  ),
+  [actions.courses.load.pending]: state => setPath(['pending'], true, state),
+  [actions.courses.load.success]: (state, {payload}) =>
+    assignPath([], {pending: false, data: payload, errorMessage: null}, state),
+  [actions.courses.load.error]: (state, {payload}) =>
+    assignPath([], {pending: false, errorMessage: payload.message}, state),
+  [actions.courses.courseDetails.show]: state =>
+    setPath(['courseDetails', 'show'], true, state),
+  [actions.courses.courseDetails.hide]: state =>
+    setPath(['courseDetails', 'show'], false, state),
+  [actions.courses.courseDetails.pending]: state =>
+    setPath(['courseDetails'], {pending: true, details: {}}, state),
+  [actions.courses.courseDetails.success]: (state, {payload}) =>
+    assignPath(['courseDetails'], {pending: false, details: payload}, state),
+  [actions.courses.courseDetails.error]: (state, {payload}) =>
+    assignPath(['courseDetails'], {pending: false, errorMessage: payload.message}, state),
+  [actions.courses.courseDetails.toggleAttendeeList]: state =>
+    togglePath(['courseDetails', 'showAttendees'], state),
+  [actions.courses.courseDetails.toggleEditCourse]: state =>
+    togglePath(['courseDetails', 'edit'], state),
+  [actions.courses.courseDetails.onCourseDetailsChange]: (state, {payload}) =>
+    setPath(['courseDetails', 'details', payload.id], payload.value, state),
   [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.save.success]: (state, {payload}) => updateCourse(state, payload)
-
 }, initialState);

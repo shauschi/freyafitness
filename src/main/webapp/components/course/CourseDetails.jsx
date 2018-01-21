@@ -16,7 +16,8 @@ import Input, {InputLabel, InputAdornment} from 'material-ui/Input';
 import Collapse from 'material-ui/transitions/Collapse';
 import Avatar from 'material-ui/Avatar';
 import Slide from 'material-ui/transitions/Slide';
-import {TypeMapper} from ".";
+import {TypeMapper} from '.';
+import * as Format from '../../utils/Format.jsx';
 
 import {FaCalendarO, FaClockO, FaMapMarker, FaUser, FaUserMd, FaClose, FaPencil, FaEye} from 'react-icons/lib/fa';
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
@@ -135,20 +136,20 @@ class CourseDetails extends Component {
                  readonly={true}
                  onChange={value => {/*TODO*/}}
                  icon={icon({color: color})}/>
-            <Row id="start_date" label="Kursdatum" type="date" value={moment(start).format("YYYY-MM-DD")}
+            <Row id="start_date" label="Kursdatum" type="date" value={moment(start).format(Format.ISO_DATE_FORMAT)}
                  readonly={readonly}
                  onChange={value => {
-                   const date = moment(value, "YYYY-MM-DD");
+                   const date = moment(value, Format.ISO_DATE_FORMAT);
                    const newStart = moment(start).set({'year': date.year(), 'month': date.month(), 'day': date.day()});
-                   onCourseDetailsChange('start', newStart.format('YYYY-MM-DD HH:mm:ss'));
+                   onCourseDetailsChange('start', newStart.format(Format.TIMESTAMP_FORMAT));
                  }}
                  icon={<FaCalendarO/>}/>
-            <Row id="start_time" label="Kursbeginn" type="time" value={moment(start).format("HH:mm")}
+            <Row id="start_time" label="Kursbeginn" type="time" value={moment(start).format(Format.HOUR_MINUTE)}
                  readonly={readonly}
                  onChange={value => {
                    const time = moment(value, "HH:mm");
                    const newStart = moment(start).set({'hour': time.hour(), 'minute': time.minute()});
-                   onCourseDetailsChange('start', newStart.format('YYYY-MM-DD HH:mm:ss'));
+                   onCourseDetailsChange('start', newStart.format(Format.TIMESTAMP_FORMAT));
                  }}
                  icon={<FaClockO/>}/>
             <Row id="duration" label="Dauer" type="number" value={minutes}

@@ -1,5 +1,6 @@
 import {createActions, handleActions} from 'redux-actions';
 import {getOwnProfile} from '../../service/profile';
+import {setPath, assignPath} from "../../utils/RamdaUtils.jsx";
 
 const initialState = {
   pending: false,
@@ -26,13 +27,9 @@ export const fetchOwnProfile = (filterOptions) => {
 };
 
 export default handleActions({
-  [actions.profile.load.pending]: (state, {payload}) => Object.assign(
-    {}, state, {pending: true}
-  ),
-  [actions.profile.load.success]: (state, {payload}) => Object.assign(
-    {}, state, {data: payload, pending: false}
-  ),
-  [actions.profile.load.error]: (state, {payload}) => Object.assign(
-    {}, state, {pending: false, errorMessage: payload.message}
-  )
+  [actions.profile.load.pending]: state => setPath(['pending'], true, state),
+  [actions.profile.load.success]: (state, {payload}) =>
+    assignPath([], {pending: false, data: payload, errorMessage: null}, state),
+  [actions.profile.load.error]: (state, {payload}) =>
+    assignPath([], {pending: false, errorMessage: payload.message}, state)
 }, initialState);

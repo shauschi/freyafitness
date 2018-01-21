@@ -1,9 +1,10 @@
 'use strict';
 import {GET, POST, PUT} from '../HttpUtils';
 import moment from 'moment';
+import * as Format from '../../utils/Format.jsx';
 const baseURL = __API__;
 
-export const getCourses = () => GET(`${baseURL}/courses/from/${moment().format('YYYY-MM-DD')}`);
+export const getCourses = () => GET(`${baseURL}/courses/from/${moment().format(Format.ISO_DATE_FORMAT)}`);
 
 export const getCourseDetails = id => GET(`${baseURL}/courses/${id}`);
 
