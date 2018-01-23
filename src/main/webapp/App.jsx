@@ -10,7 +10,9 @@ import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
 import * as Style from './utils/Style.jsx';
-import {actions as drawerActions} from './model/drawer';
+import {
+  toggleDrawer
+} from './model/drawer';
 import {
   fetchCourses,
   showCourseDetails,
@@ -22,7 +24,14 @@ import {
   signIn,
   signOut
 } from './model/courses';
+import {
+  onProfileDetailsChange
+} from "./model/profile";
+import {
+  onPasswordChange
+} from "./model/password";
 import init from './model/init.js';
+import {ChangePasswordDialog} from "./components/password";
 
 class App extends Component {
 
@@ -78,8 +87,13 @@ class App extends Component {
                       signOut={actions.signOut}
                     />}
                   />
-                  <Route exact path='/profile'
-                         render={() => <ProfileSite pending={profile.pending} profile={profile.data}/>}/>
+                  <Route exact path='/profile' render={() =>
+                    <ProfileSite
+                      pending={profile.pending}
+                      profile={profile.data}
+                      onProfileDetailsChange={actions.onProfileDetailsChange}
+                    />}
+                  />
                 </SwipeableRoutes>
               </Switch>
             </div>
@@ -99,11 +113,12 @@ const mapStateToProps = state => ({
   profile: state.profile,
   drawer: state.drawer,
   courses: state.courses,
+  password: state.password,
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
-    toggleDrawer: drawerActions.toggleDrawer,
+    toggleDrawer: toggleDrawer,
     fetchCourses: fetchCourses,
     showCourseDetails: showCourseDetails,
     hideCourseDetails: hideCourseDetails,
@@ -112,7 +127,8 @@ const mapDispatchToProps = dispatch => ({
     toggleEditCourse: toggleEditCourse,
     onCourseDetailsChange: onCourseDetailsChange,
     signIn: signIn,
-    signOut: signOut
+    signOut: signOut,
+    onProfileDetailsChange: onProfileDetailsChange
   }, dispatch),
   dispatch
 });
