@@ -9,6 +9,10 @@ export const actions = createActions({
   TOGGLE_DRAWER: undefined
 });
 
+export const toggleDrawer = () => {
+  return dispatch => dispatch(actions.toggleDrawer());
+};
+
 export default handleActions({
   [actions.toggleDrawer]: state => togglePath(['open'], state)
 }, initialState)

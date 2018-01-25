@@ -108,10 +108,11 @@ export const signOut = courseId => {
 };
 
 const updateCourse = (state, course) => {
-  const courses = Object.assign({}, state.data);
+  const courses = Object.assign([], state.data);
   for (const idx in courses) {
     if (courses[idx].id === course.id) {
-      return setPath(['data', idx], course, state);
+      courses[idx] = course;
+      return setPath(['data'], courses, state);
     }
   }
   return state;
