@@ -4,7 +4,7 @@ import Dialog, {DialogActions, DialogContent, DialogTitle, withMobileDialog} fro
 import Slide from 'material-ui/transitions/Slide';
 import List, {ListItem, ListItemIcon} from 'material-ui/List';
 import {FaClose} from 'react-icons/lib/fa';
-import {blueGrey} from "material-ui/colors/index";
+import {red, blueGrey} from "material-ui/colors/index";
 import FormControl from "material-ui/Form/FormControl";
 import Input, {InputLabel} from "material-ui/Input";
 import IconButton from "material-ui/IconButton";
@@ -35,52 +35,53 @@ const Row = ({icon, id, label, type, value, endAdornment, onChange, inset, reado
 class ChangePasswordDialog extends Component {
 
   render() {
-
-    const {show, password, onPasswordChange} = this.props;
-    const {passwordOld, passwordNew, passwordNewConfirm} = password || {};
+    const {password, onPasswordChange, onSave, onClose} = this.props;
+    const {open = false, oldPassword, newPassword, newPasswordConfirm, errorMessage} = password || {};
+    let error = undefined;
+    if (errorMessage) {
+      error = (<Typography style={{color: red.A200}}>{errorMessage}</Typography>);
+    }
 
     return (
       <Dialog
-        onRequestClose={this.handleRequestClose}
+        onClose={onClose}
         fullScreen={false}
         transition={Transition}
-        open={show}>
+        open={open}>
 
         <DialogTitle disableTypography
                      style={{color: 'white', background: blueGrey.A700, display: 'flex', padding: '2px 0'}}>
-          <IconButton style={{color: 'white', marginLeft: '8px'}}
-                      onClick={this.handleRequestClose} aria-label="Close">
+          <IconButton style={{color: 'white', marginLeft: '8px', zIndex: '10'}}
+                      onClick={onClose} aria-label="Close">
             <FaClose/>
           </IconButton>
-          <Typography type="title" style={{color: 'white', position: 'absolute', width: '100%', textAlign: 'center', padding: '14px 0'}}>
+          <Typography type="title" style={{color: 'white', position: 'absolute', width: '100%', textAlign: 'center', padding: '14px 0', zIndex: '5'}}>
             {'Passwort ändern'}
           </Typography>
         </DialogTitle>
 
         <DialogContent>
           <List>
-            <Row id="passwordOld" label="Altes Passwort" value={passwordOld} type='password'
-                 inset
+            <Row id="oldPassword" label="Altes Passwort" value={oldPassword} type='password'
                  readonly={false} /* TODO */
-                 onChange={value => onPasswordChange(['passwordNew'], value)}
+                 onChange={value => onPasswordChange(['newPassword'], value)}
                  icon={undefined /* TODO ??? */}/>
-            <Row id="passwordNew" label="Neues Passwort" value={passwordNew} type='password'
-                 inset
+            <Row id="newPassword" label="Neues Passwort" value={newPassword} type='password'
                  readonly={false} /* TODO */
-                 onChange={value => onPasswordChange(['passwordNew'], value)}
+                 onChange={value => onPasswordChange(['newPassword'], value)}
                  icon={undefined /* TODO ??? */}/>
-            <Row id="passwordNewConfirm" label="Passwort bestätigen" value={passwordNewConfirm} type='password'
-                 inset
+            <Row id="newPasswordConfirm" label="Passwort bestätigen" value={newPasswordConfirm} type='password'
                  readonly={false} /* TODO */
-                 onChange={value => onPasswordChange(['passwordNewConfirm'], value)}
+                 onChange={value => onPasswordChange(['newPasswordConfirm'], value)}
                  icon={undefined /* TODO ??? */}/>
+            {error}
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.signInOut} color="primary">
+          <Button onClick={onClose} color="primary">
             {'Abbrechen'}
           </Button>
-          <Button onClick={this.signInOut} color="primary">
+          <Button onClick={() => onSave(oldPassword, newPassword, newPasswordConfirm)} color="primary">
             {'Speichern'}
           </Button>
         </DialogActions>

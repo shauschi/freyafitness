@@ -30,10 +30,9 @@ const Row = ({icon, id, label, type, value, endAdornment, onChange, inset, reado
   );
 };
 
-const Profile = ({profile, onProfileDetailsChange}) => {
-  const {firstname, lastname, dayOfBirth, email, mobil, adress = {}, loginData = {}} = profile;
+const Profile = ({profile, onProfileDetailsChange, onOpenPasswordChange}) => {
+  const {firstname, lastname, dayOfBirth, email, mobil, adress = {}} = profile;
   const {zipCode, city, street, nr} = adress;
-  const {passwordOld, passwordNew, passwordNewConfirm} = loginData;
 
   return (
     <List>
@@ -58,7 +57,8 @@ const Profile = ({profile, onProfileDetailsChange}) => {
         </ListItemIcon>
         <ListItemText primary={"Statistiken (PR)"}/>
       </ListItem>
-      <ListItem button style={{backgroundColor: backgroundColor}}>
+      <ListItem button style={{backgroundColor: backgroundColor}}
+                onClick={() => onOpenPasswordChange()}>
         <ListItemIcon>
           <FaLock/>
         </ListItemIcon>

@@ -28,10 +28,12 @@ import {
   onProfileDetailsChange
 } from "./model/profile";
 import {
-  onPasswordChange
+  onPasswordChange,
+  onOpenPasswordChange,
+  onCancelPasswordChange,
+  changePassword
 } from "./model/password";
 import init from './model/init.js';
-import {ChangePasswordDialog} from "./components/password";
 
 class App extends Component {
 
@@ -41,7 +43,7 @@ class App extends Component {
   };
 
   render() {
-    const {classes, drawer, actions, profile, courses} = this.props;
+    const {classes, drawer, actions, profile, courses, password} = this.props;
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
@@ -92,6 +94,11 @@ class App extends Component {
                       pending={profile.pending}
                       profile={profile.data}
                       onProfileDetailsChange={actions.onProfileDetailsChange}
+                      password={password}
+                      onPasswordChange={actions.onPasswordChange}
+                      onOpenPasswordChange={actions.onOpenPasswordChange}
+                      onCancelPasswordChange={actions.onCancelPasswordChange}
+                      changePassword={actions.changePassword}
                     />}
                   />
                 </SwipeableRoutes>
@@ -128,7 +135,11 @@ const mapDispatchToProps = dispatch => ({
     onCourseDetailsChange: onCourseDetailsChange,
     signIn: signIn,
     signOut: signOut,
-    onProfileDetailsChange: onProfileDetailsChange
+    onProfileDetailsChange: onProfileDetailsChange,
+    onPasswordChange: onPasswordChange,
+    onOpenPasswordChange: onOpenPasswordChange,
+    onCancelPasswordChange: onCancelPasswordChange,
+    changePassword: changePassword
   }, dispatch),
   dispatch
 });

@@ -1,6 +1,13 @@
-import {fetchOwnProfile, actions} from '../';
+import {
+  actions,
+  changePassword,
+  onOpenPasswordChange,
+  onCancelPasswordChange,
+  onPasswordChange
+} from '../';
 
-jest.mock('../../../service/profile');
+// TODO
+// jest.mock('../../../service/password');
 
 describe('profile actions', () => {
 
@@ -12,25 +19,13 @@ describe('profile actions', () => {
     getMockState = () => {};
   });
 
-  describe('fetchOwnProfile', () => {
+  describe('changePassword', () => {
 
-    it('should dispatch PENDING action', () => {
-      fetchOwnProfile()(dispatchMock, getMockState);
+    it('should dispatch ERROR action when newPassword does not equal newPasswordConfirm', () => {
+      changePassword("old", "new", "other new")(dispatchMock, getMockState);
 
-      expect(dispatchMock.mock.calls[0][0]).toEqual(actions.profile.load.pending());
+      expect(dispatchMock.mock.calls[0][0]).toEqual(
+        actions.password.error({message: 'Die beiden neuen Passwörter stimmen nicht überein.'}));
     });
-
-    it('should dispatch SUCCESS action when fetch is successful', async () => {
-      await fetchOwnProfile()(dispatchMock, getMockState);
-
-      expect(dispatchMock.mock.calls[1][0]).toEqual(actions.profile.load.success({"firstname": "Testee", "lastname": "Foobar"}));
-    });
-
-    it('should dispatch ERROR action when fetch is not successful', async () => {
-      const error = new Error('Ops, something went wrong');
-      await fetchOwnProfile(error)(dispatchMock, getMockState);
-
-      expect(dispatchMock.mock.calls[1][0]).toEqual(actions.profile.load.error(error));
-    })
   });
 });
