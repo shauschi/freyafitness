@@ -2,11 +2,10 @@
 import React, {Component} from 'react';
 import Dialog, {DialogActions, DialogContent, DialogTitle, withMobileDialog} from 'material-ui/Dialog';
 import Slide from 'material-ui/transitions/Slide';
-import List, {ListItem, ListItemIcon} from 'material-ui/List';
+import {Row} from './../general';
+import List from 'material-ui/List';
 import {FaClose} from 'react-icons/lib/fa';
 import {red, blueGrey} from "material-ui/colors/index";
-import FormControl from "material-ui/Form/FormControl";
-import Input, {InputLabel} from "material-ui/Input";
 import IconButton from "material-ui/IconButton";
 import Button from "material-ui/Button";
 import Typography from "material-ui/Typography";
@@ -14,23 +13,6 @@ import Typography from "material-ui/Typography";
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
-
-const Row = ({icon, id, label, type, value, endAdornment, onChange, inset, readonly, backgroundColor}) => {
-  return (
-    <ListItem style={{backgroundColor: backgroundColor}} inset={inset}>
-      {icon ? <ListItemIcon>{icon}</ListItemIcon> : undefined}
-      <FormControl fullWidth>
-        <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Input id={id} type={type}
-               endAdornment={endAdornment}
-               value={value}
-               onChange={event => onChange(event.target.value)}
-               disabled={readonly}/>
-      </FormControl>
-    </ListItem>
-  );
-};
-
 
 class ChangePasswordDialog extends Component {
 

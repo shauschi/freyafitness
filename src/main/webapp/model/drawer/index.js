@@ -10,7 +10,7 @@ export const actions = createActions({
 });
 
 export const toggleDrawer = () => {
-  return dispatch => dispatch(actions.toggleDrawer);
+  return dispatch => dispatch(actions.toggleDrawer());
 };
 
 export default handleActions({

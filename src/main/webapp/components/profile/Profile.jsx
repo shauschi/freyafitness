@@ -1,34 +1,14 @@
 'use strict';
-import React, {Component} from 'react';
-import List, {ListItem, ListItemText, ListItemIcon, ListSubheader} from 'material-ui/List';
+import React from 'react';
+import {Row, Subheader} from './../../components/general';
+import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-import {FormControl} from 'material-ui/Form';
-import Input, {InputLabel} from 'material-ui/Input';
-import {FaBattery1, FaLock, FaUser, FaLineChart, FaFloppyO} from 'react-icons/lib/fa';
+import {FaBattery1, FaLock, FaUser, FaLineChart} from 'react-icons/lib/fa';
 import {red} from 'material-ui/colors';
-import {blueGrey} from "material-ui/colors/index";
 import * as Format from "../../utils/Format.jsx";
 import moment from "moment/moment";
 
-// TODO in constants / colors
 const backgroundColor = 'rgba(255, 255, 255, 0.75)';
-
-// TODO als utils!
-const Row = ({icon, id, label, type, value, endAdornment, onChange, inset, readonly}) => {
-  return (
-    <ListItem style={{backgroundColor: backgroundColor}} inset={inset}>
-      {icon ? <ListItemIcon>{icon}</ListItemIcon> : undefined}
-      <FormControl fullWidth>
-        <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Input id={id} type={type}
-               endAdornment={endAdornment}
-               value={value}
-               onChange={event => onChange(event.target.value)}
-               disabled={readonly}/>
-      </FormControl>
-    </ListItem>
-  );
-};
 
 const Profile = ({profile, onProfileDetailsChange, onOpenPasswordChange}) => {
   const {firstname, lastname, dayOfBirth, email, mobil, adress = {}} = profile;
@@ -36,9 +16,7 @@ const Profile = ({profile, onProfileDetailsChange, onOpenPasswordChange}) => {
 
   return (
     <List>
-      <ListSubheader style={{background: blueGrey.A400, color: 'white', lineHeight: '32px'}}>
-        {"Profilübersicht"}
-      </ListSubheader>
+      <Subheader label={"Profilübersicht"} />
       <ListItem button style={{backgroundColor: backgroundColor}}>
         <Avatar>
           <FaUser/>
@@ -65,9 +43,7 @@ const Profile = ({profile, onProfileDetailsChange, onOpenPasswordChange}) => {
         <ListItemText primary={"Passwort ändern"}/>
       </ListItem>
 
-      <ListSubheader style={{background: blueGrey.A400, color: 'white', lineHeight: '32px'}}>
-        {"Persönliche Daten"}
-      </ListSubheader>
+      <Subheader label={"Persönliche Daten"} />
       <Row id="firstname" label="Vorname" value={firstname}
            readonly={false} /* TODO */
            onChange={value => onProfileDetailsChange(['firstname'], value)}
@@ -89,9 +65,7 @@ const Profile = ({profile, onProfileDetailsChange, onOpenPasswordChange}) => {
            onChange={value => onProfileDetailsChange(['mobil'], value)}
            icon={undefined /* TODO ??? */}/>
 
-      <ListSubheader style={{background: blueGrey.A400, color: 'white', lineHeight: '32px'}}>
-        {"Anschrift"}
-      </ListSubheader>
+      <Subheader label={"Anschrift"} />
       <Row id="zipCode" label="PLZ" value={zipCode}
            readonly={false} /* TODO */
            onChange={value => onProfileDetailsChange(['adress', 'zipCode'], value)}

@@ -1,13 +1,12 @@
 'use strict';
 import React from 'react';
 import moment from 'moment';
-import List, {ListSubheader} from 'material-ui/List';
+import {Subheader} from './../general';
+import List from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import {comparingMod} from '../../utils/Comparator.jsx';
 import * as Format from '../../utils/Format.jsx';
 import Course from '.';
-
-import {blueGrey} from 'material-ui/colors';
 
 const compareCourseByStartDate = comparingMod('start', moment);
 
@@ -21,9 +20,7 @@ const CourseList = ({courses, showCourseDetails}) => {
     if (lastFormatted !== formattedDayOfCourse) {
       lastFormatted = formattedDayOfCourse;
       elements.push(
-        <ListSubheader key={formattedDayOfCourse} style={{background: blueGrey.A400, color: 'white', lineHeight: '32px'}}>
-          {formattedDayOfCourse}
-        </ListSubheader>
+        <Subheader key={formattedDayOfCourse} label={formattedDayOfCourse} />
       );
     } else {
       elements.push(<Divider key={idx + "_divider"} inset light/>);
