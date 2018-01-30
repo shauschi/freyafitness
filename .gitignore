@@ -20,6 +20,7 @@
 nbproject/private/
 build/
 nbbuild/
+coverage/
 out/
 node_modules/
 dist/

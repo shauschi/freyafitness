@@ -1,6 +1,7 @@
 const debug = process.env.NODE_ENV !== "production";
 const webpack = require('webpack');
 const path = require('path');
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -19,8 +20,18 @@ module.exports = {
     inline: true,
     port: 3333
   },
+  resolve: {
+    modules: ['node_modules'],
+    extensions: ['.js', '.json', '.jsx'],
+    alias: {
+      'react-native': 'react-native-web',
+    },
+    plugins: [
+      new ModuleScopePlugin(__dirname + '/src/'),
+    ],
+  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
@@ -30,7 +41,28 @@ module.exports = {
           presets: ['react', 'es2015', 'react-hmre'],
           plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
         }
-      }
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/i,
+        loader:"file-loader",
+        query:{
+          name:'[name].[ext]',
+          outputPath:'images/'
+        }
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "url-loader",
+        query:{
+          limit:'10000',
+          name:'[name].[ext]',
+          outputPath:'fonts/'
+        }
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader']
+      },
     ]
   },
   output: {

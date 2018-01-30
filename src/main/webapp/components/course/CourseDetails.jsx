@@ -65,13 +65,13 @@ class CourseDetails extends Component {
 
   handleRequestClose = () => {
     // TODO unsaved changes?
-    this.props.onRequestClose();
+    this.props.onClose();
   };
 
   handleRequestSave = () => {
     // TODO onRequestSave
-    this.props.onRequestSave(this.props.courseDetails.details);
-    this.props.onRequestClose();
+    this.props.onSave(this.props.courseDetails.details);
+    this.props.onClose();
   };
 
   signInOut = () => {
@@ -114,7 +114,7 @@ class CourseDetails extends Component {
 
     return (
       <Dialog
-        onRequestClose={this.handleRequestClose}
+        onClose={this.handleRequestClose}
         fullScreen={fullScreen}
         transition={Transition}
         open={courseDetails.show}>
