@@ -13,22 +13,22 @@ databaseChangeLog:
                 primaryKey: true
                 nullable: false
           - column:
-              name: title
+              name: email
               type: varchar(255)
           - column:
-              name: teaser
+              name: first_name
               type: varchar(255)
           - column:
-              name: text
-              type: varchar(10000)
-          - column:
-              name: pictureId
+              name: family_name
               type: varchar(255)
           - column:
-              name: validity_from
+              name: password
+              type: varchar(255)
+          - column:
+              name: last_login
               type: timestamp
           - column:
-              name: validity_to
+              name: account_creation_time
               type: timestamp
           schemaName: public
-          tableName: news
+          tableName: user

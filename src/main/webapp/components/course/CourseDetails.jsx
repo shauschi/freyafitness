@@ -64,7 +64,7 @@ const getAttendeeList = attendees => {
 class CourseDetails extends Component {
 
   handleRequestClose = () => {
-    // TODO unsaved changes?
+    // TODO unsaved 000_user?
     this.props.onClose();
   };
 

@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: course_id
+              type: bigserial
+              constraints:
+                nullable: false
+          - column:
+              name: user_id
+              type: bigserial
+              constraints:
+                nullable: false
+          schemaName: public
+          tableName: course_user
+      - addForeignKeyConstraint:
+          baseColumnNames: user_id
+          baseTableName: course_user
+          constraintName: fk_course_user_user
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: user
+      - addForeignKeyConstraint:
+          baseColumnNames: course_id
+          baseTableName: course_user
+          constraintName: fk_course_user_course
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: course

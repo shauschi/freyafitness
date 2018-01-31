@@ -1,12 +1,13 @@
 package freya.fitness.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "news", schema="public")
 public class News extends BusinessObject {
 
