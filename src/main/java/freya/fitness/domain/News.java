@@ -11,10 +11,6 @@ import javax.persistence.*;
 @Table(name = "news", schema="public")
 public class News extends BusinessObject {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
   private String title;
 
   private String teaser;

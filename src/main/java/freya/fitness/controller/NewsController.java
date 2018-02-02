@@ -1,5 +1,6 @@
 package freya.fitness.controller;
 
+import freya.fitness.dto.NewsPreviewDto;
 import freya.fitness.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

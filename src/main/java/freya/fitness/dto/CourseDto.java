@@ -1,4 +1,4 @@
-package freya.fitness.controller;
+package freya.fitness.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import freya.fitness.domain.Course;
@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

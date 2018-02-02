@@ -1,33 +1,24 @@
 package freya.fitness.service;
 
 import freya.fitness.domain.News;
+import freya.fitness.repository.NewsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class NewsService {
 
-  public List<News> getCurrentNews() {
-    return Arrays.asList(
-        news(1L, "Neue App", "Jetzt gliech online anmelden"),
-        news(2L, "Neuer Ort",
-            "Kurse finden jetzt teilweise im Schützenhaus statt." +
-                " Bitte informiert euch, wo euer Kurs stattfindet."),
-        news(3L, "XLETIX",
-            "Wir wollen mit einem Team an den" +
-                " XLETIX Norddeutschland teilnehmen.")
-    );
-  }
+  @Autowired
+  private NewsRepository newsRepository;
 
-  private News news(Long id, String title, String teaser) {
-    News news = new News();
-    news.setId(id);
-    news.setTitle(title);
-    news.setTeaser(teaser);
-    news.setPictureId(id);
-    return news;
+  public List<News> getCurrentNews() {
+    final LocalDateTime now = LocalDateTime.now();
+    return newsRepository
+        .findByValidityFromLessThanEqualAndValidityToGreaterThanEqual(
+            now, now);
   }
 
 }

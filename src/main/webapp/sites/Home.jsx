@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import Grid from 'material-ui/Grid';
-import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from 'material-ui/Dialog';
-import List, {ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction} from 'material-ui/List';
-import {Subheader, NewsSlider, NewsItem} from './../components/general';
+import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
+import {Subheader, Slider} from './../components/general';
+import {NewsItem} from './../components/news';
 import Course from './../components/course';
 
 import {FaInfo, FaBattery1} from 'react-icons/lib/fa';
@@ -69,7 +69,7 @@ class Home extends Component {
 
         <Grid item xs={12} md={12} style={{padding: '0px'}}>
           {/* Neuigkeiten, autoscroll, 1 bis 5 Elemente, default=Willkommen */}
-          <NewsSlider loading={this.props.news.pending}>
+          <Slider loading={this.props.news.pending}>
             {newsData.map((newsItem, idx) => (
               <NewsItem
                 key={idx}
@@ -77,7 +77,7 @@ class Home extends Component {
                 text={newsItem.teaser}
                 img={'http://localhost:9000/test' + newsItem.pictureId + '.jpg'}/>
             ))}
-          </NewsSlider>
+          </Slider>
 
           <List>
             <Subheader label={"Meine Kurse"}/>

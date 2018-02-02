@@ -1,6 +1,6 @@
 package freya.fitness.domain;
 
-import freya.fitness.controller.CourseDto;
+import freya.fitness.dto.CourseDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

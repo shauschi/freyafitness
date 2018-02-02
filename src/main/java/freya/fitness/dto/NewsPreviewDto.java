@@ -1,7 +1,6 @@
-package freya.fitness.controller;
+package freya.fitness.dto;
 
 import freya.fitness.domain.News;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

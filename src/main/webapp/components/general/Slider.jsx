@@ -30,7 +30,7 @@ const sliderStyles = () => ({
   }
 });
 
-class NewsSlider extends Component {
+class Slider extends Component {
 
   constructor(props) {
     super(props);
@@ -111,4 +111,4 @@ class NewsSlider extends Component {
 
 export default compose(
   withStyles(sliderStyles)
-)(NewsSlider);
+)(Slider);

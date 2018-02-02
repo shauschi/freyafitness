@@ -1,18 +1,15 @@
 package freya.fitness.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Embeddable
 public class Validity {
-
-  public Validity(LocalDateTime from, LocalDateTime to) {
-    this.from = from;
-    this.to = to;
-  }
 
   private LocalDateTime from;
 

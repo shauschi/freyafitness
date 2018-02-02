@@ -4,7 +4,7 @@ import compose from 'recompose/compose';
 import {withStyles} from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Hidden from 'material-ui/Hidden';
-import {LoadingIndicator} from '.';
+import {LoadingIndicator} from '../general/index';
 
 const itemStyles = () => ({
   container: {
