@@ -3,15 +3,14 @@ import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import {withStyles} from 'material-ui/styles';
 import SwipeableViews from 'react-swipeable-views';
-import {virtualize, autoPlay} from 'react-swipeable-views-utils';
+import {autoPlay} from 'react-swipeable-views-utils';
 import MobileStepper from 'material-ui/MobileStepper';
 import Button from 'material-ui/Button';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
-import {viewPath} from '../../utils/RamdaUtils';
 import {LoadingIndicator} from '.';
 
-const EnhancedSwipeableViews = autoPlay(virtualize(SwipeableViews));
+const EnhancedSwipeableViews = autoPlay(SwipeableViews);
 
 const sliderStyles = () => ({
   container: {
@@ -40,7 +39,6 @@ class Slider extends Component {
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handleBack = this.handleBack.bind(this);
-    this.slideRenderer = this.slideRenderer.bind(this);
   }
 
   handleChangeIndex(index) {
@@ -59,22 +57,9 @@ class Slider extends Component {
     this.setState({index: next});
   }
 
-  slideRenderer(params) {
-    const {index, key} = params;
-    const {loading} = this.props;
-    let child;
-    if (loading) {
-      child = (<LoadingIndicator/>);
-    } else {
-      const children = viewPath(['props', 'children'], this) || [];
-      child = children[Math.abs(index % children.length)];
-    }
-    return (<div key={key}>{child}</div>);
-  }
-
   render()
   {
-    const {classes, children = []} = this.props;
+    const {loading, classes, children = []} = this.props;
     const {index} = this.state;
 
     return (
@@ -83,8 +68,10 @@ class Slider extends Component {
           disableLazyLoading={true}
           index={index}
           interval={5000}
-          onChangeIndex={this.handleChangeIndex}
-          slideRenderer={this.slideRenderer} />
+          onChangeIndex={this.handleChangeIndex}>
+          {loading ? <LoadingIndicator/> : children}
+        </EnhancedSwipeableViews>
+
         <div className={classes.stepperContainer}>
           <MobileStepper
             type="dots"
