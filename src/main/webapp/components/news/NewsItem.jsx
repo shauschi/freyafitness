@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import {withStyles} from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
-import Hidden from 'material-ui/Hidden';
-import {LoadingIndicator} from '../general/index';
+import Button from 'material-ui/Button';
+import List, {ListItem, ListItemSecondaryAction} from 'material-ui/List';
 
 const itemStyles = () => ({
   container: {
@@ -13,10 +13,11 @@ const itemStyles = () => ({
     backgroundSize: 'cover'
   },
   description: {
+    color: 'white',
     position: 'absolute',
     bottom: '0',
     width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)'
+    backgroundColor: 'rgba(0, 0, 0, 0.35)'
   },
   descriptionText: {
     padding: '16px'
@@ -27,19 +28,29 @@ const itemStyles = () => ({
 });
 
 class NewsItem extends Component {
-  render()
-  {
+  render() {
     const {classes, title, text, img} = this.props;
     return (
-      <div>
-        <div className={classes.container} style={{backgroundImage: img ? 'url(' + img + ')' : undefined}}>
-          <div className={classes.description}>
-            <div className={classes.descriptionText}>
-              <Typography type='title'>{title}</Typography>
-              <Typography>{text}</Typography>
-            </div>
-            <div className={classes.stepperPlaceholder} />
-          </div>
+      <div className={classes.container} style={{backgroundImage: img ? 'url(' + img + ')' : undefined}}>
+        <div className={classes.description}>
+          <List style={{padding: '0'}}>
+            <ListItem button>
+                <div style={{width: '100%'}}>
+                  <Typography style={{color: 'rgba(255, 255, 255, 0.87)'}} type='headline'>
+                    {title}
+                    </Typography>
+                  <Typography style={{color: 'rgba(255, 255, 255, 0.87)'}}>
+                    {text}
+                  </Typography>
+                </div>
+                <ListItemSecondaryAction style={{marginTop: 'auto', top: 'auto', bottom: '6px'}}>
+                  <Button dense color='primary'>
+                    mehr
+                  </Button>
+                </ListItemSecondaryAction>
+            </ListItem>
+          </List>
+          <div className={classes.stepperPlaceholder}/>
         </div>
       </div>
     );

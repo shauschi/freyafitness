@@ -59,14 +59,13 @@ export const APP_STYLES = theme => ({
   },
   content: {
     position: 'relative',
-    backgroundColor: theme.palette.background.default,
     width: '100%',
     height: 'calc(100% - 102px)',
-    marginTop: '56px',
+    marginTop: '55px',
     marginBottom: '46px',
     [theme.breakpoints.up('sm')]: {
       height: 'calc(100% - 110px)',
-      marginTop: 64,
+      marginTop: '64px',
       width: `calc(100% - ${DRAWER_WIDTH}px)`
     },
   },

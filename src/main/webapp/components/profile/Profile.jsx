@@ -15,7 +15,7 @@ const Profile = ({profile, onProfileDetailsChange, onOpenPasswordChange}) => {
   const {zipCode, city, street, nr} = adress;
 
   return (
-    <List>
+    <List style={{padding: '0'}}>
       <Subheader label={"Profilübersicht"} />
       <ListItem button style={{backgroundColor: backgroundColor}}>
         <Avatar>

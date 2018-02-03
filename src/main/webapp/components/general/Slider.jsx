@@ -47,13 +47,21 @@ class Slider extends Component {
 
   handleNext() {
     const current = this.state.index;
+    const {children = []} = this.props;
     let next = current + 1;
+    if (next >= children.length) {
+      next = 0;
+    }
     this.setState({index: next});
   }
 
   handleBack() {
     const current = this.state.index;
+    const {children = []} = this.props;
     let next = current - 1;
+    if (next <= 0) {
+      next = children.length - 1;
+    }
     this.setState({index: next});
   }
 
@@ -80,12 +88,12 @@ class Slider extends Component {
             position="static"
             className={classes.stepper}
             nextButton={
-              <Button dense onClick={this.handleNext}>
+              <Button dense color='primary' onClick={this.handleNext}>
                 <KeyboardArrowRight/>
               </Button>
             }
             backButton={
-              <Button dense onClick={this.handleBack}>
+              <Button dense color='primary' onClick={this.handleBack}>
                 <KeyboardArrowLeft/>
               </Button>
             }

@@ -79,7 +79,7 @@ class Home extends Component {
             ))}
           </Slider>
 
-          <List>
+          <List style={{padding: '0'}}>
             <Subheader label={"Meine Kurse"}/>
             { myCourses.map(
               (course, idx) => (<Course key={idx} course={course} showCourseDetails={showCourseDetails}/>)
