@@ -2,11 +2,11 @@
 import React, {Component} from 'react';
 import {Row, Subheader} from './../../components/general';
 import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
-import {FaBattery1, FaLock, FaUser, FaLineChart} from 'react-icons/lib/fa';
+import {FaBattery1, FaLock, FaLineChart} from 'react-icons/lib/fa';
 import {red} from 'material-ui/colors';
 import * as Format from "../../utils/Format.jsx";
 import moment from "moment/moment";
+import {ProfilePicture} from ".";
 
 const backgroundColor = 'rgba(255, 255, 255, 0.75)';
 
@@ -30,15 +30,7 @@ class Profile extends Component {
             button
             style={{backgroundColor: backgroundColor}}
             onClick={onOpenProfilPictureChange}>
-            <Avatar style={{width: '60px', height: '60px'}}>
-              {
-                id
-                ? <img
-                    src={'http://127.0.0.1:9000/profile/' + id + '/picture'}
-                    style={{width: '100%'}}/>
-                : <FaUser/>
-              }
-            </Avatar>
+            <ProfilePicture userId={id} />
             <ListItemText primary={"Profilbild ändern"}/>
           </ListItem>
           <ListItem button style={{backgroundColor: backgroundColor}}>

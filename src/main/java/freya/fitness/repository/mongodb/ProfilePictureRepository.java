@@ -23,6 +23,10 @@ public class ProfilePictureRepository {
 
   public byte[] getById(final String profilePictureId) throws IOException {
     LOGGER.debug("get profile picture by id " + profilePictureId);
+    if (profilePictureId != null) {
+      return new byte[0];
+    }
+
     final GridFSFile result = gridFsTemplate.findOne(whereId(profilePictureId));
     if (result == null) {
       final String message = "no profile picture available for " + profilePictureId;
@@ -54,7 +58,9 @@ public class ProfilePictureRepository {
   }
 
   public void delete(final String profilePictureId) {
-    gridFsTemplate.delete(whereId(profilePictureId));
+    if (profilePictureId != null) {
+      gridFsTemplate.delete(whereId(profilePictureId));
+    }
   }
 
   private Query whereId(final String id) {

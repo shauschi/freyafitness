@@ -43,9 +43,14 @@ public class ProfileController {
   public ResponseEntity<Resource> getProfilePicture(@PathVariable final Long userId)
       throws IOException {
     final User user = userService.getUser(userId);
-    final byte[] bytes =
-        profilePictureService.getProfilePictureData(user.getProfilePictureId());
-    return ResponseEntity.ok().body(new ByteArrayResource(bytes));
+    final String profilePictureId = user.getProfilePictureId();
+    if (profilePictureId == null) {
+      return ResponseEntity.notFound().build();
+    } else {
+      final byte[] bytes =
+          profilePictureService.getProfilePictureData(profilePictureId);
+      return ResponseEntity.ok().body(new ByteArrayResource(bytes));
+    }
   }
 
   @PostMapping(
