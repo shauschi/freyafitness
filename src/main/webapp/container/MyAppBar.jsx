@@ -8,12 +8,12 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import Hidden from 'material-ui/Hidden';
 
-import {blueGrey, amber} from 'material-ui/colors';
+import {blueGrey} from 'material-ui/colors';
 
 const MyAppBar = (props) => {
   const {classes, toggleDrawer} = props;
   return (
-    <AppBar style={{background: blueGrey.A700}} className={classes.appBar}>
+    <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
       <Toolbar>
         <Hidden smUp>
           <IconButton

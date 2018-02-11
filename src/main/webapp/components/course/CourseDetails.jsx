@@ -119,7 +119,7 @@ class CourseDetails extends Component {
         transition={Transition}
         open={courseDetails.show}>
         <DialogTitle disableTypography
-                     style={{color: 'white', background: blueGrey.A700, display: 'flex', padding: '2px 16px'}}>
+                     style={{color: 'white', background: blueGrey[800], display: 'flex', padding: '2px 16px'}}>
           <IconButton style={{color: 'white'}} onClick={this.handleRequestClose} aria-label="Close">
             <FaClose/>
           </IconButton>
