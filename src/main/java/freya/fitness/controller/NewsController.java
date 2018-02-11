@@ -3,8 +3,8 @@ package freya.fitness.controller;
 import freya.fitness.dto.NewsPreviewDto;
 import freya.fitness.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,8 +17,7 @@ public class NewsController {
   @Autowired
   private NewsService newsService;
 
-  @RequestMapping("/previews")
-  @ResponseBody
+  @GetMapping("/previews")
   public List<NewsPreviewDto> getNewsPreviews() {
     return newsService.getCurrentNews().stream()
         .map(NewsPreviewDto::new)

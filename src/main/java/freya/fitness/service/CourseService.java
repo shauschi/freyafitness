@@ -34,12 +34,12 @@ public class CourseService {
     return courseRepository.findByStartBetween(from.atStartOfDay(), to.atTime(23, 59, 59));
   }
 
-  public Course update(Course course) {
+  private Course update(Course course) {
     return courseRepository.save(course);
   }
 
-  public Course update(CourseDto courseDto) {
-    Course existingCourse = getCourse(courseDto.getId()).orElse(null);
+  public Course update(final Long courseId, final CourseDto courseDto) {
+    Course existingCourse = getCourse(courseId).orElse(null);
     Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
     return update(course);
   }
