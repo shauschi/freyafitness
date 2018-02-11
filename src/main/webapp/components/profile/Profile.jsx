@@ -30,7 +30,9 @@ class Profile extends Component {
             button
             style={{backgroundColor: backgroundColor}}
             onClick={onOpenProfilPictureChange}>
-            <ProfilePicture userId={id} />
+            <ListItemIcon>
+              <ProfilePicture userId={id} />
+            </ListItemIcon>
             <ListItemText primary={"Profilbild ändern"}/>
           </ListItem>
           <ListItem button style={{backgroundColor: backgroundColor}}>

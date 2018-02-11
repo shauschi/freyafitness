@@ -2,10 +2,10 @@
 import React from 'react';
 import {FaUser} from 'react-icons/lib/fa';
 
-const ProfilePicture = ({userId, size = 60}) => {
+const ProfilePicture = ({userId}) => {
   if (userId) {
     return (
-      <div style={{width: size + 'px', height: size + 'px'}}>
+      <div style={{height: '100%'}}>
         <img
           src={'http://127.0.0.1:9000/profile/' + userId + '/picture'}
           style={{width: '100%'}}/>
