@@ -4,7 +4,7 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Checkbox from 'material-ui/Checkbox';
-import {FormGroup, FormControlLabel} from "material-ui/Form";
+import {FormControl, FormControlLabel, FormHelperText} from "material-ui/Form";
 import Dialog, {
   DialogContent,
   DialogActions,
@@ -13,6 +13,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import AvatarEditor from 'react-avatar-editor';
 import Slide from 'material-ui/transitions/Slide';
+import {setPath} from './../../utils/RamdaUtils';
 
 import {FaClose} from 'react-icons/lib/fa';
 import {blueGrey} from 'material-ui/colors';
@@ -25,7 +26,11 @@ class ProfilePictureDialog extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {acceptAGB: false};
     this.handleUpload = this.handleUpload.bind(this);
+    this.handleRequestSave = this.handleRequestSave.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+    this.setAvatarEditorRef = this.setAvatarEditorRef.bind(this);
   }
 
   handleUpload(e) {
@@ -39,21 +44,33 @@ class ProfilePictureDialog extends Component {
       };
       changeTempProfilePicture(temp);
     };
+    this.setState(setPath(['errorText'], undefined, this.state));
     reader.readAsDataURL(file);
   }
 
   handleRequestSave = () => {
     const {file} = this.props.temp;
+    if (!file) {
+      this.setState(setPath(['errorText'], 'Bitte ein neues Bild auswählen', this.state));
+      return;
+    }
+    const {acceptAGB} = this.state;
+    if (!acceptAGB) {
+      this.setState(setPath(['errorText'], 'Bitte die AGB akzeptieren', this.state));
+      return;
+    }
+
     const canvasScaled = this.editor.getImageScaledToCanvas();
     canvasScaled.toBlob(blob => {
-      console.warn("its a blob", blob);
       const formData = new FormData();
       formData.append('image', blob, file.name);
+      this.resetState();
       this.props.onSave(formData);
     });
   };
 
   handleRequestClose = () => {
+    this.resetState();
     this.props.onClose();
   };
 
@@ -61,7 +78,16 @@ class ProfilePictureDialog extends Component {
     this.editor = editor;
   };
 
+  resetState = () => {
+    this.setState({acceptAGB: false, errorText: undefined});
+  };
+
+  onCheckboxChange = event => {
+    this.setState({acceptAGB: event.target.checked, errorText: undefined});
+  };
+
   render() {
+    const {acceptAGB, errorText} = this.state;
     const {show, fullScreen, temp} = this.props;
 
     return (
@@ -116,18 +142,19 @@ class ProfilePictureDialog extends Component {
                 Mit dem Speichern bestätigst Du, dass Du die Rechte an diesem Bild besitzt
                 und es nicht gegen unsere AGB verstößt.
               </Typography>
-              <FormGroup row>
+              <FormControl required error={!!errorText}>
                 <FormControlLabel
                   control={
                     <Checkbox
                       id='acceptAGB'
-                      checked={true}
-                      onChange={() => {}}
+                      checked={acceptAGB}
+                      onChange={this.onCheckboxChange}
                     />
                   }
                   label={'ich stimme zu'}
                 />
-              </FormGroup>
+                <FormHelperText>{errorText}</FormHelperText>
+              </FormControl>
             </div>
           </DialogContent>
 

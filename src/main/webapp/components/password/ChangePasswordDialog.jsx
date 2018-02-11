@@ -60,11 +60,11 @@ class ChangePasswordDialog extends Component {
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
-            {'Abbrechen'}
-          </Button>
           <Button onClick={() => onSave(oldPassword, newPassword, newPasswordConfirm)} color="primary">
             {'Speichern'}
+          </Button>
+          <Button onClick={onClose} color="primary">
+            {'Abbrechen'}
           </Button>
         </DialogActions>
       </Dialog>
