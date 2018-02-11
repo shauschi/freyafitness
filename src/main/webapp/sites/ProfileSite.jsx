@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Grid from 'material-ui/Grid';
-import {CircularProgress} from 'material-ui/Progress';
 import Profile, {ProfilePictureDialog} from './../components/profile';
 import {ChangePasswordDialog} from './../components/password';
+import {LoadingIndicator} from "../components/general";
 import {
   fetchOwnProfile,
   changeTempProfilePicture,
@@ -30,7 +30,7 @@ class ProfileSite extends Component {
     } = this.props;
 
     if (profile.pending) {
-      return (<CircularProgress/>);
+      return (<LoadingIndicator/>);
     } else {
       return (
         <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>

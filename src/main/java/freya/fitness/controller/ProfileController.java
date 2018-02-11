@@ -43,10 +43,8 @@ public class ProfileController {
   public ResponseEntity<Resource> getProfilePicture(@PathVariable final Long userId)
       throws IOException {
     final User user = userService.getUser(userId);
-    byte[] bytes = profilePictureService.getProfilePicture(user.getProfilePictureId());
-//    FileOutputStream fos = new FileOutputStream(profilePicture);
-//    byte[] bytes = new byte[(int) profilePicture.length()];
-//    fos.write(bytes);
+    final byte[] bytes =
+        profilePictureService.getProfilePictureData(user.getProfilePictureId());
     return ResponseEntity.ok().body(new ByteArrayResource(bytes));
   }
 
@@ -55,7 +53,8 @@ public class ProfileController {
       headers = "Content-Type=multipart/form-data")
   @ResponseBody
   public void changeProfilePicture(
-      @RequestParam("image") final MultipartFile image) throws IOException {
+      @RequestParam("image") final MultipartFile image)
+      throws IOException, IllegalAccessException {
     final User user = currentUserService.getCurrentUser();
     profilePictureService.changeProfilePicture(user.getId(), image);
   }

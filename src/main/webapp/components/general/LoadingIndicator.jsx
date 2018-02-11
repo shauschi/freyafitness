@@ -1,43 +1,35 @@
 'use strict';
 import React, {Component} from 'react';
-import {FaSpinner} from 'react-icons/lib/fa';
-
-const keyframesStyle = `
-  @-webkit-keyframes spinner {
-    to {transform: rotate(360deg);}
-  }
-`;
-
-const injectStyle = (style) => {
-  const styleElement = document.createElement('style');
-  document.head.appendChild(styleElement);
-  const styleSheet = styleElement.sheet;
-  styleSheet.insertRule(style, styleSheet.cssRules.length);
-};
+import {CircularProgress} from 'material-ui/Progress';
+import Typography from 'material-ui/Typography';
 
 const loadingStyles = {
-  loadingIndicator: {
+  table: {
+    height: '100%',
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
+    display: 'table'
   },
-  spinner: {
-    fontSize: '2em',
-    WebkitAnimation: 'spinner 1.8s linear infinite'
+  cell: {
+    display: 'table-cell',
+    verticalAlign: 'middle'
+  },
+  indicator: {
+    width: '65px',
+    height: '65px'
   }
 };
 
 class LoadingIndicator extends Component {
 
-  constructor(props) {
-    super(props);
-    injectStyle(keyframesStyle);
-  }
-
   render()
   {
     return (
-      <div style={loadingStyles.loadingIndicator}>
-        <FaSpinner style={loadingStyles.spinner} />
+      <div style={loadingStyles.table}>
+        <div style={loadingStyles.cell}>
+          <CircularProgress style={loadingStyles.indicator}/>
+          <Typography type={'title'} color={'primary'}>loading</Typography>
+        </div>
       </div>
     );
   };
