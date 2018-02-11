@@ -39,15 +39,15 @@ public class CourseService {
   }
 
   public Course update(final Long courseId, final CourseDto courseDto) {
-    Course existingCourse = getCourse(courseId).orElse(null);
-    Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
+    final Course existingCourse = getCourse(courseId).orElse(null);
+    final Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
     return update(course);
   }
 
   public Course addUserToCourse(User user, Long courseId) {
-    Optional<Course> courseOpt = getCourse(courseId);
+    final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
-      Course course = courseOpt.get();
+      final Course course = courseOpt.get();
       course.getAttendees().add(user);
       return update(course);
     }
@@ -55,9 +55,9 @@ public class CourseService {
   }
 
   public Course removeUserFromCourse(User user, Long courseId) {
-    Optional<Course> courseOpt = getCourse(courseId);
+    final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
-      Course course = courseOpt.get();
+      final Course course = courseOpt.get();
       course.getAttendees().remove(user);
       return update(course);
     }
