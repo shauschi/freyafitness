@@ -24,15 +24,6 @@ import {
   signIn,
   signOut
 } from './model/courses';
-import {
-  onProfileDetailsChange
-} from "./model/profile";
-import {
-  onPasswordChange,
-  onOpenPasswordChange,
-  onCancelPasswordChange,
-  changePassword
-} from "./model/password";
 import init from './model/init.js';
 
 class App extends Component {
@@ -43,7 +34,7 @@ class App extends Component {
   };
 
   render() {
-    const {classes, drawer, actions, profile, courses, password, news } = this.props;
+    const {classes, drawer, actions, courses, news } = this.props;
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
@@ -88,18 +79,7 @@ class App extends Component {
                       signOut={actions.signOut}
                     />}
                   />
-                  <Route exact path='/profile' render={() =>
-                    <ProfileSite
-                      pending={profile.pending}
-                      profile={profile.data}
-                      onProfileDetailsChange={actions.onProfileDetailsChange}
-                      password={password}
-                      onPasswordChange={actions.onPasswordChange}
-                      onOpenPasswordChange={actions.onOpenPasswordChange}
-                      onCancelPasswordChange={actions.onCancelPasswordChange}
-                      changePassword={actions.changePassword}
-                    />}
-                  />
+                  <Route exact path='/profile' render={() => <ProfileSite/>}/>
                 </SwipeableRoutes>
               </Switch>
             </div>
@@ -116,10 +96,8 @@ App.contextTypes = {
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile,
   drawer: state.drawer,
   courses: state.courses,
-  password: state.password,
   news: state.news,
 });
 
@@ -134,12 +112,7 @@ const mapDispatchToProps = dispatch => ({
     toggleEditCourse: toggleEditCourse,
     onCourseDetailsChange: onCourseDetailsChange,
     signIn: signIn,
-    signOut: signOut,
-    onProfileDetailsChange: onProfileDetailsChange,
-    onPasswordChange: onPasswordChange,
-    onOpenPasswordChange: onOpenPasswordChange,
-    onCancelPasswordChange: onCancelPasswordChange,
-    changePassword: changePassword
+    signOut: signOut
   }, dispatch),
   dispatch
 });

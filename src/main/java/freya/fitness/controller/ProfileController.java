@@ -1,12 +1,22 @@
 package freya.fitness.controller;
 
+import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.ProfileDto;
 import freya.fitness.service.CurrentUserService;
+import freya.fitness.service.ProfilePictureService;
+import freya.fitness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 @RestController
@@ -14,11 +24,40 @@ import java.io.IOException;
 public class ProfileController {
 
   @Autowired
+  private UserService userService;
+
+  @Autowired
   private CurrentUserService currentUserService;
 
-  @RequestMapping("/own")
+  @Autowired
+  private ProfilePictureService profilePictureService;
+
+  @GetMapping("/own")
   @ResponseBody
-  public ProfileDto getOwnProfil() throws IOException {
+  public ProfileDto getOwnProfil() {
     return new ProfileDto(currentUserService.getCurrentUser());
   }
+
+  @GetMapping("/{userId}/picture")
+  @ResponseBody
+  public ResponseEntity<Resource> getProfilePicture(@PathVariable final Long userId)
+      throws IOException {
+    final User user = userService.getUser(userId);
+    byte[] bytes = profilePictureService.getProfilePicture(user.getProfilePictureId());
+//    FileOutputStream fos = new FileOutputStream(profilePicture);
+//    byte[] bytes = new byte[(int) profilePicture.length()];
+//    fos.write(bytes);
+    return ResponseEntity.ok().body(new ByteArrayResource(bytes));
+  }
+
+  @PostMapping(
+      value = "/picture/change",
+      headers = "Content-Type=multipart/form-data")
+  @ResponseBody
+  public void changeProfilePicture(
+      @RequestParam("image") final MultipartFile image) throws IOException {
+    final User user = currentUserService.getCurrentUser();
+    profilePictureService.changeProfilePicture(user.getId(), image);
+  }
+
 }

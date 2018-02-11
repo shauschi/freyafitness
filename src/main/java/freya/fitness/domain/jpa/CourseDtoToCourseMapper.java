@@ -1,4 +1,4 @@
-package freya.fitness.domain;
+package freya.fitness.domain.jpa;
 
 import freya.fitness.dto.CourseDto;
 import org.springframework.stereotype.Component;

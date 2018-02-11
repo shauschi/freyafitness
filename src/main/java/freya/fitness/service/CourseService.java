@@ -1,10 +1,10 @@
 package freya.fitness.service;
 
-import freya.fitness.domain.Course;
-import freya.fitness.domain.CourseDtoToCourseMapper;
-import freya.fitness.domain.User;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.CourseDtoToCourseMapper;
+import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CourseDto;
-import freya.fitness.repository.CourseRepository;
+import freya.fitness.repository.jpa.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

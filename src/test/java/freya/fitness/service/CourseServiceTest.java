@@ -1,7 +1,7 @@
 package freya.fitness.service;
 
-import freya.fitness.domain.Course;
-import freya.fitness.repository.CourseRepository;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.repository.jpa.CourseRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

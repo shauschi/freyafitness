@@ -1,4 +1,4 @@
-package freya.fitness.domain;
+package freya.fitness.domain.jpa;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

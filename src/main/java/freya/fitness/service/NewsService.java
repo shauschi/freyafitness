@@ -1,7 +1,7 @@
 package freya.fitness.service;
 
-import freya.fitness.domain.News;
-import freya.fitness.repository.NewsRepository;
+import freya.fitness.domain.jpa.News;
+import freya.fitness.repository.jpa.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

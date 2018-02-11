@@ -1,8 +1,8 @@
 package freya.fitness.controller;
 
 import freya.fitness.dto.CourseDto;
-import freya.fitness.domain.Course;
-import freya.fitness.domain.User;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.User;
 import freya.fitness.service.CourseService;
 import freya.fitness.service.CurrentUserService;
 import org.springframework.beans.factory.annotation.Autowired;

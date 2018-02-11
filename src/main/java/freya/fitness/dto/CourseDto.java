@@ -1,9 +1,9 @@
 package freya.fitness.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import freya.fitness.domain.Course;
-import freya.fitness.domain.CourseType;
-import freya.fitness.domain.User;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.CourseType;
+import freya.fitness.domain.jpa.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

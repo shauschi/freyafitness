@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: hauschildt
+      changes:
+      - addColumn:
+          columns:
+          - column:
+              name: profile_picture_id
+              type: varchar(255)
+          schemaName: public
+          tableName: user
