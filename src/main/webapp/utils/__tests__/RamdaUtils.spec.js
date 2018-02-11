@@ -1,4 +1,4 @@
-import {setPath, assignPath, togglePath} from './../RamdaUtils.jsx';
+import {setPath, assignPath, togglePath, viewPath} from './../RamdaUtils.jsx';
 
 describe('courses reducer', () => {
 
@@ -17,8 +17,16 @@ describe('courses reducer', () => {
     }
   });
 
-  describe('test setPath', () => {
+  describe('test viewPath', () => {
+    it('should return the expected value', () => {
+      expect(viewPath([], state)).toEqual(state);
+      expect(viewPath(['hello'], state)).toEqual('world');
+      expect(viewPath(['data', 'test', 1], state)).toEqual('two');
+      expect(viewPath(['any', 'not', 'existing', 'path'], state)).toEqual(undefined);
+    });
+  });
 
+  describe('test setPath', () => {
     it('should override the existing state without a given path', () => {
       const nextState = setPath([], 'override all', state);
       const expectedState = 'override all';
