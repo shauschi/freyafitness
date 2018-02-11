@@ -11,8 +11,8 @@ class Courses extends Component {
         <CourseDetails
           courses={courses}
           courseDetails={courseDetails}
-          onRequestClose={hideCourseDetails}
-          onRequestSave={saveCourseDetails}
+          onClose={hideCourseDetails}
+          onSave={saveCourseDetails}
           toggleAttendeeList={toggleAttendeeList}
           toggleEditCourse={toggleEditCourse}
           onCourseDetailsChange={onCourseDetailsChange}

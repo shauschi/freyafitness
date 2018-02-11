@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: bigserial
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: email
+              type: varchar(255)
+          - column:
+              name: first_name
+              type: varchar(255)
+          - column:
+              name: family_name
+              type: varchar(255)
+          - column:
+              name: password
+              type: varchar(255)
+          - column:
+              name: last_login
+              type: timestamp
+          - column:
+              name: account_creation_time
+              type: timestamp
+          schemaName: public
+          tableName: user

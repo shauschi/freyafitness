@@ -1,7 +1,7 @@
 package freya.fitness.controller;
 
+import freya.fitness.dto.CourseDto;
 import freya.fitness.domain.Course;
-import freya.fitness.domain.CourseDtoToCourseMapper;
 import freya.fitness.domain.User;
 import freya.fitness.service.CourseService;
 import freya.fitness.service.CurrentUserService;

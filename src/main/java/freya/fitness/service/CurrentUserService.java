@@ -12,6 +12,6 @@ public class CurrentUserService {
   private UserRepository userRepository;
 
   public User getCurrentUser() {
-    return userRepository.findById(1L).orElseThrow(RuntimeException::new);
+    return userRepository.findById(1000L).orElseThrow(RuntimeException::new);
   }
 }

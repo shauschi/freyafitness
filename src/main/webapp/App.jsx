@@ -43,20 +43,14 @@ class App extends Component {
   };
 
   render() {
-    const {classes, drawer, actions, profile, courses, password} = this.props;
+    const {classes, drawer, actions, profile, courses, password, news } = this.props;
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
           <div className={classes.appFrame} style={{backgroundImage: 'url(http://localhost:9000/background.jpg)', backgroundSize: 'cover'}}>
             <MyAppBar classes={classes} toggleDrawer={actions.toggleDrawer} {...this.props}/>
             <MyDrawer classes={classes} toggleDrawer={actions.toggleDrawer} {...drawer}/>
-            <div style={{
-              marginTop: '56px',
-              marginBottom: '46px',
-              position: 'relative',
-              width: '100%',
-              height: 'calc(100% - 102px)'
-            }}>
+            <div className={classes.content}>
               <Switch>
                 <Redirect from='/index' to='/'/>
                 <Redirect from='/home' to='/'/>
@@ -73,7 +67,12 @@ class App extends Component {
                     WebkitOverflowScrolling: 'touch',
                   }}
                 >
-                  <Route exact path='/' render={() => <Home {...this.props}/>}/>
+                  <Route exact path='/' render={() =>
+                    <Home
+                      {...this.props}
+                      news={news}
+                    />}
+                  />
                   <Route exact path='/courses/all' render={() =>
                     <Courses
                       pending={courses.pending}
@@ -121,6 +120,7 @@ const mapStateToProps = state => ({
   drawer: state.drawer,
   courses: state.courses,
   password: state.password,
+  news: state.news,
 });
 
 const mapDispatchToProps = dispatch => ({

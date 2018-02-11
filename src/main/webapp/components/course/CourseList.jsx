@@ -22,13 +22,11 @@ const CourseList = ({courses, showCourseDetails}) => {
       elements.push(
         <Subheader key={formattedDayOfCourse} label={formattedDayOfCourse} />
       );
-    } else {
-      elements.push(<Divider key={idx + "_divider"} inset light/>);
     }
     elements.push(<Course key={idx} course={course} showCourseDetails={showCourseDetails}/>);
   }
 
-  return (<List>{elements}</List>);
+  return (<List style={{padding: '0'}}>{elements}</List>);
 };
 
 export default CourseList;

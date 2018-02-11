@@ -1,9 +1,14 @@
 import {combineReducers} from 'redux';
-import profile from './profile';
-import drawer from './drawer';
 import courses from './courses';
+import drawer from './drawer';
+import news from './news';
 import password from './password';
+import profile from './profile';
 
 export default combineReducers({
-  profile, drawer, courses, password
+  courses,
+  drawer,
+  news,
+  password,
+  profile
 })

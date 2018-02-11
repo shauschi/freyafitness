@@ -36,14 +36,12 @@ export const APP_STYLES = theme => ({
   },
   appBar2: {
     position: 'relative',
+    marginLeft: '0px',
+    width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: DRAWER_WIDTH,
       width: `calc(100% - ${DRAWER_WIDTH}px)`,
-    },
-    [theme.breakpoints.down('xs')]: {
-      marginLeft: '0px',
-      width: '100%',
-    },
+    }
   },
   navIconHide: {
     [theme.breakpoints.up('sm')]: {
@@ -60,14 +58,15 @@ export const APP_STYLES = theme => ({
     },
   },
   content: {
-    backgroundColor: theme.palette.background.default,
+    position: 'relative',
     width: '100%',
-    padding: theme.spacing.unit * 3,
-    height: 'calc(100% - 56px)',
-    marginTop: 56,
+    height: 'calc(100% - 102px)',
+    marginTop: '55px',
+    marginBottom: '46px',
     [theme.breakpoints.up('sm')]: {
-      height: 'calc(100% - 64px)',
-      marginTop: 64,
+      height: 'calc(100% - 110px)',
+      marginTop: '64px',
+      width: `calc(100% - ${DRAWER_WIDTH}px)`
     },
   },
 });

@@ -51,3 +51,11 @@ export const togglePath = (path, obj) => {
   const oldValue = ramda.view(lens, obj);
   return ramda.set(lens, !oldValue, obj);
 };
+
+/*
+ * liest den Wert entland des Pfades
+ */
+export const viewPath = (path, obj) => {
+  const lens = ramda.lensPath(path);
+  return ramda.view(lens, obj);
+};
