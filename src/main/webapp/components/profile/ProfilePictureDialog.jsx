@@ -124,6 +124,7 @@ class ProfilePictureDialog extends Component {
               <Button raised color="primary">
                 <input
                   type={'file'}
+                  accept={'image/*'}
                   name={'image'}
                   style={{position: 'absolute', width: '100%', opacity: '0'}}
                   onChange={this.handleUpload}
