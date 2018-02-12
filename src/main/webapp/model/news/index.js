@@ -19,7 +19,7 @@ export const actions = createActions({
 
 export const fetchNews = (filterOptions) => {
   return dispatch => {
-    dispatch(actions.news.load.pending())
+    dispatch(actions.news.load.pending());
     return getNews(filterOptions)
       .then(profile => dispatch(actions.news.load.success(profile)))
       .catch(error => dispatch(actions.news.load.error(error)))

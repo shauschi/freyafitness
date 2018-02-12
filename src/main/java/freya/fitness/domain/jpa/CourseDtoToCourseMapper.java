@@ -9,10 +9,6 @@ import java.util.function.BiFunction;
 @Component
 public class CourseDtoToCourseMapper implements BiFunction<CourseDto, Course, Course> {
 
-  public Course apply(CourseDto courseDto) {
-    return this.apply(courseDto, null);
-  }
-
   @Override
   public Course apply(CourseDto courseDto, Course existingCourse) {
 

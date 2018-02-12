@@ -50,8 +50,7 @@ public class ProfileController {
       value = "/picture/change",
       headers = "Content-Type=multipart/form-data")
   public void changeProfilePicture(
-      @RequestParam("image") final MultipartFile image)
-      throws IOException, IllegalAccessException {
+      @RequestParam("image") final MultipartFile image) throws IOException {
     final User user = currentUserService.getCurrentUser();
     profilePictureService.changeProfilePicture(user.getId(), image);
   }

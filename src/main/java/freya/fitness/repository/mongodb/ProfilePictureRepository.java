@@ -23,15 +23,15 @@ public class ProfilePictureRepository {
 
   public byte[] getById(final String profilePictureId) throws IOException {
     LOGGER.debug("get profile picture by id " + profilePictureId);
-    if (profilePictureId != null) {
-      return new byte[0];
+    if (profilePictureId == null) {
+      return null;
     }
 
     final GridFSFile result = gridFsTemplate.findOne(whereId(profilePictureId));
     if (result == null) {
       final String message = "no profile picture available for " + profilePictureId;
       LOGGER.debug(message);
-      throw new FileNotFoundException(message);
+      return null;
     }
     final String filename = result.getFilename();
     final GridFsResource resource = gridFsTemplate.getResource(filename);
@@ -43,10 +43,9 @@ public class ProfilePictureRepository {
     }
   }
 
-  public String save(final MultipartFile multipartFile)
-      throws IOException, IllegalAccessException {
+  public String save(final MultipartFile multipartFile) throws IOException {
     if (multipartFile == null) {
-      throw new IllegalAccessException("cannot save null");
+      throw new IllegalArgumentException("cannot save null");
     }
     final String filename = multipartFile.getOriginalFilename();
     LOGGER.debug("save multipartFile " + filename);

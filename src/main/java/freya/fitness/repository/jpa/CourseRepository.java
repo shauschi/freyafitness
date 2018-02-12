@@ -12,8 +12,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
   List<Course> findByStartGreaterThanEqual(LocalDateTime timestamp);
 
-  List<Course> findByStartLessThanEqual(LocalDateTime timestamp);
-
   List<Course> findByStartBetween(LocalDateTime from, LocalDateTime to);
 
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
 
 @Service
@@ -26,7 +25,7 @@ public class ProfilePictureService {
 
   @Transactional
   public void changeProfilePicture(final Long userId, final MultipartFile multipartFile)
-      throws IOException, IllegalAccessException {
+      throws IOException {
     final User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
     if (user.getProfilePictureId() != null) {
       profilePictureRepository.delete(user.getProfilePictureId());
