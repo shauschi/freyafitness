@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "news", schema="public")
 public class News extends BusinessObject {
 
