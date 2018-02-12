@@ -1,6 +1,6 @@
 package freya.fitness.dto;
 
-import freya.fitness.domain.News;
+import freya.fitness.domain.jpa.News;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

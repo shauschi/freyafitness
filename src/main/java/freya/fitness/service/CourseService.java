@@ -1,10 +1,10 @@
 package freya.fitness.service;
 
-import freya.fitness.domain.Course;
-import freya.fitness.domain.CourseDtoToCourseMapper;
-import freya.fitness.domain.User;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.CourseDtoToCourseMapper;
+import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CourseDto;
-import freya.fitness.repository.CourseRepository;
+import freya.fitness.repository.jpa.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,20 +34,20 @@ public class CourseService {
     return courseRepository.findByStartBetween(from.atStartOfDay(), to.atTime(23, 59, 59));
   }
 
-  public Course update(Course course) {
+  private Course update(Course course) {
     return courseRepository.save(course);
   }
 
-  public Course update(CourseDto courseDto) {
-    Course existingCourse = getCourse(courseDto.getId()).orElse(null);
-    Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
+  public Course update(final Long courseId, final CourseDto courseDto) {
+    final Course existingCourse = getCourse(courseId).orElse(null);
+    final Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
     return update(course);
   }
 
   public Course addUserToCourse(User user, Long courseId) {
-    Optional<Course> courseOpt = getCourse(courseId);
+    final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
-      Course course = courseOpt.get();
+      final Course course = courseOpt.get();
       course.getAttendees().add(user);
       return update(course);
     }
@@ -55,9 +55,9 @@ public class CourseService {
   }
 
   public Course removeUserFromCourse(User user, Long courseId) {
-    Optional<Course> courseOpt = getCourse(courseId);
+    final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
-      Course course = courseOpt.get();
+      final Course course = courseOpt.get();
       course.getAttendees().remove(user);
       return update(course);
     }

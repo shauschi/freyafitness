@@ -1,3 +1,5 @@
+'use strict';
+
 export const getOwnProfile = (param) => {
   return new Promise((resolve, reject) => {
     if(param instanceof Error) {
@@ -6,4 +8,4 @@ export const getOwnProfile = (param) => {
       resolve({firstname: 'Testee', lastname: 'Foobar'});
     }
   })
-}
+};

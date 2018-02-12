@@ -36,3 +36,13 @@ export const POST = (url, data) => fetch(url,
       throw new Error('Response not ok');
     return response.json();
   });
+
+export const POST_IMAGE = (url, data) => fetch(url,
+  {
+    method: 'POST',
+    body: data
+  })
+  .then(response => {
+    if (!response.ok)
+      console.warn(response); //throw new Error('Response not ok');
+  });

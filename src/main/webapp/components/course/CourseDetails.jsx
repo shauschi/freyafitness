@@ -18,10 +18,12 @@ import Avatar from 'material-ui/Avatar';
 import Slide from 'material-ui/transitions/Slide';
 import {TypeMapper} from '.';
 import * as Format from '../../utils/Format.jsx';
+import {ProfilePicture} from "./../profile";
 
 import {FaCalendarO, FaClockO, FaMapMarker, FaUser, FaUserMd, FaClose, FaPencil, FaEye} from 'react-icons/lib/fa';
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 import {blueGrey} from 'material-ui/colors';
+
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -52,7 +54,7 @@ const getAttendeeList = attendees => {
     attendeesList.push(
       <ListItem key={idx}>
         <Avatar>
-          <FaUser/>
+          <ProfilePicture userId={user.id} />
         </Avatar>
         <ListItemText inset primary={user.firstname + " " + user.lastname}/>
       </ListItem>
@@ -119,7 +121,7 @@ class CourseDetails extends Component {
         transition={Transition}
         open={courseDetails.show}>
         <DialogTitle disableTypography
-                     style={{color: 'white', background: blueGrey.A700, display: 'flex', padding: '2px 16px'}}>
+                     style={{color: 'white', background: blueGrey[800], display: 'flex', padding: '2px 16px'}}>
           <IconButton style={{color: 'white'}} onClick={this.handleRequestClose} aria-label="Close">
             <FaClose/>
           </IconButton>
@@ -157,7 +159,12 @@ class CourseDetails extends Component {
                  readonly={readonly} onChange={value => onCourseDetailsChange('minutes', Number.parseInt(value))}
                  icon={<FaClockO/>}/>
             <Row id="instructor" label="Kursleitung" value={instructor.firstname + " " + instructor.lastname}
-                 readonly={true} onChange={value => onCourseDetailsChange('instructor')} icon={<FaUserMd/>}/>
+                 readonly={true} onChange={value => onCourseDetailsChange('instructor', value)}
+                 icon={
+                   <Avatar>
+                     <ProfilePicture userId={instructor.id} />
+                   </Avatar>
+                 }/>
             <ListItem>
               <ListItemIcon>
                 <FaMapMarker/>

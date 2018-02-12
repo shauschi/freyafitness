@@ -1,6 +1,6 @@
-package freya.fitness.repository;
+package freya.fitness.repository.jpa;
 
-import freya.fitness.domain.News;
+import freya.fitness.domain.jpa.News;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

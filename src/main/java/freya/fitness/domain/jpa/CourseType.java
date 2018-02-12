@@ -1,4 +1,4 @@
-package freya.fitness.domain;
+package freya.fitness.domain.jpa;
 
 public enum CourseType {
   SOFT,

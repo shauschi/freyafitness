@@ -1,6 +1,6 @@
-package freya.fitness.repository;
+package freya.fitness.repository.jpa;
 
-import freya.fitness.domain.Course;
+import freya.fitness.domain.jpa.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +11,6 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
   List<Course> findByStartGreaterThanEqual(LocalDateTime timestamp);
-
-  List<Course> findByStartLessThanEqual(LocalDateTime timestamp);
 
   List<Course> findByStartBetween(LocalDateTime from, LocalDateTime to);
 

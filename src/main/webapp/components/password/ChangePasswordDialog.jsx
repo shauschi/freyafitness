@@ -32,7 +32,7 @@ class ChangePasswordDialog extends Component {
         open={open}>
 
         <DialogTitle disableTypography
-                     style={{color: 'white', background: blueGrey.A700, display: 'flex', padding: '2px 0'}}>
+                     style={{color: 'white', background: blueGrey[800], display: 'flex', padding: '2px 0'}}>
           <IconButton style={{color: 'white', marginLeft: '8px', zIndex: '10'}}
                       onClick={onClose} aria-label="Close">
             <FaClose/>
@@ -60,11 +60,11 @@ class ChangePasswordDialog extends Component {
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
-            {'Abbrechen'}
-          </Button>
           <Button onClick={() => onSave(oldPassword, newPassword, newPasswordConfirm)} color="primary">
             {'Speichern'}
+          </Button>
+          <Button onClick={onClose} color="primary">
+            {'Abbrechen'}
           </Button>
         </DialogActions>
       </Dialog>

@@ -17,7 +17,7 @@ const itemStyles = () => ({
     position: 'absolute',
     bottom: '0',
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.35)'
+    backgroundColor: 'rgba(0, 0, 0, 0.65)'
   },
   descriptionText: {
     padding: '16px'

@@ -1,4 +1,4 @@
-package freya.fitness.domain;
+package freya.fitness.domain.jpa;
 
 import lombok.Data;
 
@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "user", schema="public")
 public class User {
 
+  // TODO UUID
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -21,6 +22,8 @@ public class User {
   private String familyName;
 
   private String password;
+
+  private String profilePictureId;
 
   private LocalDateTime lastLogin;
 

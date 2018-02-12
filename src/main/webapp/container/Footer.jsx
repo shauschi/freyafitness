@@ -49,7 +49,7 @@ class Footer extends Component {
     const {classes} = this.props;
     const value = this.fromRoute();
     return (
-      <Paper style={{position: 'absolute', bottom: '0px', left: '0px', width: '100%', background: blueGrey.A700}}>
+      <Paper style={{position: 'absolute', bottom: '0px', left: '0px', width: '100%', background: blueGrey[800]}}>
         <div className={classes.appBar2}>
           <Tabs
             value={value}

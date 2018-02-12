@@ -1,3 +1,5 @@
+'use strict';
+
 export const getNews = (param) => {
   return new Promise((resolve, reject) => {
     if(param instanceof Error) {
@@ -6,4 +8,4 @@ export const getNews = (param) => {
       resolve([{id: 'news1'}, {id: 'news2'}]);
     }
   })
-}
+};
