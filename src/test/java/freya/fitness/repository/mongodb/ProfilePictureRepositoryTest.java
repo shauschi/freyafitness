@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import static com.mongodb.client.model.Filters.eq;
 import static freya.fitness.TestUtils.TEST_FILE_BYTES;
 import static freya.fitness.TestUtils.gridFSFile;
 import static freya.fitness.TestUtils.gridFsResource;
@@ -25,6 +24,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
