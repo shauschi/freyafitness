@@ -2,18 +2,30 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.CourseDtoToCourseMapper;
+import freya.fitness.domain.jpa.CourseType;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CourseDto;
 import freya.fitness.repository.jpa.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static freya.fitness.utils.TimeUtils.nextFullHour;
+
 @Service
 public class CourseService {
+
+  @Value("${course.create.minutes: 60}")
+  private int minutes;
+
+  @Value("${course.create.maxParticipants: 12}")
+  private int maxParticipants;
 
   @Autowired
   private CourseRepository courseRepository;
@@ -34,14 +46,19 @@ public class CourseService {
     return courseRepository.findByStartBetween(from.atStartOfDay(), to.atTime(23, 59, 59));
   }
 
-  private Course update(Course course) {
+  private Course save(Course course) {
     return courseRepository.save(course);
   }
 
   public Course update(final Long courseId, final CourseDto courseDto) {
     final Course existingCourse = getCourse(courseId).orElse(null);
     final Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
-    return update(course);
+    return save(course);
+  }
+
+  public Course create(final CourseDto courseDto) {
+    final Course course = courseDtoToCourseMapper.apply(courseDto, null);
+    return save(course);
   }
 
   public Course addUserToCourse(User user, Long courseId) {
@@ -49,7 +66,7 @@ public class CourseService {
     if (courseOpt.isPresent()) {
       final Course course = courseOpt.get();
       course.getAttendees().add(user);
-      return update(course);
+      return save(course);
     }
     return null;
   }
@@ -59,8 +76,21 @@ public class CourseService {
     if (courseOpt.isPresent()) {
       final Course course = courseOpt.get();
       course.getAttendees().remove(user);
-      return update(course);
+      return save(course);
     }
     return null;
   }
+
+  public Course createEmptyCourse(User user) {
+    final Course course = new Course();
+    course.setInstructor(user);
+    course.setType(CourseType.NORMAL);
+    course.setMinutes(minutes);
+    course.setStart(nextFullHour());
+    course.setMaxParticipants(maxParticipants);
+    course.setAttendees(new ArrayList<>());
+    course.setCanceled(false);
+    return course;
+  }
+
 }

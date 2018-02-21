@@ -8,6 +8,10 @@ export const getCourses = () => GET(`${baseURL}/courses/from/${moment().format(F
 
 export const getCourseDetails = id => GET(`${baseURL}/courses/${id}`);
 
+export const createNewCourse = () => GET(`${baseURL}/courses/create`);
+
+export const saveNewCourse = course => POST(`${baseURL}/courses/create`, course);
+
 export const saveCourse = course => POST(`${baseURL}/courses/${course.id}`, course);
 
 export const signIn = id => GET(`${baseURL}/courses/${id}/signin`); // TODO auf PUT umstellen

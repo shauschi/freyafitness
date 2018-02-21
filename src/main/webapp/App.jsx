@@ -15,6 +15,7 @@ import {
 } from './model/drawer';
 import {
   fetchCourses,
+  createCourse,
   showCourseDetails,
   hideCourseDetails,
   saveCourseDetails,
@@ -39,7 +40,11 @@ class App extends Component {
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
           <div className={classes.appFrame} style={{backgroundImage: 'url(http://localhost:9000/background.jpg)', backgroundSize: 'cover'}}>
-            <MyAppBar classes={classes} toggleDrawer={actions.toggleDrawer} {...this.props}/>
+            <MyAppBar
+              classes={classes}
+              toggleDrawer={actions.toggleDrawer}
+              createCourse={actions.createCourse}
+              {...this.props}/>
             <MyDrawer classes={classes} toggleDrawer={actions.toggleDrawer} {...drawer}/>
             <div className={classes.content}>
               <Switch>
@@ -105,6 +110,7 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     toggleDrawer: toggleDrawer,
     fetchCourses: fetchCourses,
+    createCourse: createCourse,
     showCourseDetails: showCourseDetails,
     hideCourseDetails: hideCourseDetails,
     saveCourseDetails: saveCourseDetails,
