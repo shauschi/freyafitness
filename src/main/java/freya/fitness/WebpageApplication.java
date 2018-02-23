@@ -13,7 +13,9 @@ public class WebpageApplication implements WebMvcConfigurer {
   }
 
   public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**").allowedOrigins("http://127.0.0.1:3333");
+    registry.addMapping("/**")
+        .allowedOrigins("http://127.0.0.1:3333")
+        .allowedMethods("GET", "PUT", "POST");
   }
 
 }

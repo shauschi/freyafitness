@@ -15,8 +15,20 @@ import * as Format from '../../utils/Format.jsx';
 import {ProfilePicture} from './../profile';
 import {Dialog, Row, FadeButton} from './../general';
 import {MODE, NEW_COURSE} from './../../model/courses';
+import {TITLE_BG} from './../../utils/Style';
 
-import {FaCalendarO, FaClockO, FaMapMarker, FaUser, FaUserMd, FaClose, FaPencil, FaEye} from 'react-icons/lib/fa';
+import {
+  FaCalendarO,
+  FaClockO,
+  FaMapMarker,
+  FaUser,
+  FaUserMd,
+  FaClose,
+  FaPencil,
+  FaEye
+} from 'react-icons/lib/fa';
+import {TiGroup} from 'react-icons/lib/ti';
+
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 
 const getAttendeeList = attendees => {
@@ -25,7 +37,7 @@ const getAttendeeList = attendees => {
     const user = attendees[idx];
     attendeesList.push(
       <ListItem key={idx}>
-        <Avatar>
+        <Avatar style={{backgroundColor: TITLE_BG}}>
           <ProfilePicture userId={user.id} />
         </Avatar>
         <ListItemText inset primary={user.firstname + " " + user.lastname}/>
@@ -75,7 +87,7 @@ class CourseDetails extends Component {
 
     const attendeesList = getAttendeeList(attendees);
 
-    const {label, icon, color} = TypeMapper[type];
+    const {label, short, color} = TypeMapper[type];
 
     return (
       <Dialog
@@ -89,31 +101,22 @@ class CourseDetails extends Component {
             : undefined
         }
         open={show}>
-        <DialogContent>
+        <DialogContent style={{padding: '0', paddingTop: '12px'}}>
           <List>
             <Row id="type" label="Kurstyp" value={label}
                  readonly={true}
                  onChange={value => {/*TODO*/}}
-                 icon={icon({color: color})}/>
+                 iconBackground={color}
+                 icon={short}/>
             <Row id="start_date" label="Kursdatum" type="date" value={moment(start).format(Format.ISO_DATE_FORMAT)}
                  readonly={readonly}
                  onChange={value => {
-
-                   console.warn("CHANGE DATE", value);
                    const date = moment(value, Format.ISO_DATE_FORMAT);
-                   console.warn("d-- ", date);
-                   console.warn("d-v ", date.isValid());
                    if (!date.isValid()) {
                      return;
                    }
-                   console.warn("s-- ", start);
-                   console.warn("m-- ", moment(start));
                    const newStart = moment(start).set({'year': date.year(), 'month': date.month(), 'date': date.date()});
-                   console.warn("--- ", newStart);
-                   console.warn("v-- ", newStart.isValid());
                    if (newStart.isValid()) {
-                     console.warn("f-- ", newStart.format(Format.TIMESTAMP_FORMAT));
-
                      onCourseDetailsChange('start', newStart.format(Format.TIMESTAMP_FORMAT));
                    }
                  }}
@@ -132,28 +135,21 @@ class CourseDetails extends Component {
                  icon={<FaClockO/>}/>
             <Row id="instructor" label="Kursleitung" value={instructor.firstname + " " + instructor.lastname}
                  readonly={true} onChange={value => onCourseDetailsChange('instructor', value)}
-                 icon={
-                   <Avatar>
-                     <ProfilePicture userId={instructor.id} />
-                   </Avatar>
-                 }/>
-            <ListItem>
-              <ListItemIcon>
-                <FaMapMarker/>
-              </ListItemIcon>
-              <ListItemText
-                inset
-                primary={"Kuhstall"}
-                secondary={"irgendwo in Toppenstedt"}/>
-            </ListItem>
-            <Row id="maxParticipanrs" label="Max. Kursteilnehmer" type="number" value={maxParticipants}
+                 icon={<ProfilePicture userId={instructor.id} />}/>
+            <Row id="location" label="Ort" value={'Toppenstedt'}
+                 readonly={true} onChange={() => {}}
+                 icon={<FaMapMarker/>}/>
+            <Row id="maxParticipants" label="Max. Kursteilnehmer" type="number" value={maxParticipants}
                  readonly={readonly}
-                 onChange={value => onCourseDetailsChange('maxParticipants', Number.parseInt(value))} icon={<FaUser/>}/>
+                 onChange={value => onCourseDetailsChange('maxParticipants', Number.parseInt(value))}
+                 icon={<FaUser/>}/>
 
             {mode !== MODE.CREATE
               ? (<ListItem button onClick={toggleAttendeeList}>
                 <ListItemIcon>
-                  <FaUser/>
+                  <Avatar style={{backgroundColor: TITLE_BG}}>
+                    <TiGroup/>
+                  </Avatar>
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -172,6 +168,7 @@ class CourseDetails extends Component {
             }
           </List>
         </DialogContent>
+
         <DialogActions>
           <div style={{position: 'relative'}}>
             <FadeButton

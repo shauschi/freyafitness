@@ -82,7 +82,7 @@ class Home extends Component {
           <List style={{padding: '0'}}>
             <Subheader label={"Meine Kurse"}/>
             { myCourses.map(
-              (course, idx) => (<Course key={idx} course={course} showCourseDetails={showCourseDetails}/>)
+              (course, idx) => (<Course key={idx} course={course} showCourseDetails={showCourseDetails} showDate={true}/>)
             )}
 
             <Subheader label={"Status"}/>
