@@ -13,9 +13,9 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import AvatarEditor from 'react-avatar-editor';
 import Slide from 'material-ui/transitions/Slide';
-import {setPath} from './../../utils/RamdaUtils';
+import {setPath} from '../../utils/RamdaUtils';
 
-import {FaClose} from 'react-icons/lib/fa';
+import {IconClose} from '../../utils/Icons';
 import {blueGrey} from 'material-ui/colors';
 
 function Transition(props) {
@@ -100,7 +100,7 @@ class ProfilePictureDialog extends Component {
           <DialogTitle disableTypography
                        style={{color: 'white', background: blueGrey[800], display: 'flex', padding: '2px 16px'}}>
             <IconButton style={{color: 'white'}} onClick={this.handleRequestClose} aria-label="Close">
-              <FaClose/>
+              <IconClose/>
             </IconButton>
             <Typography type="title" style={{color: 'white', flex: 1, textAlign: 'center', padding: '14px 0'}}>
               Profilbild anpassen

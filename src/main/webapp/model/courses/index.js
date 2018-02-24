@@ -8,8 +8,7 @@ import {
   signIn as signInApiCall,
   signOut as signOutApiCall
 } from '../../service/courses';
-import {setPath, assignPath, togglePath} from "../../utils/RamdaUtils.jsx";
-import {viewPath} from "../../utils/RamdaUtils";
+import {viewPath, setPath, assignPath, togglePath} from "../../utils/RamdaUtils";
 
 export const MODE = {
   CREATE: {

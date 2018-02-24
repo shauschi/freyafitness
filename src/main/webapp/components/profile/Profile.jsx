@@ -2,9 +2,9 @@
 import React, {Component} from 'react';
 import {Row, Subheader} from './../../components/general';
 import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
-import {FaBattery1, FaLock, FaLineChart} from 'react-icons/lib/fa';
+import {IconBatteryLow, IconLockClosed, IconLineChart} from '../../utils/Icons';
 import {red} from 'material-ui/colors';
-import * as Format from "../../utils/Format.jsx";
+import * as Format from "../../utils/Format";
 import moment from "moment/moment";
 import {ProfilePicture} from ".";
 
@@ -37,20 +37,20 @@ class Profile extends Component {
           </ListItem>
           <ListItem button style={{backgroundColor: backgroundColor}}>
             <ListItemIcon>
-              <FaBattery1 color={red.A200}/>
+              <IconBatteryLow color={red.A200}/>
             </ListItemIcon>
             <ListItemText primary={"10-er Karte"} secondary={"2 von 10 frei"}/>
           </ListItem>
           <ListItem button style={{backgroundColor: backgroundColor}}>
             <ListItemIcon>
-              <FaLineChart/>
+              <IconLineChart/>
             </ListItemIcon>
             <ListItemText primary={"Statistiken (PR)"}/>
           </ListItem>
           <ListItem button style={{backgroundColor: backgroundColor}}
                     onClick={() => onOpenPasswordChange()}>
             <ListItemIcon>
-              <FaLock/>
+              <IconLockClosed/>
             </ListItemIcon>
             <ListItemText primary={"Passwort ändern"}/>
           </ListItem>

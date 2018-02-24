@@ -3,9 +3,8 @@ import React from 'react';
 import moment from 'moment';
 import {Subheader} from './../general';
 import List from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import {comparingMod} from '../../utils/Comparator.jsx';
-import * as Format from '../../utils/Format.jsx';
+import {comparingMod} from '../../utils/Comparator';
+import * as Format from '../../utils/Format';
 import Course from '.';
 
 const compareCourseByStartDate = comparingMod('start', moment);

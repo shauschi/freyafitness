@@ -5,7 +5,7 @@ import FormControl from "material-ui/Form/FormControl";
 import Input, {InputLabel} from "material-ui/Input";
 import Avatar from "material-ui/Avatar";
 
-import {TITLE_BG} from './../../utils/Style'
+import {TITLE_BG} from '../../utils/Style'
 
 class Row extends Component {
   render()

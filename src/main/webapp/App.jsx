@@ -9,7 +9,7 @@ import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
-import * as Style from './utils/Style.jsx';
+import * as Style from './utils/Style';
 import {
   toggleDrawer
 } from './model/drawer';

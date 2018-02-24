@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import * as Format from '../../utils/Format.jsx';
+import * as Format from '../../utils/Format';
 import Typography from 'material-ui/Typography';
 import {ListItem} from 'material-ui/List';
 

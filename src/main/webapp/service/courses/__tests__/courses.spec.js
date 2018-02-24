@@ -1,6 +1,6 @@
 import {getCourses} from '../';
 import moment from 'moment';
-import * as Format from "../../../utils/Format.jsx";
+import * as Format from "../../../utils/Format";
 
 describe('courses Service', () => {
 

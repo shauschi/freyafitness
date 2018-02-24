@@ -11,7 +11,7 @@ import {
 } from 'material-ui/Dialog';
 import Slide from 'material-ui/transitions/Slide';
 
-import {FaClose} from 'react-icons/lib/fa';
+import {IconClose} from '../../utils/Icons';
 import {blueGrey} from 'material-ui/colors';
 
 function Transition(props) {
@@ -64,7 +64,7 @@ class Dialog extends Component {
                 zIndex: 20
               }}
               onClick={this.handleRequestClose}>
-              <FaClose/>
+              <IconClose/>
             </IconButton>
             <Typography
               type='title'

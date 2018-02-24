@@ -8,7 +8,14 @@ import Divider from 'material-ui/Divider';
 import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import {Link} from 'react-router-dom';
 
-import {FaHome, FaInfo, FaCalendar, FaUser, FaSignOut, FaHandGrabO} from 'react-icons/lib/fa';
+import {
+  IconHome,
+  IconInfo,
+  IconCalendar,
+  IconUser,
+  IconSignOut,
+  IconDocument
+} from '../utils/Icons/Icons';
 
 const MenuLink = ({to, label, icon, onClick}) => (
   <Link to={to} style={{textDecoration: 'none'}} onClick={onClick}>
@@ -31,17 +38,17 @@ class MyDrawer extends Component {
         <Divider/>
         <div style={{overflowY: 'auto', height: '100vh'}}>
           <List>
-            <MenuLink to='/' label='Home' icon={<FaHome/>} onClick={toggleDrawer}/>
-            <MenuLink to='/courses/all' label='Alle Kurse' icon={<FaCalendar/>} onClick={toggleDrawer}/>
-            <MenuLink to='/profile' label='Profile' icon={<FaUser/>} onClick={toggleDrawer}/>
+            <MenuLink to='/' label='Home' icon={<IconHome/>} onClick={toggleDrawer}/>
+            <MenuLink to='/courses/all' label='Alle Kurse' icon={<IconCalendar/>} onClick={toggleDrawer}/>
+            <MenuLink to='/profile' label='Profile' icon={<IconUser/>} onClick={toggleDrawer}/>
           </List>
           <Divider/>
           <List>
-            <MenuLink to='/about/freya' label='Über Freya' icon={<FaInfo/>} onClick={toggleDrawer}/>
-            <MenuLink to='/about/stall' label='Der Stall' icon={<FaInfo/>} onClick={toggleDrawer}/>
-            <MenuLink to='/agb' label='AGB' icon={<FaHandGrabO/>} onClick={toggleDrawer}/>
-            <MenuLink to='/impressum' label='Impressum' icon={<FaInfo/>} onClick={toggleDrawer}/>
-            <MenuLink to='/logout' label='Logout' icon={<FaSignOut/>} onClick={toggleDrawer}/>
+            <MenuLink to='/about/freya' label='Über Freya' icon={<IconInfo/>} onClick={toggleDrawer}/>
+            <MenuLink to='/about/stall' label='Der Stall' icon={<IconInfo/>} onClick={toggleDrawer}/>
+            <MenuLink to='/agb' label='AGB' icon={<IconDocument/>} onClick={toggleDrawer}/>
+            <MenuLink to='/impressum' label='Impressum' icon={<IconInfo/>} onClick={toggleDrawer}/>
+            <MenuLink to='/logout' label='Logout' icon={<IconSignOut/>} onClick={toggleDrawer}/>
           </List>
         </div>
       </div>

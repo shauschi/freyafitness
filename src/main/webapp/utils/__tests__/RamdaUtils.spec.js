@@ -1,4 +1,4 @@
-import {setPath, assignPath, togglePath, viewPath} from './../RamdaUtils.jsx';
+import {setPath, assignPath, togglePath, viewPath} from './../RamdaUtils';
 
 describe('courses reducer', () => {
 

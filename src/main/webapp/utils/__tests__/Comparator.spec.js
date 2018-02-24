@@ -1,4 +1,4 @@
-import {comparing, comparingMod, ASC, DESC} from './../Comparator.jsx';
+import {comparing, comparingMod, ASC, DESC} from '../Comparator';
 
 describe('courses reducer', () => {
 

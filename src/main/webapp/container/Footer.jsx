@@ -7,8 +7,8 @@ import withWidth from 'material-ui/utils/withWidth';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import {withRouter} from 'react-router-dom'
-import * as Style from '../utils/Style.jsx';
-import {FaHome, FaCalendar, FaUser} from 'react-icons/lib/fa';
+import * as Style from '../utils/Style';
+import {IconHome, IconCalendar, IconUser} from '../utils/Icons';
 
 import {blueGrey} from 'material-ui/colors';
 
@@ -59,9 +59,9 @@ class Footer extends Component {
             indicatorColor="primary"
             textColor="primary"
           >
-            <Tab icon={<FaHome size={28}/>}/>
-            <Tab icon={<FaCalendar size={28}/>}/>
-            <Tab icon={<FaUser size={28}/>}/>
+            <Tab icon={<IconHome size={28}/>}/>
+            <Tab icon={<IconCalendar size={28}/>}/>
+            <Tab icon={<IconUser size={28}/>}/>
           </Tabs>
         </div>
       </Paper>

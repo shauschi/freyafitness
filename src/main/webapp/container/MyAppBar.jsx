@@ -9,7 +9,10 @@ import IconButton from 'material-ui/IconButton';
 import Hidden from 'material-ui/Hidden';
 import {FadeIconButton} from './../components/general';
 
-import {FaBars, FaPlus} from 'react-icons/lib/fa';
+import {
+  IconMenu,
+  IconPlus
+} from '../utils/Icons/Icons';
 import {blueGrey} from 'material-ui/colors';
 
 class MyAppBar extends Component {
@@ -29,7 +32,7 @@ class MyAppBar extends Component {
               onClick={toggleDrawer}
               style={{zIndex: 20}}
             >
-              <FaBars/>
+              <IconMenu/>
             </IconButton>
           </Hidden>
           <Typography
@@ -73,7 +76,7 @@ class MyAppBar extends Component {
               padding: '0 16px'
             }}
           >
-            <FaPlus/>
+            <IconPlus/>
           </FadeIconButton>
         </Toolbar>
       </AppBar>

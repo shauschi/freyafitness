@@ -1,7 +1,7 @@
 'use strict';
 import {GET, POST, PUT} from '../HttpUtils';
 import moment from 'moment';
-import * as Format from '../../utils/Format.jsx';
+import * as Format from '../../utils/Format';
 const baseURL = __API__;
 
 export const getCourses = () => GET(`${baseURL}/courses/from/${moment().format(Format.ISO_DATE_FORMAT)}`);

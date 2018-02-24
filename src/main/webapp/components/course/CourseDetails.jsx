@@ -11,23 +11,20 @@ import {InputAdornment} from 'material-ui/Input';
 import Collapse from 'material-ui/transitions/Collapse';
 import Avatar from 'material-ui/Avatar';
 import {TypeMapper} from '.';
-import * as Format from '../../utils/Format.jsx';
+import * as Format from '../../utils/Format';
 import {ProfilePicture} from './../profile';
 import {Dialog, Row, FadeButton} from './../general';
 import {MODE, NEW_COURSE} from './../../model/courses';
-import {TITLE_BG} from './../../utils/Style';
+import {TITLE_BG} from '../../utils/Style';
 
 import {
-  FaCalendarO,
-  FaClockO,
-  FaMapMarker,
-  FaUser,
-  FaUserMd,
-  FaClose,
-  FaPencil,
-  FaEye
-} from 'react-icons/lib/fa';
-import {TiGroup} from 'react-icons/lib/ti';
+  IconCalendar,
+  IconClock,
+  IconLocation,
+  IconPencil,
+  IconUser,
+  IconUserGroup
+} from '../../utils/Icons/Icons';
 
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 
@@ -37,9 +34,11 @@ const getAttendeeList = attendees => {
     const user = attendees[idx];
     attendeesList.push(
       <ListItem key={idx}>
-        <Avatar style={{backgroundColor: TITLE_BG}}>
-          <ProfilePicture userId={user.id} />
-        </Avatar>
+        <ListItemIcon>
+          <Avatar style={{backgroundColor: TITLE_BG}}>
+            <ProfilePicture userId={user.id} />
+          </Avatar>
+        </ListItemIcon>
         <ListItemText inset primary={user.firstname + " " + user.lastname}/>
       </ListItem>
     );
@@ -96,7 +95,7 @@ class CourseDetails extends Component {
         secondAction={
           mode === MODE.VIEW // TODO && admin/moderator/trainer
             ? <IconButton color='contrast' onClick={toggleEditCourse}>
-                <FaPencil/>
+                <IconPencil/>
               </IconButton>
             : undefined
         }
@@ -120,7 +119,7 @@ class CourseDetails extends Component {
                      onCourseDetailsChange('start', newStart.format(Format.TIMESTAMP_FORMAT));
                    }
                  }}
-                 icon={<FaCalendarO/>}/>
+                 icon={<IconCalendar/>}/>
             <Row id="start_time" label="Kursbeginn" type="time" value={moment(start).format(Format.HOUR_MINUTE)}
                  readonly={readonly}
                  onChange={value => {
@@ -128,39 +127,38 @@ class CourseDetails extends Component {
                    const newStart = moment(start).set({'hour': time.hour(), 'minute': time.minute()});
                    onCourseDetailsChange('start', newStart.format(Format.TIMESTAMP_FORMAT));
                  }}
-                 icon={<FaClockO/>}/>
+                 icon={<IconClock/>}/>
             <Row id="duration" label="Dauer" type="number" value={minutes}
                  endAdornment={<InputAdornment position="end">Minuten</InputAdornment>}
                  readonly={readonly} onChange={value => onCourseDetailsChange('minutes', Number.parseInt(value))}
-                 icon={<FaClockO/>}/>
+                 icon={<IconClock/>}/>
             <Row id="instructor" label="Kursleitung" value={instructor.firstname + " " + instructor.lastname}
                  readonly={true} onChange={value => onCourseDetailsChange('instructor', value)}
                  icon={<ProfilePicture userId={instructor.id} />}/>
             <Row id="location" label="Ort" value={'Toppenstedt'}
                  readonly={true} onChange={() => {}}
-                 icon={<FaMapMarker/>}/>
+                 icon={<IconLocation/>}/>
             <Row id="maxParticipants" label="Max. Kursteilnehmer" type="number" value={maxParticipants}
                  readonly={readonly}
                  onChange={value => onCourseDetailsChange('maxParticipants', Number.parseInt(value))}
-                 icon={<FaUser/>}/>
+                 icon={<IconUser/>}/>
 
             {mode !== MODE.CREATE
               ? (<ListItem button onClick={toggleAttendeeList}>
                 <ListItemIcon>
                   <Avatar style={{backgroundColor: TITLE_BG}}>
-                    <TiGroup/>
+                    <IconUserGroup/>
                   </Avatar>
                 </ListItemIcon>
                 <ListItemText
-                  inset
                   primary={"Teilnemer (" + attendees.length + ")"}/>
                 {showAttendees ? <MdExpandLess/> : <MdExpandMore/>}
               </ListItem>)
               : undefined
             }
             {mode !== MODE.CREATE
-              ? (<Collapse component="li" in={showAttendees} timeout="auto" unmountOnExit>
-                  <List disablePadding>
+              ? (<Collapse component="li" in={showAttendees} timeout='auto' unmountOnExit>
+                  <List component='div' disablePadding>
                     {attendeesList}
                   </List>
                 </Collapse>)
