@@ -2,6 +2,7 @@ package freya.fitness.domain.jpa;
 
 import freya.fitness.dto.CourseDto;
 import freya.fitness.dto.ProfileDto;
+import freya.fitness.repository.jpa.CourseTypeRepository;
 import freya.fitness.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,9 +17,13 @@ public class CourseDtoToCourseMapper implements BiFunction<CourseDto, Course, Co
 
   private final UserRepository userRepository;
 
+  private final CourseTypeRepository courseTypeRepository;
+
   @Autowired
-  public CourseDtoToCourseMapper(final UserRepository userRepository) {
+  public CourseDtoToCourseMapper(final UserRepository userRepository,
+                                 final CourseTypeRepository courseTypeRepository) {
     this.userRepository = userRepository;
+    this.courseTypeRepository = courseTypeRepository;
   }
 
   @Override
@@ -28,7 +33,9 @@ public class CourseDtoToCourseMapper implements BiFunction<CourseDto, Course, Co
     }
     final Course course = Optional.ofNullable(existingCourse).orElseGet(Course::new);
 
-    course.setType(courseDto.getType());
+    course.setType(
+        courseTypeRepository.findById(courseDto.getCourseTypeId())
+        .orElse(null));
     course.setStart(courseDto.getStart());
     course.setMinutes(courseDto.getMinutes());
     // TODO am DTO nur die ID speichern

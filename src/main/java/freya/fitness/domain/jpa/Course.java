@@ -15,7 +15,8 @@ public class Course {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Enumerated(EnumType.STRING)
+  @ManyToOne
+  @JoinColumn(name = "course_type_id")
   private CourseType type;
 
   private LocalDateTime start;

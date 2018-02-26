@@ -2,7 +2,6 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.CourseDtoToCourseMapper;
-import freya.fitness.domain.jpa.CourseType;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CourseDto;
 import freya.fitness.repository.jpa.CourseRepository;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +82,6 @@ public class CourseService {
   public Course createEmptyCourse(User user) {
     final Course course = new Course();
     course.setInstructor(user);
-    course.setType(CourseType.NORMAL);
     course.setMinutes(minutes);
     course.setStart(nextFullHour());
     course.setMaxParticipants(maxParticipants);
