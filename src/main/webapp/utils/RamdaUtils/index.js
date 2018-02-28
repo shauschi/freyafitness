@@ -1,7 +1,10 @@
 'use strict';
 export {
+  view,
   viewPath,
   setPath,
   assignPath,
-  togglePath
+  togglePath,
+  findBy,
+  findById
 } from './RamdaUtils.jsx';

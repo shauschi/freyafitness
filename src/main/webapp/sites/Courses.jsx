@@ -26,8 +26,6 @@ class Courses extends Component {
           pending={courseDetails.pending}
           showAttendees={courseDetails.showAttendees}
           course={courseDetails.course}
-          courses={courses}
-          courseDetails={courseDetails}
           onClose={hideCourseDetails}
           onSave={saveCourseDetails}
           toggleAttendeeList={toggleAttendeeList}

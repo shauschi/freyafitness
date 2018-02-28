@@ -28,7 +28,7 @@ export const MODE = {
 // TODO craeteCourse in Backend /courses/create (GET for new DTO) + courses/create (POST for save)
 export const NEW_COURSE = {
   id: 'create',
-  type: 'NORMAL',
+  courseTypeId: 1000,
   maxParticipants: 12,
 };
 

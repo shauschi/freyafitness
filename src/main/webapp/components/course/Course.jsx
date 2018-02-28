@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
+import compose from 'recompose/compose';
+import {connect} from 'react-redux';
 import moment from 'moment';
 import * as Format from '../../utils/Format';
 import Typography from 'material-ui/Typography';
 import {ListItem} from 'material-ui/List';
+import {findById} from './../../utils/RamdaUtils';
 
 import {green, blue, red} from 'material-ui/colors';
 
@@ -27,51 +30,57 @@ const getAvailability = (participants, maxParticipants, textDecoration) => {
   );
 };
 
-const Course = ({course, showCourseDetails, showDate}) => {
-  const {
-    id,
-    type,
-    start,
-    minutes,
-    instructor,
-    signedIn,
-    attendees = [],
-    maxParticipants,
-    canceled
-  } = course;
-  const {label, color} = TypeMapper[type];
-  const textDecoration = canceled ? 'line-through' : undefined;
+class Course extends Component {
 
-  const title = (<div>
-    <Typography type={'title'} style={{textDecoration: textDecoration}}>{label}</Typography>
-  </div>);
-  const details = (<div>
-    <Typography style={{display: 'inline-block', textDecoration: textDecoration}}>{'mit ' + instructor.firstname}</Typography>
-    {getAvailability(attendees.length, maxParticipants, textDecoration)}
-  </div>);
-  const additional = signedIn ? (<div>
-    <Typography style={{color: 'green'}}>Du bist angemeldet</Typography>
-  </div>) : undefined;
-  const infos = canceled ? (<div>
-    <Typography style={{color: 'red'}}>Der Kurs wurde abgesagt</Typography>
-  </div>) : undefined;
+  render() {
+    const {course, courseTypes, showCourseDetails, showDate} = this.props;
+    const {
+      id,
+      courseTypeId,
+      start,
+      minutes,
+      instructor,
+      signedIn,
+      attendees = [],
+      maxParticipants,
+      canceled
+    } = course;
 
-  let backgroundColor;
-  if (!canceled) {
-    backgroundColor = 'rgba(255, 255, 255, 0.75)';
-  }
+    const {name, color} = findById(courseTypes.data, courseTypeId) || TypeMapper['SOFT'];
+    const textDecoration = canceled ? 'line-through' : undefined;
 
-  return (
-    <ListItem
-      button
-      onClick={() => showCourseDetails(id)}
-      style={{backgroundColor: backgroundColor, position: 'relative'}}>
+    const title = (<div>
+      <Typography type={'title'} style={{textDecoration: textDecoration}}>{name}</Typography>
+    </div>);
+    const details = (<div>
+      <Typography
+        style={{display: 'inline-block', textDecoration: textDecoration}}>{'mit ' + instructor.firstname}</Typography>
+      {getAvailability(attendees.length, maxParticipants, textDecoration)}
+    </div>);
+    const additional = signedIn ? (<div>
+      <Typography style={{color: 'green'}}>Du bist angemeldet</Typography>
+    </div>) : undefined;
+    const infos = canceled ? (<div>
+      <Typography style={{color: 'red'}}>Der Kurs wurde abgesagt</Typography>
+    </div>) : undefined;
+
+    let backgroundColor;
+    if (!canceled) {
+      backgroundColor = 'rgba(255, 255, 255, 0.75)';
+    }
+
+    return (
+      <ListItem
+        button
+        onClick={() => showCourseDetails(id)}
+        style={{backgroundColor: backgroundColor, position: 'relative'}}>
         <div style={{
           position: 'relative',
           height: '100%',
           width: '36px',
           display: 'inline-block',
-          padding: '0 40px 0 0'}}> {/* 16px + 8px + 16px */}
+          padding: '0 40px 0 0'
+        }}> {/* 16px + 8px + 16px */}
           {showDate
             ? <Typography>
               {moment(start).format('DD.MM.')}
@@ -91,19 +100,26 @@ const Course = ({course, showCourseDetails, showDate}) => {
           {additional}
           {infos}
         </div>
-      <div
-        id={'color_bar_course_' + id}
-        style={{
-          backgroundColor: color,
-          position: 'absolute',
-          left: '68px', /* 16px + 36px + 16px */
-          width: '8px',
-          height: '100%',
-          minHeight: '100%'
-        }}
-      />
-    </ListItem>
-  );
-};
+        <div
+          id={'color_bar_course_' + id}
+          style={{
+            backgroundColor: color,
+            position: 'absolute',
+            left: '68px', /* 16px + 36px + 16px */
+            width: '8px',
+            height: '100%',
+            minHeight: '100%'
+          }}
+        />
+      </ListItem>
+    );
+  };
+}
 
-export default Course;
+const mapStateToProps = state => ({
+  courseTypes: state.courseTypes,
+});
+
+export default compose(
+  connect(mapStateToProps)
+)(Course);

@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-import {Row, Subheader} from './../../components/general';
+import {ListItemInput, Subheader} from './../../components/general';
 import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
 import {IconBatteryLow, IconLockClosed, IconLineChart} from '../../utils/Icons';
 import {red} from 'material-ui/colors';
@@ -56,41 +56,41 @@ class Profile extends Component {
           </ListItem>
 
           <Subheader label={"Persönliche Daten"}/>
-          <Row id="firstname" label="Vorname" value={firstname}
+          <ListItemInput id="firstname" label="Vorname" value={firstname}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['firstname'], value)}
                icon={undefined /* TODO ??? */}/>
-          <Row id="lastname" label="Nachname" value={lastname}
+          <ListItemInput id="lastname" label="Nachname" value={lastname}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['lastname'], value)}
                icon={undefined /* TODO ??? */}/>
-          <Row id="dayOfBirth" label="Geburtsdatum" value={moment(dayOfBirth).format(Format.ISO_DATE_FORMAT)} type='date'
+          <ListItemInput id="dayOfBirth" label="Geburtsdatum" value={moment(dayOfBirth).format(Format.ISO_DATE_FORMAT)} type='date'
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['dayOfBirth'], value)}
                icon={undefined /* TODO ??? */}/>
-          <Row id="email" label="E-Mail" value={email}
+          <ListItemInput id="email" label="E-Mail" value={email}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['email'], value)}
                icon={undefined /* TODO ??? */}/>
-          <Row id="mobil" label="Mobil" value={mobil}
+          <ListItemInput id="mobil" label="Mobil" value={mobil}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['mobil'], value)}
                icon={undefined /* TODO ??? */}/>
 
           <Subheader label={"Anschrift"}/>
-          <Row id="zipCode" label="PLZ" value={zipCode}
+          <ListItemInput id="zipCode" label="PLZ" value={zipCode}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['adress', 'zipCode'], value)}
                icon={undefined /* TODO ??? */}/>
-          <Row id="city" label="Ort" value={city}
+          <ListItemInput id="city" label="Ort" value={city}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['adress', 'city'], value)}
                icon={undefined /* TODO ??? */}/>
-          <Row id="street" label="Straße" value={street}
+          <ListItemInput id="street" label="Straße" value={street}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['adress', 'street'], value)}
                icon={undefined /* TODO ??? */}/>
-          <Row id="nr" label="Hausnummer" value={nr}
+          <ListItemInput id="nr" label="Hausnummer" value={nr}
                readonly={false} /* TODO */
                onChange={value => onProfileDetailsChange(['adress', 'nr'], value)}
                icon={undefined /* TODO ??? */}/>

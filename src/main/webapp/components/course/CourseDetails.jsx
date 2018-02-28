@@ -1,5 +1,7 @@
 'use strict';
 import React, {Component} from 'react';
+import compose from 'recompose/compose';
+import {connect} from 'react-redux';
 import moment from 'moment';
 import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
@@ -13,7 +15,7 @@ import Avatar from 'material-ui/Avatar';
 import {TypeMapper} from '.';
 import * as Format from '../../utils/Format';
 import {ProfilePicture} from './../profile';
-import {Dialog, Row, FadeButton} from './../general';
+import {Dialog, ListItemInput, ListItemSelect, FadeButton} from './../general';
 import {MODE, NEW_COURSE} from './../../model/courses';
 import {TITLE_BG} from '../../utils/Style';
 
@@ -27,6 +29,7 @@ import {
 } from '../../utils/Icons/Icons';
 
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
+import {findById} from "../../utils/RamdaUtils";
 
 const getAttendeeList = attendees => {
   const attendeesList = [];
@@ -73,20 +76,28 @@ class CourseDetails extends Component {
   render() {
     const {mode = MODE.CREATE,
       show,
+      pending,
       showAttendees,
       course = NEW_COURSE,
       toggleAttendeeList,
       toggleEditCourse,
-      onCourseDetailsChange} = this.props;
+      onCourseDetailsChange,
+      courseTypes
+    } = this.props;
 
     const {title, readonly} = mode;
 
-    const {start, type = 'SOFT', minutes, attendees = [],
+    const {start, courseTypeId, minutes, attendees = [],
       instructor = {}, maxParticipants, signedIn} = course;
 
     const attendeesList = getAttendeeList(attendees);
 
-    const {label, short, color} = TypeMapper[type];
+    if (pending) {
+      return <div></div>; // TODO Loading
+    }
+
+    const {name = " ", color} = findById(courseTypes.data, courseTypeId) || TypeMapper['SOFT'];
+    const short = name.charAt(0);
 
     return (
       <Dialog
@@ -102,12 +113,18 @@ class CourseDetails extends Component {
         open={show}>
         <DialogContent style={{padding: '0', paddingTop: '12px'}}>
           <List>
-            <Row id="type" label="Kurstyp" value={label}
-                 readonly={true}
-                 onChange={value => {/*TODO*/}}
-                 iconBackground={color}
-                 icon={short}/>
-            <Row id="start_date" label="Kursdatum" type="date" value={moment(start).format(Format.ISO_DATE_FORMAT)}
+            <ListItemSelect
+              id="type"
+              readonly={readonly}
+              label="Kurstyp"
+              value={courseTypeId}
+              values={courseTypes.data}
+              keyProp='id'
+              valueProp='name'
+              onChange={value => onCourseDetailsChange('courseTypeId', value)}
+              iconBackground={color}
+              icon={short}/>
+            <ListItemInput id="start_date" label="Kursdatum" type="date" value={moment(start).format(Format.ISO_DATE_FORMAT)}
                  readonly={readonly}
                  onChange={value => {
                    const date = moment(value, Format.ISO_DATE_FORMAT);
@@ -120,7 +137,7 @@ class CourseDetails extends Component {
                    }
                  }}
                  icon={<IconCalendar/>}/>
-            <Row id="start_time" label="Kursbeginn" type="time" value={moment(start).format(Format.HOUR_MINUTE)}
+            <ListItemInput id="start_time" label="Kursbeginn" type="time" value={moment(start).format(Format.HOUR_MINUTE)}
                  readonly={readonly}
                  onChange={value => {
                    const time = moment(value, "HH:mm");
@@ -128,17 +145,17 @@ class CourseDetails extends Component {
                    onCourseDetailsChange('start', newStart.format(Format.TIMESTAMP_FORMAT));
                  }}
                  icon={<IconClock/>}/>
-            <Row id="duration" label="Dauer" type="number" value={minutes}
+            <ListItemInput id="duration" label="Dauer" type="number" value={minutes}
                  endAdornment={<InputAdornment position="end">Minuten</InputAdornment>}
                  readonly={readonly} onChange={value => onCourseDetailsChange('minutes', Number.parseInt(value))}
                  icon={<IconClock/>}/>
-            <Row id="instructor" label="Kursleitung" value={instructor.firstname + " " + instructor.lastname}
+            <ListItemInput id="instructor" label="Kursleitung" value={instructor.firstname + " " + instructor.lastname}
                  readonly={true} onChange={value => onCourseDetailsChange('instructor', value)}
                  icon={<ProfilePicture userId={instructor.id} />}/>
-            <Row id="location" label="Ort" value={'Toppenstedt'}
+            <ListItemInput id="location" label="Ort" value={'Toppenstedt'}
                  readonly={true} onChange={() => {}}
                  icon={<IconLocation/>}/>
-            <Row id="maxParticipants" label="Max. Kursteilnehmer" type="number" value={maxParticipants}
+            <ListItemInput id="maxParticipants" label="Max. Kursteilnehmer" type="number" value={maxParticipants}
                  readonly={readonly}
                  onChange={value => onCourseDetailsChange('maxParticipants', Number.parseInt(value))}
                  icon={<IconUser/>}/>
@@ -201,4 +218,10 @@ class CourseDetails extends Component {
   };
 }
 
-export default CourseDetails;
+const mapStateToProps = state => ({
+  courseTypes: state.courseTypes,
+});
+
+export default compose(
+  connect(mapStateToProps)
+)(CourseDetails);

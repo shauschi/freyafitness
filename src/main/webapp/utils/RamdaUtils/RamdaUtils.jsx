@@ -1,5 +1,6 @@
 'use strict';
 import * as ramda from 'ramda';
+import {TypeMapper} from "../../components/course/Course";
 
 /*
  * Setzt den Wert entlang eines Pfades auf 'value'
@@ -53,9 +54,29 @@ export const togglePath = (path, obj) => {
 };
 
 /*
- * liest den Wert entland des Pfades
+ * Liest den Wert entland des Pfades
  */
 export const viewPath = (path, obj) => {
   const lens = ramda.lensPath(path);
   return ramda.view(lens, obj);
 };
+
+/*
+ * Gibt sofern vorhanden das Property vom Object zurück
+ */
+export const view = (prop, obj) => ramda.prop(prop, obj);
+
+/*
+ * Durchsucht ein Array nach einem Element mit einem bestimmten Property
+ */
+export const findBy = (prop, data, id) => {
+  if (!data) {
+    return undefined;
+  }
+  return ramda.find(ramda.propEq(prop, id))(data);
+};
+
+/*
+ * Durchsucht ein Array nach einem Element mit einer bestimmten ID
+ */
+export const findById = (data, id) => findBy('id', data, id);

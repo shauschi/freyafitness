@@ -5,21 +5,26 @@ import FormControl from "material-ui/Form/FormControl";
 import Input, {InputLabel} from "material-ui/Input";
 import Avatar from "material-ui/Avatar";
 
-import {TITLE_BG} from '../../utils/Style'
+import {TITLE_BG} from '../../../utils/Style/index'
 
 class Row extends Component {
+
+  constructor(props) {
+    super(props);
+    this.getCtrl = this.getCtrl.bind(this);
+  }
+
+  getCtrl() {
+    throw new Error('must be implemented in child');
+  }
+
   render()
   {
     const {
       icon,
       id,
       label,
-      type,
-      value,
-      endAdornment,
-      onChange,
       inset,
-      readonly,
       iconBackground = TITLE_BG,
       backgroundColor = 'rgba(255, 255, 255, 0.75)'
     } = this.props;
@@ -36,11 +41,7 @@ class Row extends Component {
         }
         <FormControl fullWidth>
           <InputLabel htmlFor={id} shrink>{label}</InputLabel>
-          <Input id={id} type={type}
-                 endAdornment={endAdornment}
-                 value={value}
-                 onChange={event => onChange(event.target.value)}
-                 disabled={readonly}/>
+          {this.getCtrl()}
         </FormControl>
       </ListItem>
     );

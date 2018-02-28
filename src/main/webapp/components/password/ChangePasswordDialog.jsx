@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import Dialog, {DialogActions, DialogContent, DialogTitle, withMobileDialog} from 'material-ui/Dialog';
 import Slide from 'material-ui/transitions/Slide';
-import {Row} from './../general';
+import {ListItemInput} from './../general';
 import List from 'material-ui/List';
 import {IconClose} from '../../utils/Icons';
 import {red, blueGrey} from "material-ui/colors/index";
@@ -44,15 +44,15 @@ class ChangePasswordDialog extends Component {
 
         <DialogContent>
           <List>
-            <Row id="oldPassword" label="Altes Passwort" value={oldPassword} type='password'
+            <ListItemInput id="oldPassword" label="Altes Passwort" value={oldPassword} type='password'
                  readonly={false} /* TODO */
                  onChange={value => onPasswordChange(['newPassword'], value)}
                  icon={undefined /* TODO ??? */}/>
-            <Row id="newPassword" label="Neues Passwort" value={newPassword} type='password'
+            <ListItemInput id="newPassword" label="Neues Passwort" value={newPassword} type='password'
                  readonly={false} /* TODO */
                  onChange={value => onPasswordChange(['newPassword'], value)}
                  icon={undefined /* TODO ??? */}/>
-            <Row id="newPasswordConfirm" label="Passwort bestätigen" value={newPasswordConfirm} type='password'
+            <ListItemInput id="newPasswordConfirm" label="Passwort bestätigen" value={newPasswordConfirm} type='password'
                  readonly={false} /* TODO */
                  onChange={value => onPasswordChange(['newPasswordConfirm'], value)}
                  icon={undefined /* TODO ??? */}/>
