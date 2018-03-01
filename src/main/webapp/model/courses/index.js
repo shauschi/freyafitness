@@ -8,6 +8,9 @@ import {
   signIn as signInApiCall,
   signOut as signOutApiCall
 } from '../../service/courses';
+import {
+  showNotification
+} from './../notification';
 import {viewPath, setPath, assignPath, togglePath} from "../../utils/RamdaUtils";
 
 export const MODE = {
@@ -119,7 +122,11 @@ export const saveCourseDetails = course => {
 
     if (course.id) {
       return saveCourse(course)
-        .then(updatedCourse => dispatch(actions.courses.save.success(updatedCourse)))
+        .then(updatedCourse => {
+          dispatch(actions.courses.save.success(updatedCourse));
+          dispatch(actions.courses.courseDetails.hide());
+          dispatch(showNotification('Kurs gespeichert'));
+        })
         .catch(error=> dispatch(actions.courses.save.error(error)));
     } else {
       return saveNewCourse(course)
@@ -145,8 +152,14 @@ export const signIn = courseId => {
   return dispatch => {
     dispatch(actions.courses.signIn.pending());
     return signInApiCall(courseId)
-      .then(course => dispatch(actions.courses.signIn.success(course)))
-      .catch(error => dispatch(actions.courses.signIn.error(error)));
+      .then(course => {
+        dispatch(actions.courses.signIn.success(course));
+        dispatch(showNotification('angemeldet'));
+      })
+      .catch(error => {
+        dispatch(actions.courses.signIn.error(error));
+        dispatch(showNotification('uppps, versuch es nochmal'));
+      });
   }
 };
 
@@ -154,8 +167,14 @@ export const signOut = courseId => {
   return dispatch => {
     dispatch(actions.courses.signOut.pending());
     return signOutApiCall(courseId)
-      .then(course => dispatch(actions.courses.signOut.success(course)))
-      .catch(error => dispatch(actions.courses.signOut.error(error)));
+      .then(course => {
+        dispatch(actions.courses.signOut.success(course));
+        dispatch(showNotification('abgemeldet'));
+      })
+      .catch(error => {
+        dispatch(actions.courses.signOut.error(error));
+        dispatch(showNotification('uppps, versuch es nochmal'));
+      });
   }
 };
 

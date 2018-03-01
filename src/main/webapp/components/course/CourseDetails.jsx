@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import moment from 'moment';
 import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
@@ -15,6 +16,7 @@ import Avatar from 'material-ui/Avatar';
 import {TypeMapper} from '.';
 import * as Format from '../../utils/Format';
 import {ProfilePicture} from './../profile';
+import {showNotification} from './../../model/notification';
 import {Dialog, ListItemInput, ListItemSelect, FadeButton} from './../general';
 import {MODE, NEW_COURSE} from './../../model/courses';
 import {TITLE_BG} from '../../utils/Style';
@@ -30,6 +32,12 @@ import {
 
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 import {findById} from "../../utils/RamdaUtils";
+import {
+  createCourse,
+  fetchCourses, hideCourseDetails, onCourseDetailsChange, saveCourseDetails, showCourseDetails, signIn, signOut,
+  toggleAttendeeList, toggleEditCourse
+} from "../../model/courses";
+import {toggleDrawer} from "../../model/drawer";
 
 const getAttendeeList = attendees => {
   const attendeesList = [];
@@ -59,7 +67,6 @@ class CourseDetails extends Component {
   handleRequestSave = () => {
     // TODO onRequestSave
     this.props.onSave(this.props.course);
-    this.props.onClose();
   };
 
   signInOut = () => {
@@ -222,6 +229,14 @@ const mapStateToProps = state => ({
   courseTypes: state.courseTypes,
 });
 
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({
+    showNotification: showNotification
+  }, dispatch),
+  dispatch
+});
+
+
 export default compose(
-  connect(mapStateToProps)
+  connect(mapStateToProps, mapDispatchToProps)
 )(CourseDetails);
