@@ -7,7 +7,7 @@ import {Subheader, Slider} from './../components/general';
 import {NewsItem} from './../components/news';
 import Course from './../components/course';
 
-import {FaInfo, FaBattery1} from 'react-icons/lib/fa';
+import {IconBatteryLow} from '../utils/Icons';
 import {red} from 'material-ui/colors';
 
 
@@ -22,7 +22,7 @@ class SimpleDialog extends Component {
 
     return (
       <Dialog onClose={this.handleRequestClose} {...other}>
-        <DialogTitle><FaBattery1 color={red.A200} style={{marginRight: '12px'}}/>10er-Karte</DialogTitle>
+        <DialogTitle><IconBatteryLow color={red.A200} style={{marginRight: '12px'}}/>10er-Karte</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Achtung, Deine 10er-Karte ist bald voll. Denke daran, dir eine neue zu kaufen :-)
@@ -82,25 +82,25 @@ class Home extends Component {
           <List style={{padding: '0'}}>
             <Subheader label={"Meine Kurse"}/>
             { myCourses.map(
-              (course, idx) => (<Course key={idx} course={course} showCourseDetails={showCourseDetails}/>)
+              (course, idx) => (<Course key={idx} course={course} showCourseDetails={showCourseDetails} showDate={true}/>)
             )}
 
             <Subheader label={"Status"}/>
             <ListItem button onClick={this.handleClickOpen}>
               <ListItemIcon>
-                <FaBattery1 color={red.A200}/>
+                <IconBatteryLow color={red.A200}/>
               </ListItemIcon>
               <ListItemText inset primary={"Zehnerkarte"} secondary={"(8 von 10 verbraucht)"}/>
             </ListItem>
             <ListItem button onClick={this.handleClickOpen}>
               <ListItemIcon>
-                <FaBattery1 color={red.A200}/>
+                <IconBatteryLow color={red.A200}/>
               </ListItemIcon>
               <ListItemText inset primary={"Zehnerkarte"} secondary={"(8 von 10 verbraucht)"}/>
             </ListItem>
             <ListItem button onClick={this.handleClickOpen}>
               <ListItemIcon>
-                <FaBattery1 color={red.A200}/>
+                <IconBatteryLow color={red.A200}/>
               </ListItemIcon>
               <ListItemText inset primary={"Zehnerkarte"} secondary={"(8 von 10 verbraucht)"}/>
             </ListItem>

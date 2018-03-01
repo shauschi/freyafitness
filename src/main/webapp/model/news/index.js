@@ -1,6 +1,6 @@
 import {createActions, handleActions} from 'redux-actions';
 import {getNews} from '../../service/news';
-import {setPath, assignPath} from "../../utils/RamdaUtils.jsx";
+import {setPath, assignPath} from "../../utils/RamdaUtils";
 
 const initialState = {
   pending: false,

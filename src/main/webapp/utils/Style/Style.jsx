@@ -1,7 +1,9 @@
 'use strict';
 
-import {green, lightBlue, red} from "material-ui/colors/index";
+import {blueGrey, green, lightBlue, red} from "material-ui/colors/index";
 import {createMuiTheme} from "material-ui/styles/index";
+
+export const TITLE_BG = blueGrey[800];
 
 export const APP_THEME = createMuiTheme({
   palette: {

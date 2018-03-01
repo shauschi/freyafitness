@@ -1,6 +1,39 @@
 import {createActions, handleActions} from 'redux-actions';
-import {getCourses, getCourseDetails, saveCourse, signIn as signInApiCall, signOut as signOutApiCall} from '../../service/courses';
-import {setPath, assignPath, togglePath} from "../../utils/RamdaUtils.jsx";
+import {
+  getCourses,
+  getCourseDetails,
+  saveCourse,
+  createNewCourse,
+  saveNewCourse,
+  signIn as signInApiCall,
+  signOut as signOutApiCall
+} from '../../service/courses';
+import {
+  showNotification
+} from './../notification';
+import {viewPath, setPath, assignPath, togglePath} from "../../utils/RamdaUtils";
+
+export const MODE = {
+  CREATE: {
+    title: 'neuer Kurs',
+    readonly: false,
+  },
+  VIEW: {
+    title: 'Kursdetails',
+    readonly: true,
+  },
+  MODIFY: {
+    title: 'bearbeiten',
+    readonly: false,
+  }
+};
+
+// TODO craeteCourse in Backend /courses/create (GET for new DTO) + courses/create (POST for save)
+export const NEW_COURSE = {
+  id: 'create',
+  courseTypeId: 1000,
+  maxParticipants: 12,
+};
 
 const initialState = {
   pending: false,
@@ -13,6 +46,11 @@ export const actions = createActions({
     LOAD: {
       PENDING: undefined,
       SUCCESS: courses => courses,
+      ERROR: error => error
+    },
+    CREATE: {
+      PENDING: undefined,
+      SUCCESS: course => course,
       ERROR: error => error
     },
     SAVE: {
@@ -52,6 +90,16 @@ export const fetchCourses = filterOptions => {
   };
 };
 
+export const createCourse = filterOptions => {
+  return dispatch => {
+    dispatch(actions.courses.create.pending());
+    dispatch(actions.courses.courseDetails.show());
+    return createNewCourse(filterOptions)
+      .then(course => dispatch(actions.courses.create.success(course)))
+      .catch(error => dispatch(actions.courses.create.error(error)));
+  };
+};
+
 export const showCourseDetails = id => {
   return dispatch => {
     dispatch(actions.courses.courseDetails.pending());
@@ -71,9 +119,20 @@ export const hideCourseDetails = () => {
 export const saveCourseDetails = course => {
   return dispatch => {
     dispatch(actions.courses.save.pending());
-    return saveCourse(course)
-      .then(updatedCourse => dispatch(actions.courses.save.success(updatedCourse)))
-      .catch(error=> dispatch(actions.courses.save.error(error)));
+
+    if (course.id) {
+      return saveCourse(course)
+        .then(updatedCourse => {
+          dispatch(actions.courses.save.success(updatedCourse));
+          dispatch(actions.courses.courseDetails.hide());
+          dispatch(showNotification('Kurs gespeichert'));
+        })
+        .catch(error=> dispatch(actions.courses.save.error(error)));
+    } else {
+      return saveNewCourse(course)
+        .then(updatedCourse => dispatch(actions.courses.save.success(updatedCourse)))
+        .catch(error=> dispatch(actions.courses.save.error(error)));
+    }
   };
 };
 
@@ -93,8 +152,14 @@ export const signIn = courseId => {
   return dispatch => {
     dispatch(actions.courses.signIn.pending());
     return signInApiCall(courseId)
-      .then(course => dispatch(actions.courses.signIn.success(course)))
-      .catch(error => dispatch(actions.courses.signIn.error(error)));
+      .then(course => {
+        dispatch(actions.courses.signIn.success(course));
+        dispatch(showNotification('angemeldet'));
+      })
+      .catch(error => {
+        dispatch(actions.courses.signIn.error(error));
+        dispatch(showNotification('uppps, versuch es nochmal'));
+      });
   }
 };
 
@@ -102,8 +167,14 @@ export const signOut = courseId => {
   return dispatch => {
     dispatch(actions.courses.signOut.pending());
     return signOutApiCall(courseId)
-      .then(course => dispatch(actions.courses.signOut.success(course)))
-      .catch(error => dispatch(actions.courses.signOut.error(error)));
+      .then(course => {
+        dispatch(actions.courses.signOut.success(course));
+        dispatch(showNotification('abgemeldet'));
+      })
+      .catch(error => {
+        dispatch(actions.courses.signOut.error(error));
+        dispatch(showNotification('uppps, versuch es nochmal'));
+      });
   }
 };
 
@@ -124,22 +195,34 @@ export default handleActions({
     assignPath([], {pending: false, data: payload, errorMessage: null}, state),
   [actions.courses.load.error]: (state, {payload}) =>
     assignPath([], {pending: false, errorMessage: payload.message}, state),
+
+  [actions.courses.create.pending]: state => setPath(['courseDetails', 'pending'], true, state),
+  [actions.courses.create.success]: (state, {payload}) =>
+    assignPath(['courseDetails'],
+      {pending: false, mode: MODE.CREATE, course: payload}, state),
+  [actions.courses.create.error]: (state, {payload}) =>
+    assignPath(['courseDetails'], {pending: false, errorMessage: payload.message}, state),
+
   [actions.courses.courseDetails.show]: state =>
-    setPath(['courseDetails', 'show'], true, state),
+    assignPath(['courseDetails'], {show: true, mode: MODE.VIEW}, state),
   [actions.courses.courseDetails.hide]: state =>
     setPath(['courseDetails', 'show'], false, state),
   [actions.courses.courseDetails.pending]: state =>
-    setPath(['courseDetails'], {pending: true, details: {}}, state),
+    setPath(['courseDetails'], {pending: true, course: {}}, state),
   [actions.courses.courseDetails.success]: (state, {payload}) =>
-    assignPath(['courseDetails'], {pending: false, details: payload}, state),
+    assignPath(['courseDetails'], {pending: false, course: payload}, state),
   [actions.courses.courseDetails.error]: (state, {payload}) =>
     assignPath(['courseDetails'], {pending: false, errorMessage: payload.message}, state),
   [actions.courses.courseDetails.toggleAttendeeList]: state =>
     togglePath(['courseDetails', 'showAttendees'], state),
-  [actions.courses.courseDetails.toggleEditCourse]: state =>
-    togglePath(['courseDetails', 'edit'], state),
+  [actions.courses.courseDetails.toggleEditCourse]: state => {
+    const nextMode = viewPath(['courseDetails', 'mode'], state) === MODE.VIEW
+      ? MODE.MODIFY
+      : MODE.VIEW;
+    return setPath(['courseDetails', 'mode'], nextMode, state)
+  },
   [actions.courses.courseDetails.onCourseDetailsChange]: (state, {payload}) =>
-    setPath(['courseDetails', 'details', payload.id], payload.value, state),
+    setPath(['courseDetails', 'course', payload.id], payload.value, state),
   [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.save.success]: (state, {payload}) => updateCourse(state, payload)

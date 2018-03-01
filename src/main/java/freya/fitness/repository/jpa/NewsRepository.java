@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface NewsRepository extends JpaRepository<News, Long> {
+public interface NewsRepository extends BusinessObjectRepository<News, Long> {
 
-  List<News> findByValidityFromLessThanEqualAndValidityToGreaterThanEqual(
-      LocalDateTime from, LocalDateTime to);
 }

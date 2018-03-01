@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import {FaUser} from 'react-icons/lib/fa';
+import {IconUser} from '../../utils/Icons';
 
 const ProfilePicture = ({userId}) => {
   if (userId) {
@@ -13,7 +13,7 @@ const ProfilePicture = ({userId}) => {
     );
   } else {
     return (
-      <FaUser/>
+      <IconUser/>
     );
   }
 };

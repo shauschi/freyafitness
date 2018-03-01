@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class CourseDto {
 
   private Long id;
-  private CourseType type;
+  private Long courseTypeId;
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime start;
   private Integer minutes;
@@ -28,12 +28,13 @@ public class CourseDto {
   private List<ProfileDto> attendees;
 
   public CourseDto(User user, Course course) {
-    Long userId = user.getId();
+    final Long userId = user.getId();
     this.id = course.getId();
-    this.type = course.getType();
+    final CourseType type = course.getType();
+    this.courseTypeId = type != null ? type.getId() : null;
     this.start = course.getStart();
     this.minutes = course.getMinutes();
-    User instructor = course.getInstructor();
+    final User instructor = course.getInstructor();
     this.instructor = new ProfileDto(instructor);
     this.signedIn = course.getAttendees().stream().anyMatch(attendee -> Objects.equals(attendee.getId(), userId));
     this.maxParticipants = course.getMaxParticipants();
