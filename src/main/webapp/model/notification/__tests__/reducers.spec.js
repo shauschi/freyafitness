@@ -1,50 +1,40 @@
 import reducer, {actions} from '../';
 
-describe('news reducer', () => {
+describe('notifications reducer', () => {
 
   let state;
 
   beforeEach(() => {
     state = {
-      pending: false,
-      errorMessage: null,
-      data: undefined
+      show: false,
+      message: null,
+      type: undefined
     }
   });
 
-  describe('with PENDING action', () => {
+  describe('with SHOW action', () => {
 
-    it('should only set state to pending', () => {
-      const nextState = reducer(state, actions.news.load.pending());
+    it('should change the state', () => {
+      const nextState = reducer(state, actions.notification.show('Test message'));
 
-      const expectedState = Object.assign({}, state, {pending: true});
+      expect(nextState).toEqual({show: true, message: 'Test message', type: undefined});
+    });
 
-      expect(nextState).toEqual(expectedState);
+    it('should change the state', () => {
+      const nextState = reducer(state, actions.notification.show('Test message', 'error'));
+
+      expect(nextState).toEqual({show: true, message: 'Test message', type: 'error'});
     });
   });
 
-  describe('with SUCCESS action', () => {
+  describe('with HIDE action', () => {
 
-    it('should set pending to false and update current news list', () => {
-      const expected = [{id: 'news1'}, {id: 'news2'}];
-      const nextState = reducer(state, actions.news.load.success(expected));
+    it('should reset the message and hide the notification', () => {
+      state = {show: true, message: 'Any message', type: 'any'};
 
-      const expectedState = Object.assign({}, state, {pending: false, data: expected});
+      const nextState = reducer(state, actions.notification.hide());
 
-      expect(nextState).toEqual(expectedState);
+      expect(nextState).toEqual({show: false, message: '', type: 'any'});
     });
   });
-
-  describe('with ERROR action', () => {
-
-    it('should set pending to false and update error message', () => {
-      const error = new Error('Oops, something went wrong!');
-      const nextState = reducer(state, actions.news.load.error(error));
-
-      const expectedState = Object.assign({}, state, {pending: false, errorMessage: error.message});
-
-      expect(nextState).toEqual(expectedState);
-    });
-  });
-
 });

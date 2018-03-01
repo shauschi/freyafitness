@@ -1,6 +1,6 @@
 import reducer, {actions} from '../';
 
-describe('news reducer', () => {
+describe('coursetypes reducer', () => {
 
   let state;
 
@@ -15,7 +15,7 @@ describe('news reducer', () => {
   describe('with PENDING action', () => {
 
     it('should only set state to pending', () => {
-      const nextState = reducer(state, actions.news.load.pending());
+      const nextState = reducer(state, actions.courseTypes.load.pending());
 
       const expectedState = Object.assign({}, state, {pending: true});
 
@@ -25,9 +25,9 @@ describe('news reducer', () => {
 
   describe('with SUCCESS action', () => {
 
-    it('should set pending to false and update current news list', () => {
-      const expected = [{id: 'news1'}, {id: 'news2'}];
-      const nextState = reducer(state, actions.news.load.success(expected));
+    it('should set pending to false and update current courseTypes list', () => {
+      const expected = [{id: 'course1'}, {id: 'course2'}];
+      const nextState = reducer(state, actions.courseTypes.load.success(expected));
 
       const expectedState = Object.assign({}, state, {pending: false, data: expected});
 
@@ -39,7 +39,7 @@ describe('news reducer', () => {
 
     it('should set pending to false and update error message', () => {
       const error = new Error('Oops, something went wrong!');
-      const nextState = reducer(state, actions.news.load.error(error));
+      const nextState = reducer(state, actions.courseTypes.load.error(error));
 
       const expectedState = Object.assign({}, state, {pending: false, errorMessage: error.message});
 

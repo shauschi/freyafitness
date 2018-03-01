@@ -1,6 +1,4 @@
-import {fetchNews, actions} from '../';
-
-jest.mock('../../../service/news');
+import {showNotification, hideNotification, actions} from '../';
 
 describe('news actions', () => {
 
@@ -12,25 +10,19 @@ describe('news actions', () => {
     getMockState = () => {};
   });
 
-  describe('fetchNews', () => {
+  describe('notifications actions', () => {
 
-    it('should dispatch PENDING action', () => {
-      fetchNews()(dispatchMock, getMockState);
+    it('should dispatch SHOW action', () => {
+      showNotification('Test message')(dispatchMock, getMockState);
 
-      expect(dispatchMock.mock.calls[0][0]).toEqual(actions.news.load.pending());
+      expect(dispatchMock.mock.calls[0][0]).toEqual(actions.notification.show('Test message'));
     });
 
-    it('should dispatch SUCCESS action when fetch is successful', async () => {
-      await fetchNews()(dispatchMock, getMockState);
+    it('should dispatch HIDE action', async () => {
+      hideNotification()(dispatchMock, getMockState);
 
-      expect(dispatchMock.mock.calls[1][0]).toEqual(actions.news.load.success([{id: 'news1'}, {id: 'news2'}]));
+      expect(dispatchMock.mock.calls[0][0]).toEqual(actions.notification.hide());
     });
 
-    it('should dispatch ERROR action when fetch is not successful', async () => {
-      const error = new Error('Ops, something went wrong');
-      await fetchNews(error)(dispatchMock, getMockState);
-
-      expect(dispatchMock.mock.calls[1][0]).toEqual(actions.news.load.error(error));
-    })
   });
 });
