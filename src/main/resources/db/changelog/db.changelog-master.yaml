@@ -2,4 +2,6 @@ databaseChangeLog:
     - includeAll:
         path: db/changelog/000__initial/
     - includeAll:
-        path: db/changelog/999__testdata/
+        path: db/changelog/000__testdata/
+    - includeAll:
+        path: db/changelog/001__course_type/
