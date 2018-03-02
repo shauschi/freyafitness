@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --coverage --runInBand",
     "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot",
     "dev": "webpack-dev-server --progress --inline --hot --config webpack.dev.config.js",
     "build:production": "webpack --config webpack.config.js"
@@ -32,23 +32,31 @@
     "babel-preset-react-app": "^3.1.0",
     "babel-preset-react-hmre": "^1.1.1",
     "clean-webpack-plugin": "^0.1.17",
+    "css-loader": "^0.28.9",
+    "file-loader": "^1.1.6",
     "material-ui": "^1.0.0-beta.29",
     "material-ui-icons": "^1.0.0-beta.17",
     "moment": "^2.19.1",
     "prop-types": "^15.6.0",
     "ramda": "^0.25.0",
     "react": "^16.0.0",
+    "react-avatar-editor": "^10.3.0",
     "react-dom": "^16.0.0",
     "react-icons": "^2.2.7",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-swipeable-routes": "^0.3.0",
-    "react-swipeable-views": "^0.12.10",
+    "react-swipeable-views": "^0.12.12",
+    "react-swipeable-views-utils": "^0.12.11",
+    "react-transition-group": "^2.2.1",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
-    "typeface-roboto": "0.0.29"
+    "slick-carousel": "^1.8.1",
+    "style-loader": "^0.19.1",
+    "typeface-roboto": "0.0.29",
+    "url-loader": "^0.6.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.1",
@@ -72,7 +80,7 @@
     "automock": false,
     "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
+      "src/main/webapp/**/*.{js,jsx}"
     ],
     "setupFiles": [
       "<rootDir>/config/jest/setup.js"

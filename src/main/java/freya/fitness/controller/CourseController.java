@@ -1,9 +1,10 @@
 package freya.fitness.controller;
 
-import freya.fitness.domain.Course;
-import freya.fitness.domain.User;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.User;
+import freya.fitness.dto.CourseDto;
 import freya.fitness.service.CourseService;
-import freya.fitness.service.UserService;
+import freya.fitness.service.CurrentUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,58 +21,69 @@ public class CourseController {
   private CourseService courseService;
 
   @Autowired
-  private UserService userService;
+  private CurrentUserService currentUserService;
 
-  @RequestMapping("/{id}")
-  @ResponseBody
+  @GetMapping("/{id}")
   public CourseDto getCourseDetails(@PathVariable("id") final Long id) {
     User user = userService.getCurrentUser();
+    final User user = currentUserService.getCurrentUser();
     return courseService.getCourse(id)
         .map(course -> new CourseDto(user, course))
         .orElse(null);
   }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-  @ResponseBody
-  public CourseDto saveCourse(@RequestBody final CourseDto courseDto) {
+  @PostMapping("/{id}")
+  public CourseDto saveCourse(@PathVariable("id") final Long id,
+                              @RequestBody final CourseDto courseDto) {
     // TODO user rights?
-    User user = userService.getCurrentUser();
-    Course updatedCourse = courseService.update(courseDto);
+    final User user = currentUserService.getCurrentUser();
+    final Course updatedCourse = courseService.update(id, courseDto);
     return new CourseDto(user, updatedCourse);
   }
 
-  @RequestMapping("/from/{from}")
-  @ResponseBody
+  @GetMapping("/create")
+  public CourseDto createNewCourse() {
+    final User user = currentUserService.getCurrentUser();
+    final Course course = courseService.createEmptyCourse(user);
+    return new CourseDto(user, course);
+  }
+
+  @PostMapping("/create")
+  public CourseDto saveNewCourse(@RequestBody final CourseDto courseDto) {
+    // TODO user rights?
+    final User user = currentUserService.getCurrentUser();
+    final Course updatedCourse = courseService.create(courseDto);
+    return new CourseDto(user, updatedCourse);
+  }
+
+  @GetMapping("/from/{from}")
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
-    User user = userService.getCurrentUser();
+    final User user = currentUserService.getCurrentUser();
     return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
   }
 
-  @RequestMapping("from/{from}/to/{to}")
-  @ResponseBody
+  @GetMapping("from/{from}/to/{to}")
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
       @PathVariable("to") final String to) {
-    User user = userService.getCurrentUser();
+    final User user = currentUserService.getCurrentUser();
     return toDtos(user, courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
   }
 
-  //@PutMapping
-  @RequestMapping("{courseId}/signin")
+  @PutMapping("{courseId}/signin")
   public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final Long courseId) {
-    User user = userService.getCurrentUser();
-    Course changedCourse = courseService.addUserToCourse(user, courseId);
+    final User user = currentUserService.getCurrentUser();
+    final Course changedCourse = courseService.addUserToCourse(user, courseId);
     if (changedCourse != null) {
       return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
     }
     return ResponseEntity.badRequest().build();
   }
 
-  //@PutMapping
-  @RequestMapping("{courseId}/signout")
+  @PutMapping("{courseId}/signout")
   public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final Long courseId) {
-    User user = userService.getCurrentUser();
-    Course changedCourse = courseService.removeUserFromCourse(user, courseId);
+    final User user = currentUserService.getCurrentUser();
+    final Course changedCourse = courseService.removeUserFromCourse(user, courseId);
     if (changedCourse != null) {
       return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
     }

@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: bigserial
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: title
+              type: varchar(255)
+          - column:
+              name: teaser
+              type: varchar(255)
+          - column:
+              name: text
+              type: varchar(10000)
+          - column:
+              name: picture_id
+              type: varchar(255)
+          - column:
+              name: validity_from
+              type: timestamp
+          - column:
+              name: validity_to
+              type: timestamp
+          schemaName: public
+          tableName: news

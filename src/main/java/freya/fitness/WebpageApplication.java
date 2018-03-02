@@ -39,7 +39,7 @@ public class WebpageApplication extends WebSecurityConfigurerAdapter {
     configuration.setAllowedOrigins(Arrays.asList(
         "http://127.0.0.1:3333", "http://localhost:3333",
         "http://127.0.0.1:9000", "http://localhost:9000"));
-    configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;

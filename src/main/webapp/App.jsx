@@ -8,13 +8,18 @@ import {MuiThemeProvider, withStyles} from 'material-ui/styles';
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
+import Snackbar, {SnackbarContent} from 'material-ui/Snackbar';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
-import * as Style from './utils/Style.jsx';
+import * as Style from './utils/Style';
 import {
   toggleDrawer
 } from './model/drawer';
 import {
+  hideNotification
+} from './model/notification';
+import {
   fetchCourses,
+  createCourse,
   showCourseDetails,
   hideCourseDetails,
   saveCourseDetails,
@@ -24,15 +29,6 @@ import {
   signIn,
   signOut
 } from './model/courses';
-import {
-  onProfileDetailsChange
-} from "./model/profile";
-import {
-  onPasswordChange,
-  onOpenPasswordChange,
-  onCancelPasswordChange,
-  changePassword
-} from "./model/password";
 import init from './model/init.js';
 
 class App extends Component {
@@ -43,20 +39,18 @@ class App extends Component {
   };
 
   render() {
-    const {classes, drawer, actions, profile, courses, password} = this.props;
+    const {classes, drawer, actions, courses, news, notification} = this.props;
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
           <div className={classes.appFrame} style={{backgroundImage: 'url(http://localhost:9000/background.jpg)', backgroundSize: 'cover'}}>
-            <MyAppBar classes={classes} toggleDrawer={actions.toggleDrawer} {...this.props}/>
+            <MyAppBar
+              classes={classes}
+              toggleDrawer={actions.toggleDrawer}
+              createCourse={actions.createCourse}
+              {...this.props}/>
             <MyDrawer classes={classes} toggleDrawer={actions.toggleDrawer} {...drawer}/>
-            <div style={{
-              marginTop: '56px',
-              marginBottom: '46px',
-              position: 'relative',
-              width: '100%',
-              height: 'calc(100% - 102px)'
-            }}>
+            <div className={classes.content}>
               <Switch>
                 <Redirect from='/index' to='/'/>
                 <Redirect from='/home' to='/'/>
@@ -73,7 +67,12 @@ class App extends Component {
                     WebkitOverflowScrolling: 'touch',
                   }}
                 >
-                  <Route exact path='/' render={() => <Home {...this.props}/>}/>
+                  <Route exact path='/' render={() =>
+                    <Home
+                      {...this.props}
+                      news={news}
+                    />}
+                  />
                   <Route exact path='/courses/all' render={() =>
                     <Courses
                       pending={courses.pending}
@@ -89,22 +88,16 @@ class App extends Component {
                       signOut={actions.signOut}
                     />}
                   />
-                  <Route exact path='/profile' render={() =>
-                    <ProfileSite
-                      pending={profile.pending}
-                      profile={profile.data}
-                      onProfileDetailsChange={actions.onProfileDetailsChange}
-                      password={password}
-                      onPasswordChange={actions.onPasswordChange}
-                      onOpenPasswordChange={actions.onOpenPasswordChange}
-                      onCancelPasswordChange={actions.onCancelPasswordChange}
-                      changePassword={actions.changePassword}
-                    />}
-                  />
+                  <Route exact path='/profile' render={() => <ProfileSite/>}/>
                 </SwipeableRoutes>
               </Switch>
             </div>
             <Footer {...this.props}/>
+            <Snackbar
+              open={notification.show}
+              onClose={this.props.actions.hideNotification}
+              message={notification.message}
+              autoHideDuration={1500}/>
           </div>
         </div>
       </MuiThemeProvider>
@@ -117,16 +110,17 @@ App.contextTypes = {
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile,
   drawer: state.drawer,
   courses: state.courses,
-  password: state.password,
+  news: state.news,
+  notification: state.notification,
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     toggleDrawer: toggleDrawer,
     fetchCourses: fetchCourses,
+    createCourse: createCourse,
     showCourseDetails: showCourseDetails,
     hideCourseDetails: hideCourseDetails,
     saveCourseDetails: saveCourseDetails,
@@ -135,11 +129,7 @@ const mapDispatchToProps = dispatch => ({
     onCourseDetailsChange: onCourseDetailsChange,
     signIn: signIn,
     signOut: signOut,
-    onProfileDetailsChange: onProfileDetailsChange,
-    onPasswordChange: onPasswordChange,
-    onOpenPasswordChange: onOpenPasswordChange,
-    onCancelPasswordChange: onCancelPasswordChange,
-    changePassword: changePassword
+    hideNotification: hideNotification
   }, dispatch),
   dispatch
 });

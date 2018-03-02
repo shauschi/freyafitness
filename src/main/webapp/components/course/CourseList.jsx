@@ -3,9 +3,8 @@ import React from 'react';
 import moment from 'moment';
 import {Subheader} from './../general';
 import List from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import {comparingMod} from '../../utils/Comparator.jsx';
-import * as Format from '../../utils/Format.jsx';
+import {comparingMod} from '../../utils/Comparator';
+import * as Format from '../../utils/Format';
 import Course from '.';
 
 const compareCourseByStartDate = comparingMod('start', moment);
@@ -22,13 +21,11 @@ const CourseList = ({courses, showCourseDetails}) => {
       elements.push(
         <Subheader key={formattedDayOfCourse} label={formattedDayOfCourse} />
       );
-    } else {
-      elements.push(<Divider key={idx + "_divider"} inset light/>);
     }
     elements.push(<Course key={idx} course={course} showCourseDetails={showCourseDetails}/>);
   }
 
-  return (<List>{elements}</List>);
+  return (<List style={{padding: '0'}}>{elements}</List>);
 };
 
 export default CourseList;

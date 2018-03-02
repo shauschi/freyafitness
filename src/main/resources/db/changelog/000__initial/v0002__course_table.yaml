@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: bigserial
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: type
+              type: varchar(255)
+          - column:
+              name: start
+              type: timestamp
+          - column:
+              name: minutes
+              type: int
+          - column:
+              name: max_participants
+              type: int
+          - column:
+              name: instructor_id
+              type: bigserial
+          - column:
+              name: canceled
+              type: boolean
+              defaultValueBoolean: false
+          schemaName: public
+          tableName: course
+      - addForeignKeyConstraint:
+          baseColumnNames: instructor_id
+          baseTableName: course
+          constraintName: fk_course_instructor
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: user

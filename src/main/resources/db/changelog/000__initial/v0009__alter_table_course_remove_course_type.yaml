@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: hauschildt
+      changes:
+      - dropColumn:
+          columnName: type
+          schemaName: public
+          tableName: course
+      - addNotNullConstraint:
+          columnDataType: bigserial
+          columnName: course_type_id
+          schemaName: public
+          tableName: course
+      - addForeignKeyConstraint:
+          baseColumnNames: course_type_id
+          baseTableName: course
+          constraintName: fk_course_course_type
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: course_type
