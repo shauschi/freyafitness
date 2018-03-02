@@ -1,6 +1,13 @@
 'use strict';
 
-export const GET = url => fetch(url)
+export const GET = url => fetch(url,
+  {
+    headers: {
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:3333'
+    },
+    credentials: 'include'
+  })
   .then(response => {
     if (!response.ok)
       throw new Error('Response not ok');
@@ -13,8 +20,11 @@ export const PUT = (url, data) => fetch(url,
     body: JSON.stringify(data),
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:3333'
+    },
+    credentials: 'include'
   })
   .then(response => {
     if (!response.ok)
@@ -28,8 +38,11 @@ export const POST = (url, data) => fetch(url,
     body: JSON.stringify(data),
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:3333'
+    },
+    credentials: 'include'
   })
   .then(response => {
     if (!response.ok)

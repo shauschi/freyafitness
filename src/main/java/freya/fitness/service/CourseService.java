@@ -14,12 +14,15 @@ import java.util.*;
 @Service
 public class CourseService {
 
-  @Autowired
   private CourseRepository courseRepository;
 
-  @Autowired
   private CourseDtoToCourseMapper courseDtoToCourseMapper;
 
+  public CourseService(final CourseRepository courseRepository
+      , final CourseDtoToCourseMapper courseDtoToCourseMapper) {
+    this.courseRepository = courseRepository;
+    this.courseDtoToCourseMapper = courseDtoToCourseMapper;
+  }
 
   public Optional<Course> getCourse(final Long id) {
     return courseRepository.findById(id);

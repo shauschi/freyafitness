@@ -1,10 +1,9 @@
 package freya.fitness.controller;
 
 import freya.fitness.domain.Course;
-import freya.fitness.domain.CourseDtoToCourseMapper;
 import freya.fitness.domain.User;
 import freya.fitness.service.CourseService;
-import freya.fitness.service.CurrentUserService;
+import freya.fitness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +20,12 @@ public class CourseController {
   private CourseService courseService;
 
   @Autowired
-  private CurrentUserService currentUserService;
+  private UserService userService;
 
   @RequestMapping("/{id}")
   @ResponseBody
   public CourseDto getCourseDetails(@PathVariable("id") final Long id) {
-    User user = currentUserService.getCurrentUser();
+    User user = userService.getCurrentUser();
     return courseService.getCourse(id)
         .map(course -> new CourseDto(user, course))
         .orElse(null);
@@ -36,7 +35,7 @@ public class CourseController {
   @ResponseBody
   public CourseDto saveCourse(@RequestBody final CourseDto courseDto) {
     // TODO user rights?
-    User user = currentUserService.getCurrentUser();
+    User user = userService.getCurrentUser();
     Course updatedCourse = courseService.update(courseDto);
     return new CourseDto(user, updatedCourse);
   }
@@ -44,7 +43,7 @@ public class CourseController {
   @RequestMapping("/from/{from}")
   @ResponseBody
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
-    User user = currentUserService.getCurrentUser();
+    User user = userService.getCurrentUser();
     return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
   }
 
@@ -53,14 +52,14 @@ public class CourseController {
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
       @PathVariable("to") final String to) {
-    User user = currentUserService.getCurrentUser();
+    User user = userService.getCurrentUser();
     return toDtos(user, courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
   }
 
   //@PutMapping
   @RequestMapping("{courseId}/signin")
   public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final Long courseId) {
-    User user = currentUserService.getCurrentUser();
+    User user = userService.getCurrentUser();
     Course changedCourse = courseService.addUserToCourse(user, courseId);
     if (changedCourse != null) {
       return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
@@ -71,7 +70,7 @@ public class CourseController {
   //@PutMapping
   @RequestMapping("{courseId}/signout")
   public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final Long courseId) {
-    User user = currentUserService.getCurrentUser();
+    User user = userService.getCurrentUser();
     Course changedCourse = courseService.removeUserFromCourse(user, courseId);
     if (changedCourse != null) {
       return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));

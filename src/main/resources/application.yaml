@@ -1,0 +1,41 @@
+server:
+  port: 9000
+  session:
+    cookie:
+      name: UISESSION
+spring:
+  data:
+    rest:
+      base-path: /api
+  thymeleaf:
+    check-template: true
+    check-template-location: true
+    prefix: classpath:/static/
+    cache: false
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+  datasource:
+    url: jdbc:postgresql://localhost/freyafitness
+    #url: jdbc:postgresql://93.90.205.170/freyafitness
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      clientId: 1801602199870336
+      clientSecret: 474f0a4729dc310c72b815581dbc36b1
+      accessTokenUri: https://graph.facebook.com/oauth/access_token
+      userAuthorizationUri: https://www.facebook.com/dialog/oauth
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://graph.facebook.com/me
