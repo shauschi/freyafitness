@@ -9,7 +9,7 @@ import java.security.Principal;
 public class UserController {
 
   @GetMapping("/user/me")
-  public Principal user(Principal principal) {
+  public Principal user(final Principal principal) {
     return principal;
   }
 }

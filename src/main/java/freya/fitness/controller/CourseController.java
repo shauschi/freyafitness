@@ -4,7 +4,7 @@ import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CourseDto;
 import freya.fitness.service.CourseService;
-import freya.fitness.service.CurrentUserService;
+import freya.fitness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +17,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/courses")
 public class CourseController {
 
-  @Autowired
-  private CourseService courseService;
+  private final CourseService courseService;
+
+  private final UserService userService;
 
   @Autowired
-  private CurrentUserService currentUserService;
+  public CourseController(final CourseService courseService, final UserService userService) {
+    this.courseService = courseService;
+    this.userService = userService;
+  }
 
   @GetMapping("/{id}")
   public CourseDto getCourseDetails(@PathVariable("id") final Long id) {
-    User user = userService.getCurrentUser();
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     return courseService.getCourse(id)
         .map(course -> new CourseDto(user, course))
         .orElse(null);
@@ -36,14 +39,14 @@ public class CourseController {
   public CourseDto saveCourse(@PathVariable("id") final Long id,
                               @RequestBody final CourseDto courseDto) {
     // TODO user rights?
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.update(id, courseDto);
     return new CourseDto(user, updatedCourse);
   }
 
   @GetMapping("/create")
   public CourseDto createNewCourse() {
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     final Course course = courseService.createEmptyCourse(user);
     return new CourseDto(user, course);
   }
@@ -51,14 +54,14 @@ public class CourseController {
   @PostMapping("/create")
   public CourseDto saveNewCourse(@RequestBody final CourseDto courseDto) {
     // TODO user rights?
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.create(courseDto);
     return new CourseDto(user, updatedCourse);
   }
 
   @GetMapping("/from/{from}")
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
   }
 
@@ -66,13 +69,13 @@ public class CourseController {
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
       @PathVariable("to") final String to) {
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     return toDtos(user, courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
   }
 
   @PutMapping("{courseId}/signin")
   public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final Long courseId) {
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.addUserToCourse(user, courseId);
     if (changedCourse != null) {
       return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
@@ -82,7 +85,7 @@ public class CourseController {
 
   @PutMapping("{courseId}/signout")
   public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final Long courseId) {
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.removeUserFromCourse(user, courseId);
     if (changedCourse != null) {
       return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));

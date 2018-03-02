@@ -2,7 +2,6 @@ package freya.fitness.controller;
 
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.ProfileDto;
-import freya.fitness.service.CurrentUserService;
 import freya.fitness.service.ProfilePictureService;
 import freya.fitness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
 
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
+
+  private final ProfilePictureService profilePictureService;
 
   @Autowired
-  private CurrentUserService currentUserService;
-
-  @Autowired
-  private ProfilePictureService profilePictureService;
+  public ProfileController(final UserService userService, final ProfilePictureService profilePictureService) {
+    this.userService = userService;
+    this.profilePictureService = profilePictureService;
+  }
 
   @GetMapping("/own")
-  public ProfileDto getOwnProfil(Principal principal) {
-    return new ProfileDto(currentUserService.getCurrentUser());
+  public ProfileDto getOwnProfil() {
+    return new ProfileDto(userService.getCurrentUser());
   }
 
   @GetMapping("/{userId}/picture")
@@ -52,7 +51,7 @@ public class ProfileController {
       headers = "Content-Type=multipart/form-data")
   public void changeProfilePicture(
       @RequestParam("image") final MultipartFile image) throws IOException {
-    final User user = currentUserService.getCurrentUser();
+    final User user = userService.getCurrentUser();
     profilePictureService.changeProfilePicture(user.getId(), image);
   }
 

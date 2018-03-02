@@ -13,11 +13,16 @@ import java.io.IOException;
 @Service
 public class ProfilePictureService {
 
-  @Autowired
-  private ProfilePictureRepository profilePictureRepository;
+  private final ProfilePictureRepository profilePictureRepository;
+
+  private final UserRepository userRepository;
 
   @Autowired
-  private UserRepository userRepository;
+  public ProfilePictureService(final ProfilePictureRepository profilePictureRepository
+      , final UserRepository userRepository) {
+    this.profilePictureRepository = profilePictureRepository;
+    this.userRepository = userRepository;
+  }
 
   public byte[] getProfilePictureData(final String profilePictureId) throws IOException {
     return profilePictureRepository.getById(profilePictureId);

@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class CourseTypeService {
 
+  private final CourseTypeRepository courseTypeRepository;
+
   @Autowired
-  private CourseTypeRepository courseTypeRepository;
+  public CourseTypeService(final CourseTypeRepository courseTypeRepository) {
+    this.courseTypeRepository = courseTypeRepository;
+  }
 
   public List<CourseType> getCurrentCourseTypes() {
     final LocalDateTime now = LocalDateTime.now();

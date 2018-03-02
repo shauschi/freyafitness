@@ -1,7 +1,7 @@
 package freya.fitness.service;
 
-import freya.fitness.domain.User;
-import freya.fitness.repository.UserRepository;
+import freya.fitness.domain.jpa.User;
+import freya.fitness.repository.jpa.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +23,10 @@ public class UserService implements UserDetailsService {
 
   public User getCurrentUser() {
     return userRepository.findById(1L).orElseThrow(RuntimeException::new);
+  }
+
+  public User getUser(final Long userId) {
+    return userRepository.findById(userId).orElseThrow(RuntimeException::new);
   }
 
 }

@@ -25,13 +25,12 @@ public class CourseService {
   @Value("${course.create.maxParticipants: 12}")
   private int maxParticipants;
 
-  @Autowired
-  private CourseRepository courseRepository;
+  private final CourseRepository courseRepository;
 
   private CourseDtoToCourseMapper courseDtoToCourseMapper;
 
-  public CourseService(final CourseRepository courseRepository
-      , final CourseDtoToCourseMapper courseDtoToCourseMapper) {
+  @Autowired
+  public CourseService(final CourseRepository courseRepository, final CourseDtoToCourseMapper courseDtoToCourseMapper) {
     this.courseRepository = courseRepository;
     this.courseDtoToCourseMapper = courseDtoToCourseMapper;
   }

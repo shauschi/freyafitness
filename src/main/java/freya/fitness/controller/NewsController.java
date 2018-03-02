@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/news")
 public class NewsController {
 
+  private final NewsService newsService;
+
   @Autowired
-  private NewsService newsService;
+  public NewsController(final NewsService newsService) {
+    this.newsService = newsService;
+  }
 
   @GetMapping("/previews")
   public List<NewsPreviewDto> getNewsPreviews() {
