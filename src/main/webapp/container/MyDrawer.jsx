@@ -15,7 +15,7 @@ import {
   IconUser,
   IconSignOut,
   IconDocument
-} from '../utils/Icons/Icons';
+} from '../utils/Icons';
 
 const MenuLink = ({to, label, icon, onClick}) => (
   <Link to={to} style={{textDecoration: 'none'}} onClick={onClick}>

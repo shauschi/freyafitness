@@ -12,7 +12,7 @@ import {FadeIconButton} from './../components/general';
 import {
   IconMenu,
   IconPlus
-} from '../utils/Icons/Icons';
+} from '../utils/Icons';
 import {blueGrey} from 'material-ui/colors';
 
 class MyAppBar extends Component {

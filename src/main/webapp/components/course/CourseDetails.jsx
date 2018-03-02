@@ -28,16 +28,10 @@ import {
   IconPencil,
   IconUser,
   IconUserGroup
-} from '../../utils/Icons/Icons';
+} from '../../utils/Icons';
 
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 import {findById} from "../../utils/RamdaUtils";
-import {
-  createCourse,
-  fetchCourses, hideCourseDetails, onCourseDetailsChange, saveCourseDetails, showCourseDetails, signIn, signOut,
-  toggleAttendeeList, toggleEditCourse
-} from "../../model/courses";
-import {toggleDrawer} from "../../model/drawer";
 
 const getAttendeeList = attendees => {
   const attendeesList = [];
@@ -100,7 +94,7 @@ class CourseDetails extends Component {
     const attendeesList = getAttendeeList(attendees);
 
     if (pending) {
-      return <div></div>; // TODO Loading
+      return <div/>; // TODO Loading
     }
 
     const {name = " ", color} = findById(courseTypes.data, courseTypeId) || TypeMapper['SOFT'];
