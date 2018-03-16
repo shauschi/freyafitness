@@ -16,6 +16,7 @@ export {
   IconMenu,
   IconPencil,
   IconPlus,
+  IconSignIn,
   IconSignOut,
   IconUser,
   IconUserGroup

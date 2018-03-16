@@ -63,7 +63,6 @@ class ProfileSite extends Component {
   }
 }
 
-
 const mapStateToProps = state => ({
   profile: state.profile,
   password: state.password

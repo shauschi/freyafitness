@@ -47,6 +47,10 @@ export const actions = createActions({
 export const fetchOwnProfile = (filterOptions) => {
   return dispatch => {
     dispatch(actions.profile.load.pending());
+    if (CURRENT_USER) {
+      return dispatch(actions.profile.load.success(CURRENT_USER));
+    }
+
     return getOwnProfile(filterOptions)
       .then(profile => dispatch(actions.profile.load.success(profile)))
       .catch(error => dispatch(actions.profile.load.error(error)))

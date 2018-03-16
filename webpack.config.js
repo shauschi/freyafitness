@@ -8,7 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: './src/main/webapp/index.html',
+  template: '!!html-loader!./src/main/webapp/index.html',
   filename: 'index.html',
   inject: 'body'
 });

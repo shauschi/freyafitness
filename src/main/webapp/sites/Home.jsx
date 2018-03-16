@@ -1,4 +1,7 @@
+'use strict';
 import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from 'material-ui/Dialog';
@@ -6,10 +9,12 @@ import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import {Subheader, Slider} from './../components/general';
 import {NewsItem} from './../components/news';
 import Course from './../components/course';
+import {
+  showCourseDetails
+} from '../model/courses';
 
 import {IconBatteryLow} from '../utils/Icons';
 import {red} from 'material-ui/colors';
-
 
 class SimpleDialog extends Component {
 
@@ -53,7 +58,6 @@ class Home extends Component {
   handleRequestClose = () => {
     this.setState({open: false });
   };
-
 
   render() {
     // TODO besser an die einzelnen Komponenten übergeben
@@ -111,4 +115,20 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+  courses: state.courses,
+  news: state.news
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({
+    // courses
+    showCourseDetails: showCourseDetails,
+  }, dispatch),
+  dispatch
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);

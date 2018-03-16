@@ -28,7 +28,7 @@ import {
   IconPencil,
   IconUser,
   IconUserGroup
-} from '../../utils/Icons/Icons';
+} from '../../utils/Icons';
 
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 import {findById} from "../../utils/RamdaUtils";

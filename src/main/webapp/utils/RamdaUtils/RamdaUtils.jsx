@@ -1,6 +1,5 @@
 'use strict';
 import * as ramda from 'ramda';
-import {TypeMapper} from "../../components/course/Course";
 
 /*
  * Setzt den Wert entlang eines Pfades auf 'value'
