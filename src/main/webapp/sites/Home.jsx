@@ -59,12 +59,30 @@ class Home extends Component {
     this.setState({open: false });
   };
 
+  getMyCourses = () => {
+    const {showCourseDetails} = this.props.actions;
+    const {data = {}} = this.props.courses;
+    const myCourses = data.filter(course => course.signedIn);
+    if (myCourses && myCourses.length > 0) {
+      return (
+        <div>
+          <Subheader label='Meine Kurse'/>
+          {myCourses.map(
+            (course, idx) => (
+              <Course
+                key={idx}
+                course={course}
+                showCourseDetails={showCourseDetails}
+                showDate/>)
+          )}
+        </div>
+      );
+    }
+  };
+
   render() {
     // TODO besser an die einzelnen Komponenten übergeben
     const newsData = this.props.news.data || [];
-    const {data = {}} = this.props.courses;
-    const {showCourseDetails} = this.props.actions;
-    const myCourses = data.filter(course => course.signedIn);
     return (
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
         <SimpleDialog
@@ -84,11 +102,7 @@ class Home extends Component {
           </Slider>
 
           <List style={{padding: '0'}}>
-            <Subheader label={"Meine Kurse"}/>
-            { myCourses.map(
-              (course, idx) => (<Course key={idx} course={course} showCourseDetails={showCourseDetails} showDate/>)
-            )}
-
+            {this.getMyCourses()}
             <Subheader label={"Status"}/>
             <ListItem button onClick={this.handleClickOpen}>
               <ListItemIcon>
