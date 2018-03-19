@@ -15,8 +15,8 @@ const loadingStyles = {
     verticalAlign: 'middle'
   },
   indicator: {
-    width: '65px',
-    height: '65px'
+    width: '32px',
+    height: '32px'
   }
 };
 
@@ -27,8 +27,8 @@ class LoadingIndicator extends Component {
     return (
       <div style={loadingStyles.table}>
         <div style={loadingStyles.cell}>
-          <CircularProgress style={loadingStyles.indicator}/>
-          <Typography type={'title'} color={'primary'}>loading</Typography>
+          <CircularProgress mode='indeterminate' style={loadingStyles.indicator}/>
+          <Typography color='primary'>loading</Typography>
         </div>
       </div>
     );

@@ -14,6 +14,7 @@ import {
   IconCalendar,
   IconUser,
   IconSignOut,
+  IconSignIn,
   IconDocument
 } from '../utils/Icons';
 
@@ -31,7 +32,7 @@ const MenuLink = ({to, label, icon, onClick}) => (
 class MyDrawer extends Component {
 
   render() {
-    const {classes, open, toggleDrawer} = this.props;
+    const {classes, open, toggleDrawer, logOut, currentUser} = this.props;
     const drawer = (
       <div style={{height: '100%'}}>
         <div className={classes.drawerHeader}/>
@@ -39,8 +40,16 @@ class MyDrawer extends Component {
         <div style={{overflowY: 'auto', height: '100vh'}}>
           <List>
             <MenuLink to='/' label='Home' icon={<IconHome/>} onClick={toggleDrawer}/>
-            <MenuLink to='/courses/all' label='Alle Kurse' icon={<IconCalendar/>} onClick={toggleDrawer}/>
-            <MenuLink to='/profile' label='Profile' icon={<IconUser/>} onClick={toggleDrawer}/>
+            {
+              currentUser
+                ? <MenuLink to='/courses/all' label='Alle Kurse' icon={<IconCalendar/>} onClick={toggleDrawer}/>
+                : undefined
+            }
+            {
+              currentUser
+                ? <MenuLink to='/profile' label='Profile' icon={<IconUser/>} onClick={toggleDrawer}/>
+                : undefined
+            }
           </List>
           <Divider/>
           <List>
@@ -48,7 +57,11 @@ class MyDrawer extends Component {
             <MenuLink to='/about/stall' label='Der Stall' icon={<IconInfo/>} onClick={toggleDrawer}/>
             <MenuLink to='/agb' label='AGB' icon={<IconDocument/>} onClick={toggleDrawer}/>
             <MenuLink to='/impressum' label='Impressum' icon={<IconInfo/>} onClick={toggleDrawer}/>
-            <MenuLink to='/logout' label='Logout' icon={<IconSignOut/>} onClick={toggleDrawer}/>
+            {
+              currentUser
+                ? <MenuLink to='/logout' label='Logout' icon={<IconSignOut/>} onClick={logOut}/>
+                : <MenuLink to='/login' label='Login' icon={<IconSignIn/>}/>
+            }
           </List>
         </div>
       </div>
@@ -80,4 +93,6 @@ class MyDrawer extends Component {
   }
 }
 
-export default compose(withWidth())(MyDrawer);
+export default compose(
+  withWidth()
+)(MyDrawer);

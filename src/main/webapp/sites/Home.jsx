@@ -1,4 +1,7 @@
+'use strict';
 import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from 'material-ui/Dialog';
@@ -6,10 +9,12 @@ import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import {Subheader, Slider} from './../components/general';
 import {NewsItem} from './../components/news';
 import Course from './../components/course';
+import {
+  showCourseDetails
+} from '../model/courses';
 
 import {IconBatteryLow} from '../utils/Icons';
 import {red} from 'material-ui/colors';
-
 
 class SimpleDialog extends Component {
 
@@ -54,13 +59,30 @@ class Home extends Component {
     this.setState({open: false });
   };
 
+  getMyCourses = () => {
+    const {showCourseDetails} = this.props.actions;
+    const {data = {}} = this.props.courses;
+    const myCourses = data.filter(course => course.signedIn);
+    if (myCourses && myCourses.length > 0) {
+      return (
+        <div>
+          <Subheader label='Meine Kurse'/>
+          {myCourses.map(
+            (course, idx) => (
+              <Course
+                key={idx}
+                course={course}
+                showCourseDetails={showCourseDetails}
+                showDate/>)
+          )}
+        </div>
+      );
+    }
+  };
 
   render() {
     // TODO besser an die einzelnen Komponenten übergeben
     const newsData = this.props.news.data || [];
-    const {data = {}} = this.props.courses;
-    const {showCourseDetails} = this.props.actions;
-    const myCourses = data.filter(course => course.signedIn);
     return (
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
         <SimpleDialog
@@ -80,11 +102,7 @@ class Home extends Component {
           </Slider>
 
           <List style={{padding: '0'}}>
-            <Subheader label={"Meine Kurse"}/>
-            { myCourses.map(
-              (course, idx) => (<Course key={idx} course={course} showCourseDetails={showCourseDetails} showDate={true}/>)
-            )}
-
+            {this.getMyCourses()}
             <Subheader label={"Status"}/>
             <ListItem button onClick={this.handleClickOpen}>
               <ListItemIcon>
@@ -111,4 +129,20 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+  courses: state.courses,
+  news: state.news
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({
+    // courses
+    showCourseDetails: showCourseDetails,
+  }, dispatch),
+  dispatch
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);

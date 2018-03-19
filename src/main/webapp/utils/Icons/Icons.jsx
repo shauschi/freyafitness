@@ -22,5 +22,6 @@ export {
 } from 'react-icons/lib/ti';
 
 export {
+  FaSignIn as IconSignIn,
   FaSignOut as IconSignOut
 } from 'react-icons/lib/fa';
