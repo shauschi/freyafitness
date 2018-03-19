@@ -17,6 +17,9 @@ import {
 import {
   hideNotification
 } from './model/notification';
+import {
+  logOut
+} from './model/profile';
 import init from './model/init.js';
 
 const HOME_ROUTE = <Route exact path='/' component={Home}/>;
@@ -47,7 +50,7 @@ class App extends Component {
 
   render() {
     const {classes, drawer, actions, profile = {}, notification} = this.props;
-    const currentUser = profile.data;
+    const currentUser = profile.user;
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
@@ -60,6 +63,7 @@ class App extends Component {
               {...this.props}/>
             <MyDrawer
               classes={classes}
+              logOut={actions.logOut}
               toggleDrawer={actions.toggleDrawer}
               currentUser={currentUser}
               {...drawer}/>
@@ -110,6 +114,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
+    logOut: logOut,
     toggleDrawer: toggleDrawer,
     hideNotification: hideNotification
   }, dispatch),

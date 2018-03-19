@@ -1,10 +1,15 @@
 import {createActions, handleActions} from 'redux-actions';
-import {getOwnProfile, changeProfilePicture} from '../../service/profile';
+import {
+  getOwnProfile,
+  changeProfilePicture,
+  logInWithFacebook as logInWithFacebookApiCall,
+  logOut as logOutApiCall
+} from '../../service/profile';
 import {setPath, assignPath} from "../../utils/RamdaUtils";
 
 const initialState = {
   pending: false,
-  data: {
+  user: {
     adress: {}
   }, // empty profile
   picture: {
@@ -41,8 +46,27 @@ export const actions = createActions({
         ERROR: error => error
       }
     }
+  },
+  LOG_IN: {
+    ERROR: error => error
+  },
+  LOG_OUT: {
+    SUCCESS: undefined,
+    ERROR: error => error
   }
 });
+
+export const logInWithFacebook = (filterOptions) => {
+  return dispatch => logInWithFacebookApiCall(filterOptions)
+    .then(profile => dispatch(actions.profile.load.success(profile)))
+    .error(error => dispatch(actions.logIn.error(error)));
+};
+
+export const logOut = () => {
+  return dispatch => logOutApiCall()
+    .then(() => dispatch(actions.logOut.success()))
+    .error(error => dispatch(actions.logOut.error(error)));
+};
 
 export const fetchOwnProfile = (filterOptions) => {
   return dispatch => {
@@ -89,13 +113,18 @@ export const saveProfilePicture = file => {
 };
 
 export default handleActions({
+  [actions.logIn.error]: (state, {payload}) => setPath(['error'], payload, state),
+  [actions.logOut.success]: state =>
+    assignPath([], {user: undefined, error: undefined}, state),
+  [actions.logOut.error]: (state, {payload}) => setPath(['error'], payload, state),
+
   [actions.profile.load.pending]: state => setPath(['pending'], true, state),
   [actions.profile.load.success]: (state, {payload}) =>
-    assignPath([], {pending: false, data: payload, errorMessage: null}, state),
+    assignPath([], {pending: false, user: payload, errorMessage: null}, state),
   [actions.profile.load.error]: (state, {payload}) =>
     assignPath([], {pending: false, errorMessage: payload.message}, state),
   [actions.profile.onProfileDetailsChange]: (state, {payload}) =>
-    setPath(['data', ...payload.path], payload.value, state),
+    setPath(['user', ...payload.path], payload.value, state),
 
   [actions.profile.picture.reset]: state =>
     setPath(['picture'], initialState.picture, state),

@@ -32,7 +32,7 @@ const MenuLink = ({to, label, icon, onClick}) => (
 class MyDrawer extends Component {
 
   render() {
-    const {classes, open, toggleDrawer, currentUser} = this.props;
+    const {classes, open, toggleDrawer, logOut, currentUser} = this.props;
     const drawer = (
       <div style={{height: '100%'}}>
         <div className={classes.drawerHeader}/>
@@ -59,7 +59,7 @@ class MyDrawer extends Component {
             <MenuLink to='/impressum' label='Impressum' icon={<IconInfo/>} onClick={toggleDrawer}/>
             {
               currentUser
-                ? <MenuLink to='/logout' label='Logout' icon={<IconSignOut/>} onClick={toggleDrawer}/>
+                ? <MenuLink to='/logout' label='Logout' icon={<IconSignOut/>} onClick={logOut}/>
                 : <MenuLink to='/login' label='Login' icon={<IconSignIn/>}/>
             }
           </List>

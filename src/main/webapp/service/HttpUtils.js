@@ -19,6 +19,7 @@ export const PUT = (url, data) => fetch(url,
   .then(response => {
     if (!response.ok)
       throw new Error('Response not ok');
+    // TODO Kann man prüfen, ob ein json vorliegt?
     return response.json();
   });
 
