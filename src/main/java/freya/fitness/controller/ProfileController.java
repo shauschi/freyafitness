@@ -46,13 +46,12 @@ public class ProfileController {
     }
   }
 
-  @PostMapping(
-      value = "/picture/change",
-      headers = "Content-Type=multipart/form-data")
-  public void changeProfilePicture(
+  @PostMapping("/picture/change")
+  public ProfileDto changeProfilePicture(
       @RequestParam("image") final MultipartFile image) throws IOException {
     final User user = userService.getCurrentUser();
-    profilePictureService.changeProfilePicture(user.getId(), image);
+    final User updatedUser = profilePictureService.changeProfilePicture(user.getId(), image);
+    return new ProfileDto(updatedUser);
   }
 
 }

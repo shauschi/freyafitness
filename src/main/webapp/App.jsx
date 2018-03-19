@@ -43,7 +43,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
-          <div className={classes.appFrame} style={{backgroundImage: 'url(http://localhost:9000/background.jpg)', backgroundSize: 'cover'}}>
+          <div className={classes.appFrame} style={{backgroundImage: 'url(' + __API__ + '/background.jpg)', backgroundSize: 'cover'}}>
             <MyAppBar
               classes={classes}
               toggleDrawer={actions.toggleDrawer}

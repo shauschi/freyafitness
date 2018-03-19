@@ -4,7 +4,7 @@ export const GET = url => fetch(url,
   {
     headers: {
       'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': 'http://127.0.0.1:3333'
+      'Access-Control-Allow-Origin': __API__
     },
     credentials: 'include'
   })
@@ -22,7 +22,7 @@ export const PUT = (url, data) => fetch(url,
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': 'http://127.0.0.1:3333'
+      'Access-Control-Allow-Origin': __API__
     },
     credentials: 'include'
   })
@@ -40,7 +40,7 @@ export const POST = (url, data) => fetch(url,
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': 'http://127.0.0.1:3333'
+      'Access-Control-Allow-Origin': __API__
     },
     credentials: 'include'
   })
@@ -53,7 +53,12 @@ export const POST = (url, data) => fetch(url,
 export const POST_IMAGE = (url, data) => fetch(url,
   {
     method: 'POST',
-    body: data
+    body: data,
+    headers: {
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Origin': __API__
+    },
+    credentials: 'include'
   })
   .then(response => {
     if (!response.ok)

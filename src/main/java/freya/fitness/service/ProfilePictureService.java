@@ -29,7 +29,7 @@ public class ProfilePictureService {
   }
 
   @Transactional
-  public void changeProfilePicture(final Long userId, final MultipartFile multipartFile)
+  public User changeProfilePicture(final Long userId, final MultipartFile multipartFile)
       throws IOException {
     final User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
     if (user.getProfilePictureId() != null) {
@@ -37,6 +37,6 @@ public class ProfilePictureService {
     }
     final String pictureId = profilePictureRepository.save(multipartFile);
     user.setProfilePictureId(pictureId);
-    userRepository.save(user);
+    return userRepository.save(user);
   }
 }

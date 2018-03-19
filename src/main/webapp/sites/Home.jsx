@@ -75,7 +75,7 @@ class Home extends Component {
                 key={idx}
                 title={newsItem.title}
                 text={newsItem.teaser}
-                img={'http://localhost:9000/test' + newsItem.pictureId + '.jpg'}/>
+                img={__API__ + '/test' + newsItem.pictureId + '.jpg'}/>
             ))}
           </Slider>
 
