@@ -18,7 +18,7 @@ import {
   hideNotification
 } from './model/notification';
 import {
-  logOut
+  logout
 } from './model/profile';
 import init from './model/init.js';
 
@@ -63,7 +63,7 @@ class App extends Component {
               {...this.props}/>
             <MyDrawer
               classes={classes}
-              logOut={actions.logOut}
+              logout={actions.logout}
               toggleDrawer={actions.toggleDrawer}
               currentUser={currentUser}
               {...drawer}/>
@@ -114,7 +114,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
-    logOut: logOut,
+    logout: logout,
     toggleDrawer: toggleDrawer,
     hideNotification: hideNotification
   }, dispatch),

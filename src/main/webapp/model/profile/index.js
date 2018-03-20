@@ -2,9 +2,12 @@ import {createActions, handleActions} from 'redux-actions';
 import {
   getOwnProfile,
   changeProfilePicture,
-  logInWithFacebook as logInWithFacebookApiCall,
-  logOut as logOutApiCall
+  loginWithFacebook as loginWithFacebookApiCall,
+  logout as logoutApiCall
 } from '../../service/profile';
+import {
+  actions as drawerActions
+} from './../drawer';
 import {setPath, assignPath} from "../../utils/RamdaUtils";
 
 const initialState = {
@@ -47,25 +50,28 @@ export const actions = createActions({
       }
     }
   },
-  LOG_IN: {
+  LOGIN: {
     ERROR: error => error
   },
-  LOG_OUT: {
+  LOGOUT: {
     SUCCESS: undefined,
     ERROR: error => error
   }
 });
 
-export const logInWithFacebook = (filterOptions) => {
-  return dispatch => logInWithFacebookApiCall(filterOptions)
+export const loginWithFacebook = (filterOptions) => {
+  return dispatch => loginWithFacebookApiCall(filterOptions)
     .then(profile => dispatch(actions.profile.load.success(profile)))
-    .error(error => dispatch(actions.logIn.error(error)));
+    .error(error => dispatch(actions.login.error(error)));
 };
 
-export const logOut = () => {
-  return dispatch => logOutApiCall()
-    .then(() => dispatch(actions.logOut.success()))
-    .error(error => dispatch(actions.logOut.error(error)));
+export const logout = () => {
+  return dispatch => logoutApiCall()
+    .then(() => {
+      dispatch(drawerActions.closeDrawer());
+      dispatch(actions.logout.success());
+    })
+    .error(error => dispatch(actions.logout.error(error)));
 };
 
 export const fetchOwnProfile = (filterOptions) => {
@@ -113,10 +119,10 @@ export const saveProfilePicture = file => {
 };
 
 export default handleActions({
-  [actions.logIn.error]: (state, {payload}) => setPath(['error'], payload, state),
-  [actions.logOut.success]: state =>
+  [actions.login.error]: (state, {payload}) => setPath(['error'], payload, state),
+  [actions.logout.success]: state =>
     assignPath([], {user: undefined, error: undefined}, state),
-  [actions.logOut.error]: (state, {payload}) => setPath(['error'], payload, state),
+  [actions.logout.error]: (state, {payload}) => setPath(['error'], payload, state),
 
   [actions.profile.load.pending]: state => setPath(['pending'], true, state),
   [actions.profile.load.success]: (state, {payload}) =>

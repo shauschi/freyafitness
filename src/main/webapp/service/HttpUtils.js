@@ -1,11 +1,18 @@
 'use strict';
 
+const acceptJsonHeaders = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
+
+const securityHeaders = {
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Origin': '*',
+};
+
 export const GET = url => fetch(url,
   {
-    headers: {
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': __API__
-    },
+    headers: securityHeaders,
     credentials: 'include'
   })
   .then(response => {
@@ -19,10 +26,8 @@ export const PUT = (url, data) => fetch(url,
     method: 'PUT',
     body: JSON.stringify(data),
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': __API__
+      ...acceptJsonHeaders,
+      ...securityHeaders
     },
     credentials: 'include'
   })
@@ -38,10 +43,8 @@ export const POST = (url, data) => fetch(url,
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': __API__
+      ...acceptJsonHeaders,
+      ...securityHeaders
     },
     credentials: 'include'
   })
@@ -55,10 +58,7 @@ export const POST_IMAGE = (url, data) => fetch(url,
   {
     method: 'POST',
     body: data,
-    headers: {
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': __API__
-    },
+    headers: securityHeaders,
     credentials: 'include'
   })
   .then(response => {
