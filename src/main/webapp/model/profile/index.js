@@ -12,9 +12,7 @@ import {setPath, assignPath} from "../../utils/RamdaUtils";
 
 const initialState = {
   pending: false,
-  user: {
-    adress: {}
-  }, // empty profile
+  user: undefined,
   picture: {
     dialog: {
       open: false

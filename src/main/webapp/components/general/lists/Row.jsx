@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {ListItem, ListItemIcon} from 'material-ui/List';
 import FormControl from "material-ui/Form/FormControl";
-import Input, {InputLabel} from "material-ui/Input";
+import {InputLabel} from "material-ui/Input";
 import Avatar from "material-ui/Avatar";
 
 import {TITLE_BG} from '../../../utils/Style/index'

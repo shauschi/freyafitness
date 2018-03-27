@@ -5,7 +5,7 @@ import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {MuiThemeProvider, withStyles} from 'material-ui/styles';
-import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
+import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import Snackbar from 'material-ui/Snackbar';
@@ -18,6 +18,7 @@ import {
   hideNotification
 } from './model/notification';
 import {
+  loginWithFacebook,
   logout
 } from './model/profile';
 import init from './model/init.js';
@@ -60,6 +61,7 @@ class App extends Component {
               toggleDrawer={actions.toggleDrawer}
               createCourse={actions.createCourse}
               currentUser={currentUser}
+              login={actions.loginWithFacebook}
               {...this.props}/>
             <MyDrawer
               classes={classes}
@@ -67,7 +69,7 @@ class App extends Component {
               toggleDrawer={actions.toggleDrawer}
               currentUser={currentUser}
               {...drawer}/>
-            <div className={classes.content}>
+            <div className={currentUser ? classes.content : classes.contentScroll}>
               <Switch>
                 <Redirect from='/index' to='/'/>
                 <Redirect from='/home' to='/'/>
@@ -114,6 +116,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
+    login: loginWithFacebook,
     logout: logout,
     toggleDrawer: toggleDrawer,
     hideNotification: hideNotification

@@ -1,5 +1,4 @@
 'use strict';
-
 import {blueGrey, green, lightBlue, red} from "material-ui/colors/index";
 import {createMuiTheme} from "material-ui/styles/index";
 
@@ -71,4 +70,14 @@ export const APP_STYLES = theme => ({
       width: `calc(100% - ${DRAWER_WIDTH}px)`
     },
   },
+  contentScroll: {
+    position: 'relative',
+    width: '100%',
+    marginTop: '55px',
+    overflow: 'scroll',
+    [theme.breakpoints.up('sm')]: {
+      marginTop: '64px',
+      width: `calc(100% - ${DRAWER_WIDTH}px)`
+    },
+  }
 });

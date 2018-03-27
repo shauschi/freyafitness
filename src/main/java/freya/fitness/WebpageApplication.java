@@ -28,7 +28,7 @@ public class WebpageApplication extends WebSecurityConfigurerAdapter {
         .cors().and()
         .antMatcher("/**")
         .authorizeRequests()
-          .antMatchers("/", "/login**", "/webjars/**")
+          .antMatchers("/", "/login**", "/logout**", "/news/**", "/webjars/**", "/*.png", "/bundle.min.js")
           .permitAll()
         .anyRequest()
           .authenticated()
@@ -46,6 +46,7 @@ public class WebpageApplication extends WebSecurityConfigurerAdapter {
     configuration.addAllowedHeader("*");
     configuration.setAllowedMethods(Arrays.asList(
         HttpMethod.HEAD.name(),
+        HttpMethod.OPTIONS.name(),
         HttpMethod.GET.name(),
         HttpMethod.PUT.name(),
         HttpMethod.POST.name()));
