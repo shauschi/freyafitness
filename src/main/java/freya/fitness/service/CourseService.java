@@ -48,6 +48,9 @@ public class CourseService {
   }
 
   private Course save(Course course) {
+    if (course == null) {
+      return null;
+    }
     return courseRepository.save(course);
   }
 

@@ -23,7 +23,7 @@ public class CourseTypeController {
 
   @GetMapping("/")
   public List<CourseTypeDto> getAllValidCourseTypes() {
-    return courseTypeService.getCurrentCourseTypes().stream()
+    return courseTypeService.getValidCourseTypes().stream()
         .map(CourseTypeDto::new)
         .collect(Collectors.toList());
   }

@@ -5,3 +5,5 @@ databaseChangeLog:
         path: db/changelog/000__testdata/
     - includeAll:
         path: db/changelog/001__course_type/
+    - includeAll:
+        path: db/changelog/002__oauth/

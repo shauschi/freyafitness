@@ -18,7 +18,9 @@ describe('courses Service', () => {
 
     it('should extract response body', async () => {
       const result = await getCourses();
-      expect(apiCall).toHaveBeenCalledWith(__API__ + '/courses/from/' + moment().format(Format.ISO_DATE_FORMAT));
+      expect(apiCall).toHaveBeenCalledWith(
+        __API__ + '/courses/from/' + moment().format(Format.ISO_DATE_FORMAT),
+        {"credentials": "include", "headers": {"Access-Control-Allow-Credentials": "true", "Access-Control-Allow-Origin": "*"}});
       expect(result).toEqual(courses);
     });
 

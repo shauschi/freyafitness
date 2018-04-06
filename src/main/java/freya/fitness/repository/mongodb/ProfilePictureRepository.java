@@ -1,7 +1,8 @@
 package freya.fitness.repository.mongodb;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,7 +17,7 @@ import java.io.*;
 @Repository
 public class ProfilePictureRepository {
 
-  private final Logger LOGGER = Logger.getLogger(ProfilePictureRepository.class);
+  private final Logger LOGGER = LogManager.getLogger(ProfilePictureRepository.class);
 
   @Autowired
   private GridFsTemplate gridFsTemplate;

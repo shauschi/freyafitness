@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: token_id
+              type: varchar(255)
+          - column:
+              name: token
+              type: longvarbinary
+          - column:
+              name: authentication_id
+              type: varchar(255)
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: user_name
+              type: varchar(255)
+          - column:
+              name: client_id
+              type: varchar(255)
+          - column:
+              name: authentication
+              type: longvarbinary
+          - column:
+              name: refresh_token
+              type: varchar(255)
+          schemaName: public
+          tableName: oauth_access_token

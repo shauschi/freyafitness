@@ -2,26 +2,17 @@ package freya.fitness;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
-@EnableOAuth2Sso
-public class WebpageApplication extends WebSecurityConfigurerAdapter {
+@EnableResourceServer
+public class WebpageApplication extends SpringBootServletInitializer { //extends WebSecurityConfigurerAdapter {
 
   public static void main(String[] args) {
     SpringApplication.run(WebpageApplication.class, args);
   }
-
+/*
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
@@ -35,6 +26,7 @@ public class WebpageApplication extends WebSecurityConfigurerAdapter {
         .and().logout().logoutSuccessUrl("/").permitAll()
         .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
   }
+  /*
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
@@ -54,4 +46,5 @@ public class WebpageApplication extends WebSecurityConfigurerAdapter {
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
+  */
 }

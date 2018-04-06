@@ -1,13 +1,17 @@
 package freya.fitness.service;
 
 import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.CourseDtoToCourseMapper;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.dto.CourseDto;
 import freya.fitness.repository.jpa.CourseRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,9 +24,16 @@ import java.util.Optional;
 import static freya.fitness.TestUtils.emptyCourse;
 import static freya.fitness.TestUtils.testUser;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.isNull;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CourseServiceTest {
@@ -32,6 +43,15 @@ public class CourseServiceTest {
 
   @Mock
   private CourseRepository courseRepository;
+
+  @Mock
+  private CourseDtoToCourseMapper courseDtoToCourseMapper;
+
+  @Before
+  public void setUp() {
+    ReflectionTestUtils.setField(testee, "minutes", 72);
+    ReflectionTestUtils.setField(testee, "maxParticipants", 7);
+  }
 
   @Test
   public void test_getCourses() {
@@ -114,5 +134,75 @@ public class CourseServiceTest {
     assertThat(result.getAttendees().size(), equalTo(0));
     verify(courseRepository).findById(123_456L);
     verify(courseRepository).save(any());
+  }
+
+  @Test
+  public void test_update_withNullValue() {
+    Course result = testee.update(null, null);
+
+    assertThat(result, nullValue());
+    verify(courseRepository).findById(isNull());
+    verify(courseRepository, never()).save(any());
+  }
+
+  @Test
+  public void test_update_noCourseId() {
+    CourseDto courseDto = new CourseDto();
+    Course course = new Course();
+    course.setId(42L);
+    when(courseRepository.save(any())).thenReturn(course);
+    when(courseDtoToCourseMapper.apply(any(), any())).thenReturn(course);
+
+    Course result = testee.update(null, courseDto);
+
+    assertThat(result, notNullValue());
+    assertThat(result.getId(), equalTo(42L));
+    verify(courseRepository).findById(isNull());
+    verify(courseDtoToCourseMapper).apply(courseDto, null);
+    verify(courseRepository).save(any());
+  }
+
+  @Test
+  public void test_create_null() {
+    when(courseDtoToCourseMapper.apply(isNull(), any())).thenReturn(null);
+
+    Course result = testee.create(null);
+
+    assertThat(result, nullValue());
+    verify(courseDtoToCourseMapper).apply(isNull(), any());
+  }
+
+  @Test
+  public void test_create() {
+    CourseDto dto = new CourseDto();
+    Course expectedResult = new Course();
+    when(courseDtoToCourseMapper.apply(eq(dto), isNull())).thenReturn(expectedResult);
+    when(courseRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+    Course result = testee.create(dto);
+
+    assertThat(result, notNullValue());
+    assertThat(result, equalTo(expectedResult));
+    verify(courseDtoToCourseMapper).apply(eq(dto), isNull());
+  }
+
+  @Test
+  public void test_createEmptyCourse() {
+    final User instructor = new User();
+    instructor.setFirstName("Testuser");
+
+    Course result = testee.createEmptyCourse(instructor);
+
+    assertThat(result, notNullValue());
+    User resultInstructor = result.getInstructor();
+    assertThat(resultInstructor, notNullValue());
+    assertThat(resultInstructor.getFirstName(), equalTo("Testuser"));
+    assertThat(result.getAttendees(), emptyCollectionOf(User.class));
+    assertThat(result.getMinutes(), equalTo(72));
+    assertThat(result.getMaxParticipants(), equalTo(7));
+    LocalDateTime start = result.getStart();
+    assertThat(start, notNullValue());
+    assertThat(start.getMinute(), equalTo(0));
+    assertThat(result.isCanceled(), equalTo(false));
   }
 }

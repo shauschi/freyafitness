@@ -19,7 +19,7 @@ public class CourseTypeService {
     this.courseTypeRepository = courseTypeRepository;
   }
 
-  public List<CourseType> getCurrentCourseTypes() {
+  public List<CourseType> getValidCourseTypes() {
     final LocalDateTime now = LocalDateTime.now();
     return courseTypeRepository
         .findByValidityFromLessThanEqualAndValidityToGreaterThanEqual(

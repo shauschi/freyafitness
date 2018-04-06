@@ -1,8 +1,11 @@
 package freya.fitness.controller;
 
 import freya.fitness.domain.jpa.User;
+import freya.fitness.dto.CreateAccountDto;
 import freya.fitness.dto.ProfileDto;
 import freya.fitness.service.ProfilePictureService;
+import freya.fitness.utils.UserAllreadyExistsException;
+import freya.fitness.utils.UserNotFoundException;
 import freya.fitness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -27,14 +31,23 @@ public class ProfileController {
     this.profilePictureService = profilePictureService;
   }
 
+  @PostMapping("/create")
+  public ProfileDto createAccount(
+      @RequestParam("createAccount") @Valid final CreateAccountDto createAccountDto)
+      throws UserAllreadyExistsException {
+    final User user = userService.createAccount(createAccountDto);
+    return new ProfileDto(user);
+  }
+
   @GetMapping("/own")
   public ProfileDto getOwnProfil() {
-    return new ProfileDto(userService.getCurrentUser());
+    final User user = userService.getCurrentUser();
+    return user != null ? new ProfileDto(user) : null;
   }
 
   @GetMapping("/{userId}/picture")
   public ResponseEntity<Resource> getProfilePicture(@PathVariable final Long userId)
-      throws IOException {
+      throws IOException, UserNotFoundException {
     final User user = userService.getUser(userId);
     final String profilePictureId = user.getProfilePictureId();
     if (profilePictureId == null) {
