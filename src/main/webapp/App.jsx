@@ -9,7 +9,7 @@ import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import Snackbar from 'material-ui/Snackbar';
-import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
+import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum} from "./sites";
 import * as Style from './utils/Style';
 import {
   toggleDrawer
@@ -18,10 +18,12 @@ import {
   hideNotification
 } from './model/notification';
 import {
-  loginWithFacebook,
+  scrollToLogin,
+  login,
   logout
 } from './model/profile';
 import init from './model/init.js';
+import {LoadingIndicator} from "./components/general";
 
 const HOME_ROUTE = <Route exact path='/' component={Home}/>;
 const SWIPEABLE_ROUTE = <SwipeableRoutes
@@ -50,18 +52,19 @@ class App extends Component {
   };
 
   render() {
-    const {classes, drawer, actions, profile = {}, notification} = this.props;
+    const {classes, drawer, actions, profile, notification} = this.props;
     const currentUser = profile.user;
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
           <div className={classes.appFrame} style={{backgroundImage: 'url(' + __API__ + '/background.jpg)', backgroundSize: 'cover'}}>
             <MyAppBar
+              pending={profile.pending}
               classes={classes}
               toggleDrawer={actions.toggleDrawer}
               createCourse={actions.createCourse}
+              scrollToLogin={actions.scrollToLogin}
               currentUser={currentUser}
-              login={actions.loginWithFacebook}
               {...this.props}/>
             <MyDrawer
               classes={classes}
@@ -69,22 +72,25 @@ class App extends Component {
               toggleDrawer={actions.toggleDrawer}
               currentUser={currentUser}
               {...drawer}/>
-            <div className={currentUser ? classes.content : classes.contentScroll}>
-              <Switch>
-                <Redirect from='/index' to='/'/>
-                <Redirect from='/home' to='/'/>
-                <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
-                <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
-                <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
-                <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                <Route exact path='/logout' render={() => <Logout {...this.props}/>}/>
-                {
-                  currentUser
-                    ? SWIPEABLE_ROUTE
-                    : HOME_ROUTE
-                }
-              </Switch>
-            </div>
+            {
+              profile.pending
+                ? <LoadingIndicator/>
+                : <div className={currentUser ? classes.content : classes.contentScroll}>
+                <Switch>
+                  <Redirect from='/index' to='/'/>
+                  <Redirect from='/home' to='/'/>
+                  <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
+                  <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
+                  <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
+                  <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
+                  {
+                    currentUser
+                      ? SWIPEABLE_ROUTE
+                      : HOME_ROUTE
+                  }
+                </Switch>
+              </div>
+            }
             {
               currentUser
                 ? <Footer {...this.props}/>
@@ -116,7 +122,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
-    login: loginWithFacebook,
+    scrollToLogin: scrollToLogin,
+    login: login,
     logout: logout,
     toggleDrawer: toggleDrawer,
     hideNotification: hideNotification

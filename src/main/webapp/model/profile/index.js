@@ -1,14 +1,17 @@
+'use strict';
 import {createActions, handleActions} from 'redux-actions';
+import cookie from 'react-cookies';
 import {
   getOwnProfile,
   changeProfilePicture,
-  loginWithFacebook as loginWithFacebookApiCall,
-  logout as logoutApiCall
+  login as loginApiCall,
+  createAccount as createAccountApiCall
 } from '../../service/profile';
 import {
   actions as drawerActions
 } from './../drawer';
 import {setPath, assignPath} from "../../utils/RamdaUtils";
+import init from './../init.js';
 
 const initialState = {
   pending: false,
@@ -23,6 +26,22 @@ const initialState = {
     },
     pending: false,
     errorMessage: undefined
+  },
+  loginRef: undefined,
+  login: {
+    data: {
+      email: undefined,
+      password: undefined
+    }
+  },
+  createAccount: {
+    data: {
+      firstname: undefined,
+      lastname: undefined,
+      email: undefined,
+      password: undefined,
+      matchingPassword: undefined
+    }
   }
 };
 
@@ -49,36 +68,68 @@ export const actions = createActions({
     }
   },
   LOGIN: {
-    ERROR: error => error
+    ERROR: error => error,
+    SUCCESS: undefined,
+    DATA_CHANGED: (id, value) => ({id: id, value: value}),
   },
   LOGOUT: {
     SUCCESS: undefined,
-    ERROR: error => error
+    ERROR: error => error,
+  },
+  SET_LOGIN_REF: ref => ref,
+  CREATE_ACCOUNT: {
+    PENDING: undefined,
+    SUCCESS: profile => profile,
+    ERROR: error => error,
+    DATA_CHANGED: (id, value) => ({id: id, value: value}),
   }
 });
 
-export const loginWithFacebook = (filterOptions) => {
-  return dispatch => loginWithFacebookApiCall(filterOptions)
-    .then(profile => dispatch(actions.profile.load.success(profile)))
-    .error(error => dispatch(actions.login.error(error)));
+export const setLoginRef = (ref) => {
+  return dispatch => dispatch(actions.setLoginRef(ref));
 };
 
+export const scrollToLogin = () => {
+  return (dispatch, getState) => {
+    const loginRef = getState().profile.loginRef;
+    loginRef.scrollIntoView({behaviour: 'smooth', block: 'start'});
+  }
+};
+
+export const login = loginData =>
+  dispatch => loginApiCall(loginData)
+      .then(() => init(dispatch))
+      .catch(error => dispatch(actions.login.error(error)));
+
+export const loginDataChanged = (id, value) =>
+  dispatch => dispatch(actions.login.dataChanged(id, value));
+
+export const createAccount = (createData) => {
+  return dispatch => {
+    dispatch(actions.createAccount.pending());
+    return createAccountApiCall(createData)
+      .then(profile => {
+        dispatch(actions.createAccount.success());
+        dispatch(actions.profile.load.success(profile));
+      })
+      .catch(error => dispatch(actions.createAccount.error(error)));
+  };
+};
+
+export const createAccountDataChanged = (id, value) =>
+  dispatch => dispatch(actions.createAccount.dataChanged(id, value));
+
 export const logout = () => {
-  return dispatch => logoutApiCall()
-    .then(() => {
-      dispatch(drawerActions.closeDrawer());
-      dispatch(actions.logout.success());
-    })
-    .error(error => dispatch(actions.logout.error(error)));
+  return dispatch => {
+    cookie.save('tokenData', undefined, {path: '/'});
+    dispatch(drawerActions.closeDrawer());
+    dispatch(actions.logout.success());
+  }
 };
 
 export const fetchOwnProfile = (filterOptions) => {
   return dispatch => {
     dispatch(actions.profile.load.pending());
-    if (CURRENT_USER) {
-      return dispatch(actions.profile.load.success(CURRENT_USER));
-    }
-
     return getOwnProfile(filterOptions)
       .then(profile => dispatch(actions.profile.load.success(profile)))
       .catch(error => dispatch(actions.profile.load.error(error)))
@@ -144,4 +195,17 @@ export default handleActions({
     assignPath(['picture'], {pending: false, errorMessage: undefined}, state),
   [actions.profile.picture.save.error]: (state, {payload}) =>
     setPath(['picture', 'errorMessage'], payload.message, state),
+  [actions.setLoginRef]: (state, {payload}) =>
+    setPath(['loginRef'], payload, state),
+
+  [actions.login.dataChanged]: (state, {payload}) =>
+    setPath(['login', 'data', payload.id], payload.value, state),
+  [actions.createAccount.dataChanged]: (state, {payload}) =>
+    setPath(['createAccount', 'data', payload.id], payload.value, state),
+  [actions.createAccount.pending]: state =>
+    setPath(['createAccount', 'pending'], true, state),
+  [actions.createAccount.success]: state =>
+    setPath(['createAccount', 'pending'], false, state),
+  [actions.createAccount.error]: (state, {payload}) =>
+    assignPath(['createAccount'], {pending: false, error: payload}, state)
 }, initialState);

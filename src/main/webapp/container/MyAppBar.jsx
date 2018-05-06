@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import withWidth from 'material-ui/utils/withWidth';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -22,6 +22,7 @@ class MyAppBar extends Component {
     super(props);
     this.getAddCourseButton = this.getAddCourseButton.bind(this);
     this.getLoginButton = this.getLoginButton.bind(this);
+    this.getAdditionalAction = this.getAdditionalAction.bind(this);
   }
 
   getAddCourseButton() {
@@ -43,10 +44,10 @@ class MyAppBar extends Component {
   }
 
   getLoginButton() {
-    const {login} = this.props;
+    const {scrollToLogin} = this.props;
     return (
       <Button
-        onClick={login}
+        onClick={scrollToLogin}
         color={'primary'}
         style={{
           position: 'absolute',
@@ -59,8 +60,18 @@ class MyAppBar extends Component {
     );
   }
 
+  getAdditionalAction() {
+    if (this.props.pending) {
+      return undefined;
+    }
+    if (this.props.currentUser) {
+      return this.getAddCourseButton();
+    }
+    return this.getLoginButton();
+  }
+
   render() {
-    const {classes, toggleDrawer, currentUser} = this.props;
+    const {classes, toggleDrawer} = this.props;
 
     return (
       <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
@@ -105,11 +116,7 @@ class MyAppBar extends Component {
               <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
             </Hidden>
           </Typography>
-          {
-            currentUser
-              ? this.getAddCourseButton()
-              : this.getLoginButton()
-          }
+          {this.getAdditionalAction()}
         </Toolbar>
       </AppBar>
     );

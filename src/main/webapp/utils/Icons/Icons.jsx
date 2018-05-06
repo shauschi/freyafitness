@@ -23,5 +23,8 @@ export {
 
 export {
   FaSignIn as IconSignIn,
-  FaSignOut as IconSignOut
+  FaSignOut as IconSignOut,
+  FaPaperPlane as IconPaperPlane,
+  FaEye as IconEye,
+  FaEyeSlash as IconEyeSlash
 } from 'react-icons/lib/fa';

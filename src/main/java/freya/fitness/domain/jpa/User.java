@@ -1,6 +1,7 @@
 package freya.fitness.domain.jpa;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -35,6 +36,7 @@ public class User {
 
   private LocalDateTime lastLogin;
 
+  @CreatedDate
   private LocalDateTime accountCreationTime;
 
 }

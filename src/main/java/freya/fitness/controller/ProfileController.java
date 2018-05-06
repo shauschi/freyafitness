@@ -33,7 +33,7 @@ public class ProfileController {
 
   @PostMapping("/create")
   public ProfileDto createAccount(
-      @RequestParam("createAccount") @Valid final CreateAccountDto createAccountDto)
+      @RequestBody @Valid final CreateAccountDto createAccountDto)
       throws UserAllreadyExistsException {
     final User user = userService.createAccount(createAccountDto);
     return new ProfileDto(user);

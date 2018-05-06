@@ -8,4 +8,3 @@ global.Request = Request;
 
 global.fetch = require('jest-fetch-mock');
 global.__API__ = 'backend';
-global.CURRENT_USER = undefined;

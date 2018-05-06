@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Grid from 'material-ui/Grid';
 import Profile, {ProfilePictureDialog} from './../components/profile';
-import {ChangePasswordDialog} from './../components/password';
+import {ChangePasswordDialog} from '../components/account';
 import {LoadingIndicator} from "../components/general";
 import {
   fetchOwnProfile,

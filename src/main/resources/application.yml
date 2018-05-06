@@ -20,22 +20,19 @@ spring:
     #url: jdbc:postgresql://93.90.205.170/freyafitness
     username: postgres
     password: postgres
-    driver-class-name: org.postgresql.Driver
+    driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-security:
-  basic:
-    enabled: true
-  oauth2:
-    client:
-      clientId: SampleClientId
-      clientSecret: secret
-      accessTokenUri: http://127.0.0.1:9000/oauth/token
-      userAuthorizationUri: http://127.0.0.1:9000/oauth/authorize
-    resource:
-      userInfoUri: http://localhost:9000/auth/user/me
+    properties:
+      hibernate:
+        temp:
+          # Disable feature detection by this undocumented parameter.
+          # Check the org.hibernate.engine.jdbc.internal.JdbcServiceImpl.configure method for more details.
+          use_jdbc_metadata_defaults: false
+    # Because detection is disabled you have to set correct dialect by hand.
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
 course:
   create:
     minutes: 60

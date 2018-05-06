@@ -12,9 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -22,14 +22,19 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
   private UserRepository userRepository;
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserService(final UserRepository userRepository) {
+  public UserService(
+      final UserRepository userRepository,
+      final PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(final String username)
+      throws UsernameNotFoundException {
     final User user = userRepository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException(
             "Kein User zu E-Mail: '" + username + "' gefunden."));
@@ -70,7 +75,9 @@ public class UserService implements UserDetailsService {
     newUser.setFamilyName(createAccountDto.getLastname());
     final String email = createAccountDto.getEmail();
     newUser.setEmail(email);
-    newUser.setPassword(createAccountDto.getPassword());
+    final String encodedPassword =
+        passwordEncoder.encode(createAccountDto.getPassword());
+    newUser.setPassword(encodedPassword);
 
     final Optional<User> existingUser = userRepository.findByEmail(email);
     if (existingUser.isPresent()) {

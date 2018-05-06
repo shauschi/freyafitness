@@ -5,10 +5,7 @@ import {connect} from 'react-redux';
 import Card, {CardMedia, CardHeader, CardContent} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
-import FormControl from "material-ui/Form/FormControl";
-import Input, {InputLabel} from "material-ui/Input";
 import Button from 'material-ui/Button';
-import Divider from 'material-ui/Divider';
 import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from 'material-ui/Dialog';
 import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import {Subheader, Slider} from './../components/general';
@@ -20,6 +17,7 @@ import {
 
 import {IconBatteryLow} from '../utils/Icons';
 import {red} from 'material-ui/colors';
+import {LoginAndRegistrationCard} from "../components/account";
 
 class SimpleDialog extends Component {
 
@@ -70,18 +68,19 @@ class Home extends Component {
       return undefined;
     }
     return (
-      <Card>
-        <CardHeader title={'Willkommen'}/>
-        <CardMedia>
-          <div style={{height: '250px', background: 'blue'}}>
-            <img src={__API__ + '/test1.png'}/>
-          </div>
-        </CardMedia>
-        <CardContent>
-          <Typography>Lorem ipsum Beispueltext.</Typography>
-          <Typography>Noch mehr Text, der dann gerne noch mal ersetzt werden sollte. Hier könnte irgendwas kurzes stehen über "das bin ich und das biete ich an". Später kommen dann die Nachrichten, also XLETICS, neuer Raum, Yoga.</Typography>
-        </CardContent>
-      </Card>
+      <Grid item xs={12}>
+        <Card>
+          <CardHeader title={'Willkommen'}/>
+          <CardMedia
+            src={__API__ + '/test1.png'}
+            style={{height: '250px', background: 'blue'}}
+          />
+          <CardContent>
+            <Typography>Lorem ipsum Beispueltext.</Typography>
+            <Typography>Noch mehr Text, der dann gerne noch mal ersetzt werden sollte. Hier könnte irgendwas kurzes stehen über "das bin ich und das biete ich an". Später kommen dann die Nachrichten, also XLETICS, neuer Raum, Yoga.</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
     )
   };
 
@@ -106,40 +105,12 @@ class Home extends Component {
     }
   };
 
-  getLoginPaper = () => {
-    const {user} = this.props;
-    if (user) {
-      return undefined;
+  getLoginCard = () => {
+    if (!this.props.user) {
+      return <Grid item xs={12}>
+        <LoginAndRegistrationCard/>
+      </Grid>;
     }
-    return (
-      <Card>
-        <CardHeader title={'Login'}/>
-        <CardContent>
-          <Typography>Du bist bereits registriert? Dann melde dich gleich an und sieh, was es neues gibt.</Typography>
-          <FormControl fullWidth>
-            <InputLabel htmlFor={'emal'} shrink>E-Mail</InputLabel>
-            <Input/>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel htmlFor={'password'} shrink>Password</InputLabel>
-            <Input password/>
-          </FormControl>
-          <FormControl fullWidth>
-            <Button dense>login</Button>
-          </FormControl>
-          <FormControl fullWidth>
-            <Button dense style={{color: 'white', background: 'blue'}}>
-              login mit facebook
-            </Button>
-          </FormControl>
-          <Divider/>
-          <Typography>Oder erstelle hier dein kostenloses Konto, um dich für Kurse anzumelden.</Typography>
-          <FormControl fullWidth>
-            <Button dense color={'primary'}>registrieren</Button>
-          </FormControl>
-        </CardContent>
-      </Card>
-    )
   };
 
   render() {
@@ -151,12 +122,10 @@ class Home extends Component {
           open={this.state.open}
           onClose={this.handleRequestClose}/>
 
-        <Grid item xs={12}>
-          {/* Nur bei nicht angemeldeten Benutzern*/}
-          {this.getWelcomeGreetings()}
-        </Grid>
+        {/* Nur bei nicht angemeldeten Benutzern*/}
+        {this.getWelcomeGreetings()}
 
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{padding: '0px'}}>
           <Slider loading={this.props.news.pending}>
             {newsData.map((newsItem, idx) => (
               <NewsItem
@@ -168,10 +137,8 @@ class Home extends Component {
           </Slider>
         </Grid>
 
-        <Grid item xs={12}>
-          {/* Nur bei nicht angemeldeten Benutzern*/}
-          {this.getLoginPaper()}
-        </Grid>
+        {/* Nur bei nicht angemeldeten Benutzern*/}
+        {this.getLoginCard()}
 
         <Grid item xs={12} style={{padding: '0px'}}>
           <List style={{padding: '0'}}>
@@ -204,7 +171,6 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  profile: state.profile,
   user: state.profile.user,
   courses: state.courses,
   news: state.news
@@ -213,7 +179,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     // courses
-    showCourseDetails: showCourseDetails,
+    showCourseDetails: showCourseDetails
   }, dispatch),
   dispatch
 });

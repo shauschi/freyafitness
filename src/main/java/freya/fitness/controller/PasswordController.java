@@ -58,7 +58,7 @@ public class PasswordController {
   public MessageDto setNewPassword(
       @RequestParam("token") final String token,
       @RequestParam("password") final String password)
-        throws InvalidResetTokenException, UserNotFoundException {
+        throws InvalidResetTokenException {
       passwordService.processResetPassword(token, password);
       return new MessageDto("You have successfully reset your password. You may now login.");
   }

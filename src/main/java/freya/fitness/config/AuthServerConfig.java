@@ -3,7 +3,6 @@ package freya.fitness.config;
 import freya.fitness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,54 +11,54 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
-  private final AuthenticationManager authenticationManager;
-  private final UserService userService;
-  private final DataSource dataSource;
+  private final int DAY = 24 * 60 * 60; // in seconds
 
-  @Bean
-  public TokenStore tokenStore() {
-    return new JdbcTokenStore(dataSource);
-  }
+  private final AuthenticationManager authenticationManager;
+  private final AppConfig appConfig;
+  private final PasswordEncoder passwordEncoder;
+  private final UserService userService;
 
   @Autowired
-  public AuthServerConfig(AuthenticationManager authenticationManager,
-                          UserService userService,
-                          @Qualifier("dataSource") DataSource dataSource) {
+  public AuthServerConfig(
+      @Qualifier("authenticationManagerBean")
+      final AuthenticationManager authenticationManager,
+      final AppConfig appConfig,
+      final PasswordEncoder passwordEncoder,
+      final UserService userService) {
     this.authenticationManager = authenticationManager;
+    this.appConfig = appConfig;
+    this.passwordEncoder = passwordEncoder;
     this.userService = userService;
-    this.dataSource = dataSource;
   }
 
   @Override
-  public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
-    oauthServer.tokenKeyAccess("permitAll()")
+  public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
+    clients.inMemory()
+        .withClient("freyaFitnessWebApp")
+        .secret(passwordEncoder.encode("secret"))
+        .accessTokenValiditySeconds(30 * DAY)
+        .refreshTokenValiditySeconds(360 * DAY)
+        .authorizedGrantTypes("password", "authorization_code", "refresh_token")
+        .scopes("read", "write");
+  }
+
+  @Override
+  public void configure(final AuthorizationServerSecurityConfigurer oauthServer) {
+    oauthServer
+        .tokenKeyAccess("permitAll()")
         .checkTokenAccess("isAuthenticated()");
   }
 
   @Override
-  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    clients.jdbc(dataSource)
-        .withClient("SampleClientId")
-        .secret("secret")
-        .accessTokenValiditySeconds(2000)
-        .refreshTokenValiditySeconds(-1)
-        .scopes("read", "write")
-        .authorizedGrantTypes("password", "refresh_token");
+  public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
+    endpoints
+        .tokenStore(appConfig.tokenStore())
+        .authenticationManager(authenticationManager)
+        .userDetailsService(userService);
   }
-
-  @Override
-  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-    endpoints.authenticationManager(authenticationManager);
-    endpoints.tokenStore(tokenStore());
-  }
-
 }

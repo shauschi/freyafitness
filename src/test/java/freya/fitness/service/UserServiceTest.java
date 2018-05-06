@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -41,6 +42,9 @@ public class UserServiceTest {
   @Mock
   private UserRepository userRepository;
 
+  @Mock
+  private PasswordEncoder passwordEncoder;
+
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
 
@@ -56,6 +60,7 @@ public class UserServiceTest {
     user.setPassword("any");
     when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
     when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+    when(passwordEncoder.encode(any())).thenAnswer(answer -> answer.getArgument(0));
   }
 
   @Test
