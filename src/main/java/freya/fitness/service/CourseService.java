@@ -35,7 +35,7 @@ public class CourseService {
     this.courseDtoToCourseMapper = courseDtoToCourseMapper;
   }
 
-  public Optional<Course> getCourse(final Long id) {
+  public Optional<Course> getCourse(final String id) {
     return courseRepository.findById(id);
   }
 
@@ -54,7 +54,7 @@ public class CourseService {
     return courseRepository.save(course);
   }
 
-  public Course update(final Long courseId, final CourseDto courseDto) {
+  public Course update(final String courseId, final CourseDto courseDto) {
     final Course existingCourse = getCourse(courseId).orElse(null);
     final Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
     return save(course);
@@ -65,7 +65,7 @@ public class CourseService {
     return save(course);
   }
 
-  public Course addUserToCourse(User user, Long courseId) {
+  public Course addUserToCourse(final User user, final String courseId) {
     final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
       final Course course = courseOpt.get();
@@ -75,7 +75,7 @@ public class CourseService {
     return null;
   }
 
-  public Course removeUserFromCourse(User user, Long courseId) {
+  public Course removeUserFromCourse(final User user, final String courseId) {
     final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
       final Course course = courseOpt.get();
@@ -85,7 +85,7 @@ public class CourseService {
     return null;
   }
 
-  public Course createEmptyCourse(User user) {
+  public Course createEmptyCourse(final User user) {
     final Course course = new Course();
     course.setInstructor(user);
     course.setMinutes(minutes);

@@ -1,6 +1,7 @@
 package freya.fitness.domain.jpa;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -9,8 +10,12 @@ import javax.persistence.*;
 public abstract class BusinessObject {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  public Long id;
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(
+      name = "UUID",
+      strategy = "org.hibernate.id.UUIDGenerator"
+  )
+  public String id;
 
   @Embedded
   @AttributeOverrides({

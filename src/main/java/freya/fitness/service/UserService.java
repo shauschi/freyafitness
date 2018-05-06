@@ -1,5 +1,6 @@
 package freya.fitness.service;
 
+import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CreateAccountDto;
 import freya.fitness.repository.jpa.UserRepository;
@@ -7,7 +8,6 @@ import freya.fitness.utils.UserAllreadyExistsException;
 import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service("userService")
@@ -38,9 +38,13 @@ public class UserService implements UserDetailsService {
     final User user = userRepository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException(
             "Kein User zu E-Mail: '" + username + "' gefunden."));
+    final List<Role> userRoles = user.getRoles();
+    if (userRoles.isEmpty()) {
+      throw new UsernameNotFoundException(
+          "Keine Rollen zu Benutzer: " + user + " gefunden.");
+    }
     return new org.springframework.security.core.userdetails.User(
-        username, user.getPassword(),
-        Collections.singletonList(new SimpleGrantedAuthority("USER")));
+        username, user.getPassword(), userRoles);
   }
 
   public User getCurrentUser() {
@@ -51,10 +55,11 @@ public class UserService implements UserDetailsService {
     final org.springframework.security.core.userdetails.User user =
         (org.springframework.security.core.userdetails.User) auth.getPrincipal();
     final String userId = user.getUsername();
-    return userRepository.findByEmail(userId).orElseThrow(RuntimeException::new);
+    return userRepository.findByEmail(userId)
+        .orElseThrow(RuntimeException::new);
   }
 
-  public User getUser(final Long userId) throws UserNotFoundException {
+  public User getUser(final String userId) throws UserNotFoundException {
     return userRepository.findById(userId)
         .orElseThrow(() -> UserNotFoundException.withId(userId));
   }

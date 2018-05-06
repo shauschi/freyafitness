@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 4
+      id: 13
       author: hauschildt
       changes:
       - createTable:
@@ -12,16 +12,10 @@ databaseChangeLog:
                 primaryKey: true
                 nullable: false
           - column:
-              name: title
+              name: authority
               type: varchar(255)
           - column:
-              name: teaser
-              type: varchar(255)
-          - column:
-              name: text
-              type: varchar(10000)
-          - column:
-              name: picture_id
+              name: description
               type: varchar(255)
           - column:
               name: validity_from
@@ -30,4 +24,4 @@ databaseChangeLog:
               name: validity_to
               type: timestamp
           schemaName: public
-          tableName: news
+          tableName: role

@@ -6,7 +6,7 @@ public class UserNotFoundException extends Exception {
     super(message);
   }
 
-  public static UserNotFoundException withId(final Long id) {
+  public static UserNotFoundException withId(final String id) {
     return new UserNotFoundException(
         String.format("Kein Benutzer gefunden mit der ID: %s", id));
   }

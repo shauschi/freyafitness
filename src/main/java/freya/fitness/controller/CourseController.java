@@ -28,7 +28,7 @@ public class CourseController {
   }
 
   @GetMapping("/{id}")
-  public CourseDto getCourseDetails(@PathVariable("id") final Long id) {
+  public CourseDto getCourseDetails(@PathVariable("id") final String id) {
     final User user = userService.getCurrentUser();
     return courseService.getCourse(id)
         .map(course -> new CourseDto(user, course))
@@ -36,7 +36,7 @@ public class CourseController {
   }
 
   @PostMapping("/{id}")
-  public CourseDto saveCourse(@PathVariable("id") final Long id,
+  public CourseDto saveCourse(@PathVariable("id") final String id,
                               @RequestBody final CourseDto courseDto) {
     // TODO user rights?
     final User user = userService.getCurrentUser();
@@ -74,7 +74,7 @@ public class CourseController {
   }
 
   @PutMapping("{courseId}/signin")
-  public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final Long courseId) {
+  public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final String courseId) {
     final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.addUserToCourse(user, courseId);
     if (changedCourse != null) {
@@ -84,7 +84,7 @@ public class CourseController {
   }
 
   @PutMapping("{courseId}/signout")
-  public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final Long courseId) {
+  public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final String courseId) {
     final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.removeUserFromCourse(user, courseId);
     if (changedCourse != null) {

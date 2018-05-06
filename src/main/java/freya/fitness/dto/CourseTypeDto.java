@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CourseTypeDto {
 
-  private Long id;
+  private String id;
   private String name;
   private String description;
   private String color;

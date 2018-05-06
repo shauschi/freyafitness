@@ -56,7 +56,7 @@ public class CourseServiceTest {
   @Test
   public void test_getCourses() {
     Course course = new Course();
-    course.setId(42L);
+    course.setId("42");
     List<Course> courses = Collections.singletonList(course);
     when(courseRepository.findByStartBetween(any(), any())).thenReturn(courses);
 
@@ -70,7 +70,7 @@ public class CourseServiceTest {
         LocalDateTime.of(end, LocalTime.of(23, 59, 59)));
     assertThat(result, notNullValue());
     assertThat(result.size(), equalTo(1));
-    assertThat(result.get(0).getId(), equalTo(42L));
+    assertThat(result.get(0).getId(), equalTo("42"));
   }
 
   @Test
@@ -87,24 +87,24 @@ public class CourseServiceTest {
   public void test_addUserToCourse_returnNullIfCourseNotPresent() {
     when(courseRepository.findById(any())).thenReturn(Optional.empty());
 
-    Course result = testee.addUserToCourse(testUser(), 123_456L);
+    Course result = testee.addUserToCourse(testUser(), "123_456");
 
     assertThat(result, nullValue());
-    verify(courseRepository).findById(123_456L);
+    verify(courseRepository).findById("123_456");
     verify(courseRepository, never()).save(any());
   }
 
   @Test
   public void test_addUserToCourse_returnCourseAfterUserWasAdded() {
-    when(courseRepository.findById(123_456L)).thenReturn(emptyCourse());
+    when(courseRepository.findById("123_456")).thenReturn(emptyCourse());
     when(courseRepository.save(any()))
         .thenAnswer(invocation -> invocation.getArguments()[0]);
 
-    Course result = testee.addUserToCourse(testUser(), 123_456L);
+    Course result = testee.addUserToCourse(testUser(), "123_456");
 
     assertThat(result, notNullValue());
     assertThat(result.getAttendees().size(), equalTo(1));
-    verify(courseRepository).findById(123_456L);
+    verify(courseRepository).findById("123_456");
     verify(courseRepository).save(any());
   }
 
@@ -112,10 +112,10 @@ public class CourseServiceTest {
   public void test_removeUserToCourse_returnNullIfCourseNotPresent() {
     when(courseRepository.findById(any())).thenReturn(Optional.empty());
 
-    Course result = testee.removeUserFromCourse(testUser(), 123_456L);
+    Course result = testee.removeUserFromCourse(testUser(), "123_456");
 
     assertThat(result, nullValue());
-    verify(courseRepository).findById(123_456L);
+    verify(courseRepository).findById("123_456");
     verify(courseRepository, never()).save(any());
   }
 
@@ -124,15 +124,15 @@ public class CourseServiceTest {
     User testUser = testUser();
     Optional<Course> course = emptyCourse();
     course.ifPresent(c -> c.getAttendees().add(testUser));
-    when(courseRepository.findById(123_456L)).thenReturn(course);
+    when(courseRepository.findById("123_456")).thenReturn(course);
     when(courseRepository.save(any()))
         .thenAnswer(invocation -> invocation.getArguments()[0]);
 
-    Course result = testee.removeUserFromCourse(testUser, 123_456L);
+    Course result = testee.removeUserFromCourse(testUser, "123_456");
 
     assertThat(result, notNullValue());
     assertThat(result.getAttendees().size(), equalTo(0));
-    verify(courseRepository).findById(123_456L);
+    verify(courseRepository).findById("123_456");
     verify(courseRepository).save(any());
   }
 
@@ -149,14 +149,14 @@ public class CourseServiceTest {
   public void test_update_noCourseId() {
     CourseDto courseDto = new CourseDto();
     Course course = new Course();
-    course.setId(42L);
+    course.setId("42");
     when(courseRepository.save(any())).thenReturn(course);
     when(courseDtoToCourseMapper.apply(any(), any())).thenReturn(course);
 
     Course result = testee.update(null, courseDto);
 
     assertThat(result, notNullValue());
-    assertThat(result.getId(), equalTo(42L));
+    assertThat(result.getId(), equalTo("42"));
     verify(courseRepository).findById(isNull());
     verify(courseDtoToCourseMapper).apply(courseDto, null);
     verify(courseRepository).save(any());

@@ -3,6 +3,7 @@ package freya.fitness.controller;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CreateAccountDto;
 import freya.fitness.dto.ProfileDto;
+import freya.fitness.dto.UserDto;
 import freya.fitness.service.ProfilePictureService;
 import freya.fitness.utils.UserAllreadyExistsException;
 import freya.fitness.utils.UserNotFoundException;
@@ -40,13 +41,13 @@ public class ProfileController {
   }
 
   @GetMapping("/own")
-  public ProfileDto getOwnProfil() {
+  public UserDto getOwnProfil() {
     final User user = userService.getCurrentUser();
-    return user != null ? new ProfileDto(user) : null;
+    return user != null ? new UserDto(user) : null;
   }
 
   @GetMapping("/{userId}/picture")
-  public ResponseEntity<Resource> getProfilePicture(@PathVariable final Long userId)
+  public ResponseEntity<Resource> getProfilePicture(@PathVariable final String userId)
       throws IOException, UserNotFoundException {
     final User user = userService.getUser(userId);
     final String profilePictureId = user.getProfilePictureId();

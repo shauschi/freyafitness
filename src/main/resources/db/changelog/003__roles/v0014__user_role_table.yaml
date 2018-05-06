@@ -1,35 +1,35 @@
 databaseChangeLog:
   - changeSet:
-      id: 3
+      id: 14
       author: hauschildt
       changes:
       - createTable:
           columns:
           - column:
-              name: course_id
-              type: uuid
-              constraints:
-                nullable: false
-          - column:
               name: user_id
               type: uuid
               constraints:
                 nullable: false
+          - column:
+              name: role_id
+              type: uuid
+              constraints:
+                nullable: false
           schemaName: public
-          tableName: course_user
+          tableName: user_role
       - addForeignKeyConstraint:
           baseColumnNames: user_id
-          baseTableName: course_user
-          constraintName: fk_course_user_user
+          baseTableName: user_role
+          constraintName: fk_user_role_user
           deferrable: true
           initiallyDeferred: true
           referencedColumnNames: id
           referencedTableName: user
       - addForeignKeyConstraint:
-          baseColumnNames: course_id
-          baseTableName: course_user
-          constraintName: fk_course_user_course
+          baseColumnNames: role_id
+          baseTableName: user_role
+          constraintName: fk_user_role_role
           deferrable: true
           initiallyDeferred: true
           referencedColumnNames: id
-          referencedTableName: course
+          referencedTableName: role

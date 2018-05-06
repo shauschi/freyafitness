@@ -1,5 +1,6 @@
 package freya.fitness.service;
 
+import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CreateAccountDto;
 import freya.fitness.repository.jpa.UserRepository;
@@ -53,7 +54,7 @@ public class UserServiceTest {
   @Before
   public void setUp() {
     user = new User();
-    user.setId(42L);
+    user.setId("42");
     user.setFirstName("Test");
     user.setFamilyName("User");
     user.setEmail("test.user@test.mail");
@@ -74,12 +75,12 @@ public class UserServiceTest {
   public void test_getUser_userNotFound() throws UserNotFoundException {
     expectedException.expect(UserNotFoundException.class);
 
-    testee.getUser(1_000L);
+    testee.getUser("1_000");
   }
 
   @Test
   public void test_getUser() throws UserNotFoundException {
-    User result = testee.getUser(42L);
+    User result = testee.getUser("42");
 
     assertThat(result, equalTo(user));
   }
@@ -157,6 +158,7 @@ public class UserServiceTest {
     final User user = new User();
     user.setEmail(username);
     user.setPassword("test_password");
+    user.setRoles(Collections.singletonList(new Role()));
     when(userRepository.findByEmail(username)).thenReturn(Optional.of(user));
 
     UserDetails result = testee.loadUserByUsername(username);
@@ -165,6 +167,7 @@ public class UserServiceTest {
     assertThat(result, notNullValue());
     assertThat(result.getUsername(), equalTo(username));
     assertThat(result.getPassword(), equalTo(user.getPassword()));
+    assertThat(result.getAuthorities().size(), equalTo(1));
   }
 
   @Test

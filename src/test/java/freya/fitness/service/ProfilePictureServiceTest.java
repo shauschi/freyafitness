@@ -50,7 +50,7 @@ public class ProfilePictureServiceTest {
   @Test(expected = RuntimeException.class)
   public void test_changeProfilePicture_userNotFoundThrowsException()
       throws IOException {
-    final Long userId = 123_456L;
+    final String userId = "123_456";
     when(userRepository.findById(userId)).thenReturn(Optional.empty());
     MultipartFile multipartFile = new MockMultipartFile("test.file", new byte[]{1, 0});
 
@@ -60,7 +60,7 @@ public class ProfilePictureServiceTest {
   @Test
   public void test_changeProfilePicture_savePictureAndUpdateUser()
       throws IOException {
-    final Long userId = 123_456L;
+    final String userId = "123_456";
     final User user = testUser();
     when(userRepository.findById(userId)).thenReturn(Optional.of(user));
     when(profilePictureRepository.save(any())).thenReturn("SAVED");
@@ -77,7 +77,7 @@ public class ProfilePictureServiceTest {
   @Test
   public void test_changeProfilePicture_deleteCurrentPictureFromDbIfExists()
       throws IOException {
-    final Long userId = 123_456L;
+    final String userId = "123_456";
     final User user = testUser();
     user.setProfilePictureId("OLD_PIC");
     when(userRepository.findById(userId)).thenReturn(Optional.of(user));

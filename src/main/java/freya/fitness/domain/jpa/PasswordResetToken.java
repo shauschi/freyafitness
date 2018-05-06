@@ -1,6 +1,7 @@
 package freya.fitness.domain.jpa;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,8 +19,12 @@ import java.time.LocalDateTime;
 public class PasswordResetToken {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(
+      name = "UUID",
+      strategy = "org.hibernate.id.UUIDGenerator"
+  )
+  private String id;
 
   private String token;
 

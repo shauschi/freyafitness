@@ -7,7 +7,7 @@ databaseChangeLog:
           columns:
           - column:
               name: course_type_id
-              type: bigserial
+              type: uuid
               defaultValue: null
           schemaName: public
           tableName: course

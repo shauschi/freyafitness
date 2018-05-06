@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class CourseDto {
 
-  private Long id;
-  private Long courseTypeId;
+  private String id;
+  private String courseTypeId;
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime start;
   private Integer minutes;
@@ -28,7 +28,7 @@ public class CourseDto {
   private List<ProfileDto> attendees;
 
   public CourseDto(User user, Course course) {
-    final Long userId = user.getId();
+    final String userId = user.getId();
     this.id = course.getId();
     final CourseType type = course.getType();
     this.courseTypeId = type != null ? type.getId() : null;

@@ -24,7 +24,7 @@ public class ProfilePictureService {
   }
 
   @Transactional
-  public User changeProfilePicture(final Long userId, final MultipartFile multipartFile)
+  public User changeProfilePicture(final String userId, final MultipartFile multipartFile)
       throws IOException {
     final User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
     if (user.getProfilePictureId() != null) {

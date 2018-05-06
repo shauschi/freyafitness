@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NewsPreviewDto {
 
-  private Long id;
+  private String id;
   private String title;
   private String teaser;
   private Long pictureId;
