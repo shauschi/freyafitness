@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -24,7 +25,7 @@ public class PasswordResetToken {
       name = "UUID",
       strategy = "org.hibernate.id.UUIDGenerator"
   )
-  private String id;
+  private UUID id;
 
   private String token;
 

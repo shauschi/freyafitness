@@ -1,21 +1,53 @@
 'use strict';
-import React from 'react';
+import React, {Component} from 'react';
 import {IconUser} from '../../utils/Icons';
+import {LoadingIndicator} from "../general";
+import {assignPath} from '../../utils/RamdaUtils';
+import {getProfilePicture} from '../../service/profile';
 
-const ProfilePicture = ({userId}) => {
-  if (userId) {
+class ProfilePicture extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {loading: false, picture: undefined}
+  }
+
+  updatePicture() {
+    const {userId} = this.props;
+    if (this.state.userId !== userId) {
+      this.setState(assignPath([], {loading: true, userId: userId}, this.state));
+      getProfilePicture(userId)
+        .then(pictureData => {
+          const objectURL = URL.createObjectURL(pictureData);
+          this.setState(assignPath([],
+            {picture: objectURL, loading: false}, this.state));
+        })
+        .catch(() => {
+          this.setState(assignPath([], {loading: false}, this.state));
+        });
+    }
+  }
+
+  render() {
+    const {userId} = this.props;
+    if (userId) {
+      this.updatePicture();
+    }
+    const {loading, picture} = this.state;
+    if (loading) {
+      return <LoadingIndicator noLabel style={{marginTop: '4px'}}/>;
+    }
+    if (!picture) {
+      return <IconUser/>;
+    }
     return (
       <div style={{height: '100%'}}>
         <img
-          src={'http://127.0.0.1:9000/profile/' + userId + '/picture'}
+          src={picture}
           style={{width: '100%'}}/>
       </div>
     );
-  } else {
-    return (
-      <IconUser/>
-    );
   }
-};
+}
 
 export default ProfilePicture;

@@ -7,10 +7,13 @@ import freya.fitness.service.CourseService;
 import freya.fitness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,16 +30,18 @@ public class CourseController {
     this.userService = userService;
   }
 
+  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/{id}")
-  public CourseDto getCourseDetails(@PathVariable("id") final String id) {
+  public CourseDto getCourseDetails(@PathVariable("id") final UUID id) {
     final User user = userService.getCurrentUser();
     return courseService.getCourse(id)
         .map(course -> new CourseDto(user, course))
         .orElse(null);
   }
 
+  @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
   @PostMapping("/{id}")
-  public CourseDto saveCourse(@PathVariable("id") final String id,
+  public CourseDto saveCourse(@PathVariable("id") final UUID id,
                               @RequestBody final CourseDto courseDto) {
     // TODO user rights?
     final User user = userService.getCurrentUser();
@@ -44,6 +49,7 @@ public class CourseController {
     return new CourseDto(user, updatedCourse);
   }
 
+  @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
   @GetMapping("/create")
   public CourseDto createNewCourse() {
     final User user = userService.getCurrentUser();
@@ -51,6 +57,7 @@ public class CourseController {
     return new CourseDto(user, course);
   }
 
+  @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
   @PostMapping("/create")
   public CourseDto saveNewCourse(@RequestBody final CourseDto courseDto) {
     // TODO user rights?
@@ -59,12 +66,14 @@ public class CourseController {
     return new CourseDto(user, updatedCourse);
   }
 
+  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/from/{from}")
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
     final User user = userService.getCurrentUser();
     return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
   }
 
+  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("from/{from}/to/{to}")
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
@@ -73,8 +82,9 @@ public class CourseController {
     return toDtos(user, courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
   }
 
+  @PreAuthorize("hasRole('USER')")
   @PutMapping("{courseId}/signin")
-  public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final String courseId) {
+  public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final UUID courseId) {
     final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.addUserToCourse(user, courseId);
     if (changedCourse != null) {
@@ -83,8 +93,9 @@ public class CourseController {
     return ResponseEntity.badRequest().build();
   }
 
+  @PreAuthorize("hasRole('USER')")
   @PutMapping("{courseId}/signout")
-  public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final String courseId) {
+  public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final UUID courseId) {
     final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.removeUserFromCourse(user, courseId);
     if (changedCourse != null) {

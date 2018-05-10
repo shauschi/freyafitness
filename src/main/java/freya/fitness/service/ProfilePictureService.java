@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class ProfilePictureService {
@@ -24,7 +25,7 @@ public class ProfilePictureService {
   }
 
   @Transactional
-  public User changeProfilePicture(final String userId, final MultipartFile multipartFile)
+  public User changeProfilePicture(final UUID userId, final MultipartFile multipartFile)
       throws IOException {
     final User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
     if (user.getProfilePictureId() != null) {

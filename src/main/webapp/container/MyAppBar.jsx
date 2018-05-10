@@ -64,10 +64,14 @@ class MyAppBar extends Component {
     if (this.props.pending) {
       return undefined;
     }
-    if (this.props.currentUser) {
+    if (!this.props.currentUser) {
+      return this.getLoginButton();
+    }
+
+    const roles = this.props.currentUser.roles;
+    if (roles.ADMIN || roles.TRAINER) {
       return this.getAddCourseButton();
     }
-    return this.getLoginButton();
   }
 
   render() {

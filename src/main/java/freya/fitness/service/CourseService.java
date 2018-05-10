@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static freya.fitness.utils.TimeUtils.nextFullHour;
 
@@ -35,7 +36,7 @@ public class CourseService {
     this.courseDtoToCourseMapper = courseDtoToCourseMapper;
   }
 
-  public Optional<Course> getCourse(final String id) {
+  public Optional<Course> getCourse(final UUID id) {
     return courseRepository.findById(id);
   }
 
@@ -54,7 +55,7 @@ public class CourseService {
     return courseRepository.save(course);
   }
 
-  public Course update(final String courseId, final CourseDto courseDto) {
+  public Course update(final UUID courseId, final CourseDto courseDto) {
     final Course existingCourse = getCourse(courseId).orElse(null);
     final Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
     return save(course);
@@ -65,7 +66,7 @@ public class CourseService {
     return save(course);
   }
 
-  public Course addUserToCourse(final User user, final String courseId) {
+  public Course addUserToCourse(final User user, final UUID courseId) {
     final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
       final Course course = courseOpt.get();
@@ -75,7 +76,7 @@ public class CourseService {
     return null;
   }
 
-  public Course removeUserFromCourse(final User user, final String courseId) {
+  public Course removeUserFromCourse(final User user, final UUID courseId) {
     final Optional<Course> courseOpt = getCourse(courseId);
     if (courseOpt.isPresent()) {
       final Course course = courseOpt.get();

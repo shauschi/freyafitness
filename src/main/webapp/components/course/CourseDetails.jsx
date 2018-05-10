@@ -32,6 +32,7 @@ import {
 
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 import {findById} from "../../utils/RamdaUtils";
+import {LoadingIndicator} from "../general";
 
 const getAttendeeList = attendees => {
   const attendeesList = [];
@@ -83,7 +84,8 @@ class CourseDetails extends Component {
       toggleAttendeeList,
       toggleEditCourse,
       onCourseDetailsChange,
-      courseTypes
+      courseTypes,
+      currentUser = {}
     } = this.props;
 
     const {title, readonly} = mode;
@@ -94,18 +96,18 @@ class CourseDetails extends Component {
     const attendeesList = getAttendeeList(attendees);
 
     if (pending) {
-      return <div/>; // TODO Loading
+      return <LoadingIndicator/>;
     }
 
     const {name = " ", color} = findById(courseTypes.data, courseTypeId) || TypeMapper['SOFT'];
     const short = name.charAt(0);
-
+    const {roles = {}} = currentUser;
     return (
       <Dialog
         title={title}
         onClose={this.props.onClose}
         secondAction={
-          mode === MODE.VIEW // TODO && admin/moderator/trainer
+          mode === MODE.VIEW && (roles.ADMIN || roles.TRAINER)
             ? <IconButton color='contrast' onClick={toggleEditCourse}>
                 <IconPencil/>
               </IconButton>
@@ -220,6 +222,7 @@ class CourseDetails extends Component {
 }
 
 const mapStateToProps = state => ({
+  currentUser: state.profile.currentUser,
   courseTypes: state.courseTypes,
 });
 

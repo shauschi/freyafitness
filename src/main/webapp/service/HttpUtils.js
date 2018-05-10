@@ -86,7 +86,7 @@ const fetchWithToken = (url, params, retry = true) =>
       if (!response.ok) {
         throw new Error('Response not ok');
       }
-      return response.json();
+      return new Promise(resolve => resolve(response));
     });
 
 export const LOGIN = (loginData = {}) =>
@@ -103,7 +103,8 @@ export const GET = url => fetchWithToken(url,
       ...getAccessTokenHeader()
     },
     credentials: 'include'
-  });
+  })
+  .then(response => response.json());
 
 export const PUT = (url, data) => fetchWithToken(url,
   {
@@ -115,7 +116,8 @@ export const PUT = (url, data) => fetchWithToken(url,
       ...getAccessTokenHeader()
     },
     credentials: 'include'
-  });
+  })
+  .then(response => response.json());
 
 export const POST = (url, data) => fetchWithToken(url,
   {
@@ -127,7 +129,19 @@ export const POST = (url, data) => fetchWithToken(url,
       ...getAccessTokenHeader()
     },
     credentials: 'include'
-  });
+  })
+  .then(response => response.json());
+
+export const GET_IMAGE = url => fetchWithToken(url,
+  {
+    method: 'GET',
+    headers: {
+      ...securityHeaders,
+      ...getAccessTokenHeader()
+    },
+    credentials: 'include'
+  })
+  .then(response => response.blob());
 
 export const POST_IMAGE = (url, data) => fetchWithToken(url,
   {
@@ -138,4 +152,5 @@ export const POST_IMAGE = (url, data) => fetchWithToken(url,
       ...getAccessTokenHeader()
     },
     credentials: 'include'
-  });
+  })
+  .then(response => response.json());

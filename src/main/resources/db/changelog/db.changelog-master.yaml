@@ -9,3 +9,5 @@ databaseChangeLog:
         path: db/changelog/002__oauth/
     - includeAll:
         path: db/changelog/003__roles/
+    - includeAll:
+        path: db/changelog/003__testdata/

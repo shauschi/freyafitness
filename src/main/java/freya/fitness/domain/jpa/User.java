@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -22,7 +23,7 @@ public class User {
       name = "UUID",
       strategy = "org.hibernate.id.UUIDGenerator"
   )
-  private String id;
+  private UUID id;
 
   @Email
   @NotEmpty
@@ -44,7 +45,7 @@ public class User {
   @CreatedDate
   private LocalDateTime accountCreationTime;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name="user_role",
       joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),

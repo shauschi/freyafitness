@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -25,7 +26,7 @@ public class Course {
       name = "UUID",
       strategy = "org.hibernate.id.UUIDGenerator"
   )
-  private String id;
+  private UUID id;
 
   @ManyToOne
   @JoinColumn(name = "course_type_id")

@@ -14,9 +14,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service("userService")
 public class UserService implements UserDetailsService {
@@ -59,7 +62,7 @@ public class UserService implements UserDetailsService {
         .orElseThrow(RuntimeException::new);
   }
 
-  public User getUser(final String userId) throws UserNotFoundException {
+  public User getUser(final UUID userId) throws UserNotFoundException {
     return userRepository.findById(userId)
         .orElseThrow(() -> UserNotFoundException.withId(userId));
   }

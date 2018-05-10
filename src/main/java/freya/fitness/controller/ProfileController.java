@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/profile")
@@ -40,14 +42,16 @@ public class ProfileController {
     return new ProfileDto(user);
   }
 
+  @PreAuthorize("hasRole('USER')")
   @GetMapping("/own")
   public UserDto getOwnProfil() {
     final User user = userService.getCurrentUser();
     return user != null ? new UserDto(user) : null;
   }
 
+  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/{userId}/picture")
-  public ResponseEntity<Resource> getProfilePicture(@PathVariable final String userId)
+  public ResponseEntity<Resource> getProfilePicture(@PathVariable final UUID userId)
       throws IOException, UserNotFoundException {
     final User user = userService.getUser(userId);
     final String profilePictureId = user.getProfilePictureId();
@@ -60,6 +64,7 @@ public class ProfileController {
     }
   }
 
+  @PreAuthorize("hasRole('USER')")
   @PostMapping("/picture/change")
   public ProfileDto changeProfilePicture(
       @RequestParam("image") final MultipartFile image) throws IOException {

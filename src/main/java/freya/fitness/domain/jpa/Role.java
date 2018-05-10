@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "user", schema="public")
+@Table(name = "role", schema="public")
 public class Role extends BusinessObject implements GrantedAuthority {
 
   @NotEmpty

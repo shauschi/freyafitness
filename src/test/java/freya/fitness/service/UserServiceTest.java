@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -50,11 +51,12 @@ public class UserServiceTest {
   public ExpectedException expectedException = ExpectedException.none();
 
   private User user;
+  private UUID uuid = UUID.randomUUID();
 
   @Before
   public void setUp() {
     user = new User();
-    user.setId("42");
+    user.setId(uuid);
     user.setFirstName("Test");
     user.setFamilyName("User");
     user.setEmail("test.user@test.mail");
@@ -75,12 +77,12 @@ public class UserServiceTest {
   public void test_getUser_userNotFound() throws UserNotFoundException {
     expectedException.expect(UserNotFoundException.class);
 
-    testee.getUser("1_000");
+    testee.getUser(UUID.randomUUID());
   }
 
   @Test
   public void test_getUser() throws UserNotFoundException {
-    User result = testee.getUser("42");
+    User result = testee.getUser(uuid);
 
     assertThat(result, equalTo(user));
   }

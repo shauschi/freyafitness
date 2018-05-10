@@ -59,12 +59,7 @@ class MyDrawer extends Component {
             <MenuLink to='/impressum' label='Impressum' icon={<IconInfo/>} onClick={toggleDrawer}/>
             {
               currentUser
-                ? <ListItem button onClick={logout}>
-                    <ListItemIcon>
-                      <IconSignOut/>
-                    </ListItemIcon>
-                    <ListItemText primary='Logout'/>
-                  </ListItem>
+                ? <MenuLink to='/' label='Logout' icon={<IconSignOut/>} onClick={logout}/>
                 : <MenuLink to='/login' label='Login' icon={<IconSignIn/>}/>
             }
           </List>
