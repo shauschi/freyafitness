@@ -1,23 +1,28 @@
 package freya.fitness.controller;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
+import freya.fitness.dto.ChangePasswordDto;
 import freya.fitness.dto.MessageDto;
 import freya.fitness.service.PasswordResetTokenService;
-import freya.fitness.utils.InvalidResetTokenException;
 import freya.fitness.service.PasswordService;
+import freya.fitness.utils.InvalidPasswordException;
+import freya.fitness.utils.InvalidResetTokenException;
 import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import javax.validation.Valid;
 
-@RestController("/password")
+@RestController
+@RequestMapping("/password")
 public class PasswordController {
 
   @Value("${mail.resetpassword.success}")
@@ -61,6 +66,13 @@ public class PasswordController {
         throws InvalidResetTokenException {
       passwordService.processResetPassword(token, password);
       return new MessageDto("You have successfully reset your password. You may now login.");
+  }
+
+  @PostMapping("/change")
+  public MessageDto changePassword(
+      @RequestBody @Valid final ChangePasswordDto data) throws InvalidPasswordException {
+    passwordService.changePassword(data.getOldPassword(), data.getPassword());
+    return new MessageDto("Your password was changed successfully.");
   }
 
 }

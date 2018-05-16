@@ -1,7 +1,6 @@
 package freya.fitness.dto;
 
 import freya.fitness.utils.validator.PasswordMatches;
-import freya.fitness.utils.validator.ValidEmail;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -9,20 +8,11 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @PasswordMatches
-public class CreateAccountDto implements WithPassword {
+public class ChangePasswordDto implements WithPassword {
 
   @NotNull
   @NotEmpty
-  private String firstname;
-
-  @NotNull
-  @NotEmpty
-  private String lastname;
-
-  @NotNull
-  @NotEmpty
-  @ValidEmail
-  private String email;
+  private String oldPassword;
 
   @NotNull
   @NotEmpty

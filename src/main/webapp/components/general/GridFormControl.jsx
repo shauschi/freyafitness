@@ -10,9 +10,9 @@ import {IconEye, IconEyeSlash} from './../../utils/Icons';
 import {setPath, togglePath} from './../../utils/RamdaUtils';
 import ValidationControl from "./validation/ValidationControl";
 
-const GridWrapper = ({children, xs = 12, md}) =>
+const GridWrapper = ({children, xs = 12, md, style={paddingLeft: '0px', paddingRight: '0px'}}) =>
   <Grid item xs={xs} md={md}
-        style={{paddingLeft: '0px', paddingRight: '0px'}}>
+        style={style}>
     {children}
   </Grid>;
 
@@ -20,7 +20,8 @@ export class GridTextControl extends Component {
 
   render() {
     const {text} = this.props;
-    return <GridWrapper>
+    return <GridWrapper
+      style={{paddingLeft: '0px', paddingRight: '0px', paddingTop: '16px', paddingBottom: '16px'}}>
       <Typography>{text}</Typography>
     </GridWrapper>;
   }

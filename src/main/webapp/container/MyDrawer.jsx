@@ -5,8 +5,8 @@ import withWidth from 'material-ui/utils/withWidth';
 import Drawer from 'material-ui/Drawer';
 import Hidden from 'material-ui/Hidden';
 import Divider from 'material-ui/Divider';
-import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
-import {Link} from 'react-router-dom';
+import List from 'material-ui/List';
+import {MenuLink} from '../components/general';
 
 import {
   IconHome,
@@ -17,17 +17,6 @@ import {
   IconSignIn,
   IconDocument
 } from '../utils/Icons';
-
-const MenuLink = ({to, label, icon, onClick}) => (
-  <Link to={to} style={{textDecoration: 'none'}} onClick={onClick}>
-    <ListItem button>
-      <ListItemIcon>
-        {icon}
-      </ListItemIcon>
-      <ListItemText primary={label}/>
-    </ListItem>
-  </Link>
-);
 
 class MyDrawer extends Component {
 

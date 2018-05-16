@@ -3,7 +3,9 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CreateAccountDto;
+import freya.fitness.repository.jpa.RoleRepository;
 import freya.fitness.repository.jpa.UserRepository;
+import freya.fitness.utils.RoleNotFoundException;
 import freya.fitness.utils.UserAllreadyExistsException;
 import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,18 +27,20 @@ public class UserService implements UserDetailsService {
 
   private UserRepository userRepository;
   private PasswordEncoder passwordEncoder;
+  private RoleRepository roleRepository;
 
   @Autowired
   public UserService(
       final UserRepository userRepository,
-      final PasswordEncoder passwordEncoder) {
+      final PasswordEncoder passwordEncoder,
+      final RoleRepository roleRepository) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.roleRepository = roleRepository;
   }
 
   @Override
-  public UserDetails loadUserByUsername(final String username)
-      throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(final String username) {
     final User user = userRepository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException(
             "Kein User zu E-Mail: '" + username + "' gefunden."));
@@ -76,21 +79,24 @@ public class UserService implements UserDetailsService {
     return userRepository.save(user);
   }
 
-  public User createAccount(
-      final CreateAccountDto createAccountDto) throws UserAllreadyExistsException {
-    final User newUser = new User();
-    newUser.setFirstName(createAccountDto.getFirstname());
-    newUser.setFamilyName(createAccountDto.getLastname());
+  public User createAccount(final CreateAccountDto createAccountDto)
+      throws UserAllreadyExistsException, RoleNotFoundException {
     final String email = createAccountDto.getEmail();
-    newUser.setEmail(email);
-    final String encodedPassword =
-        passwordEncoder.encode(createAccountDto.getPassword());
-    newUser.setPassword(encodedPassword);
-
     final Optional<User> existingUser = userRepository.findByEmail(email);
     if (existingUser.isPresent()) {
       throw new UserAllreadyExistsException(email);
     }
+    final User newUser = new User();
+    newUser.setEmail(email);
+    newUser.setFirstName(createAccountDto.getFirstname());
+    newUser.setFamilyName(createAccountDto.getLastname());
+    final String password = createAccountDto.getPassword();
+    final String encodedPassword = passwordEncoder.encode(password);
+    newUser.setPassword(encodedPassword);
+
+    final Role role = roleRepository.findByAuthority("USER")
+        .orElseThrow(() -> new RoleNotFoundException("USER"));
+    newUser.setRoles(Collections.singletonList(role));
 
     return userRepository.save(newUser);
   }

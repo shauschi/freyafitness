@@ -44,7 +44,10 @@ class ProfileSite extends Component {
             onClose={actions.closeProfilePictureChangeDialog}
           />
           <ChangePasswordDialog
-            password={password}
+            formData={password}
+            pending={password.pending}
+            open={password.open}
+            errorMessage={password.errorMessage}
             onClose={actions.onCancelPasswordChange}
             onPasswordChange={actions.onPasswordChange}
             onSave={actions.changePassword}

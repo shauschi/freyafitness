@@ -5,6 +5,7 @@ import freya.fitness.dto.CreateAccountDto;
 import freya.fitness.dto.ProfileDto;
 import freya.fitness.dto.UserDto;
 import freya.fitness.service.ProfilePictureService;
+import freya.fitness.utils.RoleNotFoundException;
 import freya.fitness.utils.UserAllreadyExistsException;
 import freya.fitness.utils.UserNotFoundException;
 import freya.fitness.service.UserService;
@@ -35,21 +36,21 @@ public class ProfileController {
   }
 
   @PostMapping("/create")
-  public ProfileDto createAccount(
+  public UserDto createAccount(
       @RequestBody @Valid final CreateAccountDto createAccountDto)
-      throws UserAllreadyExistsException {
+      throws UserAllreadyExistsException, RoleNotFoundException {
     final User user = userService.createAccount(createAccountDto);
-    return new ProfileDto(user);
+    return new UserDto(user);
   }
 
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasAuthority('USER')")
   @GetMapping("/own")
   public UserDto getOwnProfil() {
     final User user = userService.getCurrentUser();
     return user != null ? new UserDto(user) : null;
   }
 
-  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/{userId}/picture")
   public ResponseEntity<Resource> getProfilePicture(@PathVariable final UUID userId)
       throws IOException, UserNotFoundException {
@@ -64,7 +65,7 @@ public class ProfileController {
     }
   }
 
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasAuthority('USER')")
   @PostMapping("/picture/change")
   public ProfileDto changeProfilePicture(
       @RequestParam("image") final MultipartFile image) throws IOException {

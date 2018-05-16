@@ -1,8 +1,17 @@
+'use strict';
 import {createActions, handleActions} from 'redux-actions';
 import {setPath, assignPath} from "../../utils/RamdaUtils";
+import {
+  changePassword as changePasswordApiCall
+} from "../../service/password";
+import {
+  showNotification
+} from './../notification';
 
 const initialState = {
+  open: false,
   pending: false,
+  message: undefined,
   show: false,
   errorMessage: undefined,
   oldPassword: '',
@@ -23,28 +32,16 @@ export const actions = createActions({
   }
 });
 
-export const changePassword = (oldPassword, newPassword, newPasswordConfirm) => {
-  if (newPassword !== newPasswordConfirm) {
-    return dispatch => dispatch(
-      actions.password.error({message: 'Die beiden neuen Passwörter stimmen nicht überein.'}));
-  } else {
-    return dispatch => dispatch(
-      actions.password.error({message: 'TODO: Noch nicht implementiert.'}));
-  }
-
-  /*
-  const oldPasswordHashed = oldPassword;
-  const newPasswordHashed = newPassword;
-  const newPasswordConfirmHashed = newPasswordConfirm;
-
-  return dispatch => {
+export const changePassword = (changePasswordData) =>
+  dispatch => {
     dispatch(actions.password.change.pending());
-    return getOwnProfile(oldPasswordHashed, newPasswordHashed, newPasswordConfirmHashed)
-      .then(profile => dispatch(actions.password.change.success(profile)))
-      .catch(error => dispatch(actions.password.change.error(error)))
-  }
-  */
-};
+    return changePasswordApiCall(changePasswordData)
+      .then(answer => {
+        dispatch(actions.password.change.success());
+        dispatch(showNotification(answer.message));
+      })
+      .catch(error => dispatch(actions.password.error(error)));
+  };
 
 export const onPasswordChange = (path, value) => {
   return dispatch => dispatch(actions.password.changing(path, value));
@@ -60,8 +57,8 @@ export const onCancelPasswordChange = () => {
 
 export default handleActions({
   [actions.password.change.pending]: state => setPath(['pending'], true, state),
-  [actions.password.change.success]: (state, {payload}) =>
-    assignPath([], {pending: false, data: payload, errorMessage: null}, state),
+  [actions.password.change.success]: state =>
+    assignPath([], {pending: false, open: false, errorMessage: null}, state),
   [actions.password.error]: (state, {payload}) =>
     assignPath([], {pending: false, errorMessage: payload.message}, state),
   [actions.password.open]: state =>

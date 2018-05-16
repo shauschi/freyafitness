@@ -17,6 +17,10 @@ const loadingStyles = {
   indicator: {
     width: '32px',
     height: '32px'
+  },
+  indicatorSmall: {
+    width: '16px',
+    height: '16px'
   }
 };
 
@@ -24,11 +28,13 @@ class LoadingIndicator extends Component {
 
   render()
   {
-    const {noLabel} = this.props;
+    const {noLabel, small} = this.props;
     return (
       <div style={loadingStyles.table}>
         <div style={loadingStyles.cell}>
-          <CircularProgress mode='indeterminate' style={loadingStyles.indicator}/>
+          <CircularProgress
+            mode='indeterminate'
+            style={small ? loadingStyles.indicatorSmall : loadingStyles.indicator}/>
           {
             noLabel
             ? undefined

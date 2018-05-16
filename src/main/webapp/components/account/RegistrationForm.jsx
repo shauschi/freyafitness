@@ -42,9 +42,10 @@ class RegistrationForm extends Component {
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
         <ValidationGroup ref={this.setValidation}>
           <GridTextControl
-            text={'Erstelle hier ganz einfach deinen eigenen Account:'}/>
+            text={'Du hast noch kein Konto und möchtest dich gerne zu den Sportkursen online anmelden?' +
+            ' Dann erstelle hier ganz einfach deinen eigenen Account.'}/>
           <GridInputControl
-            id='fistname'
+            id='firstname'
             label='Vorname'
             value={formData.firstname}
             validators={[Validators.notEmpty('Bitte gib deinen Vornamen an.')]}
@@ -71,7 +72,7 @@ class RegistrationForm extends Component {
             id='matchingPassword'
             label='Password wiederholen'
             value={formData.matchingPassword}
-            validators={[Validators.matches(formData.password)]}
+            validators={[Validators.matches(formData.password, 'Das neue Password stimmt nicht überein.')]}
             onChange={formDataChanged}/>
           <GridButtonControl
             label='Konto erstellen'

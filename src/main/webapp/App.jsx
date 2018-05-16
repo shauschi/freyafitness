@@ -100,7 +100,7 @@ class App extends Component {
               open={notification.show}
               onClose={this.props.actions.hideNotification}
               message={notification.message}
-              autoHideDuration={1500}/>
+              autoHideDuration={notification.autoHideDuration}/>
           </div>
         </div>
       </MuiThemeProvider>

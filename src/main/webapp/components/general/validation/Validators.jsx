@@ -19,7 +19,7 @@ export const email = (errorText = 'Bitte eine gültige E-Mail-Adresse angeben.')
   error: errorText
 });
 
-export const matches = (expectedValue, errorText = 'Bitte eine gültige E-Mail-Adresse angeben.') => value => ({
+export const matches = (expectedValue, errorText = 'Die angegebenen Werte stimmen nicht überein.') => value => ({
   valid: expectedValue === value,
   error: errorText
 });

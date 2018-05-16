@@ -15,9 +15,10 @@ import {
   showCourseDetails
 } from '../model/courses';
 
-import {IconBatteryLow} from '../utils/Icons';
+import {IconBatteryLow, IconCalendar} from '../utils/Icons';
 import {red} from 'material-ui/colors';
 import {LoginAndRegistrationCard} from "../components/account";
+import {MenuLink} from "../components/general";
 
 class SimpleDialog extends Component {
 
@@ -68,7 +69,7 @@ class Home extends Component {
       return undefined;
     }
     return (
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={9}>
         <Card>
           <CardHeader title={'Willkommen'}/>
           <CardMedia
@@ -84,87 +85,90 @@ class Home extends Component {
     )
   };
 
+  getNews = () => {
+    const newsData = this.props.news.data || [];
+    return <Grid item xs={12} sm={9} style={{padding: '0px'}}>
+      <Slider loading={this.props.news.pending}>
+        {newsData.map((newsItem, idx) => (
+          <NewsItem
+            key={idx}
+            title={newsItem.title}
+            text={newsItem.teaser}
+            img={__API__ + '/test' + newsItem.pictureId + '.jpg'}/>
+        ))}
+      </Slider>
+    </Grid>
+  };
+
   getMyCourses = () => {
     const {showCourseDetails} = this.props.actions;
     const {data = {}} = this.props.courses;
     const myCourses = data.filter(course => course.signedIn);
-    if (myCourses && myCourses.length > 0) {
-      return (
-        <div>
-          <Subheader label='Meine Kurse'/>
-          {myCourses.map(
+    return (
+      <div>
+        <Subheader label='Meine Kurse'/>
+        {myCourses.length === 0
+          ? <MenuLink
+              to='/courses/all' label='Melde dich hier zu Kursen an'
+              icon={<IconCalendar/>}/>
+          : myCourses.map(
             (course, idx) => (
               <Course
                 key={idx}
                 course={course}
                 showCourseDetails={showCourseDetails}
                 showDate/>)
-          )}
-        </div>
-      );
-    }
+            )
+        }
+      </div>
+    );
   };
 
   getLoginCard = () => {
-    if (!this.props.user) {
-      return <Grid item xs={12}>
-        <LoginAndRegistrationCard/>
-      </Grid>;
+    if (this.props.user) {
+      return undefined;
     }
+    return <Grid item xs={12} sm={6}>
+      <LoginAndRegistrationCard/>
+    </Grid>;
+  };
+
+  getUserDetails = () => {
+    if (!this.props.user) {
+      return undefined;
+    }
+    return <Grid item xs={12} sm={9} style={{padding: '0px'}}>
+      <List style={{padding: '0'}}>
+        {/* TODO Das ganze mal als GridList ausprobieren */}
+        {this.getMyCourses()}
+        <Subheader label={"Status"}/>
+        <ListItem button onClick={this.handleClickOpen}>
+          <ListItemIcon>
+            <IconBatteryLow color={red.A200}/>
+          </ListItemIcon>
+          <ListItemText
+            inset
+            primary={"Zehnerkarte"}
+            secondary={"(zukünftig kannst du hier deine Karten verwalten)"}/>
+        </ListItem>
+      </List>
+    </Grid>;
   };
 
   render() {
     // TODO besser an die einzelnen Komponenten übergeben
-    const newsData = this.props.news.data || [];
     return (
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
         <SimpleDialog
           open={this.state.open}
           onClose={this.handleRequestClose}/>
-
         {/* Nur bei nicht angemeldeten Benutzern*/}
         {this.getWelcomeGreetings()}
-
-        <Grid item xs={12} style={{padding: '0px'}}>
-          <Slider loading={this.props.news.pending}>
-            {newsData.map((newsItem, idx) => (
-              <NewsItem
-                key={idx}
-                title={newsItem.title}
-                text={newsItem.teaser}
-                img={__API__ + '/test' + newsItem.pictureId + '.jpg'}/>
-            ))}
-          </Slider>
-        </Grid>
-
+        {this.getNews()}
         {/* Nur bei nicht angemeldeten Benutzern*/}
         {this.getLoginCard()}
-
-        <Grid item xs={12} style={{padding: '0px'}}>
-          <List style={{padding: '0'}}>
-            {/* TODO Das ganze mal als GridList ausprobieren */}
-            {this.getMyCourses()}
-            <Subheader label={"Status"}/>
-            <ListItem button onClick={this.handleClickOpen}>
-              <ListItemIcon>
-                <IconBatteryLow color={red.A200}/>
-              </ListItemIcon>
-              <ListItemText inset primary={"Zehnerkarte"} secondary={"(8 von 10 verbraucht)"}/>
-            </ListItem>
-            <ListItem button onClick={this.handleClickOpen}>
-              <ListItemIcon>
-                <IconBatteryLow color={red.A200}/>
-              </ListItemIcon>
-              <ListItemText inset primary={"Zehnerkarte"} secondary={"(8 von 10 verbraucht)"}/>
-            </ListItem>
-            <ListItem button onClick={this.handleClickOpen}>
-              <ListItemIcon>
-                <IconBatteryLow color={red.A200}/>
-              </ListItemIcon>
-              <ListItemText inset primary={"Zehnerkarte"} secondary={"(8 von 10 verbraucht)"}/>
-            </ListItem>
-          </List>
-        </Grid>
+        {/* Nur bei angemeldeten Benutzern*/}
+        {this.getUserDetails()}
       </Grid>
     );
   }

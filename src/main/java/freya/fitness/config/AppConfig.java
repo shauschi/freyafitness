@@ -47,7 +47,7 @@ public class AppConfig {
         .csrf().disable()
         .antMatcher("/**")
         .authorizeRequests()
-        .antMatchers("/", "/login", "/create",
+        .antMatchers("/", "/profile/create",
             "/news/previews",
             "/*.jpg")
         .permitAll()

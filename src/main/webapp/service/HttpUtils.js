@@ -70,7 +70,7 @@ const updateAccessToken = () => {
 
 const fetchWithToken = (url, params, retry = true) =>
   fetch(url, params)
-    .then(response => {
+    .then(async response => {
       // 401 indicates that the access token is expired
       if (response.status === 401 && retry) {
         return updateAccessToken()
@@ -84,7 +84,11 @@ const fetchWithToken = (url, params, retry = true) =>
           });
       }
       if (!response.ok) {
-        throw new Error('Response not ok');
+        let errorMessage = 'Oops, something went wrong';
+        await response.json()
+          .then(error => errorMessage = error.message);
+        console.warn("Error message", errorMessage);
+        throw new Error(errorMessage);
       }
       return new Promise(resolve => resolve(response));
     });

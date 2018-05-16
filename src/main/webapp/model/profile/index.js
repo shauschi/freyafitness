@@ -104,8 +104,8 @@ export const login = loginData =>
 export const loginDataChanged = (id, value) =>
   dispatch => dispatch(actions.login.dataChanged(id, value));
 
-export const createAccount = (createData) => {
-  return dispatch => {
+export const createAccount = (createData) =>
+  dispatch => {
     dispatch(actions.createAccount.pending());
     return createAccountApiCall(createData)
       .then(profile => {
@@ -114,7 +114,6 @@ export const createAccount = (createData) => {
       })
       .catch(error => dispatch(actions.createAccount.error(error)));
   };
-};
 
 export const createAccountDataChanged = (id, value) =>
   dispatch => dispatch(actions.createAccount.dataChanged(id, value));

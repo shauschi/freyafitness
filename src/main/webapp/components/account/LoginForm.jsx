@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import Grid from 'material-ui/Grid';
 import {IconSignIn} from './../../utils/Icons';
-import {ValidationGroup, Validators} from './../general/validation';
+import {ValidationGroup} from './../general/validation';
 import {
   GridTextControl,
   GridInputControl,

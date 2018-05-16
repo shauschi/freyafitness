@@ -30,7 +30,7 @@ public class CourseController {
     this.userService = userService;
   }
 
-  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/{id}")
   public CourseDto getCourseDetails(@PathVariable("id") final UUID id) {
     final User user = userService.getCurrentUser();
@@ -39,7 +39,7 @@ public class CourseController {
         .orElse(null);
   }
 
-  @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @PostMapping("/{id}")
   public CourseDto saveCourse(@PathVariable("id") final UUID id,
                               @RequestBody final CourseDto courseDto) {
@@ -49,7 +49,7 @@ public class CourseController {
     return new CourseDto(user, updatedCourse);
   }
 
-  @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @GetMapping("/create")
   public CourseDto createNewCourse() {
     final User user = userService.getCurrentUser();
@@ -57,7 +57,7 @@ public class CourseController {
     return new CourseDto(user, course);
   }
 
-  @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @PostMapping("/create")
   public CourseDto saveNewCourse(@RequestBody final CourseDto courseDto) {
     // TODO user rights?
@@ -66,14 +66,14 @@ public class CourseController {
     return new CourseDto(user, updatedCourse);
   }
 
-  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/from/{from}")
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
     final User user = userService.getCurrentUser();
     return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
   }
 
-  @PreAuthorize("hasAnyRole('USER', 'TRAINER', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("from/{from}/to/{to}")
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
@@ -82,7 +82,7 @@ public class CourseController {
     return toDtos(user, courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
   }
 
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasAuthority('USER')")
   @PutMapping("{courseId}/signin")
   public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final UUID courseId) {
     final User user = userService.getCurrentUser();
@@ -93,7 +93,7 @@ public class CourseController {
     return ResponseEntity.badRequest().build();
   }
 
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasAuthority('USER')")
   @PutMapping("{courseId}/signout")
   public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final UUID courseId) {
     final User user = userService.getCurrentUser();

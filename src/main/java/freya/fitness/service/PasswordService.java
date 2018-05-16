@@ -2,6 +2,7 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.utils.InvalidPasswordException;
 import freya.fitness.utils.InvalidResetTokenException;
 import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -72,6 +74,17 @@ public class PasswordService {
     final String newPasswordEncoded = passwordEncoder.encode(newPasswordRaw);
     user.setPassword(newPasswordEncoded);
     passwordResetTokenService.delete(passwordResetToken);
+    userService.saveUser(user);
+  }
+
+  public void changePassword(final String oldPassword, final String newPassword)
+      throws InvalidPasswordException {
+    final User user = userService.getCurrentUser();
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+      throw new InvalidPasswordException();
+    }
+    final String newPasswordEncoded = passwordEncoder.encode(newPassword);
+    user.setPassword(newPasswordEncoded);
     userService.saveUser(user);
   }
 
