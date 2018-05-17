@@ -3,7 +3,9 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.dto.CreateAccountDto;
+import freya.fitness.repository.jpa.RoleRepository;
 import freya.fitness.repository.jpa.UserRepository;
+import freya.fitness.utils.RoleNotFoundException;
 import freya.fitness.utils.UserAllreadyExistsException;
 import freya.fitness.utils.UserNotFoundException;
 import org.junit.Before;
@@ -23,10 +25,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -47,10 +51,14 @@ public class UserServiceTest {
   @Mock
   private PasswordEncoder passwordEncoder;
 
+  @Mock
+  private RoleRepository roleRepository;
+
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
 
   private User user;
+  private Role roleUser;
   private UUID uuid = UUID.randomUUID();
 
   @Before
@@ -61,9 +69,15 @@ public class UserServiceTest {
     user.setFamilyName("User");
     user.setEmail("test.user@test.mail");
     user.setPassword("any");
+
+    roleUser = new Role();
+    roleUser.setAuthority("USER");
+
     when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
     when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
     when(passwordEncoder.encode(any())).thenAnswer(answer -> answer.getArgument(0));
+    when(roleRepository.findByAuthority("USER"))
+        .thenReturn(Optional.of(roleUser));
   }
 
   @Test
@@ -109,14 +123,16 @@ public class UserServiceTest {
   }
 
   @Test
-  public void test_createAccount_userAllreadyExists() throws UserAllreadyExistsException {
+  public void test_createAccount_userAllreadyExists()
+      throws UserAllreadyExistsException, RoleNotFoundException {
     expectedException.expect(UserAllreadyExistsException.class);
 
     testee.createAccount(createAccountDto("any", "any", user.getEmail(), "any"));
   }
 
   @Test
-  public void test_createAccount() throws UserAllreadyExistsException {
+  public void test_createAccount()
+      throws UserAllreadyExistsException, RoleNotFoundException {
     final User newUser = new User();
     newUser.setFirstName("New");
     newUser.setFamilyName("User");
@@ -132,6 +148,13 @@ public class UserServiceTest {
     assertThat(result.getFamilyName(), equalTo(newUser.getFamilyName()));
     assertThat(result.getEmail(), equalTo(newUser.getEmail()));
     assertThat(result.getPassword(), equalTo(newUser.getPassword()));
+    List<Role> roles = result.getRoles();
+    assertThat(roles, hasSize(1));
+    assertThat(roles.get(0), equalTo(roleUser));
+
+    // Beim Speichern wurde die Rolle ergänzt
+    newUser.setRoles(roles);
+
     verify(userRepository).save(newUser);
   }
 
