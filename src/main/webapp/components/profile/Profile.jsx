@@ -19,7 +19,7 @@ class Profile extends Component {
       onOpenPasswordChange,
       onOpenProfilPictureChange
     } = this.props;
-    const {id, firstname, lastname, dayOfBirth, email, mobil, adress = {}} = profile.data;
+    const {id, firstname, lastname, dayOfBirth, email, mobil, adress = {}} = profile.user;
     const {zipCode, city, street, nr} = adress;
 
     return (

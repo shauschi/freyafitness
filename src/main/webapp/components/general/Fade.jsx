@@ -9,10 +9,9 @@ const defaultStyle = {
 };
 
 const transitionStyles = {
-  entering: {opacity: 1},
+  entering: {opacity: 0},
   entered: {opacity: 1},
-  exiting: {opacity: 0},
-  exited: {opacity: 0},
+  exiting: {opacity: 0}
 };
 
 const Fade = ({inProp, style, children}) => (
@@ -20,6 +19,9 @@ const Fade = ({inProp, style, children}) => (
     in={inProp}
     timeout={650}>
     {(state) => {
+      if (state === 'exited') {
+        return null;
+      }
       return <div style={{
         ...defaultStyle,
         ...transitionStyles[state],

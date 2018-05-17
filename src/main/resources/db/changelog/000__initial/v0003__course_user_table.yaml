@@ -7,12 +7,12 @@ databaseChangeLog:
           columns:
           - column:
               name: course_id
-              type: bigserial
+              type: uuid
               constraints:
                 nullable: false
           - column:
               name: user_id
-              type: bigserial
+              type: uuid
               constraints:
                 nullable: false
           schemaName: public

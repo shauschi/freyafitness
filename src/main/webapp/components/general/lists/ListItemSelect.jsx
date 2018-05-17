@@ -4,7 +4,7 @@ import Row from './Row.jsx';
 import Select from "material-ui/Select";
 import Input from "material-ui/Input";
 import {MenuItem} from "material-ui/Menu";
-import {view, findBy} from './../../../utils/RamdaUtils';
+import {view} from './../../../utils/RamdaUtils';
 
 class ListItemSelect extends Row {
 

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: token_id
+              type: varchar(255)
+          - column:
+              name: token
+              type: longvarbinary
+          - column:
+              name: authentication
+              type: longvarbinary
+          schemaName: public
+          tableName: oauth_refresh_token

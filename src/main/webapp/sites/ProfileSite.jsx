@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Grid from 'material-ui/Grid';
 import Profile, {ProfilePictureDialog} from './../components/profile';
-import {ChangePasswordDialog} from './../components/password';
+import {ChangePasswordDialog} from '../components/account';
 import {LoadingIndicator} from "../components/general";
 import {
   fetchOwnProfile,
@@ -44,7 +44,10 @@ class ProfileSite extends Component {
             onClose={actions.closeProfilePictureChangeDialog}
           />
           <ChangePasswordDialog
-            password={password}
+            formData={password}
+            pending={password.pending}
+            open={password.open}
+            errorMessage={password.errorMessage}
             onClose={actions.onCancelPasswordChange}
             onPasswordChange={actions.onPasswordChange}
             onSave={actions.changePassword}
@@ -62,7 +65,6 @@ class ProfileSite extends Component {
     }
   }
 }
-
 
 const mapStateToProps = state => ({
   profile: state.profile,

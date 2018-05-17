@@ -5,18 +5,22 @@ import {assignPath} from "../../utils/RamdaUtils";
 const initialState = {
   show: false,
   type: 'normal',
-  message: ''
+  message: '',
+  authHideDuration: 1500
 };
 
 export const actions = createActions({
   NOTIFICATION: {
-    SHOW: (message, type) => ({message: message, type: type}),
+    SHOW: data => ({message: data.message, type: data.type, autoHideDuration: data.autoHideDuration}),
     HIDE: undefined
   }
 });
 
+export const showStickyNotification = (message, type) =>
+  dispatch => dispatch(actions.notification.show({message: message, type: type, autoHideDuration: undefined}));
+
 export const showNotification = (message, type) =>
-  dispatch => dispatch(actions.notification.show(message, type));
+  dispatch => dispatch(actions.notification.show({message: message, type: type, autoHideDuration: 1500}));
 
 export const hideNotification = () =>
   dispatch => dispatch(actions.notification.hide());

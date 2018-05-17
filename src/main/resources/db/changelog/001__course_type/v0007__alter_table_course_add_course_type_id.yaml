@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: hauschildt
+      changes:
+      - addColumn:
+          columns:
+          - column:
+              name: course_type_id
+              type: uuid
+              defaultValue: null
+          schemaName: public
+          tableName: course

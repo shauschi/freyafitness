@@ -14,12 +14,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/coursetypes")
 public class CourseTypeController {
 
+  private final CourseTypeService courseTypeService;
+
   @Autowired
-  private CourseTypeService courseTypeService;
+  public CourseTypeController(final CourseTypeService courseTypeService) {
+    this.courseTypeService = courseTypeService;
+  }
 
   @GetMapping("/")
   public List<CourseTypeDto> getAllValidCourseTypes() {
-    return courseTypeService.getCurrentCourseTypes().stream()
+    return courseTypeService.getValidCourseTypes().stream()
         .map(CourseTypeDto::new)
         .collect(Collectors.toList());
   }

@@ -9,15 +9,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
 public class CourseDto {
 
-  private Long id;
-  private Long courseTypeId;
+  private UUID id;
+  private UUID courseTypeId;
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime start;
   private Integer minutes;
@@ -27,8 +28,8 @@ public class CourseDto {
   private boolean canceled;
   private List<ProfileDto> attendees;
 
-  public CourseDto(User user, Course course) {
-    final Long userId = user.getId();
+  public CourseDto(final User user, final Course course) {
+    final UUID id = user.getId();
     this.id = course.getId();
     final CourseType type = course.getType();
     this.courseTypeId = type != null ? type.getId() : null;
@@ -36,7 +37,9 @@ public class CourseDto {
     this.minutes = course.getMinutes();
     final User instructor = course.getInstructor();
     this.instructor = new ProfileDto(instructor);
-    this.signedIn = course.getAttendees().stream().anyMatch(attendee -> Objects.equals(attendee.getId(), userId));
+    this.signedIn = course.getAttendees().stream()
+        .map(User::getId)
+        .anyMatch(Predicate.isEqual(id));
     this.maxParticipants = course.getMaxParticipants();
     this.canceled = course.isCanceled();
     this.attendees = course.getAttendees().stream().map(ProfileDto::new).collect(Collectors.toList());

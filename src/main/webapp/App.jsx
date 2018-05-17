@@ -5,11 +5,11 @@ import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {MuiThemeProvider, withStyles} from 'material-ui/styles';
-import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
+import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
-import Snackbar, {SnackbarContent} from 'material-ui/Snackbar';
-import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum, Logout} from "./sites";
+import Snackbar from 'material-ui/Snackbar';
+import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum} from "./sites";
 import * as Style from './utils/Style';
 import {
   toggleDrawer
@@ -18,20 +18,33 @@ import {
   hideNotification
 } from './model/notification';
 import {
-  fetchCourses,
-  createCourse,
-  showCourseDetails,
-  hideCourseDetails,
-  saveCourseDetails,
-  toggleAttendeeList,
-  toggleEditCourse,
-  onCourseDetailsChange,
-  signIn,
-  signOut
-} from './model/courses';
+  scrollToLogin,
+  login,
+  logout
+} from './model/profile';
 import init from './model/init.js';
+import {LoadingIndicator} from "./components/general";
+
+const HOME_ROUTE = <Route exact path='/' component={Home}/>;
+const SWIPEABLE_ROUTE = <SwipeableRoutes
+  resistance
+  style={{height: '100%'}}
+  containerStyle={{
+    height: '100%',
+    WebkitOverflowScrolling: 'touch',
+  }}
+>
+  {HOME_ROUTE}
+  <Route exact path='/courses/all' component={Courses}/>
+  <Route exact path='/profile' component={ProfileSite}/>
+</SwipeableRoutes>;
+
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+  }
 
   componentDidMount() {
     const {dispatch} = this.props;
@@ -39,65 +52,55 @@ class App extends Component {
   };
 
   render() {
-    const {classes, drawer, actions, courses, news, notification} = this.props;
+    const {classes, drawer, actions, profile, notification} = this.props;
+    const currentUser = profile.user;
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
-          <div className={classes.appFrame} style={{backgroundImage: 'url(http://localhost:9000/background.jpg)', backgroundSize: 'cover'}}>
+          <div className={classes.appFrame} style={{backgroundImage: 'url(' + __API__ + '/background.jpg)', backgroundSize: 'cover'}}>
             <MyAppBar
+              pending={profile.pending}
               classes={classes}
               toggleDrawer={actions.toggleDrawer}
               createCourse={actions.createCourse}
+              scrollToLogin={actions.scrollToLogin}
+              currentUser={currentUser}
               {...this.props}/>
-            <MyDrawer classes={classes} toggleDrawer={actions.toggleDrawer} {...drawer}/>
-            <div className={classes.content}>
-              <Switch>
-                <Redirect from='/index' to='/'/>
-                <Redirect from='/home' to='/'/>
-                <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
-                <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
-                <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
-                <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                <Route exact path='/logout' render={() => <Logout {...this.props}/>}/>
-                <SwipeableRoutes
-                  resistance
-                  style={{height: '100%'}}
-                  containerStyle={{
-                    height: '100%',
-                    WebkitOverflowScrolling: 'touch',
-                  }}
-                >
-                  <Route exact path='/' render={() =>
-                    <Home
-                      {...this.props}
-                      news={news}
-                    />}
-                  />
-                  <Route exact path='/courses/all' render={() =>
-                    <Courses
-                      pending={courses.pending}
-                      courses={courses.data}
-                      showCourseDetails={actions.showCourseDetails}
-                      hideCourseDetails={actions.hideCourseDetails}
-                      saveCourseDetails={actions.saveCourseDetails}
-                      courseDetails={courses.courseDetails}
-                      toggleAttendeeList={actions.toggleAttendeeList}
-                      toggleEditCourse={actions.toggleEditCourse}
-                      onCourseDetailsChange={actions.onCourseDetailsChange}
-                      signIn={actions.signIn}
-                      signOut={actions.signOut}
-                    />}
-                  />
-                  <Route exact path='/profile' render={() => <ProfileSite/>}/>
-                </SwipeableRoutes>
-              </Switch>
-            </div>
-            <Footer {...this.props}/>
+            <MyDrawer
+              classes={classes}
+              logout={actions.logout}
+              toggleDrawer={actions.toggleDrawer}
+              currentUser={currentUser}
+              {...drawer}/>
+            {
+              profile.pending
+                ? <LoadingIndicator/>
+                : <div className={currentUser ? classes.content : classes.contentScroll}>
+                <Switch>
+                  <Redirect from='/index' to='/'/>
+                  <Redirect from='/home' to='/'/>
+                  <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
+                  <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
+                  <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
+                  <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
+                  {
+                    currentUser
+                      ? SWIPEABLE_ROUTE
+                      : HOME_ROUTE
+                  }
+                </Switch>
+              </div>
+            }
+            {
+              currentUser
+                ? <Footer {...this.props}/>
+                : undefined
+            }
             <Snackbar
               open={notification.show}
               onClose={this.props.actions.hideNotification}
               message={notification.message}
-              autoHideDuration={1500}/>
+              autoHideDuration={notification.autoHideDuration}/>
           </div>
         </div>
       </MuiThemeProvider>
@@ -110,25 +113,19 @@ App.contextTypes = {
 };
 
 const mapStateToProps = state => ({
-  drawer: state.drawer,
   courses: state.courses,
+  drawer: state.drawer,
   news: state.news,
-  notification: state.notification,
+  profile: state.profile,
+  notification: state.notification
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
+    scrollToLogin: scrollToLogin,
+    login: login,
+    logout: logout,
     toggleDrawer: toggleDrawer,
-    fetchCourses: fetchCourses,
-    createCourse: createCourse,
-    showCourseDetails: showCourseDetails,
-    hideCourseDetails: hideCourseDetails,
-    saveCourseDetails: saveCourseDetails,
-    toggleAttendeeList: toggleAttendeeList,
-    toggleEditCourse: toggleEditCourse,
-    onCourseDetailsChange: onCourseDetailsChange,
-    signIn: signIn,
-    signOut: signOut,
     hideNotification: hideNotification
   }, dispatch),
   dispatch

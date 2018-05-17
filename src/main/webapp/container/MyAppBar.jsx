@@ -1,26 +1,81 @@
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import withWidth from 'material-ui/utils/withWidth';
-import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
+import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
 import {FadeIconButton} from './../components/general';
 
 import {
   IconMenu,
   IconPlus
-} from '../utils/Icons/Icons';
+} from '../utils/Icons';
 import {blueGrey} from 'material-ui/colors';
 
 class MyAppBar extends Component {
 
-  render() {
-    const props = this.props;
-    const {classes, toggleDrawer, createCourse, location} = props;
+  constructor(props) {
+    super(props);
+    this.getAddCourseButton = this.getAddCourseButton.bind(this);
+    this.getLoginButton = this.getLoginButton.bind(this);
+    this.getAdditionalAction = this.getAdditionalAction.bind(this);
+  }
+
+  getAddCourseButton() {
+    const {createCourse, location} = this.props;
     const inProp = location.pathname === '/courses/all';
+
+    return (<FadeIconButton
+      inProp={inProp}
+      color='contrast'
+      ariaLabel='Neuen Kurs anlegen'
+      onClick={createCourse}
+      style={{
+        position: 'absolute',
+        right: '0px',
+        padding: '0 16px'
+      }}>
+      <IconPlus/>
+    </FadeIconButton>);
+  }
+
+  getLoginButton() {
+    const {scrollToLogin} = this.props;
+    return (
+      <Button
+        onClick={scrollToLogin}
+        color={'primary'}
+        style={{
+          position: 'absolute',
+          right: '0px',
+          padding: '0 16px',
+          zIndex: 20
+        }}>
+        Login
+      </Button>
+    );
+  }
+
+  getAdditionalAction() {
+    if (this.props.pending) {
+      return undefined;
+    }
+    if (!this.props.currentUser) {
+      return this.getLoginButton();
+    }
+
+    const roles = this.props.currentUser.roles;
+    if (roles.ADMIN || roles.TRAINER) {
+      return this.getAddCourseButton();
+    }
+  }
+
+  render() {
+    const {classes, toggleDrawer} = this.props;
 
     return (
       <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
@@ -65,19 +120,7 @@ class MyAppBar extends Component {
               <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
             </Hidden>
           </Typography>
-          <FadeIconButton
-            inProp={inProp}
-            color='contrast'
-            ariaLabel='Neuen Kurs anlegen'
-            onClick={createCourse}
-            style={{
-              position: 'absolute',
-              right: '0px',
-              padding: '0 16px'
-            }}
-          >
-            <IconPlus/>
-          </FadeIconButton>
+          {this.getAdditionalAction()}
         </Toolbar>
       </AppBar>
     );

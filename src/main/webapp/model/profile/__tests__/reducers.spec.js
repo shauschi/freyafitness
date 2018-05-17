@@ -8,7 +8,7 @@ describe('profile reducer', () => {
     state = {
       pending: false,
       errorMessage: null,
-      data: undefined
+      user: undefined
     }
   });
 
@@ -29,7 +29,7 @@ describe('profile reducer', () => {
       const expected = {firstname: 'Testee', lastname: 'Foobar'};
       const nextState = reducer(state, actions.profile.load.success(expected));
 
-      const expectedState = Object.assign({}, state, {pending: false, data: expected});
+      const expectedState = Object.assign({}, state, {pending: false, user: expected});
 
       expect(nextState).toEqual(expectedState);
     });

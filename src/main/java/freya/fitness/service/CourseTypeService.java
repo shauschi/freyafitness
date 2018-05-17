@@ -12,10 +12,14 @@ import java.util.List;
 @Service
 public class CourseTypeService {
 
-  @Autowired
-  private CourseTypeRepository courseTypeRepository;
+  private final CourseTypeRepository courseTypeRepository;
 
-  public List<CourseType> getCurrentCourseTypes() {
+  @Autowired
+  public CourseTypeService(final CourseTypeRepository courseTypeRepository) {
+    this.courseTypeRepository = courseTypeRepository;
+  }
+
+  public List<CourseType> getValidCourseTypes() {
     final LocalDateTime now = LocalDateTime.now();
     return courseTypeRepository
         .findByValidityFromLessThanEqualAndValidityToGreaterThanEqual(

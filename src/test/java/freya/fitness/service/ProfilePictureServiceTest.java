@@ -13,11 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import static freya.fitness.TestUtils.testUser;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProfilePictureServiceTest {
@@ -46,23 +51,23 @@ public class ProfilePictureServiceTest {
   @Test(expected = RuntimeException.class)
   public void test_changeProfilePicture_userNotFoundThrowsException()
       throws IOException {
-    final Long userId = 123_456L;
-    when(userRepository.findById(userId)).thenReturn(Optional.empty());
+    final UUID uuid = UUID.randomUUID();
+    when(userRepository.findById(uuid)).thenReturn(Optional.empty());
     MultipartFile multipartFile = new MockMultipartFile("test.file", new byte[]{1, 0});
 
-    testee.changeProfilePicture(userId, multipartFile);
+    testee.changeProfilePicture(uuid, multipartFile);
   }
 
   @Test
   public void test_changeProfilePicture_savePictureAndUpdateUser()
       throws IOException {
-    final Long userId = 123_456L;
+    final UUID uuid = UUID.randomUUID();
     final User user = testUser();
-    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+    when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
     when(profilePictureRepository.save(any())).thenReturn("SAVED");
     MultipartFile multipartFile = new MockMultipartFile("test.file", new byte[]{1, 0});
 
-    testee.changeProfilePicture(userId, multipartFile);
+    testee.changeProfilePicture(uuid, multipartFile);
 
     verify(profilePictureRepository, never()).delete(any());
     verify(profilePictureRepository).save(multipartFile);
@@ -73,15 +78,15 @@ public class ProfilePictureServiceTest {
   @Test
   public void test_changeProfilePicture_deleteCurrentPictureFromDbIfExists()
       throws IOException {
-    final Long userId = 123_456L;
+    final UUID uuid = UUID.randomUUID();
     final User user = testUser();
     user.setProfilePictureId("OLD_PIC");
-    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+    when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
     when(profilePictureRepository.save(any())).thenReturn("SAVED");
     final MultipartFile multipartFile =
         new MockMultipartFile("test.file", new byte[]{1, 0});
 
-    testee.changeProfilePicture(userId, multipartFile);
+    testee.changeProfilePicture(uuid, multipartFile);
 
     verify(profilePictureRepository).delete("OLD_PIC");
     verify(profilePictureRepository).save(multipartFile);

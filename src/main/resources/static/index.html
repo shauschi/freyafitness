@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlsn="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width"/>
@@ -19,6 +20,11 @@
                 height: 100%;
             }
         </style>
+        <script th:inline="javascript">
+          /*<![CDATA[*/
+          let CURRENT_USER = /*[[${currentUser}]]*/ undefined; // {id: 1000, firstname: 'Testuser'};
+          /*]]>*/
+        </script>
     </head>
     <body>
         <div id="app">

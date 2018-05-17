@@ -5,7 +5,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: './src/main/webapp/index.html',
+  template: '!!html-loader!./src/main/webapp/index.html',
   filename: 'index.html',
   inject: 'body'
 });

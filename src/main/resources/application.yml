@@ -1,0 +1,48 @@
+server:
+  port: 9000
+  session:
+    cookie:
+      name: UISESSION
+spring:
+  data:
+    rest:
+      base-path: /api
+  thymeleaf:
+    check-template: true
+    check-template-location: true
+    prefix: classpath:/static/
+    cache: false
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+  datasource:
+    url: jdbc:postgresql://localhost/freyafitness
+    #url: jdbc:postgresql://93.90.205.170/freyafitness
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        temp:
+          # Disable feature detection by this undocumented parameter.
+          # Check the org.hibernate.engine.jdbc.internal.JdbcServiceImpl.configure method for more details.
+          use_jdbc_metadata_defaults: false
+    # Because detection is disabled you have to set correct dialect by hand.
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+course:
+  create:
+    minutes: 60
+    maxParticipants: 12
+mail:
+  resetpassword:
+    success: Erfolg
+    invalid: Nicht so erfolgreich
+    sender: admin@freya.fitness
+    subject: Passwort für freya.fitness zurücksetzen
+    message: Bla bla bla
+    validity:
+      hours: 24

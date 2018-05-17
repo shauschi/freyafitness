@@ -15,8 +15,12 @@ const loadingStyles = {
     verticalAlign: 'middle'
   },
   indicator: {
-    width: '65px',
-    height: '65px'
+    width: '32px',
+    height: '32px'
+  },
+  indicatorSmall: {
+    width: '16px',
+    height: '16px'
   }
 };
 
@@ -24,11 +28,18 @@ class LoadingIndicator extends Component {
 
   render()
   {
+    const {noLabel, small} = this.props;
     return (
       <div style={loadingStyles.table}>
         <div style={loadingStyles.cell}>
-          <CircularProgress style={loadingStyles.indicator}/>
-          <Typography type={'title'} color={'primary'}>loading</Typography>
+          <CircularProgress
+            mode='indeterminate'
+            style={small ? loadingStyles.indicatorSmall : loadingStyles.indicator}/>
+          {
+            noLabel
+            ? undefined
+            : <Typography color='primary'>loading</Typography>
+          }
         </div>
       </div>
     );
