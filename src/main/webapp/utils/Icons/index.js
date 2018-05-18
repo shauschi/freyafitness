@@ -19,6 +19,7 @@ export {
   IconPaperPlane,
   IconPencil,
   IconPlus,
+  IconPreferences,
   IconSignIn,
   IconSignOut,
   IconUser,

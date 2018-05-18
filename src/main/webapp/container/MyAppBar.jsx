@@ -4,46 +4,25 @@ import withWidth from 'material-ui/utils/withWidth';
 import {withRouter} from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
+import Menu, {MenuItem} from 'material-ui/Menu';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
-import {FadeIconButton} from './../components/general';
 
 import {
   IconMenu,
-  IconPlus
+  IconPreferences
 } from '../utils/Icons';
 import {blueGrey} from 'material-ui/colors';
 
 class MyAppBar extends Component {
 
-  constructor(props) {
-    super(props);
-    this.getAddCourseButton = this.getAddCourseButton.bind(this);
-    this.getLoginButton = this.getLoginButton.bind(this);
-    this.getAdditionalAction = this.getAdditionalAction.bind(this);
-  }
+  state = {
+    anchor: null
+  };
 
-  getAddCourseButton() {
-    const {createCourse, location} = this.props;
-    const inProp = location.pathname === '/courses/all';
-
-    return (<FadeIconButton
-      inProp={inProp}
-      color='contrast'
-      ariaLabel='Neuen Kurs anlegen'
-      onClick={createCourse}
-      style={{
-        position: 'absolute',
-        right: '0px',
-        padding: '0 16px'
-      }}>
-      <IconPlus/>
-    </FadeIconButton>);
-  }
-
-  getLoginButton() {
+  getLoginButton = () => {
     const {scrollToLogin} = this.props;
     return (
       <Button
@@ -58,9 +37,9 @@ class MyAppBar extends Component {
         Login
       </Button>
     );
-  }
+  };
 
-  getAdditionalAction() {
+  getAdditionalAction = () => {
     if (this.props.pending) {
       return undefined;
     }
@@ -70,34 +49,56 @@ class MyAppBar extends Component {
 
     const roles = this.props.currentUser.roles;
     if (roles.ADMIN || roles.TRAINER) {
-      return this.getAddCourseButton();
+      return <IconButton
+        color='contrast'
+        ariaLabel='Neuen Kurs anlegen'
+        onClick={this.openMenu}
+        style={{marginLeft: '20px', marginRight: '-12px'}}>
+        <IconPreferences/>
+      </IconButton>;
     }
-  }
+  };
+
+  openMenu = event => {
+    this.setState({anchor: event.currentTarget});
+  };
+
+  closeMenu = () => {
+    this.setState({anchor: null});
+  };
+
+  getMenu = () => {
+    const {anchor} = this.state;
+    const {createCourse} = this.props;
+    return <Menu
+      open={!!anchor}
+      anchorEl={anchor}
+      onClose={this.closeMenu}
+      >
+      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
+      <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
+      <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
+    </Menu>
+  };
 
   render() {
     const {classes, toggleDrawer} = this.props;
 
     return (
-      <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
-        <Toolbar>
+      <div style={{flexGrow: 1}}>
+        <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
+          <Toolbar>
           <Hidden smUp>
             <IconButton
               color='contrast'
               aria-label='Navigation'
               onClick={toggleDrawer}
-              style={{zIndex: 20}}
+              style={{marginLeft: '-12px', marginRight: '20px'}}
             >
               <IconMenu/>
             </IconButton>
           </Hidden>
-          <Typography
-            type='title'
-            style={{
-              zIndex: 10,
-              position: 'absolute',
-              left: 0,
-              width: '100%',
-              textAlign: 'center'}}>
+          <Typography type='title' style={{flex: 1, textAlign: 'center'}}>
             <span style={{
               color: 'white',
               fontSize: '31px',
@@ -122,7 +123,9 @@ class MyAppBar extends Component {
           </Typography>
           {this.getAdditionalAction()}
         </Toolbar>
-      </AppBar>
+        </AppBar>
+        {this.getMenu()}
+      </div>
     );
   };
 }

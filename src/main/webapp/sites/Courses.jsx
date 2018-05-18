@@ -6,7 +6,6 @@ import Grid from 'material-ui/Grid';
 import {CourseDetails, CourseList} from './../components/course';
 import {
   fetchCourses,
-  createCourse,
   showCourseDetails,
   hideCourseDetails,
   saveCourseDetails,
@@ -67,7 +66,6 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     // courses
     fetchCourses: fetchCourses,
-    createCourse: createCourse,
     showCourseDetails: showCourseDetails,
     hideCourseDetails: hideCourseDetails,
     saveCourseDetails: saveCourseDetails,

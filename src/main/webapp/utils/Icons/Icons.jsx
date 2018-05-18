@@ -9,6 +9,7 @@ export {
   TiTime as IconClock,
   TiTimes as IconClose,
   TiDocumentText as IconDocument,
+  TiCog as IconPreferences,
   TiHome as IconHome,
   TiInfoLarge as IconInfo,
   TiChartLine as IconLineChart,

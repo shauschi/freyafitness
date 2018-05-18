@@ -43,7 +43,6 @@ public class CourseController {
   @PostMapping("/{id}")
   public CourseDto saveCourse(@PathVariable("id") final UUID id,
                               @RequestBody final CourseDto courseDto) {
-    // TODO user rights?
     final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.update(id, courseDto);
     return new CourseDto(user, updatedCourse);
@@ -60,7 +59,6 @@ public class CourseController {
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @PostMapping("/create")
   public CourseDto saveNewCourse(@RequestBody final CourseDto courseDto) {
-    // TODO user rights?
     final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.create(courseDto);
     return new CourseDto(user, updatedCourse);

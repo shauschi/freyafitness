@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import moment from 'moment';
 import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import {
   DialogContent,
@@ -17,7 +18,7 @@ import {TypeMapper} from '.';
 import * as Format from '../../utils/Format';
 import {ProfilePicture} from './../profile';
 import {showNotification} from './../../model/notification';
-import {Dialog, ListItemInput, ListItemSelect, FadeButton} from './../general';
+import {Dialog, ListItemInput, ListItemSelect} from './../general';
 import {MODE, NEW_COURSE} from './../../model/courses';
 import {TITLE_BG} from '../../utils/Style';
 
@@ -34,11 +35,8 @@ import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 import {findById} from "../../utils/RamdaUtils";
 import {LoadingIndicator} from "../general";
 
-const getAttendeeList = attendees => {
-  const attendeesList = [];
-  for (const idx in attendees) {
-    const user = attendees[idx];
-    attendeesList.push(
+const getAttendeeList = attendees =>
+  attendees.map((value, idx) =>
       <ListItem key={idx}>
         <ListItemIcon>
           <Avatar style={{backgroundColor: TITLE_BG}}>
@@ -47,10 +45,7 @@ const getAttendeeList = attendees => {
         </ListItemIcon>
         <ListItemText inset primary={user.firstname + " " + user.lastname}/>
       </ListItem>
-    );
-  }
-  return attendeesList;
-};
+  );
 
 class CourseDetails extends Component {
 
@@ -107,7 +102,7 @@ class CourseDetails extends Component {
         title={title}
         onClose={this.props.onClose}
         secondAction={
-          mode === MODE.VIEW && (roles.ADMIN || roles.TRAINER)
+          (mode === MODE.VIEW && (roles.ADMIN || roles.TRAINER))
             ? <IconButton color='contrast' onClick={toggleEditCourse}>
                 <IconPencil/>
               </IconButton>
@@ -188,33 +183,24 @@ class CourseDetails extends Component {
         </DialogContent>
 
         <DialogActions>
-          <div style={{position: 'relative'}}>
-            <FadeButton
-              inProp={mode === MODE.VIEW}
-              onClick={this.signInOut}>
-              {signedIn ? 'Abmelden' : 'Teilnehmen'}
-            </FadeButton>
-            <FadeButton
-              inProp={mode !== MODE.VIEW}
-              onClick={this.handleRequestSave}
-              style={{position: 'absolute', left: '0px', top: '0px'}}>
-              Speichern
-            </FadeButton>
-          </div>
-
-          <div style={{position: 'relative'}}>
-            <FadeButton
-              inProp={mode === MODE.VIEW}
-              onClick={this.handleRequestClose}>
-              Schließen
-            </FadeButton>
-            <FadeButton
-              inProp={mode !== MODE.VIEW}
-              onClick={mode === MODE.MODIFY ? toggleEditCourse : this.handleRequestClose}
-              style={{position: 'absolute', left: '0px', top: '0px'}}>
-              Abbrechen
-            </FadeButton>
-          </div>
+          {
+            mode === MODE.VIEW
+            ? <Button key='course-details-button-1-a' color='primary' onClick={this.signInOut}>
+                {signedIn ? 'Abmelden' : 'Teilnehmen'}
+              </Button>
+            : <Button key='course-details-button-1-b' onClick={this.handleRequestSave}>
+                {'Speichern'}
+              </Button>
+          }
+          {
+            mode === MODE.VIEW
+              ? <Button key='course-details-button-2-a' color='primary' onClick={this.handleRequestClose}>
+                {'Schließen'}
+              </Button>
+              : <Button key='course-details-button-2-b' onClick={mode === MODE.MODIFY ? toggleEditCourse : this.handleRequestClose}>
+                {'Abbrechen'}
+              </Button>
+          }
         </DialogActions>
       </Dialog>
     );
@@ -222,7 +208,7 @@ class CourseDetails extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.profile.currentUser,
+  currentUser: state.profile.user,
   courseTypes: state.courseTypes,
 });
 

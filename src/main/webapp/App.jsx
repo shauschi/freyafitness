@@ -18,6 +18,9 @@ import {
   hideNotification
 } from './model/notification';
 import {
+  createCourse
+} from './model/courses';
+import {
   scrollToLogin,
   login,
   logout
@@ -122,6 +125,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
+    createCourse: createCourse,
     scrollToLogin: scrollToLogin,
     login: login,
     logout: logout,

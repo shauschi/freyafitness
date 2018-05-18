@@ -126,14 +126,13 @@ export const logout = () => {
   }
 };
 
-export const fetchOwnProfile = (filterOptions) => {
-  return dispatch => {
+export const fetchOwnProfile = (filterOptions) =>
+  dispatch => {
     dispatch(actions.profile.load.pending());
     return getOwnProfile(filterOptions)
       .then(profile => dispatch(actions.profile.load.success(profile)))
       .catch(error => dispatch(actions.profile.load.error(error)))
-  }
-};
+  };
 
 export const onProfileDetailsChange = (path, value) => {
   return dispatch => dispatch(actions.profile.onProfileDetailsChange(path, value));

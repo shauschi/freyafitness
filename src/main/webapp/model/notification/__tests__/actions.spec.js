@@ -1,6 +1,6 @@
 import {showNotification, hideNotification, actions} from '../';
 
-describe('news actions', () => {
+describe('notification actions', () => {
 
   let dispatchMock;
   let getMockState;
@@ -15,7 +15,8 @@ describe('news actions', () => {
     it('should dispatch SHOW action', () => {
       showNotification('Test message')(dispatchMock, getMockState);
 
-      expect(dispatchMock.mock.calls[0][0]).toEqual(actions.notification.show('Test message'));
+      expect(dispatchMock.mock.calls[0][0]).toEqual(
+        actions.notification.show({message: 'Test message', type: undefined, autoHideDuration: 1500}));
     });
 
     it('should dispatch HIDE action', async () => {

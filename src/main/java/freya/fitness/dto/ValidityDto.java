@@ -1,15 +1,27 @@
 package freya.fitness.dto;
 
-import lombok.AllArgsConstructor;
+import freya.fitness.domain.jpa.Validity;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
-public class MessageDto {
+@NoArgsConstructor
+public class ValidityDto {
 
-  private String message;
+  private LocalDateTime from;
+  private LocalDateTime to;
 
-  public static MessageDto formatted(final String message, final String value) {
-    return new MessageDto(String.format(message, value));
+  public ValidityDto(final Validity validity) {
+    this.from = validity.getFrom();
+    this.to = validity.getTo();
+  }
+
+  public Validity toValidity() {
+    final Validity validity = new Validity();
+    validity.setFrom(from);
+    validity.setTo(to);
+    return validity;
   }
 }

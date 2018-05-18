@@ -7,7 +7,8 @@ describe('password reducer', () => {
   beforeEach(() => {
     state = {
       pending: false,
-      errorMessage: null
+      errorMessage: null,
+      open: false
     }
   });
 
