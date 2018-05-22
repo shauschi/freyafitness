@@ -1,4 +1,4 @@
-package freya.fitness.controller;
+package freya.fitness.api.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

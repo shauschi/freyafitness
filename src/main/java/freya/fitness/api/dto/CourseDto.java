@@ -1,4 +1,4 @@
-package freya.fitness.dto;
+package freya.fitness.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import freya.fitness.domain.jpa.Course;

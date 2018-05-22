@@ -1,8 +1,8 @@
-package freya.fitness.controller;
+package freya.fitness.api.controller;
 
 import freya.fitness.domain.jpa.News;
-import freya.fitness.dto.NewsDto;
-import freya.fitness.dto.NewsPreviewDto;
+import freya.fitness.api.dto.NewsDto;
+import freya.fitness.api.dto.NewsPreviewDto;
 import freya.fitness.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

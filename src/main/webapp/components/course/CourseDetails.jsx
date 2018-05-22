@@ -36,7 +36,7 @@ import {findById} from "../../utils/RamdaUtils";
 import {LoadingIndicator} from "../general";
 
 const getAttendeeList = attendees =>
-  attendees.map((value, idx) =>
+  attendees.map((user, idx) =>
       <ListItem key={idx}>
         <ListItemIcon>
           <Avatar style={{backgroundColor: TITLE_BG}}>

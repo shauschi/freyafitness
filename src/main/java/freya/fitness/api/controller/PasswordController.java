@@ -1,8 +1,8 @@
-package freya.fitness.controller;
+package freya.fitness.api.controller;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
-import freya.fitness.dto.ChangePasswordDto;
-import freya.fitness.dto.MessageDto;
+import freya.fitness.api.dto.ChangePasswordDto;
+import freya.fitness.api.dto.MessageDto;
 import freya.fitness.service.PasswordResetTokenService;
 import freya.fitness.service.PasswordService;
 import freya.fitness.utils.InvalidPasswordException;

@@ -1,9 +1,9 @@
-package freya.fitness.controller;
+package freya.fitness.api.controller;
 
 import freya.fitness.domain.jpa.User;
-import freya.fitness.dto.CreateAccountDto;
-import freya.fitness.dto.ProfileDto;
-import freya.fitness.dto.UserDto;
+import freya.fitness.api.dto.CreateAccountDto;
+import freya.fitness.api.dto.ProfileDto;
+import freya.fitness.api.dto.UserDto;
 import freya.fitness.service.ProfilePictureService;
 import freya.fitness.utils.RoleNotFoundException;
 import freya.fitness.utils.UserAllreadyExistsException;

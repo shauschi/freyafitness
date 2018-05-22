@@ -1,7 +1,7 @@
 package freya.fitness.domain.jpa;
 
-import freya.fitness.dto.CourseDto;
-import freya.fitness.dto.ProfileDto;
+import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.ProfileDto;
 import freya.fitness.repository.jpa.CourseTypeRepository;
 import freya.fitness.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
