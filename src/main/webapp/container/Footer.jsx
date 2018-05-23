@@ -6,7 +6,7 @@ import {withStyles} from 'material-ui/styles';
 import withWidth from 'material-ui/utils/withWidth';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
 import * as Style from '../utils/Style';
 import {IconHome, IconCalendar, IconUser} from '../utils/Icons';
 

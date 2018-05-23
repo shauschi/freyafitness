@@ -34,6 +34,16 @@ import {
 import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
 import {findById} from "../../utils/RamdaUtils";
 import {LoadingIndicator} from "../general";
+import {
+  fetchCourses,
+  hideCourseDetails,
+  onCourseDetailsChange,
+  saveCourseDetails,
+  signIn,
+  signOut,
+  toggleAttendeeList,
+  toggleEditCourse
+} from "../../model/courses";
 
 const getAttendeeList = attendees =>
   attendees.map((user, idx) =>
@@ -51,43 +61,47 @@ class CourseDetails extends Component {
 
   handleRequestClose = () => {
     // TODO unsaved 000_user?
-    this.props.onClose();
+    this.props.actions.hideCourseDetails();
   };
 
   handleRequestSave = () => {
     // TODO onRequestSave
-    this.props.onSave(this.props.course);
+    this.props.actions.saveCourseDetails(this.props.course);
   };
 
   signInOut = () => {
     const {id, signedIn} = this.props.course;
     if (signedIn) {
-      this.props.signOut(id);
+      this.props.actions.signOut(id);
       this.handleRequestClose();
     } else {
-      this.props.signIn(id);
+      this.props.actions.signIn(id);
       this.handleRequestClose();
     }
   };
 
   render() {
-    const {mode = MODE.CREATE,
-      show,
+    const {
+      courseDetails = {},
       pending,
+      currentUser,
+      courseTypes,
+      actions} = this.props;
+    const {
+      show,
+      mode = MODE.CREATE,
       showAttendees,
-      course = NEW_COURSE,
+      course = NEW_COURSE
+    } = courseDetails;
+    const {
       toggleAttendeeList,
       toggleEditCourse,
-      onCourseDetailsChange,
-      courseTypes,
-      currentUser = {}
-    } = this.props;
+      onCourseDetailsChange
+    } = actions;
 
     const {title, readonly} = mode;
-
     const {start, courseTypeId, minutes, attendees = [],
       instructor = {}, maxParticipants, signedIn} = course;
-
     const attendeesList = getAttendeeList(attendees);
 
     if (pending) {
@@ -100,7 +114,7 @@ class CourseDetails extends Component {
     return (
       <Dialog
         title={title}
-        onClose={this.props.onClose}
+        onClose={this.handleRequestClose}
         secondAction={
           (mode === MODE.VIEW && (roles.ADMIN || roles.TRAINER))
             ? <IconButton color='contrast' onClick={toggleEditCourse}>
@@ -210,11 +224,21 @@ class CourseDetails extends Component {
 const mapStateToProps = state => ({
   currentUser: state.profile.user,
   courseTypes: state.courseTypes,
+  courseDetails: state.courses.courseDetails
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
-    showNotification: showNotification
+    showNotification: showNotification,
+    // courses
+    fetchCourses: fetchCourses,
+    hideCourseDetails: hideCourseDetails,
+    saveCourseDetails: saveCourseDetails,
+    toggleAttendeeList: toggleAttendeeList,
+    toggleEditCourse: toggleEditCourse,
+    onCourseDetailsChange: onCourseDetailsChange,
+    signIn: signIn,
+    signOut: signOut,
   }, dispatch),
   dispatch
 });

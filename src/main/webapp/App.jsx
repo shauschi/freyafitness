@@ -10,6 +10,7 @@ import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import Snackbar from 'material-ui/Snackbar';
 import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum} from "./sites";
+import {CourseDetails} from "./components/course";
 import * as Style from './utils/Style';
 import {
   toggleDrawer
@@ -57,6 +58,7 @@ class App extends Component {
   render() {
     const {classes, drawer, actions, profile, notification} = this.props;
     const currentUser = profile.user;
+
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <div className={classes.root}>
@@ -75,6 +77,11 @@ class App extends Component {
               toggleDrawer={actions.toggleDrawer}
               currentUser={currentUser}
               {...drawer}/>
+            <div>
+              {/* All Dialogs */}
+              <CourseDetails/>
+
+            </div>
             {
               profile.pending
                 ? <LoadingIndicator/>
