@@ -30,7 +30,7 @@ class MyAppBar extends Component {
         color={'primary'}
         style={{
           position: 'absolute',
-          right: '0px',
+          right: '8px',
           padding: '0 16px',
           zIndex: 20
         }}>
@@ -51,10 +51,10 @@ class MyAppBar extends Component {
     if (roles.ADMIN || roles.TRAINER) {
       return <IconButton
         color='contrast'
-        ariaLabel='Neuen Kurs anlegen'
+        aria-label='Einstellungen'
         onClick={this.openMenu}
-        style={{marginLeft: '20px', marginRight: '-12px'}}>
-        <IconPreferences/>
+        style={{position: 'absolute', right: '8px', zIndex: 20}}>
+        <IconPreferences size={28}/>
       </IconButton>;
     }
   };
@@ -93,12 +93,12 @@ class MyAppBar extends Component {
               color='contrast'
               aria-label='Navigation'
               onClick={toggleDrawer}
-              style={{marginLeft: '-12px', marginRight: '20px'}}
+              style={{position: 'absolute', left: '8px', zIndex: 20}}
             >
-              <IconMenu/>
+              <IconMenu size={28}/>
             </IconButton>
           </Hidden>
-          <Typography type='title' style={{flex: 1, textAlign: 'center'}}>
+          <Typography type='title' style={{position: 'absolute', left: '0px', width: '100%', textAlign: 'center'}}>
             <span style={{
               color: 'white',
               fontSize: '31px',
