@@ -1,6 +1,6 @@
 import {createActions, handleActions} from 'redux-actions';
 import {getNews} from '../../service/news';
-import {assignPath, setPath} from "../../utils/RamdaUtils";
+import {assignPath, setPath} from '../../utils/RamdaUtils';
 
 export const MODE = {
   CREATE: {

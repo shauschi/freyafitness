@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import Row from './Row.jsx';
-import Input from "material-ui/Input";
+import Input from '@material-ui/core/Input';
 
 class ListItemInput extends Row {
 

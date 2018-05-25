@@ -1,9 +1,9 @@
 'use strict';
 import React from 'react';
 import Row from './Row.jsx';
-import Select from "material-ui/Select";
-import Input from "material-ui/Input";
-import {MenuItem} from "material-ui/Menu";
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
 import {view} from './../../../utils/RamdaUtils';
 
 class ListItemSelect extends Row {

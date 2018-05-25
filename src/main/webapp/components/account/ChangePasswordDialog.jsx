@@ -1,17 +1,21 @@
 'use strict';
 import React, {Component} from 'react';
-import Dialog, {DialogActions, DialogContent, DialogTitle, withMobileDialog} from 'material-ui/Dialog';
-import Slide from 'material-ui/transitions/Slide';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Slide from '@material-ui/core/Slide';
 import {IconClose} from '../../utils/Icons';
-import {red, blueGrey} from 'material-ui/colors/index';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import Grid from 'material-ui/Grid';
+import {blueGrey, red} from '@material-ui/core/colors/index';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import {ValidationGroup} from './../general/validation';
 import {GridPasswordControl, GridTextControl} from './../general';
-import {Validators} from "../general/validation";
-import LoadingIndicator from "../general/LoadingIndicator";
+import {Validators} from '../general/validation';
+import LoadingIndicator from '../general/LoadingIndicator';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;

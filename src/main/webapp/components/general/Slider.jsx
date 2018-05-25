@@ -1,13 +1,13 @@
 'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import {withStyles} from 'material-ui/styles';
+import {withStyles} from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 import {autoPlay} from 'react-swipeable-views-utils';
-import MobileStepper from 'material-ui/MobileStepper';
-import Button from 'material-ui/Button';
-import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
-import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
+import MobileStepper from '@material-ui/core/MobileStepper';
+import Button from '@material-ui/core/Button';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import {LoadingIndicator} from '.';
 
 const EnhancedSwipeableViews = autoPlay(SwipeableViews);
@@ -88,12 +88,12 @@ class Slider extends Component {
             position="static"
             className={classes.stepper}
             nextButton={
-              <Button dense color='primary' onClick={this.handleNext}>
+              <Button color='primary' onClick={this.handleNext}>
                 <KeyboardArrowRight/>
               </Button>
             }
             backButton={
-              <Button dense color='primary' onClick={this.handleBack}>
+              <Button color='primary' onClick={this.handleBack}>
                 <KeyboardArrowLeft/>
               </Button>
             }

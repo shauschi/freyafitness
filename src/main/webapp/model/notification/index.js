@@ -1,6 +1,6 @@
 'use strict';
 import {createActions, handleActions} from 'redux-actions';
-import {assignPath} from "../../utils/RamdaUtils";
+import {assignPath} from '../../utils/RamdaUtils';
 
 const initialState = {
   show: false,

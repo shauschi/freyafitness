@@ -1,6 +1,6 @@
 'use strict';
-import {blueGrey, green, lightBlue, red} from "material-ui/colors/index";
-import {createMuiTheme} from "material-ui/styles/index";
+import {blueGrey, green, lightBlue, red} from '@material-ui/core/colors';
+import {createMuiTheme} from '@material-ui/core/styles';
 
 export const TITLE_BG = blueGrey[800];
 

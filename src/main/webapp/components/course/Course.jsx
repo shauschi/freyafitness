@@ -3,11 +3,11 @@ import compose from 'recompose/compose';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import * as Format from '../../utils/Format';
-import Typography from 'material-ui/Typography';
-import {ListItem} from 'material-ui/List';
+import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
 import {findById} from './../../utils/RamdaUtils';
 
-import {green, blue, red} from 'material-ui/colors';
+import {green, blue, red} from '@material-ui/core/colors';
 
 export const TypeMapper = {
   SOFT: {label: 'sanfter Kurs', short: 'S', color: green['A200']},

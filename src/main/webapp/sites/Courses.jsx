@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Grid from 'material-ui/Grid';
+import Grid from '@material-ui/core/Grid';
 import {CourseDetails, CourseList} from './../components/course';
 import {showCourseDetails} from './../model/courses';
 

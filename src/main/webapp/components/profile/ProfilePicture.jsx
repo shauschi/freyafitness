@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component} from 'react';
 import {IconUser} from '../../utils/Icons';
-import {LoadingIndicator} from "../general";
+import {LoadingIndicator} from '../general';
 import {assignPath} from '../../utils/RamdaUtils';
 import {getProfilePicture} from '../../service/profile';
 

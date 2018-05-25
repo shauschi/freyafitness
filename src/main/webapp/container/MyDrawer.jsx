@@ -1,11 +1,11 @@
 'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import withWidth from 'material-ui/utils/withWidth';
-import Drawer from 'material-ui/Drawer';
-import Hidden from 'material-ui/Hidden';
-import Divider from 'material-ui/Divider';
-import List from 'material-ui/List';
+import withWidth from '@material-ui/core/withWidth';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
 import {MenuLink} from '../components/general';
 
 import {
@@ -72,7 +72,7 @@ class MyDrawer extends Component {
             {drawer}
           </Drawer>
         </Hidden>
-        <Hidden only='xs' implementation="css">
+        <Hidden only='xs' implementation="js">
           <Drawer type="permanent" open classes={{paper: classes.drawerPaper}}>
             {drawer}
           </Drawer>

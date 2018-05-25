@@ -11,7 +11,7 @@ import {
 import {
   showNotification
 } from './../notification';
-import {viewPath, setPath, assignPath, togglePath} from "../../utils/RamdaUtils";
+import {viewPath, setPath, assignPath, togglePath} from '../../utils/RamdaUtils';
 
 export const MODE = {
   CREATE: {

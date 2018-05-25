@@ -2,23 +2,30 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Card, {CardMedia, CardHeader, CardContent} from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
-import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from 'material-ui/Dialog';
-import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
-import {Subheader, Slider} from './../components/general';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import {Slider, Subheader} from './../components/general';
 import {NewsItem} from './../components/news';
 import Course from './../components/course';
-import {
-  showCourseDetails
-} from '../model/courses';
-
+import {showCourseDetails} from '../model/courses';
 import {IconBatteryLow, IconCalendar} from '../utils/Icons';
-import {red} from 'material-ui/colors';
-import {LoginAndRegistrationCard} from "../components/account";
-import {MenuLink} from "../components/general";
+import {red} from '@material-ui/core/colors';
+import {LoginAndRegistrationCard} from '../components/account';
+import {MenuLink} from '../components/general';
 
 class SimpleDialog extends Component {
 

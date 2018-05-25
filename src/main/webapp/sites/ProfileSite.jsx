@@ -2,10 +2,10 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Grid from 'material-ui/Grid';
+import Grid from '@material-ui/core/Grid';
 import Profile, {ProfilePictureDialog} from './../components/profile';
 import {ChangePasswordDialog} from '../components/account';
-import {LoadingIndicator} from "../components/general";
+import {LoadingIndicator} from '../components/general';
 import {
   fetchOwnProfile,
   changeTempProfilePicture,
@@ -13,13 +13,13 @@ import {
   closeProfilePictureChangeDialog,
   saveProfilePicture,
   onProfileDetailsChange
-} from "./../model/profile";
+} from './../model/profile';
 import {
   onPasswordChange,
   onOpenPasswordChange,
   onCancelPasswordChange,
   changePassword
-} from "./../model/password";
+} from './../model/password';
 
 class ProfileSite extends Component {
   render() {

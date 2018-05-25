@@ -1,18 +1,16 @@
 'use strict';
 import React, {Component} from 'react';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import {
-  default as MaterialDialog,
-  DialogTitle,
-  withMobileDialog
-} from 'material-ui/Dialog';
-import Slide from 'material-ui/transitions/Slide';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import {default as MaterialDialog} from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Slide from '@material-ui/core/Slide';
 
 import {IconClose} from '../../utils/Icons';
-import {blueGrey} from 'material-ui/colors';
+import {blueGrey} from '@material-ui/core/colors';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;

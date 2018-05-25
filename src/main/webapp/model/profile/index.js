@@ -10,7 +10,7 @@ import {
 import {
   actions as drawerActions
 } from './../drawer';
-import {setPath, assignPath} from "../../utils/RamdaUtils";
+import {setPath, assignPath} from '../../utils/RamdaUtils';
 import init from './../init.js';
 
 const initialState = {

@@ -1,14 +1,17 @@
 'use strict';
 import React, {Component} from 'react';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
-import {FormControl, FormHelperText} from 'material-ui/Form';
-import Input, {InputAdornment, InputLabel} from "material-ui/Input";
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
 import {IconEye, IconEyeSlash} from './../../utils/Icons';
 import {setPath, togglePath} from './../../utils/RamdaUtils';
-import ValidationControl from "./validation/ValidationControl";
+import ValidationControl from './validation/ValidationControl';
 
 const GridWrapper = ({children, xs = 12, md, style={paddingLeft: '0px', paddingRight: '0px'}}) =>
   <Grid item xs={xs} md={md}
@@ -92,7 +95,7 @@ export class GridButtonControl extends Component {
     const {label, icon, onClick} = this.props;
     return <GridFormControl>
       <Button
-        raised
+        variant='raised'
         color='primary'
         onClick={onClick}>
         {label}

@@ -4,42 +4,33 @@ import compose from 'recompose/compose';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import moment from 'moment';
-import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import {
-  DialogContent,
-  DialogActions,
-} from 'material-ui/Dialog';
-import {InputAdornment} from 'material-ui/Input';
-import Grid from 'material-ui/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Grid from '@material-ui/core/Grid';
 import {ValidationGroup} from './../general/validation';
-import {
-  GridInputControl
-} from './../general';
-import Typography from 'material-ui/Typography';
-import Collapse from 'material-ui/transitions/Collapse';
-import Avatar from 'material-ui/Avatar';
+import {Dialog, GridInputControl, ListItemInput, ListItemSelect} from './../general';
+import Typography from '@material-ui/core/Typography';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
 import {TypeMapper} from '.';
 import * as Format from '../../utils/Format';
 import {ProfilePicture} from './../profile';
 import {showNotification} from './../../model/notification';
-import {Dialog, ListItemInput, ListItemSelect} from './../general';
 import {MODE, NEW_COURSE} from './../../model/courses';
 import {TITLE_BG} from '../../utils/Style';
 
-import {
-  IconCalendar,
-  IconClock,
-  IconLocation,
-  IconPencil,
-  IconUser,
-  IconUserGroup
-} from '../../utils/Icons';
+import {IconCalendar, IconClock, IconLocation, IconPencil, IconUser, IconUserGroup} from '../../utils/Icons';
 
-import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
-import {findById} from "../../utils/RamdaUtils";
-import {LoadingIndicator} from "../general";
+import {MdExpandLess, MdExpandMore} from 'react-icons/lib/md';
+import {findById} from '../../utils/RamdaUtils';
+import {LoadingIndicator} from '../general';
 import {
   fetchCourses,
   hideCourseDetails,
@@ -49,7 +40,7 @@ import {
   signOut,
   toggleAttendeeList,
   toggleEditCourse
-} from "../../model/courses";
+} from '../../model/courses';
 
 const getAttendeeList = attendees =>
   attendees.map((user, idx) =>
@@ -126,7 +117,7 @@ class CourseDetails extends Component {
         onClose={this.handleRequestClose}
         secondAction={
           (mode === MODE.VIEW && (roles.ADMIN || roles.TRAINER))
-            ? <IconButton color='contrast' onClick={toggleEditCourse}>
+            ? <IconButton onClick={toggleEditCourse}>
                 <IconPencil/>
               </IconButton>
             : undefined

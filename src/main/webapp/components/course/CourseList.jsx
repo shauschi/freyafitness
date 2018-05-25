@@ -2,7 +2,7 @@
 import React from 'react';
 import moment from 'moment';
 import {Subheader} from './../general';
-import List from 'material-ui/List';
+import List from '@material-ui/core/List';
 import {comparingMod} from '../../utils/Comparator';
 import * as Format from '../../utils/Format';
 import Course from '.';

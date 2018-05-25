@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {MuiThemeProvider, withStyles} from 'material-ui/styles';
+import {MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
-import Snackbar from 'material-ui/Snackbar';
-import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum} from "./sites";
-import {CourseDetails} from "./components/course";
+import Snackbar from '@material-ui/core/Snackbar';
+import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum} from './sites';
+import {CourseDetails} from './components/course';
 import * as Style from './utils/Style';
 import {
   toggleDrawer
@@ -27,7 +27,7 @@ import {
   logout
 } from './model/profile';
 import init from './model/init.js';
-import {LoadingIndicator} from "./components/general";
+import {LoadingIndicator} from './components/general';
 
 const HOME_ROUTE = <Route exact path='/' component={Home}/>;
 const SWIPEABLE_ROUTE = <SwipeableRoutes

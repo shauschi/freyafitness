@@ -1,10 +1,12 @@
 'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import {withStyles} from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import List, {ListItem, ListItemSecondaryAction} from 'material-ui/List';
+import {withStyles} from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const itemStyles = () => ({
   container: {
@@ -44,7 +46,7 @@ class NewsItem extends Component {
                   </Typography>
                 </div>
                 <ListItemSecondaryAction style={{marginTop: 'auto', top: 'auto', bottom: '6px'}}>
-                  <Button dense color='primary'>
+                  <Button color='primary'>
                     mehr
                   </Button>
                 </ListItemSecondaryAction>

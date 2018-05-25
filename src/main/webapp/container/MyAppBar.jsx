@@ -1,20 +1,19 @@
+'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import withWidth from 'material-ui/utils/withWidth';
+import withWidth from '@material-ui/core/withWidth';
 import {withRouter} from 'react-router-dom';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Menu, {MenuItem} from 'material-ui/Menu';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import Hidden from 'material-ui/Hidden';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Hidden from '@material-ui/core/Hidden';
 
-import {
-  IconMenu,
-  IconPreferences
-} from '../utils/Icons';
-import {blueGrey} from 'material-ui/colors';
+import {IconMenu, IconPreferences} from '../utils/Icons';
+import {blueGrey} from '@material-ui/core/colors';
 
 class MyAppBar extends Component {
 
@@ -27,7 +26,6 @@ class MyAppBar extends Component {
     return (
       <Button
         onClick={scrollToLogin}
-        color={'primary'}
         style={{
           position: 'absolute',
           right: '8px',
@@ -50,7 +48,6 @@ class MyAppBar extends Component {
     const roles = this.props.currentUser.roles;
     if (roles.ADMIN || roles.TRAINER) {
       return <IconButton
-        color='contrast'
         aria-label='Einstellungen'
         onClick={this.openMenu}
         style={{position: 'absolute', right: '8px', zIndex: 20}}>
@@ -90,7 +87,6 @@ class MyAppBar extends Component {
           <Toolbar>
           <Hidden smUp>
             <IconButton
-              color='contrast'
               aria-label='Navigation'
               onClick={toggleDrawer}
               style={{position: 'absolute', left: '8px', zIndex: 20}}

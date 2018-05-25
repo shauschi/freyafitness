@@ -1,6 +1,6 @@
 import {createActions, handleActions} from 'redux-actions';
 import {getCourseTypes} from '../../service/coursetypes';
-import {setPath, assignPath} from "../../utils/RamdaUtils";
+import {setPath, assignPath} from '../../utils/RamdaUtils';
 
 const initialState = {
   pending: false,

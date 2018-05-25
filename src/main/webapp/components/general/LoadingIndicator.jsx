@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component} from 'react';
-import {CircularProgress} from 'material-ui/Progress';
-import Typography from 'material-ui/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 
 const loadingStyles = {
   table: {

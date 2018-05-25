@@ -3,37 +3,18 @@ import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import moment from 'moment';
-import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import {
-  DialogContent,
-  DialogActions,
-} from 'material-ui/Dialog';
-import {InputAdornment} from 'material-ui/Input';
-import Collapse from 'material-ui/transitions/Collapse';
-import Avatar from 'material-ui/Avatar';
+import List from '@material-ui/core/List';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import {TypeMapper} from '.';
-import * as Format from '../../utils/Format';
-import {ProfilePicture} from './../profile';
 import {showNotification} from './../../model/notification';
-import {Dialog, ListItemInput, ListItemSelect} from './../general';
+import {Dialog} from './../general';
 import {MODE, NEW_COURSE} from './../../model/news';
-import {TITLE_BG} from '../../utils/Style';
 
-import {
-  IconCalendar,
-  IconClock,
-  IconLocation,
-  IconPencil,
-  IconUser,
-  IconUserGroup
-} from '../../utils/Icons';
-
-import {MdExpandMore, MdExpandLess} from 'react-icons/lib/md';
-import {findById} from "../../utils/RamdaUtils";
-import {LoadingIndicator} from "../general";
+import {IconPencil} from '../../utils/Icons';
+import {LoadingIndicator} from '../general';
 
 class NewsDetails extends Component {
 
