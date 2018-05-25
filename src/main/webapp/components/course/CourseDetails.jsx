@@ -12,6 +12,12 @@ import {
   DialogActions,
 } from 'material-ui/Dialog';
 import {InputAdornment} from 'material-ui/Input';
+import Grid from 'material-ui/Grid';
+import {ValidationGroup} from './../general/validation';
+import {
+  GridInputControl
+} from './../general';
+import Typography from 'material-ui/Typography';
 import Collapse from 'material-ui/transitions/Collapse';
 import Avatar from 'material-ui/Avatar';
 import {TypeMapper} from '.';
@@ -47,14 +53,17 @@ import {
 
 const getAttendeeList = attendees =>
   attendees.map((user, idx) =>
-      <ListItem key={idx}>
-        <ListItemIcon>
-          <Avatar style={{backgroundColor: TITLE_BG}}>
-            <ProfilePicture userId={user.id} />
-          </Avatar>
-        </ListItemIcon>
-        <ListItemText inset primary={user.firstname + " " + user.lastname}/>
-      </ListItem>
+    <Grid item xs={3} key={idx}>
+      <Avatar style={{backgroundColor: TITLE_BG, margin: '0 auto'}}>
+        <ProfilePicture userId={user.id} />
+      </Avatar>
+      <Typography style={{width: '100%', textAlign: 'center', marginTop: '4px'}}>
+        {user.firstname}
+        </Typography>
+      <Typography style={{width: '100%', textAlign: 'center'}}>
+        {user.lastname}
+      </Typography>
+    </Grid>
   );
 
 class CourseDetails extends Component {
@@ -84,7 +93,7 @@ class CourseDetails extends Component {
     const {
       courseDetails = {},
       pending,
-      currentUser,
+      currentUser = {},
       courseTypes,
       actions} = this.props;
     const {
@@ -124,6 +133,26 @@ class CourseDetails extends Component {
         }
         open={show}>
         <DialogContent style={{padding: '0', paddingTop: '12px'}}>
+          <Grid container spacing={16} style={{width: '100%', margin: '0px'}}>
+            <ValidationGroup ref={this.setValidation}>
+              <GridInputControl
+                id='start_date'
+                label='Kursdatum'
+                type='date'
+                value={moment(start).format(Format.ISO_DATE_FORMAT)}
+                onChange={(id, value) => {
+                  const date = moment(value, Format.ISO_DATE_FORMAT);
+                  if (!date.isValid()) {
+                    return;
+                  }
+                  const newStart = moment(start).set({'year': date.year(), 'month': date.month(), 'date': date.date()});
+                  if (newStart.isValid()) {
+                    onCourseDetailsChange('start', newStart.format(Format.TIMESTAMP_FORMAT));
+                  }
+                }}/>
+            </ValidationGroup>
+          </Grid>
+
           <List>
             <ListItemSelect
               id="type"
@@ -185,15 +214,16 @@ class CourseDetails extends Component {
               </ListItem>)
               : undefined
             }
-            {mode !== MODE.CREATE
-              ? (<Collapse component="li" in={showAttendees} timeout='auto' unmountOnExit>
-                  <List component='div' disablePadding>
-                    {attendeesList}
-                  </List>
-                </Collapse>)
-              : undefined
-            }
           </List>
+          {mode !== MODE.CREATE
+            ? (<Collapse component="div" in={showAttendees} timeout='auto' unmountOnExit>
+              <Grid container spacing={16} justify="flex-start" style={{width: '100%'}}>
+                {attendeesList}
+                {/* Add user */}
+              </Grid>
+            </Collapse>)
+            : undefined
+          }
         </DialogContent>
 
         <DialogActions>

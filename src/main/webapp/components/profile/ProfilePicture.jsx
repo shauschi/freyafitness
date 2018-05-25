@@ -38,6 +38,7 @@ class ProfilePicture extends Component {
       return <LoadingIndicator noLabel style={{marginTop: '4px'}}/>;
     }
     if (!picture) {
+      // TODO alternative: e.g. user initials
       return <IconUser/>;
     }
     return (
