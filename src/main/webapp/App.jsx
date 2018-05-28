@@ -5,6 +5,8 @@ import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {MuiThemeProvider, withStyles} from '@material-ui/core/styles';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
@@ -61,58 +63,59 @@ class App extends Component {
 
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
-        <div className={classes.root}>
-          <div className={classes.appFrame} style={{backgroundImage: 'url(' + __API__ + '/background.jpg)', backgroundSize: 'cover'}}>
-            <MyAppBar
-              pending={profile.pending}
-              classes={classes}
-              toggleDrawer={actions.toggleDrawer}
-              createCourse={actions.createCourse}
-              scrollToLogin={actions.scrollToLogin}
-              currentUser={currentUser}
-              {...this.props}/>
-            <MyDrawer
-              classes={classes}
-              logout={actions.logout}
-              toggleDrawer={actions.toggleDrawer}
-              currentUser={currentUser}
-              {...drawer}/>
-            <div>
-              {/* All Dialogs */}
-              <CourseDetails/>
-
-            </div>
-            {
-              profile.pending
-                ? <LoadingIndicator/>
-                : <div className={currentUser ? classes.content : classes.contentScroll}>
-                <Switch>
-                  <Redirect from='/index' to='/'/>
-                  <Redirect from='/home' to='/'/>
-                  <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
-                  <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
-                  <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
-                  <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                  {
-                    currentUser
-                      ? SWIPEABLE_ROUTE
-                      : HOME_ROUTE
-                  }
-                </Switch>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <div className={classes.root}>
+            <div className={classes.appFrame} style={{backgroundImage: 'url(' + __API__ + '/background.jpg)', backgroundSize: 'cover'}}>
+              <MyAppBar
+                pending={profile.pending}
+                classes={classes}
+                toggleDrawer={actions.toggleDrawer}
+                createCourse={actions.createCourse}
+                scrollToLogin={actions.scrollToLogin}
+                currentUser={currentUser}
+                {...this.props}/>
+              <div style={{position: 'absolute'}}>
+                {/* All Dialogs */}
+                <CourseDetails/>
               </div>
-            }
-            {
-              currentUser
-                ? <Footer {...this.props}/>
-                : undefined
-            }
-            <Snackbar
-              open={notification.show}
-              onClose={this.props.actions.hideNotification}
-              message={notification.message}
-              autoHideDuration={notification.autoHideDuration}/>
+              <MyDrawer
+                classes={classes}
+                logout={actions.logout}
+                toggleDrawer={actions.toggleDrawer}
+                currentUser={currentUser}
+                {...drawer}/>
+              <div className={currentUser ? classes.content : classes.contentScroll}>
+                {
+                  profile.pending
+                    ? <LoadingIndicator/>
+                    : <Switch>
+                        <Redirect from='/index' to='/'/>
+                        <Redirect from='/home' to='/'/>
+                        <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
+                        <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
+                        <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
+                        <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
+                        {
+                          currentUser
+                            ? SWIPEABLE_ROUTE
+                            : HOME_ROUTE
+                        }
+                      </Switch>
+                }
+              </div>
+              {
+                currentUser
+                  ? <Footer {...this.props}/>
+                  : undefined
+              }
+              <Snackbar
+                open={notification.show}
+                onClose={this.props.actions.hideNotification}
+                message={notification.message}
+                autoHideDuration={notification.autoHideDuration}/>
+            </div>
           </div>
-        </div>
+        </MuiPickersUtilsProvider>
       </MuiThemeProvider>
     );
   };

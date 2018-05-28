@@ -25,6 +25,7 @@ class MyAppBar extends Component {
     const {scrollToLogin} = this.props;
     return (
       <Button
+        color='primary'
         onClick={scrollToLogin}
         style={{
           position: 'absolute',
@@ -113,7 +114,7 @@ class MyAppBar extends Component {
               fontWeight: 'bold',
               textShadow: '-2px -2px 0px #444'
             }}>fitness</span>
-            <Hidden xsDown>
+            <Hidden smDown>
               <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
             </Hidden>
           </Typography>

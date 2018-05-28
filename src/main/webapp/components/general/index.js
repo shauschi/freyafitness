@@ -14,5 +14,7 @@ export {
   GridInputControl,
   GridButtonControl,
   GridFormControl,
-  GridPasswordControl
+  GridPasswordControl,
+  GridDateTimeControl,
+  GridItemSelectControl
 } from './GridFormControl.jsx';

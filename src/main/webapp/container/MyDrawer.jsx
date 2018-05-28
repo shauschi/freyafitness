@@ -60,7 +60,7 @@ class MyDrawer extends Component {
       <div>
         <Hidden smUp>
           <Drawer
-            type="temporary"
+            variant="temporary"
             anchor="left"
             open={open}
             classes={{paper: classes.drawerPaper}}
@@ -73,7 +73,7 @@ class MyDrawer extends Component {
           </Drawer>
         </Hidden>
         <Hidden only='xs' implementation="js">
-          <Drawer type="permanent" open classes={{paper: classes.drawerPaper}}>
+          <Drawer variant="permanent" open classes={{paper: classes.drawerPaper}}>
             {drawer}
           </Drawer>
         </Hidden>

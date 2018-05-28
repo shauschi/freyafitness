@@ -55,10 +55,15 @@ const updateAccessToken = () => {
   if (updatingAccessToken) {
     return updatingAccessToken;
   }
-  updatingAccessToken = updateTokenData({
-    refresh_token: cookie.load('tokenData')['refresh_token'],
-    grant_type: 'refresh_token'
-  });
+  const tokenData = cookie.load('tokenData');
+  if (tokenData && tokenData['refresh_token']) {
+    updatingAccessToken = updateTokenData({
+      refresh_token: tokenData['refresh_token'],
+      grant_type: 'refresh_token'
+    });
+  } else {
+    updatingAccessToken = new Promise((resolve, reject) => reject("No refresh token available"));
+  }
   return updatingAccessToken.then(tokenData => {
     updatingAccessToken = undefined;
     return new Promise(resolve => resolve(tokenData))

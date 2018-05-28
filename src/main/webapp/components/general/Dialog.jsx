@@ -50,13 +50,12 @@ class Dialog extends Component {
       <MaterialDialog
         onClose={this.handleRequestClose}
         fullScreen={fullScreen}
-        transition={Transition}
+        TransitionComponent={Transition}
         open={open}>
         <DialogTitle>
         <AppBar style={{background: blueGrey[800], position: 'absolute'}}>
           <Toolbar>
             <IconButton
-              color='contrast'
               aria-label='Close'
               style={{
                 zIndex: 20

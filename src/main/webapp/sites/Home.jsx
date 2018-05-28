@@ -76,7 +76,7 @@ class Home extends Component {
       return undefined;
     }
     return (
-      <Grid item xs={12} sm={9}>
+      <Grid item xs={12} md={9}>
         <Card>
           <CardHeader title={'Willkommen'}/>
           <CardMedia
@@ -94,7 +94,7 @@ class Home extends Component {
 
   getNews = () => {
     const newsData = this.props.news.data || [];
-    return <Grid item xs={12} sm={9} style={{padding: '0px'}}>
+    return <Grid item xs={12} md={9} style={{padding: '0px'}}>
       <Slider loading={this.props.news.pending}>
         {newsData.map((newsItem, idx) => (
           <NewsItem
@@ -135,7 +135,7 @@ class Home extends Component {
     if (this.props.user) {
       return undefined;
     }
-    return <Grid item xs={12} sm={6}>
+    return <Grid item xs={12} md={6}>
       <LoginAndRegistrationCard/>
     </Grid>;
   };
@@ -144,7 +144,7 @@ class Home extends Component {
     if (!this.props.user) {
       return undefined;
     }
-    return <Grid item xs={12} sm={9} style={{padding: '0px'}}>
+    return <Grid item xs={12} md={9} style={{padding: '0px'}}>
       <List style={{padding: '0'}}>
         {/* TODO Das ganze mal als GridList ausprobieren */}
         {this.getMyCourses()}
