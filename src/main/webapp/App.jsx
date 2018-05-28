@@ -11,7 +11,7 @@ import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import Snackbar from '@material-ui/core/Snackbar';
-import {Home, Courses, ProfileSite, AboutFreya, AboutLocation, Agb, Impressum} from './sites';
+import {Home, Courses, ProfileSite, About, Agb, Impressum} from './sites';
 import {CourseDetails} from './components/course';
 import * as Style from './utils/Style';
 import {
@@ -91,8 +91,7 @@ class App extends Component {
                     : <Switch>
                         <Redirect from='/index' to='/'/>
                         <Redirect from='/home' to='/'/>
-                        <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
-                        <Route exact path='/about/stall' render={() => <AboutLocation {...this.props}/>}/>
+                        <Route exact path='/about' render={() => <About {...this.props}/>}/>
                         <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
                         <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
                         {

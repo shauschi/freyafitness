@@ -42,8 +42,7 @@ class MyDrawer extends Component {
           </List>
           <Divider/>
           <List>
-            <MenuLink to='/about/freya' label='Über Freya' icon={<IconInfo/>} onClick={toggleDrawer}/>
-            <MenuLink to='/about/stall' label='Der Stall' icon={<IconInfo/>} onClick={toggleDrawer}/>
+            <MenuLink to='/about' label='Informationen' icon={<IconInfo/>} onClick={toggleDrawer}/>
             <MenuLink to='/agb' label='AGB' icon={<IconDocument/>} onClick={toggleDrawer}/>
             <MenuLink to='/impressum' label='Impressum' icon={<IconInfo/>} onClick={toggleDrawer}/>
             {

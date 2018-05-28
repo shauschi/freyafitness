@@ -41,7 +41,7 @@ class SimpleDialog extends Component {
         <DialogTitle><IconBatteryLow color={red.A200} style={{marginRight: '12px'}}/>10er-Karte</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Achtung, Deine 10er-Karte ist bald voll. Denke daran, dir eine neue zu kaufen :-)
+            Achtung, Deine 10er-Karte ist bald voll. Denke daran, Dir eine neue zu kaufen :-)
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -78,14 +78,16 @@ class Home extends Component {
     return (
       <Grid item xs={12} md={9}>
         <Card>
-          <CardHeader title={'Willkommen'}/>
+          <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
             src={__API__ + '/test1.png'}
             style={{height: '250px', background: 'blue'}}
           />
           <CardContent>
-            <Typography>Lorem ipsum Beispueltext.</Typography>
-            <Typography>Noch mehr Text, der dann gerne noch mal ersetzt werden sollte. Hier könnte irgendwas kurzes stehen über "das bin ich und das biete ich an". Später kommen dann die Nachrichten, also XLETICS, neuer Raum, Yoga.</Typography>
+            <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
+            <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept. Ein Raum indem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches Trainingsprogramm wartet.
+              Jedes Mal anders, jedes Mal Neu!</Typography>
+            <Typography>Neben dem breiten Kursprogramm, können Mitglieder auch zum eigenständigen bzw. freien Training vorbei kommen.</Typography>
           </CardContent>
         </Card>
       </Grid>
