@@ -6,7 +6,9 @@ import {
   createNewCourse,
   saveNewCourse,
   signIn as signInApiCall,
-  signOut as signOutApiCall
+  signOut as signOutApiCall,
+  addUserToCourse as addUserToCourseApiCall,
+  removeUserFromCourse as removeUserFromCourseApiCall
 } from '../../service/courses';
 import {
   showNotification
@@ -38,7 +40,7 @@ export const NEW_COURSE = {
 const initialState = {
   pending: false,
   data: [],
-  courseDetails: {show: false, showAttendees: false, edit: false}
+  courseDetails: {show: false, edit: false}
 };
 
 export const actions = createActions({
@@ -74,6 +76,16 @@ export const actions = createActions({
       ERROR: error => error
     },
     SIGN_OUT: {
+      PENDING: undefined,
+      SUCCESS: course => course,
+      ERROR: error => error
+    },
+    ADD_USER: {
+      PENDING: undefined,
+      SUCCESS: course => course,
+      ERROR: error => error
+    },
+    REMOVE_USER: {
       PENDING: undefined,
       SUCCESS: course => course,
       ERROR: error => error
@@ -136,10 +148,6 @@ export const saveCourseDetails = course => {
   };
 };
 
-export const toggleAttendeeList = () => {
-  return dispatch => dispatch(actions.courses.courseDetails.toggleAttendeeList());
-};
-
 export const toggleEditCourse = () => {
   return dispatch => dispatch(actions.courses.courseDetails.toggleEditCourse());
 };
@@ -178,12 +186,42 @@ export const signOut = courseId => {
   }
 };
 
+export const addUserToCourse = (courseId, userId) => {
+  return dispatch => {
+    dispatch(actions.courses.addUser.pending());
+    return addUserToCourseApiCall(courseId, userId)
+      .then(course => {
+        dispatch(actions.courses.addUser.success(course));
+      })
+      .catch(error => {
+        dispatch(actions.course.addUser.error(error));
+        dispatch(showNotification('uppps, versuch es nochmal'));
+      });
+  }
+};
+
+export const removeUserFromCourse = (courseId, userId) => {
+  return dispatch => {
+    dispatch(actions.courses.removeUser.pending());
+    return removeUserFromCourseApiCall(courseId, userId)
+      .then(course => {
+        dispatch(actions.courses.removeUser.success(course));
+        dispatch(showNotification('Teilnehmer entfernt'));
+      })
+      .catch(error => {
+        dispatch(actions.course.removeUser.error(error));
+        dispatch(showNotification('uppps, versuch es nochmal'));
+      });
+  }
+};
+
 const updateCourse = (state, course) => {
   const courses = Object.assign([], state.data);
   for (const idx in courses) {
     if (courses[idx].id === course.id) {
       courses[idx] = course;
-      return setPath(['data'], courses, state);
+      const updatedState = setPath(['data'], courses, state);
+      return setPath(['courseDetails', 'course'], course, updatedState);
     }
   }
   return state;
@@ -213,8 +251,6 @@ export default handleActions({
     assignPath(['courseDetails'], {pending: false, course: payload}, state),
   [actions.courses.courseDetails.error]: (state, {payload}) =>
     assignPath(['courseDetails'], {pending: false, errorMessage: payload.message}, state),
-  [actions.courses.courseDetails.toggleAttendeeList]: state =>
-    togglePath(['courseDetails', 'showAttendees'], state),
   [actions.courses.courseDetails.toggleEditCourse]: state => {
     const nextMode = viewPath(['courseDetails', 'mode'], state) === MODE.VIEW
       ? MODE.MODIFY
@@ -225,5 +261,8 @@ export default handleActions({
     setPath(['courseDetails', 'course', payload.id], payload.value, state),
   [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload),
-  [actions.courses.save.success]: (state, {payload}) => updateCourse(state, payload)
+  [actions.courses.save.success]: (state, {payload}) => updateCourse(state, payload),
+
+  [actions.courses.addUser.success]: (state, {payload}) => updateCourse(state, payload),
+  [actions.courses.removeUser.success]: (state, {payload}) => updateCourse(state, payload),
 }, initialState);

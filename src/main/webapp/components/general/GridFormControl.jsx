@@ -16,11 +16,13 @@ import {setPath, togglePath} from './../../utils/RamdaUtils';
 import ValidationControl from './validation/ValidationControl';
 import {DateTimePicker} from 'material-ui-pickers';
 import * as Format from './../../utils/Format';
-import {view} from "../../utils/RamdaUtils";
+import {view} from '../../utils/RamdaUtils';
+import LoadingIndicator from '../general/LoadingIndicator';
 
+import red from '@material-ui/core/colors/red';
 
-const GridWrapper = ({children, xs = 12, md, style}) =>
-  <Grid item xs={xs} md={md}
+const GridWrapper = ({children, xs = 12, sm, md, style}) =>
+  <Grid item xs={xs} sm={sm} md={md}
         style={style}>
     {children}
   </Grid>;
@@ -28,18 +30,20 @@ const GridWrapper = ({children, xs = 12, md, style}) =>
 export class GridTextControl extends Component {
 
   render() {
-    const {text} = this.props;
+    const {text, error = false} = this.props;
     return <GridWrapper
       style={{paddingLeft: '0px', paddingRight: '0px', paddingTop: '16px', paddingBottom: '16px'}}>
-      <Typography>{text}</Typography>
+      <Typography style={{color: error ? red.A200 : undefined}}>
+        {text}
+        </Typography>
     </GridWrapper>;
   }
 }
 
 
-export const GridFormControl = ({error, children, xs, md}) =>
-  <GridWrapper xs={xs} md={md}>
-    <FormControl fullWidth error={error} margin='normal'>
+export const GridFormControl = ({error, children, xs, sm, md}) =>
+  <GridWrapper xs={xs} sm={sm} md={md}>
+    <FormControl fullWidth error={error} margin='dense'>
       {children}
     </FormControl>
   </GridWrapper>;
@@ -48,8 +52,8 @@ export class GridInputControl extends ValidationControl {
 
   render() {
     const {valid, errors} = this.state;
-    const {id, label, value, readonly, type, endAdornment, onChange, xs, md} = this.props;
-    return <GridFormControl error={!valid} xs={xs} md={md}>
+    const {id, label, value, readonly, type, endAdornment, onChange, xs, sm, md} = this.props;
+    return <GridFormControl error={!valid} xs={xs} sm={sm} md={md}>
       <InputLabel htmlFor={id} shrink>{label}</InputLabel>
       <Input
         id={id}
@@ -109,9 +113,10 @@ export class GridItemSelectControl extends Component {
       onChange,
       readonly,
       xs,
+      sm,
       md
     } = this.props;
-    return <GridFormControl xs={xs} md={md}>
+    return <GridFormControl xs={xs} sm={sm} md={md}>
       <InputLabel htmlFor={id} shrink>{label}</InputLabel>
       <Select
         value={value}
@@ -145,7 +150,7 @@ export class GridDateTimeControl extends ValidationControl {
         todayLabel={'HEUTE'}
         showTodayButton
         disableOpenOnEnter={readonly}
-        InputProps={{disabled: readonly}}
+        InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
       />
     </GridFormControl>;
   }
@@ -154,14 +159,22 @@ export class GridDateTimeControl extends ValidationControl {
 export class GridButtonControl extends Component {
 
   render() {
-    const {label, icon, onClick} = this.props;
+    const {label, icon, onClick, pending} = this.props;
     return <GridFormControl>
       <Button
         variant='raised'
         color='primary'
+        disabled={pending}
         onClick={onClick}>
         {label}
         {icon}
+        {
+          pending
+            ? <div style={{position: 'absolute'}}>
+              <LoadingIndicator noLabel small/>
+            </div>
+            : undefined
+        }
       </Button>
     </GridFormControl>;
   }

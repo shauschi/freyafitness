@@ -5,7 +5,8 @@ import {
   getOwnProfile,
   changeProfilePicture,
   login as loginApiCall,
-  createAccount as createAccountApiCall
+  createAccount as createAccountApiCall,
+  getAllUsers as getAllUsersApiCall
 } from '../../service/profile';
 import {
   actions as drawerActions
@@ -16,6 +17,11 @@ import init from './../init.js';
 const initialState = {
   pending: false,
   user: undefined,
+  users: {
+    lastUpdate: undefined,
+    pending: false,
+    data: []
+  },
   picture: {
     dialog: {
       open: false
@@ -29,6 +35,8 @@ const initialState = {
   },
   loginRef: undefined,
   login: {
+    pending: false,
+    error: undefined,
     data: {
       email: undefined,
       password: undefined
@@ -67,7 +75,14 @@ export const actions = createActions({
       }
     }
   },
+  USERS: {
+    PENDING: undefined,
+    UPDATED: timestamp => timestamp,
+    ERROR: error => error,
+    SUCCESS: users => users
+  },
   LOGIN: {
+    PENDING: undefined,
     ERROR: error => error,
     SUCCESS: undefined,
     DATA_CHANGED: (id, value) => ({id: id, value: value}),
@@ -97,9 +112,15 @@ export const scrollToLogin = () => {
 };
 
 export const login = loginData =>
-  dispatch => loginApiCall(loginData)
-      .then(() => init(dispatch))
-      .catch(error => dispatch(actions.login.error(error)));
+  dispatch => {
+    dispatch(actions.login.pending());
+    return loginApiCall(loginData)
+      .then(() => {
+        dispatch(actions.login.success());
+        init(dispatch);
+    })
+      .catch(() => dispatch(actions.login.error("Ungültige Kombination aus E-Mail und Passwort")));
+  };
 
 export const loginDataChanged = (id, value) =>
   dispatch => dispatch(actions.login.dataChanged(id, value));
@@ -124,6 +145,19 @@ export const logout = () => {
     dispatch(drawerActions.closeDrawer());
     dispatch(actions.logout.success());
   }
+};
+
+export const updateUsers = () => {
+  return (dispatch, getState) => {
+    if (getState().profile.users.lastUpdate) {
+      return; // TODO update every other call/day
+    }
+    dispatch(actions.users.updated('foo'));
+    dispatch(actions.users.pending());
+    getAllUsersApiCall()
+      .then(users => dispatch(actions.users.success(users)))
+      .catch(error => dispatch(actions.users.error(error)));
+  };
 };
 
 export const fetchOwnProfile = (filterOptions) =>
@@ -166,7 +200,9 @@ export const saveProfilePicture = file => {
 };
 
 export default handleActions({
-  [actions.login.error]: (state, {payload}) => setPath(['error'], payload, state),
+  [actions.login.pending]: state => assignPath(['login'], {pending: true, error: undefined}, state),
+  [actions.login.success]: state => assignPath(['login'], {pending: false, error: undefined}, state),
+  [actions.login.error]: (state, {payload}) => assignPath(['login'], {pending: false, error: payload}, state),
   [actions.logout.success]: state =>
     assignPath([], {user: undefined, error: undefined}, state),
   [actions.logout.error]: (state, {payload}) => setPath(['error'], payload, state),
@@ -201,9 +237,18 @@ export default handleActions({
   [actions.createAccount.dataChanged]: (state, {payload}) =>
     setPath(['createAccount', 'data', payload.id], payload.value, state),
   [actions.createAccount.pending]: state =>
-    setPath(['createAccount', 'pending'], true, state),
+    assignPath(['createAccount'], {pending: true, error: undefined}, state),
   [actions.createAccount.success]: state =>
-    setPath(['createAccount', 'pending'], false, state),
+    assignPath(['createAccount'], {pending: false, error: undefined}, state),
   [actions.createAccount.error]: (state, {payload}) =>
-    assignPath(['createAccount'], {pending: false, error: payload}, state)
+    assignPath(['createAccount'], {pending: false, error: payload}, state),
+
+  [actions.users.pending]: state =>
+    assignPath(['users'], {pending: true, error: undefined}, state),
+  [actions.users.updated]: (state, {payload}) =>
+    assignPath(['users'], {lastUpdate: payload}, state),
+  [actions.users.success]: (state, {payload}) =>
+    assignPath(['users'], {pending: false, data: payload, error: undefined}, state),
+  [actions.users.error]: state =>
+    assignPath(['users'], {pending: false, error: error}, state),
 }, initialState);

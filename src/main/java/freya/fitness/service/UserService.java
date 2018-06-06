@@ -65,6 +65,10 @@ public class UserService implements UserDetailsService {
         .orElseThrow(RuntimeException::new);
   }
 
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
+  }
+
   public User getUser(final UUID userId) throws UserNotFoundException {
     return userRepository.findById(userId)
         .orElseThrow(() -> UserNotFoundException.withId(userId));
@@ -100,4 +104,5 @@ public class UserService implements UserDetailsService {
 
     return userRepository.save(newUser);
   }
+
 }

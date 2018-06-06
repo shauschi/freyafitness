@@ -19,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/profile")
@@ -33,6 +35,14 @@ public class ProfileController {
   public ProfileController(final UserService userService, final ProfilePictureService profilePictureService) {
     this.userService = userService;
     this.profilePictureService = profilePictureService;
+  }
+
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
+  @GetMapping("/")
+  public List<ProfileDto> getAllUsers() {
+    return userService.getAllUsers().stream()
+        .map(ProfileDto::new)
+        .collect(Collectors.toList());
   }
 
   @PostMapping("/create")

@@ -14,3 +14,5 @@ export const changeProfilePicture = image =>
 export const login = LOGIN;
 
 export const createAccount = (createData) => POST(`${baseURL}/profile/create`, createData);
+
+export const getAllUsers = () => GET(`${baseURL}/profile/`);

@@ -27,8 +27,11 @@ class ValidationGroup extends Component {
 
   render() {
     return React.Children.map(this.props.children, child => {
-          return React.cloneElement(child, {ref: this.addChildRef});
-        })
+      if (child === null) {
+        return null;
+      }
+      return React.cloneElement(child, {ref: this.addChildRef});
+    });
   }
 
 }

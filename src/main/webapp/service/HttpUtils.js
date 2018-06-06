@@ -16,7 +16,7 @@ const securityHeaders = {
 
 const getAccessTokenHeader = () => {
   const tokenData = cookie.load('tokenData');
-  if (tokenData) {
+  if (tokenData && tokenData['access_token']) {
     return {'Authorization': 'Bearer   ' + tokenData['access_token']};
   }
 };
