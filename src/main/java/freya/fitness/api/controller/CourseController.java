@@ -70,7 +70,6 @@ public class CourseController {
     return new CourseDto(user, updatedCourse);
   }
 
-  @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/from/{from}")
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
     final User user = userService.getCurrentUser();

@@ -20,12 +20,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {Slider, Subheader} from './../components/general';
 import {NewsItem} from './../components/news';
-import Course from './../components/course';
+import Course, {CourseList} from './../components/course';
 import {showCourseDetails} from '../model/courses';
 import {IconBatteryLow, IconCalendar} from '../utils/Icons';
 import {red} from '@material-ui/core/colors';
 import {LoginAndRegistrationCard} from '../components/account';
 import {MenuLink} from '../components/general';
+import {showNotification} from "../model/notification";
 
 class SimpleDialog extends Component {
 
@@ -133,6 +134,21 @@ class Home extends Component {
     );
   };
 
+  getUpcomingCourses = () => {
+    const {data = {}} = this.props.courses;
+    const notifyUser = () => this.props.actions.showNotification('Bitte melde dich, um weitere Details zu sehen');
+    return (
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardHeader title={'Anstehende Kurse'}/>
+          <CardContent style={{maxHeight: '300px', overflow: 'auto', padding: '0px'}}>
+            <CourseList courses={data} showCourseDetails={notifyUser}/>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  };
+
   getLoginCard = () => {
     if (this.props.user) {
       return undefined;
@@ -143,7 +159,8 @@ class Home extends Component {
   };
 
   getUserDetails = () => {
-    if (!this.props.user) {
+    const signedIn = !!this.props.user;
+    if (!signedIn) {
       return undefined;
     }
     return <Grid item xs={12} md={9} style={{padding: '0px'}}>
@@ -151,7 +168,8 @@ class Home extends Component {
         {/* TODO Das ganze mal als GridList ausprobieren */}
         {this.getMyCourses()}
         <Subheader label={"Status"}/>
-        <ListItem button onClick={this.handleClickOpen}>
+        <ListItem button
+            onClick={this.handleClickOpen}>
           <ListItemIcon>
             <IconBatteryLow color={red.A200}/>
           </ListItemIcon>
@@ -174,10 +192,12 @@ class Home extends Component {
         {/* Nur bei nicht angemeldeten Benutzern*/}
         {this.getWelcomeGreetings()}
         {this.getNews()}
+        {/* weitere Informationen bei angemeldeten Benutzern */}
+        {this.getUserDetails()}
+        {/* Die nächsten Kurse */}
+        {this.getUpcomingCourses()}
         {/* Nur bei nicht angemeldeten Benutzern*/}
         {this.getLoginCard()}
-        {/* Nur bei angemeldeten Benutzern*/}
-        {this.getUserDetails()}
       </Grid>
     );
   }
@@ -192,7 +212,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     // courses
-    showCourseDetails: showCourseDetails
+    showCourseDetails: showCourseDetails,
+    // notification
+    showNotification: showNotification
   }, dispatch),
   dispatch
 });

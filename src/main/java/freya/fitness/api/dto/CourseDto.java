@@ -29,7 +29,16 @@ public class CourseDto {
   private List<ProfileDto> attendees;
 
   public CourseDto(final User user, final Course course) {
-    final UUID id = user.getId();
+    this(course);
+    if (user != null) {
+      final UUID userId = user.getId();
+      this.signedIn = course.getAttendees().stream()
+          .map(User::getId)
+          .anyMatch(Predicate.isEqual(userId));
+    }
+  }
+
+  public CourseDto(final Course course) {
     this.id = course.getId();
     final CourseType type = course.getType();
     this.courseTypeId = type != null ? type.getId() : null;
@@ -37,11 +46,10 @@ public class CourseDto {
     this.minutes = course.getMinutes();
     final User instructor = course.getInstructor();
     this.instructor = new ProfileDto(instructor);
-    this.signedIn = course.getAttendees().stream()
-        .map(User::getId)
-        .anyMatch(Predicate.isEqual(id));
     this.maxParticipants = course.getMaxParticipants();
     this.canceled = course.isCanceled();
+
+    // TODO die Information darf nicht raus, wenn man nicht angemeldet ist
     this.attendees = course.getAttendees().stream().map(ProfileDto::new).collect(Collectors.toList());
   }
 }
