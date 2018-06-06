@@ -19,12 +19,12 @@ describe('profile Service', () => {
     });
 
     it('should throw an error when fetching profile fails', async () => {
-      fetch.mockResponse('', {status: 404});
+      fetch.mockResponse(JSON.stringify({message: 'Some error'}), {status: 404});
 
       try {
         await getProfile();
       } catch (err) {
-        expect(err.message).toEqual('Response not ok');
+        expect(err.message).toEqual('Some error');
       }
     });
   })

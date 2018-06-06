@@ -3,7 +3,7 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.CourseDtoToCourseMapper;
 import freya.fitness.domain.jpa.User;
-import freya.fitness.dto.CourseDto;
+import freya.fitness.api.dto.CourseDto;
 import freya.fitness.repository.jpa.CourseRepository;
 import org.junit.Before;
 import org.junit.Test;

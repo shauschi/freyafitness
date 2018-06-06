@@ -1,11 +1,11 @@
 'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import withWidth from 'material-ui/utils/withWidth';
-import Drawer from 'material-ui/Drawer';
-import Hidden from 'material-ui/Hidden';
-import Divider from 'material-ui/Divider';
-import List from 'material-ui/List';
+import withWidth from '@material-ui/core/withWidth';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
 import {MenuLink} from '../components/general';
 
 import {
@@ -42,8 +42,7 @@ class MyDrawer extends Component {
           </List>
           <Divider/>
           <List>
-            <MenuLink to='/about/freya' label='Über Freya' icon={<IconInfo/>} onClick={toggleDrawer}/>
-            <MenuLink to='/about/stall' label='Der Stall' icon={<IconInfo/>} onClick={toggleDrawer}/>
+            <MenuLink to='/about' label='Informationen' icon={<IconInfo/>} onClick={toggleDrawer}/>
             <MenuLink to='/agb' label='AGB' icon={<IconDocument/>} onClick={toggleDrawer}/>
             <MenuLink to='/impressum' label='Impressum' icon={<IconInfo/>} onClick={toggleDrawer}/>
             {
@@ -60,7 +59,7 @@ class MyDrawer extends Component {
       <div>
         <Hidden smUp>
           <Drawer
-            type="temporary"
+            variant="temporary"
             anchor="left"
             open={open}
             classes={{paper: classes.drawerPaper}}
@@ -72,8 +71,8 @@ class MyDrawer extends Component {
             {drawer}
           </Drawer>
         </Hidden>
-        <Hidden only='xs' implementation="css">
-          <Drawer type="permanent" open classes={{paper: classes.drawerPaper}}>
+        <Hidden only='xs' implementation="js">
+          <Drawer variant="permanent" open classes={{paper: classes.drawerPaper}}>
             {drawer}
           </Drawer>
         </Hidden>

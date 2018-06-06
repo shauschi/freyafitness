@@ -2,7 +2,7 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
-import freya.fitness.dto.CreateAccountDto;
+import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.repository.jpa.RoleRepository;
 import freya.fitness.repository.jpa.UserRepository;
 import freya.fitness.utils.RoleNotFoundException;

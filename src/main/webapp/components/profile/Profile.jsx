@@ -1,12 +1,15 @@
 'use strict';
 import React, {Component} from 'react';
 import {ListItemInput, Subheader} from './../../components/general';
-import List, {ListItem, ListItemText, ListItemIcon} from 'material-ui/List';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import {IconBatteryLow, IconLockClosed, IconLineChart} from '../../utils/Icons';
-import {red} from 'material-ui/colors';
-import * as Format from "../../utils/Format";
-import moment from "moment/moment";
-import {ProfilePicture} from ".";
+import {red} from '@material-ui/core/colors';
+import * as Format from '../../utils/Format';
+import moment from 'moment/moment';
+import {ProfilePicture} from '.';
 
 const backgroundColor = 'rgba(255, 255, 255, 0.75)';
 
@@ -31,7 +34,7 @@ class Profile extends Component {
             style={{backgroundColor: backgroundColor}}
             onClick={onOpenProfilPictureChange}>
             <ListItemIcon>
-              <ProfilePicture userId={id} />
+              <ProfilePicture user={profile.user} />
             </ListItemIcon>
             <ListItemText primary={"Profilbild ändern"}/>
           </ListItem>

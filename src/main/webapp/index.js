@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {HashRouter} from 'react-router-dom';
@@ -7,7 +8,7 @@ import store from './model';
 import moment from 'moment';
 import deLocale from 'moment/locale/de';
 
-moment.locale("de", deLocale);
+moment.updateLocale("de", deLocale);
 
 ReactDOM.render(
   <Provider store={store}>

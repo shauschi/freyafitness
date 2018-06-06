@@ -1,4 +1,4 @@
-package freya.fitness.dto;
+package freya.fitness.api.dto;
 
 import freya.fitness.utils.validator.PasswordMatches;
 import freya.fitness.utils.validator.ValidEmail;

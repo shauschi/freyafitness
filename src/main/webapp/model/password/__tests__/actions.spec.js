@@ -1,13 +1,9 @@
 import {
   actions,
-  changePassword,
-  onOpenPasswordChange,
-  onCancelPasswordChange,
-  onPasswordChange
+  changePassword
 } from '../';
 
-// TODO
-// jest.mock('../../../service/password');
+jest.mock('../../../service/password');
 
 describe('profile actions', () => {
 
@@ -21,11 +17,12 @@ describe('profile actions', () => {
 
   describe('changePassword', () => {
 
-    it('should dispatch ERROR action when newPassword does not equal newPasswordConfirm', () => {
-      changePassword("old", "new", "other new")(dispatchMock, getMockState);
+    it('should dispatch ERROR action', async () => {
+      const error = new Error('Ops, something went wrong');
+      await changePassword(error)(dispatchMock, getMockState);
 
-      expect(dispatchMock.mock.calls[0][0]).toEqual(
-        actions.password.error({message: 'Die beiden neuen Passwörter stimmen nicht überein.'}));
+      expect(dispatchMock.mock.calls[0][0]).toEqual(actions.password.change.pending());
+      expect(dispatchMock.mock.calls[1][0]).toEqual(actions.password.error(error));
     });
   });
 });

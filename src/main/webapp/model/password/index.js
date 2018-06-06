@@ -1,9 +1,9 @@
 'use strict';
 import {createActions, handleActions} from 'redux-actions';
-import {setPath, assignPath} from "../../utils/RamdaUtils";
+import {setPath, assignPath} from '../../utils/RamdaUtils';
 import {
   changePassword as changePasswordApiCall
-} from "../../service/password";
+} from '../../service/password';
 import {
   showNotification
 } from './../notification';

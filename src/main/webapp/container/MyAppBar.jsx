@@ -1,66 +1,44 @@
+'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import withWidth from 'material-ui/utils/withWidth';
+import withWidth from '@material-ui/core/withWidth';
 import {withRouter} from 'react-router-dom';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import Hidden from 'material-ui/Hidden';
-import {FadeIconButton} from './../components/general';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Hidden from '@material-ui/core/Hidden';
 
-import {
-  IconMenu,
-  IconPlus
-} from '../utils/Icons';
-import {blueGrey} from 'material-ui/colors';
+import {IconMenu, IconPreferences} from '../utils/Icons';
+import {blueGrey} from '@material-ui/core/colors';
 
 class MyAppBar extends Component {
 
-  constructor(props) {
-    super(props);
-    this.getAddCourseButton = this.getAddCourseButton.bind(this);
-    this.getLoginButton = this.getLoginButton.bind(this);
-    this.getAdditionalAction = this.getAdditionalAction.bind(this);
-  }
+  state = {
+    anchor: null
+  };
 
-  getAddCourseButton() {
-    const {createCourse, location} = this.props;
-    const inProp = location.pathname === '/courses/all';
-
-    return (<FadeIconButton
-      inProp={inProp}
-      color='contrast'
-      ariaLabel='Neuen Kurs anlegen'
-      onClick={createCourse}
-      style={{
-        position: 'absolute',
-        right: '0px',
-        padding: '0 16px'
-      }}>
-      <IconPlus/>
-    </FadeIconButton>);
-  }
-
-  getLoginButton() {
+  getLoginButton = () => {
     const {scrollToLogin} = this.props;
     return (
       <Button
+        color='primary'
         onClick={scrollToLogin}
-        color={'primary'}
         style={{
           position: 'absolute',
-          right: '0px',
+          right: '8px',
           padding: '0 16px',
           zIndex: 20
         }}>
         Login
       </Button>
     );
-  }
+  };
 
-  getAdditionalAction() {
+  getAdditionalAction = () => {
     if (this.props.pending) {
       return undefined;
     }
@@ -70,34 +48,54 @@ class MyAppBar extends Component {
 
     const roles = this.props.currentUser.roles;
     if (roles.ADMIN || roles.TRAINER) {
-      return this.getAddCourseButton();
+      return <IconButton
+        aria-label='Einstellungen'
+        onClick={this.openMenu}
+        style={{position: 'absolute', right: '8px', zIndex: 20}}>
+        <IconPreferences size={28}/>
+      </IconButton>;
     }
-  }
+  };
+
+  openMenu = event => {
+    this.setState({anchor: event.currentTarget});
+  };
+
+  closeMenu = () => {
+    this.setState({anchor: null});
+  };
+
+  getMenu = () => {
+    const {anchor} = this.state;
+    const {createCourse} = this.props;
+    return <Menu
+      open={!!anchor}
+      anchorEl={anchor}
+      onClose={this.closeMenu}
+      >
+      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
+      <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
+      <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
+    </Menu>
+  };
 
   render() {
     const {classes, toggleDrawer} = this.props;
 
     return (
-      <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
-        <Toolbar>
+      <div style={{flexGrow: 1}}>
+        <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
+          <Toolbar>
           <Hidden smUp>
             <IconButton
-              color='contrast'
               aria-label='Navigation'
               onClick={toggleDrawer}
-              style={{zIndex: 20}}
+              style={{position: 'absolute', left: '8px', zIndex: 20}}
             >
-              <IconMenu/>
+              <IconMenu size={28}/>
             </IconButton>
           </Hidden>
-          <Typography
-            type='title'
-            style={{
-              zIndex: 10,
-              position: 'absolute',
-              left: 0,
-              width: '100%',
-              textAlign: 'center'}}>
+          <Typography type='title' style={{position: 'absolute', left: '0px', width: '100%', textAlign: 'center'}}>
             <span style={{
               color: 'white',
               fontSize: '31px',
@@ -116,13 +114,15 @@ class MyAppBar extends Component {
               fontWeight: 'bold',
               textShadow: '-2px -2px 0px #444'
             }}>fitness</span>
-            <Hidden xsDown>
+            <Hidden smDown>
               <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
             </Hidden>
           </Typography>
           {this.getAdditionalAction()}
         </Toolbar>
-      </AppBar>
+        </AppBar>
+        {this.getMenu()}
+      </div>
     );
   };
 }

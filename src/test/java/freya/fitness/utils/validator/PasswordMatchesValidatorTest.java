@@ -1,6 +1,6 @@
 package freya.fitness.utils.validator;
 
-import freya.fitness.dto.CreateAccountDto;
+import freya.fitness.api.dto.CreateAccountDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,6 @@
 'use strict';
-import {blueGrey, green, lightBlue, red} from "material-ui/colors/index";
-import {createMuiTheme} from "material-ui/styles/index";
+import {blueGrey, green, lightBlue, red} from '@material-ui/core/colors';
+import {createMuiTheme} from '@material-ui/core/styles';
 
 export const TITLE_BG = blueGrey[800];
 
@@ -29,7 +29,7 @@ export const APP_STYLES = theme => ({
     height: '100%',
   },
   appBar: {
-    position: 'absolute',
+    position: 'fixed',
     marginLeft: DRAWER_WIDTH,
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${DRAWER_WIDTH}px)`,

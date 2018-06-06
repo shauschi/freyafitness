@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component} from 'react';
 import {IconUser} from '../../utils/Icons';
-import {LoadingIndicator} from "../general";
+import {LoadingIndicator} from '../general';
 import {assignPath} from '../../utils/RamdaUtils';
 import {getProfilePicture} from '../../service/profile';
 
@@ -13,7 +13,8 @@ class ProfilePicture extends Component {
   }
 
   updatePicture() {
-    const {userId} = this.props;
+    const {user = {}} = this.props;
+    const {userId} = user;
     if (this.state.userId !== userId) {
       this.setState(assignPath([], {loading: true, userId: userId}, this.state));
       getProfilePicture(userId)
@@ -29,8 +30,8 @@ class ProfilePicture extends Component {
   }
 
   render() {
-    const {userId} = this.props;
-    if (userId) {
+    const {user} = this.props;
+    if (user) {
       this.updatePicture();
     }
     const {loading, picture} = this.state;
@@ -38,7 +39,11 @@ class ProfilePicture extends Component {
       return <LoadingIndicator noLabel style={{marginTop: '4px'}}/>;
     }
     if (!picture) {
-      return <IconUser/>;
+      if (user && user.firstname && user.lastname) {
+        return <span>{user.firstname.charAt(0) + user.lastname.charAt(0)}</span>;
+      } else {
+        return <IconUser/>;
+      }
     }
     return (
       <div style={{height: '100%'}}>

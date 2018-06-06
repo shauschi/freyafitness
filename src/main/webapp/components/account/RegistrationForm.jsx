@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-import Grid from 'material-ui/Grid';
+import Grid from '@material-ui/core/Grid';
 import {IconPaperPlane} from './../../utils/Icons';
 import {ValidationGroup, Validators} from './../general/validation';
 import {

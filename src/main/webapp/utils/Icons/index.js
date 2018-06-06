@@ -7,6 +7,7 @@ export {
   IconCalendar,
   IconClock,
   IconClose,
+  IconDelete,
   IconDocument,
   IconEye,
   IconEyeSlash,
@@ -19,8 +20,10 @@ export {
   IconPaperPlane,
   IconPencil,
   IconPlus,
+  IconPreferences,
   IconSignIn,
   IconSignOut,
   IconUser,
+  IconUserAdd,
   IconUserGroup
 } from './Icons.jsx';

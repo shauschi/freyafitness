@@ -1,17 +1,28 @@
 'use strict';
 import React, {Component} from 'react';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
-import {FormControl, FormHelperText} from 'material-ui/Form';
-import Input, {InputAdornment, InputLabel} from "material-ui/Input";
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import {IconEye, IconEyeSlash} from './../../utils/Icons';
 import {setPath, togglePath} from './../../utils/RamdaUtils';
-import ValidationControl from "./validation/ValidationControl";
+import ValidationControl from './validation/ValidationControl';
+import {DateTimePicker} from 'material-ui-pickers';
+import * as Format from './../../utils/Format';
+import {view} from '../../utils/RamdaUtils';
+import LoadingIndicator from '../general/LoadingIndicator';
 
-const GridWrapper = ({children, xs = 12, md, style={paddingLeft: '0px', paddingRight: '0px'}}) =>
-  <Grid item xs={xs} md={md}
+import red from '@material-ui/core/colors/red';
+
+const GridWrapper = ({children, xs = 12, sm, md, style}) =>
+  <Grid item xs={xs} sm={sm} md={md}
         style={style}>
     {children}
   </Grid>;
@@ -19,18 +30,20 @@ const GridWrapper = ({children, xs = 12, md, style={paddingLeft: '0px', paddingR
 export class GridTextControl extends Component {
 
   render() {
-    const {text} = this.props;
+    const {text, error = false} = this.props;
     return <GridWrapper
       style={{paddingLeft: '0px', paddingRight: '0px', paddingTop: '16px', paddingBottom: '16px'}}>
-      <Typography>{text}</Typography>
+      <Typography style={{color: error ? red.A200 : undefined}}>
+        {text}
+        </Typography>
     </GridWrapper>;
   }
 }
 
 
-export const GridFormControl = ({error, children}) =>
-  <GridWrapper>
-    <FormControl fullWidth error={error}>
+export const GridFormControl = ({error, children, xs, sm, md}) =>
+  <GridWrapper xs={xs} sm={sm} md={md}>
+    <FormControl fullWidth error={error} margin='dense'>
       {children}
     </FormControl>
   </GridWrapper>;
@@ -39,16 +52,17 @@ export class GridInputControl extends ValidationControl {
 
   render() {
     const {valid, errors} = this.state;
-    const {id, label, value, type, endAdornment, onChange} = this.props;
-    return <GridFormControl error={!valid}>
+    const {id, label, value, readonly, type, endAdornment, onChange, xs, sm, md} = this.props;
+    return <GridFormControl error={!valid} xs={xs} sm={sm} md={md}>
       <InputLabel htmlFor={id} shrink>{label}</InputLabel>
       <Input
         id={id}
         value={value}
         type={type}
+        disabled={readonly}
         onChange={event => onChange(id, event.target.value)}
         endAdornment={endAdornment}/>
-      <FormHelperText>{errors}</FormHelperText>
+      {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
     </GridFormControl>;
   }
 }
@@ -86,17 +100,81 @@ export class GridPasswordControl extends ValidationControl {
   }
 }
 
+export class GridItemSelectControl extends Component {
+
+  render() {
+    const {
+      id,
+      value = '',
+      values,
+      keyProp = 'key',
+      valueProp = 'value',
+      label,
+      onChange,
+      readonly,
+      xs,
+      sm,
+      md
+    } = this.props;
+    return <GridFormControl xs={xs} sm={sm} md={md}>
+      <InputLabel htmlFor={id} shrink>{label}</InputLabel>
+      <Select
+        value={value}
+        onChange={event => onChange(event.target.value)}
+        input={<Input id={id}/>}
+        disabled={readonly}>
+        {values.map((v, idx) =>
+          <MenuItem key={idx} value={view(keyProp, v)}>
+            {view(valueProp, v)}
+          </MenuItem>
+        )}
+      </Select>
+    </GridFormControl>
+  }
+
+}
+
+export class GridDateTimeControl extends ValidationControl {
+
+  render() {
+    const {value, label, readonly, onChange, xs, md} = this.props;
+    return <GridFormControl xs={xs} md={md}>
+      <DateTimePicker
+        value={value}
+        onChange={onChange}
+        label={label}
+        ampm={false}
+        format={Format.TIMESTAMP_FORMAT_DE}
+        okLabel={'OK'}
+        cancelLabel={'ABBRECHEN'}
+        todayLabel={'HEUTE'}
+        showTodayButton
+        disableOpenOnEnter={readonly}
+        InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
+      />
+    </GridFormControl>;
+  }
+}
+
 export class GridButtonControl extends Component {
 
   render() {
-    const {label, icon, onClick} = this.props;
+    const {label, icon, onClick, pending} = this.props;
     return <GridFormControl>
       <Button
-        raised
+        variant='raised'
         color='primary'
+        disabled={pending}
         onClick={onClick}>
         {label}
         {icon}
+        {
+          pending
+            ? <div style={{position: 'absolute'}}>
+              <LoadingIndicator noLabel small/>
+            </div>
+            : undefined
+        }
       </Button>
     </GridFormControl>;
   }

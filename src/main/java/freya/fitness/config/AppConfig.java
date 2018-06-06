@@ -49,6 +49,8 @@ public class AppConfig {
         .authorizeRequests()
         .antMatchers("/", "/profile/create",
             "/news/previews",
+            "/courses/from/**",
+            "/coursetypes/",
             "/*.jpg")
         .permitAll()
         .anyRequest()

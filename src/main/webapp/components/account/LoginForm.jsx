@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-import Grid from 'material-ui/Grid';
+import Grid from '@material-ui/core/Grid';
 import {IconSignIn} from './../../utils/Icons';
 import {ValidationGroup} from './../general/validation';
 import {
@@ -33,7 +33,7 @@ class LoginForm extends Component {
   };
 
   render() {
-    const {formData, formDataChanged} = this.props;
+    const {formData, formDataChanged, pending, error} = this.props;
 
     return (
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
@@ -50,7 +50,9 @@ class LoginForm extends Component {
             label='Password'
             value={formData.password}
             onChange={formDataChanged}/>
+          {error ? <GridTextControl text={error} error={true}/> : undefined}
           <GridButtonControl
+            pending={pending}
             label='login'
             icon={<IconSignIn style={{marginLeft: '8px'}} size={16}/>}
             onClick={this.doLogin}/>

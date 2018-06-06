@@ -20,12 +20,12 @@ describe('courses Service', () => {
     });
 
     it('should throw an error when fetching courses fails', async () => {
-      fetch.mockResponse('', {status: 404});
+      fetch.mockResponse(JSON.stringify({message: 'Some error'}), {status: 404});
 
       try {
         await getCourseTypes();
       } catch (err) {
-        expect(err.message).toEqual('Response not ok');
+        expect(err.message).toEqual('Some error');
       }
     });
   })

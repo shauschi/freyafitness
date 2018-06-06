@@ -1,6 +1,7 @@
 'use strict';
 
 export {
+  TiUserAdd as IconUserAdd,
   TiBatteryLow as IconBatteryLow,
   TiBatteryMid as IconBatteryMid,
   TiBatteryHigh as IconBatteryHigh,
@@ -9,6 +10,7 @@ export {
   TiTime as IconClock,
   TiTimes as IconClose,
   TiDocumentText as IconDocument,
+  TiCog as IconPreferences,
   TiHome as IconHome,
   TiInfoLarge as IconInfo,
   TiChartLine as IconLineChart,
@@ -18,7 +20,8 @@ export {
   TiPencil as IconPencil,
   TiPlus as IconPlus,
   TiGroup as IconUserGroup,
-  TiUser as IconUser
+  TiUser as IconUser,
+  TiDelete as IconDelete
 } from 'react-icons/lib/ti';
 
 export {

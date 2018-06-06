@@ -2,23 +2,31 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Card, {CardMedia, CardHeader, CardContent} from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
-import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from 'material-ui/Dialog';
-import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
-import {Subheader, Slider} from './../components/general';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import {Slider, Subheader} from './../components/general';
 import {NewsItem} from './../components/news';
-import Course from './../components/course';
-import {
-  showCourseDetails
-} from '../model/courses';
-
+import Course, {CourseList} from './../components/course';
+import {showCourseDetails} from '../model/courses';
 import {IconBatteryLow, IconCalendar} from '../utils/Icons';
-import {red} from 'material-ui/colors';
-import {LoginAndRegistrationCard} from "../components/account";
-import {MenuLink} from "../components/general";
+import {red} from '@material-ui/core/colors';
+import {LoginAndRegistrationCard} from '../components/account';
+import {MenuLink} from '../components/general';
+import {showNotification} from "../model/notification";
 
 class SimpleDialog extends Component {
 
@@ -34,7 +42,7 @@ class SimpleDialog extends Component {
         <DialogTitle><IconBatteryLow color={red.A200} style={{marginRight: '12px'}}/>10er-Karte</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Achtung, Deine 10er-Karte ist bald voll. Denke daran, dir eine neue zu kaufen :-)
+            Achtung, Deine 10er-Karte ist bald voll. Denke daran, Dir eine neue zu kaufen :-)
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -69,16 +77,18 @@ class Home extends Component {
       return undefined;
     }
     return (
-      <Grid item xs={12} sm={9}>
+      <Grid item xs={12} md={9}>
         <Card>
-          <CardHeader title={'Willkommen'}/>
+          <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
             src={__API__ + '/test1.png'}
             style={{height: '250px', background: 'blue'}}
           />
           <CardContent>
-            <Typography>Lorem ipsum Beispueltext.</Typography>
-            <Typography>Noch mehr Text, der dann gerne noch mal ersetzt werden sollte. Hier könnte irgendwas kurzes stehen über "das bin ich und das biete ich an". Später kommen dann die Nachrichten, also XLETICS, neuer Raum, Yoga.</Typography>
+            <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
+            <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept. Ein Raum indem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches Trainingsprogramm wartet.
+              Jedes Mal anders, jedes Mal Neu!</Typography>
+            <Typography>Neben dem breiten Kursprogramm, können Mitglieder auch zum eigenständigen bzw. freien Training vorbei kommen.</Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -87,7 +97,7 @@ class Home extends Component {
 
   getNews = () => {
     const newsData = this.props.news.data || [];
-    return <Grid item xs={12} sm={9} style={{padding: '0px'}}>
+    return <Grid item xs={12} md={9} style={{padding: '0px'}}>
       <Slider loading={this.props.news.pending}>
         {newsData.map((newsItem, idx) => (
           <NewsItem
@@ -124,25 +134,42 @@ class Home extends Component {
     );
   };
 
+  getUpcomingCourses = () => {
+    const {data = {}} = this.props.courses;
+    const notifyUser = () => this.props.actions.showNotification('Bitte melde dich, um weitere Details zu sehen');
+    return (
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardHeader title={'Anstehende Kurse'}/>
+          <CardContent style={{maxHeight: '300px', overflow: 'auto', padding: '0px'}}>
+            <CourseList courses={data} showCourseDetails={notifyUser}/>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  };
+
   getLoginCard = () => {
     if (this.props.user) {
       return undefined;
     }
-    return <Grid item xs={12} sm={6}>
+    return <Grid item xs={12} md={6}>
       <LoginAndRegistrationCard/>
     </Grid>;
   };
 
   getUserDetails = () => {
-    if (!this.props.user) {
+    const signedIn = !!this.props.user;
+    if (!signedIn) {
       return undefined;
     }
-    return <Grid item xs={12} sm={9} style={{padding: '0px'}}>
+    return <Grid item xs={12} md={9} style={{padding: '0px'}}>
       <List style={{padding: '0'}}>
         {/* TODO Das ganze mal als GridList ausprobieren */}
         {this.getMyCourses()}
         <Subheader label={"Status"}/>
-        <ListItem button onClick={this.handleClickOpen}>
+        <ListItem button
+            onClick={this.handleClickOpen}>
           <ListItemIcon>
             <IconBatteryLow color={red.A200}/>
           </ListItemIcon>
@@ -165,10 +192,12 @@ class Home extends Component {
         {/* Nur bei nicht angemeldeten Benutzern*/}
         {this.getWelcomeGreetings()}
         {this.getNews()}
+        {/* weitere Informationen bei angemeldeten Benutzern */}
+        {this.getUserDetails()}
+        {/* Die nächsten Kurse */}
+        {this.getUpcomingCourses()}
         {/* Nur bei nicht angemeldeten Benutzern*/}
         {this.getLoginCard()}
-        {/* Nur bei angemeldeten Benutzern*/}
-        {this.getUserDetails()}
       </Grid>
     );
   }
@@ -183,7 +212,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     // courses
-    showCourseDetails: showCourseDetails
+    showCourseDetails: showCourseDetails,
+    // notification
+    showNotification: showNotification
   }, dispatch),
   dispatch
 });

@@ -1,15 +1,21 @@
-package freya.fitness.controller;
+package freya.fitness.api.controller;
 
+import freya.fitness.api.dto.CourseDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
-import freya.fitness.dto.CourseDto;
 import freya.fitness.service.CourseService;
 import freya.fitness.service.UserService;
+import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,7 +49,6 @@ public class CourseController {
   @PostMapping("/{id}")
   public CourseDto saveCourse(@PathVariable("id") final UUID id,
                               @RequestBody final CourseDto courseDto) {
-    // TODO user rights?
     final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.update(id, courseDto);
     return new CourseDto(user, updatedCourse);
@@ -60,13 +65,11 @@ public class CourseController {
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @PostMapping("/create")
   public CourseDto saveNewCourse(@RequestBody final CourseDto courseDto) {
-    // TODO user rights?
     final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.create(courseDto);
     return new CourseDto(user, updatedCourse);
   }
 
-  @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/from/{from}")
   public List<CourseDto> getCourses(@PathVariable("from") final String from) {
     final User user = userService.getCurrentUser();
@@ -87,10 +90,7 @@ public class CourseController {
   public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final UUID courseId) {
     final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.addUserToCourse(user, courseId);
-    if (changedCourse != null) {
-      return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
-    }
-    return ResponseEntity.badRequest().build();
+    return createResponseWithCourseAndUser(changedCourse, user);
   }
 
   @PreAuthorize("hasAuthority('USER')")
@@ -98,8 +98,33 @@ public class CourseController {
   public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final UUID courseId) {
     final User user = userService.getCurrentUser();
     final Course changedCourse = courseService.removeUserFromCourse(user, courseId);
-    if (changedCourse != null) {
-      return ResponseEntity.accepted().body(new CourseDto(user, changedCourse));
+    return createResponseWithCourseAndUser(changedCourse, user);
+  }
+
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
+  @PutMapping("{courseId}/adduser/{userId}")
+  public ResponseEntity<CourseDto> addUserToCourse(
+      @PathVariable("courseId") final UUID courseId,
+      @PathVariable("userId") final UUID userId) throws UserNotFoundException {
+    final User userToAdd = userService.getUser(userId);
+    final Course changedCourse = courseService.addUserToCourse(userToAdd, courseId);
+    return createResponseWithCourseAndUser(changedCourse, userService.getCurrentUser());
+  }
+
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
+  @PutMapping("{courseId}/removeuser/{userId}")
+  public ResponseEntity<CourseDto> removeUserFromCourse(
+      @PathVariable("courseId") final UUID courseId,
+      @PathVariable("userId") final UUID userId) throws UserNotFoundException {
+    final User userToAdd = userService.getUser(userId);
+    final Course changedCourse = courseService.removeUserFromCourse(userToAdd, courseId);
+    return createResponseWithCourseAndUser(changedCourse, userService.getCurrentUser());
+  }
+
+  private ResponseEntity<CourseDto> createResponseWithCourseAndUser(
+      final Course course, final User user) {
+    if (course != null) {
+      return ResponseEntity.accepted().body(new CourseDto(user, course));
     }
     return ResponseEntity.badRequest().build();
   }
@@ -109,4 +134,5 @@ public class CourseController {
         .map(course -> new CourseDto(user, course))
         .collect(Collectors.toList());
   }
+
 }

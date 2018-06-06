@@ -1,6 +1,6 @@
-package freya.fitness.controller;
+package freya.fitness.api.controller;
 
-import freya.fitness.dto.MessageDto;
+import freya.fitness.api.dto.MessageDto;
 import freya.fitness.utils.InvalidResetTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

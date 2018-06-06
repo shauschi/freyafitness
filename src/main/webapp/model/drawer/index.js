@@ -1,5 +1,5 @@
 import {createActions, handleActions} from 'redux-actions';
-import {setPath, togglePath} from "../../utils/RamdaUtils";
+import {setPath, togglePath} from '../../utils/RamdaUtils';
 
 const initialState = {
   open: false

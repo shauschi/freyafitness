@@ -26,13 +26,12 @@ class ValidationGroup extends Component {
   };
 
   render() {
-    return <div>
-      {
-        React.Children.map(this.props.children, child => {
-          return React.cloneElement(child, {ref: this.addChildRef});
-        })
+    return React.Children.map(this.props.children, child => {
+      if (child === null) {
+        return null;
       }
-    </div>
+      return React.cloneElement(child, {ref: this.addChildRef});
+    });
   }
 
 }

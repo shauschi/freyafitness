@@ -2,15 +2,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
-import {withStyles} from 'material-ui/styles';
-import withWidth from 'material-ui/utils/withWidth';
-import Paper from 'material-ui/Paper';
-import Tabs, { Tab } from 'material-ui/Tabs';
-import {withRouter} from 'react-router-dom'
+import {withStyles} from '@material-ui/core/styles';
+import withWidth from '@material-ui/core/withWidth';
+import Paper from '@material-ui/core/Paper';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import {withRouter} from 'react-router-dom';
 import * as Style from '../utils/Style';
 import {IconHome, IconCalendar, IconUser} from '../utils/Icons';
 
-import {blueGrey} from 'material-ui/colors';
+import {blueGrey} from '@material-ui/core/colors';
 
 class Footer extends Component {
 

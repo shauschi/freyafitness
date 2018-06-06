@@ -2,8 +2,10 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Card, {CardContent} from 'material-ui/Card';
-import Tabs, {Tab} from 'material-ui/Tabs';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
 import {togglePath, viewPath} from '../../utils/RamdaUtils';
@@ -29,7 +31,11 @@ class LoginAndRegistrationCard extends Component {
   render() {
     const {showLogin} = this.state;
     const loginData = viewPath(['profile', 'login', 'data'], this.props);
+    const loginPending = viewPath(['profile', 'login', 'pending'], this.props);
+    const loginError = viewPath(['profile', 'login', 'error'], this.props);
     const createAccountData = viewPath(['profile', 'createAccount', 'data'], this.props);
+    const createAccountPending = viewPath(['profile', 'createAccount', 'pending'], this.props);
+    const createAccountError = viewPath(['profile', 'createAccount', 'error'], this.props);
     const {
       setLoginRef,
       login,
@@ -53,10 +59,14 @@ class LoginAndRegistrationCard extends Component {
               showLogin
                 ? <LoginForm
                   login={login}
+                  pending={loginPending}
+                  error={loginError}
                   formData={loginData}
                   formDataChanged={loginDataChanged}/>
                 : <RegistrationForm
                   createAccount={createAccount}
+                  pending={createAccountPending}
+                  error={createAccountError}
                   formData={createAccountData}
                   formDataChanged={createAccountDataChanged}/>
             }

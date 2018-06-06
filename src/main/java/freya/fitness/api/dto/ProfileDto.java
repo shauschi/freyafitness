@@ -1,4 +1,4 @@
-package freya.fitness.dto;
+package freya.fitness.api.dto;
 
 import freya.fitness.domain.jpa.User;
 import lombok.Data;

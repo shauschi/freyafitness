@@ -1,22 +1,23 @@
 'use strict';
 import React, {Component} from 'react';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import Checkbox from 'material-ui/Checkbox';
-import {FormControl, FormControlLabel, FormHelperText} from "material-ui/Form";
-import Dialog, {
-  DialogContent,
-  DialogActions,
-  DialogTitle,
-  withMobileDialog
-} from 'material-ui/Dialog';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import AvatarEditor from 'react-avatar-editor';
-import Slide from 'material-ui/transitions/Slide';
+import Slide from '@material-ui/core/Slide';
 import {setPath} from '../../utils/RamdaUtils';
 
 import {IconClose} from '../../utils/Icons';
-import {blueGrey} from 'material-ui/colors';
+import {blueGrey} from '@material-ui/core/colors';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -121,7 +122,7 @@ class ProfilePictureDialog extends Component {
               />
             </div>
             <div style={{margin: '16px auto', textAlign: 'center'}}>
-              <Button raised color="primary">
+              <Button variant='raised' color='primary'>
                 <input
                   type={'file'}
                   accept={'image/*'}

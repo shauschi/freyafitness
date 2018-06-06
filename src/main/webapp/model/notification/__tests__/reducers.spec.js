@@ -15,13 +15,13 @@ describe('notifications reducer', () => {
   describe('with SHOW action', () => {
 
     it('should change the state', () => {
-      const nextState = reducer(state, actions.notification.show('Test message'));
+      const nextState = reducer(state, actions.notification.show({message: 'Test message'}));
 
       expect(nextState).toEqual({show: true, message: 'Test message', type: undefined});
     });
 
     it('should change the state', () => {
-      const nextState = reducer(state, actions.notification.show('Test message', 'error'));
+      const nextState = reducer(state, actions.notification.show({message: 'Test message', type: 'error'}));
 
       expect(nextState).toEqual({show: true, message: 'Test message', type: 'error'});
     });

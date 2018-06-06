@@ -1,6 +1,6 @@
 package freya.fitness.utils.validator;
 
-import freya.fitness.dto.WithPassword;
+import freya.fitness.api.dto.WithPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
