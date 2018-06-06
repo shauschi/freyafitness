@@ -15,7 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import {ValidationGroup} from './../general/validation';
 import {GridPasswordControl, GridTextControl} from './../general';
 import {Validators} from '../general/validation';
-import LoadingIndicator from '../general/LoadingIndicator';
+import {LoadingIndicator} from '../general';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;

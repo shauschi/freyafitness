@@ -6,8 +6,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import LoginForm from './LoginForm';
-import RegistrationForm from './RegistrationForm';
+import {LoginForm} from '.';
+import {RegistrationForm} from '.';
 import {togglePath, viewPath} from '../../utils/RamdaUtils';
 import {
   setLoginRef,

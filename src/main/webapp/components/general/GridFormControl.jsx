@@ -13,11 +13,11 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {IconEye, IconEyeSlash} from './../../utils/Icons';
 import {setPath, togglePath} from './../../utils/RamdaUtils';
-import ValidationControl from './validation/ValidationControl';
+import {ValidationControl} from './validation';
 import {DateTimePicker} from 'material-ui-pickers';
 import * as Format from './../../utils/Format';
 import {view} from '../../utils/RamdaUtils';
-import LoadingIndicator from '../general/LoadingIndicator';
+import {LoadingIndicator} from '../general';
 
 import red from '@material-ui/core/colors/red';
 
