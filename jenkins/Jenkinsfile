@@ -8,7 +8,9 @@ pipeline {
 
   stages {
     stage('example') {
-      echo "using postgres user ${env.POSTGRES_USER}"
+      steps {
+        echo "using postgres user ${env.POSTGRES_USER}"
+      }
     }
     stage('npm install') {
       steps {
