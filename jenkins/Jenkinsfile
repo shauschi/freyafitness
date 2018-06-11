@@ -1,11 +1,9 @@
 pipeline {
   agent any
-
-  environment {
-    POSTGRES_USER     = credentials('postgres-user')
-    POSTGRES_PASSWORD = credentials('postgres-password')
-  }
-
+  #environment {
+  #  POSTGRES_USER     = credentials('postgres-user')
+  #  POSTGRES_PASSWORD = credentials('postgres-password')
+  #}
   stages {
     stage('example') {
       steps {
