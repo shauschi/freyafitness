@@ -4,6 +4,7 @@ process.env.NODE_ENV = 'production';
 const webpack = require('webpack');
 const path = require('path');
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -19,10 +20,16 @@ module.exports = {
   entry: './src/main/webapp/index.js',
   plugins: [
     new CleanWebpackPlugin([__dirname + '/src/main/resources/static/']),
+    new CopyWebpackPlugin([
+      {from: './src/main/webapp/background.jpg', to: __dirname + '/src/main/resources/static/'},
+      {from: './src/main/webapp/test1000.jpg', to: __dirname + '/src/main/resources/static/'},
+      {from: './src/main/webapp/test1001.jpg', to: __dirname + '/src/main/resources/static/'},
+      {from: './src/main/webapp/test1002.jpg', to: __dirname + '/src/main/resources/static/'}
+    ]),
     new UglifyJSPlugin(),
     HtmlWebpackPluginConfig,
     new webpack.DefinePlugin({
-      __API__: "'http://127.0.0.1:9000'"
+      __API__: "'http://93.90.205.170'"
     })
   ],
   module: {

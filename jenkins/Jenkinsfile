@@ -1,34 +1,38 @@
 pipeline {
-  agent none
+  agent any
+
+  environment {
+    POSTGRES_USER     = credentials('postgres-user')
+    POSTGRES_PASSWORD = credentials('postgres-password')
+  }
+
   stages {
+    stage('example') {
+      echo "using postgres user ${env.POSTGRES_USER}"
+    }
     stage('npm install') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
       steps {
         sh 'npm install'
       }
     }
     stage('npm test') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
       steps {
         sh 'npm test'
       }
     }
     stage('build production') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
       steps {
-        sh 'npm run build:production'
+        sh 'npm run build_production'
+      }
+    }
+    stage('run tests') {
+      steps {
+        sh './gradlew clean test'
       }
     }
     stage('build docker') {
-      agent { dockerfile { dir 'docker' } }
       steps {
-        sh 'echo "use dockerfile"'
+        sh 'docker build -t freyafitness-container'
       }
     }
   }
