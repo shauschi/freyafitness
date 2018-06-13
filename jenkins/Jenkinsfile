@@ -1,35 +1,12 @@
-pipeline {
-  agent any
-  stages {
-    stage('example') {
-      steps {
-        echo "using postgres user ${env.POSTGRES_USER}"
-      }
+node {
+    stage("Compile") {
+       steps {
+            sh "./gradlew compileJava"
+       }
     }
-    stage('npm install') {
-      steps {
-        sh 'npm install'
-      }
+    stage("Unit test") {
+        steps {
+            sh "./gradlew test"
+        }
     }
-    stage('npm test') {
-      steps {
-        sh 'npm test'
-      }
-    }
-    stage('build production') {
-      steps {
-        sh 'npm run build_production'
-      }
-    }
-    stage('run tests') {
-      steps {
-        sh './gradlew clean test'
-      }
-    }
-    stage('build docker') {
-      steps {
-        sh 'docker build -t freyafitness-container'
-      }
-    }
-  }
 }
