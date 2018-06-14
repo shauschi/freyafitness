@@ -4,17 +4,27 @@ node {
         sh 'ls'
     }
     stage('compile') {
-        sh './gradlew clean build'
+        parallel(
+            java: {
+                sh './gradlew clean build'
+            },
+            npm: {
+                sh './gradlew nodeSetup'
+                sh './gradlew npmInstall'
+            }
     }
     stage('test') {
         parallel(
-            jest: {
-                sh './gradlew npmTest'
-            },
             jUnit: {
                 sh './gradlew test'
+            },
+            jest: {
+                sh './gradlew npmTest'
             }
         )
+    }
+    stage('build webapp') {
+        sh './gradlew npmProd'
     }
     stage('deployment') {
         echo 'deployment'
