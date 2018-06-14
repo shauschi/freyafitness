@@ -1,6 +1,6 @@
 node {
     stage('checkout') {
-        echo 'checkout'
+        scm checkout
     }
     stage('ls'){
         sh 'ls'
