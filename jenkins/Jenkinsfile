@@ -1,7 +1,7 @@
 node {
     checkout scm
-    stage('ls'){
-        sh 'ls'
+    stage('lnode setup'){
+        sh './gradlew nodeSetup'
     }
     stage('compile') {
         parallel(
@@ -9,7 +9,6 @@ node {
                 sh './gradlew clean build'
             },
             npm: {
-                sh './gradlew nodeSetup'
                 sh './gradlew npmInstall'
             }
         )
