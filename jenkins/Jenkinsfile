@@ -1,12 +1,21 @@
 node {
-    stage("Compile") {
-       steps {
-            sh "./gradlew compileJava"
-       }
+    stage('checkout') {
+        echo 'checkout'
     }
-    stage("Unit test") {
-        steps {
-            sh "./gradlew test"
+    stage('compile') {
+        sh './gradlew clean build'
+    }
+    stage('test') {
+        parallel {
+            jest: {
+                sh './gradlew npmTest'
+            },
+            jUnit: {
+                sh './gradlew test'
+            }
         }
+    }
+    stage('deployment') {
+        echo 'deployment'
     }
 }

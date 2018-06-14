@@ -63,6 +63,12 @@ task npmProd(type: NpmTask) {
   args = ['run', 'build_production']
 }
 
+
+task npmTest(type: NpmTask) {
+  args = ['run', 'test']
+}
+
+
 docker {
   name '${project.group}/${jar.baseName}'
   files jar.archivePath
