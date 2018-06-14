@@ -1,6 +1,6 @@
 node {
     stage('checkout') {
-        scm checkout
+        checkout scm
     }
     stage('ls'){
         sh 'ls'
