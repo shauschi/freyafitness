@@ -2,6 +2,9 @@ node {
     stage('checkout') {
         echo 'checkout'
     }
+    stage('ls'){
+        sh 'ls'
+    }
     stage('compile') {
         sh './gradlew clean build'
     }
