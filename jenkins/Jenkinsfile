@@ -12,6 +12,7 @@ node {
                 sh './gradlew nodeSetup'
                 sh './gradlew npmInstall'
             }
+        )
     }
     stage('test') {
         parallel(
