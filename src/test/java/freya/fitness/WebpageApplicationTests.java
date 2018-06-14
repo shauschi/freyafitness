@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@Ignore // Es wird eine application.yml für test benötigt
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 		"mail.password=pw"})
 public class WebpageApplicationTests {
 
-	@Ignore // Es wird eine application.yml für test benötigt
 	@Test
 	public void contextLoads() {
 	}
