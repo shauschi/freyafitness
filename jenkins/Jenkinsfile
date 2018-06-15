@@ -50,18 +50,14 @@ pipeline {
         sh './gradlew test'
       }
     }
-    stage('build jar') {
+    stage('containerize') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
         sh './gradlew bootJar'
-      }
-    }
-    stage('build docker') {
-      agent { dockerfile { dir 'docker' } }
-      steps {
-        sh 'echo "use dockerfile"'
+        sh './gradlew docker'
+        sh './gradlew dockerRun'
       }
     }
   }

@@ -70,6 +70,7 @@ task npmTest(type: NpmTask) {
 
 
 docker {
+  dependsOn build
   name '${project.group}/${jar.baseName}'
   files jar.archivePath
   buildArgs(['JAR_FILE': '${jar.archiveName}', '/var/run/docker.sock': '/var/run/docker.sock'])
