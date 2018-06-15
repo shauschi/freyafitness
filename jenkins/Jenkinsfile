@@ -1,39 +1,51 @@
-node {
-    checkout scm
-    stage('node setup'){
-        env.NODEJS_HOME = tool name: 'Node 10.4.1', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        // on linux / mac
-        env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
-        // on windows
-        env.PATH="${env.NODEJS_HOME};${env.PATH}"
-        sh 'echo $PATH'
-        sh 'npm --version'
-        sh 'node --version'
+pipeline {
+  agent none
+  stages {
+    stage('npm install') {
+      agent {
+        docker { image 'node:9-alpine' }
+      }
+      steps {
+        sh 'npm install'
+      }
     }
-    stage('compile') {
-        parallel(
-            java: {
-                sh './gradlew clean build'
-            },
-            npm: {
-                sh './gradlew npmInstall'
-            }
-        )
+    stage('npm test') {
+      agent {
+        docker { image 'node:9-alpine' }
+      }
+      steps {
+        sh 'npm test'
+      }
     }
-    stage('test') {
-        parallel(
-            jUnit: {
-                sh './gradlew test'
-            },
-            jest: {
-                sh './gradlew npmTest'
-            }
-        )
+    stage('npm build production') {
+      agent {
+        docker { image 'node:9-alpine' }
+      }
+      steps {
+        sh 'npm run build_production'
+      }
     }
-    stage('build webapp') {
-        sh './gradlew npmProd'
+    stage('build application') {
+      agent {
+        docker { image 'openjdk:8-jre' }
+      }
+      steps {
+        sh './gradlew clean build'
+      }
     }
-    stage('deployment') {
-        echo 'deployment'
+    stage('test application') {
+      agent {
+        docker { image 'openjdk:8-jre' }
+      }
+      steps {
+        sh './gradlew test'
+      }
     }
+    stage('build docker') {
+      agent { dockerfile { dir 'docker' } }
+      steps {
+        sh 'echo "use dockerfile"'
+      }
+    }
+  }
 }
