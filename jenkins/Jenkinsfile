@@ -1,7 +1,7 @@
 node {
     checkout scm
     stage('node setup'){
-        env.NODEJS_HOME = tool 'Node 10.4.1'}
+        env.NODEJS_HOME = tool 'Node 10.4.1'
         env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
         sh 'echo $PATH'
         sh 'node --version'
