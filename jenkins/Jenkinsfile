@@ -5,11 +5,11 @@ pipeline {
   }
   stages {
     stage('checkout') {
-        agent any
-        steps {
-          checkout scm
-        }
+      agent any
+      steps {
+        checkout scm
       }
+    }
     stage('npm install') {
       agent {
         docker { image 'node:9-alpine' }
@@ -50,7 +50,7 @@ pipeline {
         sh './gradlew test'
       }
     }
-    stage('test application') {
+    stage('build jar') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
       }
