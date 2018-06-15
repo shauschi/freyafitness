@@ -1,7 +1,13 @@
 node {
     checkout scm
-    stage('lnode setup'){
-        sh './gradlew nodeSetup'
+    stage('node setup'){
+        steps {
+            sh './gradlew nodeSetup'
+            sh './gradlew npmSetup'
+            echo 'node --version'
+            echo 'npm --version'
+            sh 'npm --version'
+        }
     }
     stage('compile') {
         parallel(
