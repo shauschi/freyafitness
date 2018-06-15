@@ -1,17 +1,8 @@
 node {
     checkout scm
     stage('node setup'){
-        echo '--- start setup ---'
-        sh 'echo $PATH'
-        def nodeHome = tool 'node-10.1.0'
-        env.PATH = '${env.PATH}:{$nodeHome}/bin'
-
-        sh 'echo $PATH'
-        def npmHome = tool 'npm-6.1.0'
-        env.PATH = '${env.PATH}:{$nomHome}/bin'
-
-        echo '--- finished setup ---'
-        sh 'echo $PATH'
+        env.NODEJS_HOME = "${tool 'Node 6.x'}"
+        env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
         sh 'node --version'
         sh 'npm --version'
     }
