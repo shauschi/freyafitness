@@ -2,7 +2,10 @@ node {
     checkout scm
     stage('node setup'){
         env.NODEJS_HOME = tool name: 'Node 10.4.1', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+        // on linux / mac
         env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
+        // on windows
+        env.PATH="${env.NODEJS_HOME};${env.PATH}"
         sh 'echo $PATH'
         sh 'node --version'
         sh 'npm --version'
