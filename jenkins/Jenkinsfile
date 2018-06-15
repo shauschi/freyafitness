@@ -4,7 +4,14 @@ pipeline {
     skipDefaultCheckout()
   }
   stages {
-    checkout scm
+    stage('checkout') {
+        agent {
+          any
+        }
+        steps {
+          checkout scm
+        }
+      }
     stage('npm install') {
       agent {
         docker { image 'node:9-alpine' }
