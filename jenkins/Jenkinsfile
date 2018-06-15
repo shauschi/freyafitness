@@ -1,10 +1,18 @@
 node {
     checkout scm
     stage('node setup'){
-        sh './gradlew nodeSetup'
-        sh './gradlew npmSetup'
-        echo 'node --version'
-        echo 'npm --version'
+        echo '--- start setup ---'
+        sh 'echo $PATH'
+        def nodeHome = tool 'node-10.1.0'
+        env.PATH = '${env.PATH}:{$nodeHome}/bin'
+
+        sh 'echo $PATH'
+        def npmHome = tool 'npm-6.1.0'
+        env.PATH = '${env.PATH}:{$nomHome}/bin'
+
+        echo '--- finished setup ---'
+        sh 'echo $PATH'
+        sh 'node --version'
         sh 'npm --version'
     }
     stage('compile') {
