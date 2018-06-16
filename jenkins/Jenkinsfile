@@ -74,12 +74,12 @@ pipeline {
       }
     }
     stage('run container') {
-          agent {
-            docker { image 'docker' }
-          }
-          steps {
-            sh 'docker run freyafitness -p 9000:9000'
-          }
-        }
-  }
+      agent {
+        docker { image 'docker' }
+      }
+      steps {
+        sh 'docker run freyafitness -p 9000:9000'
+      }
+    }
+}
 }
