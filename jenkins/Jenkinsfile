@@ -65,7 +65,6 @@ pipeline {
         sh './gradlew bootJar'
       }
     }
-    def image
     stage('containerize') {
       agent {
         docker { image 'docker' }
