@@ -70,7 +70,7 @@ pipeline {
         docker { image 'docker' }
       }
       steps {
-        sh 'docker build . --build-args JAR_FILE=build/libs/freyafitness.jar -t freyafitness'
+        sh 'docker build . --build-arg JAR_FILE=build/libs/freyafitness.jar -t freyafitness'
       }
     }
     stage('run container') {
