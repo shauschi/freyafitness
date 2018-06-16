@@ -10,26 +10,23 @@ buildscript {
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0")
-    classpath("com.moowork.gradle:gradle-node-plugin:1.2.0")
   }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'com.palantir.docker'
-apply plugin: 'com.palantir.docker-run'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.moowork.node'
 
 jar {
-  baseName = 'freaya.fitness'
+  baseName = 'freayafitness'
   version = '0.0.1'
 }
+
 group = 'stefanhauschildt'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+archivesBaseName = "freyafitness"
 
 repositories {
   mavenCentral()
@@ -57,28 +54,4 @@ dependencies {
   runtime group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-}
-
-task npmProd(type: NpmTask) {
-  args = ['run', 'build_production']
-}
-
-
-task npmTest(type: NpmTask) {
-  args = ['run', 'test']
-}
-
-
-docker {
-  dependsOn build
-  name '${project.group}/${jar.baseName}'
-  files jar.archivePath
-  buildArgs(['JAR_FILE': '${jar.archiveName}', '/var/run/docker.sock': '/var/run/docker.sock'])
-}
-
-dockerRun {
-  name '${project.group}/${jar.baseName}'
-  image 'busybox'
-  daemonize true
-  command 'sleep', '100'
 }

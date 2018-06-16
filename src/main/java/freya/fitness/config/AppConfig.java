@@ -13,16 +13,16 @@ import javax.sql.DataSource;
 @Configuration
 public class AppConfig {
 
-  @Value("${spring.datasource.driverClassName}")
+  @Value("${spring.datasource.driverClassName:org.postgresql.Driver}")
   private String driverClassName;
 
-  @Value("${spring.datasource.url}")
+  @Value("${spring.datasource.url:jdbc:postgresql://localhost/freyafitness}")
   private String dataSourceUrl;
 
-  @Value("${spring.datasource.username}")
+  @Value("${spring.datasource.username:postgres}")
   private String dataSourceUsername;
 
-  @Value("${spring.datasource.password}")
+  @Value("${spring.datasource.password:postgres}")
   private String dataSourcePassword;
 
   @Bean
