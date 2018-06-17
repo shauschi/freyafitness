@@ -1,5 +1,8 @@
 package freya.fitness.config;
 
+import freya.fitness.repository.mongodb.ProfilePictureRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +15,8 @@ import javax.sql.DataSource;
 
 @Configuration
 public class AppConfig {
+
+  private final Logger LOGGER = LogManager.getLogger(ProfilePictureRepository.class);
 
   @Value("${spring.datasource.driverClassName:org.postgresql.Driver}")
   private String driverClassName;
@@ -27,6 +32,8 @@ public class AppConfig {
 
   @Bean
   public DataSource dataSource() {
+    LOGGER.info("Connection to: {}", dataSourceUrl);
+
     final DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName(driverClassName);
     dataSource.setUrl(dataSourceUrl);
