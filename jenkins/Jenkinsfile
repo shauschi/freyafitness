@@ -71,6 +71,8 @@ pipeline {
           dir 'docker'
           tag 'freyafitness'
         }
+        steps {
+        }
       }
     }
     stage('run container') {
