@@ -11,8 +11,8 @@ pipeline {
       }
     }
     stage('build'){
-      parallel{
       failFast true
+      parallel{
         stage('react webapp'){
           agent none
           stages{
