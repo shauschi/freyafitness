@@ -19,7 +19,7 @@ public class AppConfig {
   @Value("${DB_URL:jdbc:postgresql://localhost/freyafitness}")
   private String dataSourceUrl;
 
-  @Value("${DB_URS:postgres}")
+  @Value("${DB_USR:postgres}")
   private String dataSourceUsername;
 
   @Value("${DB_PSW:postgres}")
