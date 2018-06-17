@@ -16,7 +16,7 @@ public class AppConfig {
   @Value("${spring.datasource.driverClassName:org.postgresql.Driver}")
   private String driverClassName;
 
-  @Value("${spring.datasource.url:jdbc:postgresql://localhost/freyafitness}")
+  @Value("${DB_URL:jdbc:postgresql://localhost/freyafitness}")
   private String dataSourceUrl;
 
   @Value("${spring.datasource.username:postgres}")

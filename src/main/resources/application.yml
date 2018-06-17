@@ -16,7 +16,6 @@ spring:
     serialization:
       write_dates_as_timestamps: false
   datasource:
-    url: ${DB_URL}
     username: ${DB_USR}
     password: ${DB_PSW}
     driverClassName: org.postgresql.Driver
