@@ -79,8 +79,7 @@ pipeline {
       }
       steps {
         sh '''
-          docker run --rm freyafitness:latest -p 9000:9000 env
-          DB_URL = ${DB_URL}
+          docker run --rm freyafitness:latest -p 9000:9000 env DB_URL = ${DB_URL}
         '''
       }
     }
