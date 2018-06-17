@@ -79,7 +79,14 @@ pipeline {
       }
       steps {
         sh '''
-          docker run --rm freyafitness:latest -p 9000:9000 env DB_URL = ${DB_URL}
+          docker run --rm freyafitness:latest -p 9000:9000 \
+          -e DB_URL = ${DB_URL} \
+          -e DB_USR = ${DB_USR} \
+          -e DB_PWD = ${DB_PWD} \
+          -e MONGO_USR = ${MONGO_UST} \
+          -e MONGO_PWD = ${MONGO_PWD} \
+          -e MONGO_HOST = ${MONGO_HOST} \
+          -e MONGO_PORT = ${MONGO_PORT} \
         '''
       }
     }
