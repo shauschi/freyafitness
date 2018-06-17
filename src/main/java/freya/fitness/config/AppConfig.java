@@ -31,7 +31,8 @@ public class AppConfig {
 
   @Bean
   public DataSource dataSource() {
-    LOGGER.info("Connecting to: {}", dataSourceUrl);
+    LOGGER.info("Connecting to: {}, {}:{}",
+        dataSourceUrl, dataSourceUsername, dataSourcePassword);
 
     final DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName(driverClassName);
