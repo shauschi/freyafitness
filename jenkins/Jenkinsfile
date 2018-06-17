@@ -66,11 +66,13 @@ pipeline {
       }
     }
     stage('containerize') {
-          agent { dockerfile { dir 'docker' } }
-          steps {
-            sh 'echo "use dockerfile"'
-          }
+      agent {
+        dockerfile {
+          dir 'docker'
+          tag 'freyafitness
         }
+      }
+    }
     stage('run container') {
       agent {
         docker { image 'docker' }
