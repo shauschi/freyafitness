@@ -3,13 +3,6 @@ pipeline {
   options {
     skipDefaultCheckout()
   }
-  environment {
-    DB = credentials('db')
-    DB_URL = 'jdbc:postgresql://93.90.205.170/freyafitness'
-    MONGO      = credentials('mongo')
-    MONGO_HOST = '93.90.205.170'
-    MONGO_PORT = 27017
-  }
   stages {
     stage('checkout') {
       agent any
@@ -76,6 +69,13 @@ pipeline {
     stage('run container') {
       agent {
         docker { image 'docker' }
+      }
+      environment {
+        DB = credentials('db')
+        DB_URL = 'jdbc:postgresql://93.90.205.170/freyafitness'
+        MONGO      = credentials('mongo')
+        MONGO_HOST = '93.90.205.170'
+        MONGO_PORT = 27017
       }
       steps {
         sh 'docker run --rm freyafitness:latest -p 9000:9000'
