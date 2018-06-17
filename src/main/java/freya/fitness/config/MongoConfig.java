@@ -18,10 +18,10 @@ public class MongoConfig extends AbstractMongoConfiguration {
   private final String database = "freyafitness";
 
   public MongoConfig(
-      @Value("${mongo.host:localhost}") final String host,
-      @Value("${mongo.port:27017}") final Integer port,
-      @Value("${mongo.user}") final String user,
-      @Value("${mongo.password}") final String password) {
+      @Value("${MONGO_HOST:localhost}") final String host,
+      @Value("${MONGO_PORT:27017}") final Integer port,
+      @Value("${MONGO_USR}") final String user,
+      @Value("${MONGO_PSW}") final String password) {
     this.serverAddress = new ServerAddress(host, port);
     this.credentials = MongoCredential.createCredential(
         user, database, password.toCharArray());

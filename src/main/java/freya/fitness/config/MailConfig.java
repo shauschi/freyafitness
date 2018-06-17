@@ -13,10 +13,10 @@ public class MailConfig {
 
   @Bean
   public JavaMailSender getJavaMailSender(
-      @Value("${mail.host}") final String host,
-      @Value("${mail.port}") final Integer port,
-      @Value("${mail.user}") final String username,
-      @Value("${mail.password}") final String password) {
+      @Value("${MAIL_HOST}") final String host,
+      @Value("${MAIL_PORT}") final Integer port,
+      @Value("${MAIL_USR}") final String username,
+      @Value("${MAIL_PSW}") final String password) {
     final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     mailSender.setHost(host);
     mailSender.setPort(port);

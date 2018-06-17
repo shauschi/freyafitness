@@ -19,10 +19,10 @@ public class AppConfig {
   @Value("${DB_URL:jdbc:postgresql://localhost/freyafitness}")
   private String dataSourceUrl;
 
-  @Value("${spring.datasource.username:postgres}")
+  @Value("${DB_URS:postgres}")
   private String dataSourceUsername;
 
-  @Value("${spring.datasource.password:postgres}")
+  @Value("${DB_PSW:postgres}")
   private String dataSourcePassword;
 
   @Bean

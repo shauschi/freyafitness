@@ -16,8 +16,6 @@ spring:
     serialization:
       write_dates_as_timestamps: false
   datasource:
-    username: ${DB_USR}
-    password: ${DB_PSW}
     driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
@@ -35,16 +33,7 @@ course:
   create:
     minutes: 60
     maxParticipants: 12
-mongo:
-  host: ${MONGO_HOST}
-  port: ${MONGO_PORT}
-  user: ${MONGO_USR}
-  password: ${MONGO_PSW}
 mail:
-  host: ${MAIL_HOST}
-  port: ${MAIL_PORT}
-  user: ${MAIL_USR}
-  password: ${MAIL_PSW}
   resetpassword:
     success: Erfolg
     invalid: Nicht so erfolgreich
