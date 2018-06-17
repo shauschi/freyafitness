@@ -40,13 +40,13 @@ pipeline {
             sh 'npm test'
           }
         }
-      }
-      stage('test application') {
-        agent {
-          docker { image 'openjdk:8-jdk-alpine' }
-        }
-        steps {
-          sh './gradlew test'
+        stage('test application') {
+          agent {
+            docker { image 'openjdk:8-jdk-alpine' }
+          }
+          steps {
+            sh './gradlew test'
+          }
         }
       }
     }
