@@ -78,7 +78,10 @@ pipeline {
         MONGO_PORT = 27017
       }
       steps {
-        sh 'docker run --rm freyafitness:latest -p 9000:9000'
+        sh '''
+          docker run --rm freyafitness:latest -p 9000:9000 env
+          DB_URL = ${DB_URL}
+        '''
       }
     }
   }
