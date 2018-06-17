@@ -4,11 +4,11 @@ pipeline {
     skipDefaultCheckout()
   }
   environment {
-      DB = credentials('db')
-      DB_URL = 'jdbc:postgresql://93.90.205.170/freyafitness'
-      MONGO      = credentials('mongo')
-      MONGO_HOST = '93.90.205.170'
-      MONGO_PORT = 27017
+    DB = credentials('db')
+    DB_URL = 'jdbc:postgresql://93.90.205.170/freyafitness'
+    MONGO      = credentials('mongo')
+    MONGO_HOST = '93.90.205.170'
+    MONGO_PORT = 27017
   }
   stages {
     stage('checkout') {
@@ -66,13 +66,11 @@ pipeline {
       }
     }
     stage('containerize') {
-      agent {
-        dockerfile {
-          dir 'docker'
-          tag 'freyafitness'
-        }
+      aagent {
+        docker { image 'docker' }
       }
       steps {
+        sh 'docker build . -f docker/Dockerfile -t freyafitness'
       }
     }
     stage('run container') {
@@ -80,9 +78,9 @@ pipeline {
         docker { image 'docker' }
       }
       steps {
-        sh 'docker rm -f freyafitness'
-        sh 'docker run --name freyafitness -p 9000:9000'
+        sh 'docker rm -f freyafitness:latest'
+        sh 'docker run freyafitness:latest -p 9000:9000'
       }
     }
-}
+  }
 }
