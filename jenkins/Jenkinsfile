@@ -93,7 +93,7 @@ pipeline {
       }
       steps {
         sh '''
-          docker run --rm \
+          docker run --rm -d \
           -e DB_URL=${DB_URL} \
           -e DB_USR=${DB_USR} \
           -e DB_PSW=${DB_PSW} \

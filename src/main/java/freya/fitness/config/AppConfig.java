@@ -54,7 +54,11 @@ public class AppConfig {
         .csrf().disable()
         .antMatcher("/**")
         .authorizeRequests()
-        .antMatchers("/", "/profile/create",
+        .antMatchers(
+            "/",
+            "/bundle.min.js",
+            "/favicon.ico",
+            "/profile/create",
             "/news/previews",
             "/courses/from/**",
             "/coursetypes/",
