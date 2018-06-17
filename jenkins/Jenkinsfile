@@ -71,8 +71,8 @@ pipeline {
           dir 'docker'
           tag 'freyafitness'
         }
-        steps {
-        }
+      }
+      steps {
       }
     }
     stage('run container') {
@@ -80,7 +80,8 @@ pipeline {
         docker { image 'docker' }
       }
       steps {
-        sh 'docker run freyafitness -p 9000:9000'
+        sh 'docker rm -f freyafitness'
+        sh 'docker run --name freyafitness -p 9000:9000'
       }
     }
 }
