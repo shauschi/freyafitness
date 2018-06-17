@@ -13,10 +13,10 @@ public class MailConfig {
 
   @Bean
   public JavaMailSender getJavaMailSender(
-      @Value("${MAIL_HOST}") final String host,
-      @Value("${MAIL_PORT}") final Integer port,
-      @Value("${MAIL_USR}") final String username,
-      @Value("${MAIL_PSW}") final String password) {
+      @Value("${MAIL_HOST:localhost}") final String host,
+      @Value("${MAIL_PORT:1124}") final Integer port,
+      @Value("${MAIL_USR:todo}") final String username,
+      @Value("${MAIL_PSW:todo}") final String password) {
     final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     mailSender.setHost(host);
     mailSender.setPort(port);
@@ -28,6 +28,8 @@ public class MailConfig {
     props.put("mail.smtp.auth", "true");
     props.put("mail.smtp.starttls.enable", "true");
     props.put("mail.debug", "true");
+
+    mailSender.setJavaMailProperties(props);
 
     return mailSender;
   }
