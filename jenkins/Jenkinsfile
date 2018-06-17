@@ -10,20 +10,44 @@ pipeline {
         checkout scm
       }
     }
-    stage('npm install') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
-      steps {
-        sh 'npm install'
+    stage('build'){
+      parallel{
+        stage('npm install') {
+          agent {
+            docker { image 'node:9-alpine' }
+          }
+          steps {
+            sh 'npm install'
+          }
+        }
+        stage('build application') {
+          agent {
+            docker { image 'openjdk:8-jdk-alpine' }
+          }
+          steps {
+            sh './gradlew clean build'
+          }
+        }
       }
     }
-    stage('npm test') {
-      agent {
-        docker { image 'node:9-alpine' }
+    stage('test'){
+      parallel{
+        stage('npm test') {
+          agent {
+            docker { image 'node:9-alpine' }
+          }
+          steps {
+            sh 'npm test'
+          }
+        }
       }
-      steps {
-        sh 'npm test'
+      stage('test application') {
+        agent {
+          docker { image 'openjdk:8-jdk-alpine' }
+        }
+        steps {
+          sh './gradlew test'
+        }
       }
     }
     stage('npm build production') {
@@ -32,22 +56,6 @@ pipeline {
       }
       steps {
         sh 'npm run build_production'
-      }
-    }
-    stage('build application') {
-      agent {
-        docker { image 'openjdk:8-jdk-alpine' }
-      }
-      steps {
-        sh './gradlew clean build'
-      }
-    }
-    stage('test application') {
-      agent {
-        docker { image 'openjdk:8-jdk-alpine' }
-      }
-      steps {
-        sh './gradlew test'
       }
     }
     stage('build jar') {
