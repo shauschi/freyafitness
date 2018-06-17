@@ -69,7 +69,7 @@ pipeline {
       agent {
         dockerfile {
           dir 'docker'
-          tag 'freyafitness
+          tag 'freyafitness'
         }
       }
     }
