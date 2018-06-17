@@ -78,8 +78,7 @@ pipeline {
         docker { image 'docker' }
       }
       steps {
-        sh 'docker rm -f freyafitness:latest'
-        sh 'docker run freyafitness:latest -p 9000:9000'
+        sh 'docker run --rm freyafitness:latest -p 9000:9000'
       }
     }
   }
