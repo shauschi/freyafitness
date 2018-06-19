@@ -78,7 +78,7 @@ pipeline {
         docker { image 'docker' }
       }
       steps {
-        sh 'docker build . -f docker/Dockerfile -t freyafitness'
+        sh 'docker build . -f Dockerfile -t freyafitness'
       }
     }
     stage('run container') {
