@@ -10,12 +10,6 @@ pipeline {
         checkout scm
       }
     }
-    stage('ll -ls') {
-      agent any
-      steps {
-        sh 'ls -ll'
-      }
-    }
     stage('build'){
       failFast true
       parallel{
@@ -56,6 +50,7 @@ pipeline {
                 docker { image 'openjdk:8-jdk-alpine' }
               }
               steps {
+                sh 'ls -ll'
                 sh './gradlew clean build'
               }
             }
