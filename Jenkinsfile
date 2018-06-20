@@ -60,17 +60,13 @@ pipeline {
       }
     }
     stage('containerize') {
-      agent {
-        docker { image 'docker' }
-      }
+      agent any
       steps {
         sh 'docker build . -f Dockerfile -t freyafitness'
       }
     }
     stage('run container') {
-      agent {
-        docker { image 'docker' }
-      }
+      agent any
       environment {
         DB = credentials('db')
         DB_URL = 'jdbc:postgresql://93.90.205.170/freyafitness'
