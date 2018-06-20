@@ -75,6 +75,7 @@ pipeline {
         MONGO_PORT = 27017
       }
       steps {
+        sh 'docker stop freyafitness || true && docker rm freyafitness || true'
         sh '''
           docker run --rm -d \
           -e DB_URL=${DB_URL} \
