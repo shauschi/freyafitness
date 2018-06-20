@@ -10,6 +10,12 @@ pipeline {
         checkout scm
       }
     }
+    stage('ll -ls') {
+      agent any
+      steps {
+        sh 'ls -ll'
+      }
+    }
     stage('build'){
       failFast true
       parallel{
