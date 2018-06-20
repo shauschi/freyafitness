@@ -81,7 +81,7 @@ class Home extends Component {
         <Card>
           <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
-            src={__API__ + '/test1.png'}
+            image={__API__ + '/welcome.png'}
             style={{height: '250px', background: 'blue'}}
           />
           <CardContent>

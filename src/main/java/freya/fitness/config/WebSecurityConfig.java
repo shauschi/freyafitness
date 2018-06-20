@@ -54,6 +54,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     final CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
     config.setAllowedOrigins(Arrays.asList(
+        "http://freya.fitness",
+        "http://www.freya.fitness",
         "http://127.0.0.1:3333",
         "http://localhost:3333",
         "http://127.0.0.1:9000",
