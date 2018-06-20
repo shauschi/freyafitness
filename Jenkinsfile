@@ -85,7 +85,7 @@ pipeline {
           -e MONGO_PSW=${MONGO_PSW} \
           -e MONGO_HOST=${MONGO_HOST} \
           -e MONGO_PORT=${MONGO_PORT} \
-          -p 9000:80 \
+          -p 80:9000 \
           --name freyafitness \
           freyafitness:latest
         '''
