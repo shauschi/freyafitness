@@ -4,7 +4,7 @@ pipeline {
     skipDefaultCheckout()
   }
   environment{
-    APP_NAME = freyafitness
+    APP_NAME = 'freyafitness'
   }
   stages {
     stage('checkout') {
