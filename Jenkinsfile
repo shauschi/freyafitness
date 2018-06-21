@@ -3,6 +3,9 @@ pipeline {
   options {
     skipDefaultCheckout()
   }
+  environment{
+    APP_NAME = freyafitness
+  }
   stages {
     stage('checkout') {
       agent any
@@ -62,7 +65,7 @@ pipeline {
     stage('containerize') {
       agent any
       steps {
-        sh 'docker build . -f Dockerfile -t freyafitness'
+        sh 'docker build . -f Dockerfile -t ${APP_NAME}'
       }
     }
     stage('run container') {
@@ -75,7 +78,7 @@ pipeline {
         MONGO_PORT = 27017
       }
       steps {
-        sh 'docker stop freyafitness || true && docker rm freyafitness || true'
+        sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
         sh '''
           docker run --rm -d \
           -e DB_URL=${DB_URL} \
@@ -86,8 +89,8 @@ pipeline {
           -e MONGO_HOST=${MONGO_HOST} \
           -e MONGO_PORT=${MONGO_PORT} \
           -p 80:9000 \
-          --name freyafitness \
-          freyafitness:latest
+          --name ${APP_NAME} \
+          ${APP_NAME}:latest
         '''
       }
     }
