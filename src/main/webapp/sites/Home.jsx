@@ -72,7 +72,7 @@ class Home extends Component {
   };
 
   getWelcomeGreetings = () => {
-    const {user} = this.props;
+    const {user, classes} = this.props;
     if (user) {
       return undefined;
     }
@@ -81,8 +81,10 @@ class Home extends Component {
         <Card>
           <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
+            Component={'img'}
             image={__API__ + '/welcome.jpg'}
-            style={{height: '250px', background: 'blue'}}
+            title={'Welcome'}
+            style={{paddingTop: '56.25%'}} // 16:9
           />
           <CardContent>
             <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
