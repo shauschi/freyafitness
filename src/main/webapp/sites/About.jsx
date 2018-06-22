@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 class About extends Component {
   render() {
     return (
-      <div style={{height: '100%', overflow: 'auto'}}>
+      <div style={{height: '100%', overflow: 'scroll', WebkitOverflowScrolling: 'touch'}}>
         <Grid container spacing={16} justify="center" style={{height: '100%', width: '100%', margin: '0px'}}>
           <Grid item xs={12}>
             <Card>
