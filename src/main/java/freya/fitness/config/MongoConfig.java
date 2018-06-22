@@ -31,7 +31,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
   public MongoClient mongoClient() {
     final MongoClientOptions options = new MongoClientOptions.Builder().build();
     //return new MongoClient(serverAddress, credentials, options);
-    return new MongoClient();
+    return new MongoClient(serverAddress);
   }
 
   @Override
