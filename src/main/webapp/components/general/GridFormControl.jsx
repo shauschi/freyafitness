@@ -42,8 +42,7 @@ export class GridTextControl extends Component {
   }
 }
 
-
-export const GridFormControl = ({error, children, xs, sm, md}) =>
+const GridFormControl = ({error, children, xs, sm, md}) =>
   <GridWrapper xs={xs} sm={sm} md={md}>
     <FormControl fullWidth error={error} margin='dense'>
       {children}

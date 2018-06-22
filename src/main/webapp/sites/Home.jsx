@@ -81,10 +81,9 @@ class Home extends Component {
         <Card>
           <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
-            Component={'img'}
+            component={'img'}
             image={__API__ + '/welcome.jpg'}
             title={'Welcome'}
-            style={{paddingTop: '56.25%'}} // 16:9
           />
           <CardContent>
             <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
