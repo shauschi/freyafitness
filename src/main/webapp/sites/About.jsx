@@ -15,15 +15,19 @@ class About extends Component {
           <Grid item xs={12}>
             <Card>
               <CardHeader title={'Wer ist Freya?'}/>
-              <CardMedia src={__API__ + '/about_freya.png'}/>
+              <CardMedia
+                component={'img'}
+                image={__API__ + '/about_freya.jpg'}
+                title={'Freya Heine'}
+              />
               <CardContent>
-                <Typography>
+                <Typography paragraph>
                   Mein Name ist Freya Heine und ich verwirkliche mit der Eröffnung von FreyRaum meinen ganz persönlichen Traum vom eigenen, sehr persönlichen Studio in Toppenstedt.
                 </Typography>
-                <Typography>
+                <Typography paragraph>
                   Durch mein Studium zur Fitnessökonomin mit Weiterbildungen im medizinischen Fitnesstraining, TRX Training, Functional Training und mehreren Jahren Berufserfahrung, in verschiedenen Fitnessstudios, ist es 2018 Zeit an der Zeit mein eigenes Kapitel zu beginnen.
                 </Typography>
-                <Typography>
+                <Typography paragraph>
                   Meine Leidenschaft zum Sport, als auch die Freude dabei Euch sportlich nach vorne zu bringen, lassen mein Herz höherschlagen.
                 </Typography>
               </CardContent>
