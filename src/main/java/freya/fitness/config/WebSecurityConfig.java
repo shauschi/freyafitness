@@ -59,7 +59,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         "http://127.0.0.1:3333",
         "http://localhost:3333",
         "http://127.0.0.1:9000",
-        "http://localhost:9000"));
+        "http://localhost:9000",
+
+        "https://freya.fitness",
+        "https://www.freya.fitness",
+        "https://127.0.0.1:3333",
+        "https://localhost:3333",
+        "https://127.0.0.1:9443",
+        "https://localhost:9443"
+    ));
     config.setAllowedHeaders(Collections.singletonList("*"));
     config.setAllowedMethods(Arrays.asList(
         HttpMethod.HEAD.name(),

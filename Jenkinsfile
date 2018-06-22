@@ -84,21 +84,26 @@ pipeline {
         MONGO_PORT = 27017
       }
       steps {
-        sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
-        sh '''
-          docker run --rm \
-          -e DB_URL=${DB_URL} \
-          -e DB_USR=${DB_USR} \
-          -e DB_PSW=${DB_PSW} \
-          -e MONGO_USR=${MONGO_USR} \
-          -e MONGO_PSW=${MONGO_PSW} \
-          -e MONGO_HOST=${MONGO_HOST} \
-          -e MONGO_PORT=${MONGO_PORT} \
-          -p 80:9000 \
-          -p 443:9443 \
-          --name ${APP_NAME} \
-          ${APP_NAME}:latest
-        '''
+        withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
+                                               keystoreVariable: 'SSL_CERTIFICATE', \
+                                               passwordVariable: 'SSL_PSW')]) {
+          sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
+          sh '''
+            docker run --rm \
+            -e SSL_PSW=${SSL_PSW} \
+            -e DB_URL=${DB_URL} \
+            -e DB_USR=${DB_USR} \
+            -e DB_PSW=${DB_PSW} \
+            -e MONGO_USR=${MONGO_USR} \
+            -e MONGO_PSW=${MONGO_PSW} \
+            -e MONGO_HOST=${MONGO_HOST} \
+            -e MONGO_PORT=${MONGO_PORT} \
+            -p 80:9000 \
+            -p 443:9443 \
+            --name ${APP_NAME} \
+            ${APP_NAME}:latest
+          '''
+        }
       }
     }
   }
