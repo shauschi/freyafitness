@@ -1,13 +1,16 @@
 'use strict';
 import React, {Component} from 'react';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import {Link} from 'react-router-dom';
 import {IconPaperPlane} from './../../utils/Icons';
 import {ValidationGroup, Validators} from './../general/validation';
 import {
   GridTextControl,
   GridInputControl,
   GridPasswordControl,
-  GridButtonControl
+  GridButtonControl,
+  GridCheckboxControl
 } from './../general';
 
 class RegistrationForm extends Component {
@@ -74,6 +77,18 @@ class RegistrationForm extends Component {
             value={formData.matchingPassword}
             validators={[Validators.matches(formData.password, 'Das neue Password stimmt nicht überein.')]}
             onChange={formDataChanged}/>
+          <Grid item xs={12}>
+            <Typography>
+              Hiermit bestätige ich, dass ich die <Link to={'/agb'}>Allgemeinen Geschäftsbedingungen</Link> gelesen habe und sie akzeptiere.
+            </Typography>
+          </Grid>
+          <GridCheckboxControl
+            id='acceptAgb'
+            checked={formData.acceptAgb}
+            validators={[Validators.cheked('Bitte die AGBs akzeptieren')]}
+            onChange={formDataChanged}
+            label='ich stimme zu'
+          />
           <GridButtonControl
             label='Konto erstellen'
             icon={<IconPaperPlane style={{marginLeft: '8px'}} size={16}/>}

@@ -1,3 +1,5 @@
+import {GridCheckboxControl} from "./GridFormControl";
+
 export {default as Dialog} from './Dialog.jsx';
 export {default as Fade} from './Fade.jsx';
 export {default as FadeButton} from './FadeButton.jsx';
@@ -16,5 +18,6 @@ export {
   GridFormControl,
   GridPasswordControl,
   GridDateTimeControl,
-  GridItemSelectControl
+  GridItemSelectControl,
+  GridCheckboxControl
 } from './GridFormControl.jsx';

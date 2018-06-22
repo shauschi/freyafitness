@@ -6,10 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
 import MenuItem from '@material-ui/core/MenuItem';
 import {IconEye, IconEyeSlash} from './../../utils/Icons';
 import {setPath, togglePath} from './../../utils/RamdaUtils';
@@ -63,6 +65,27 @@ export class GridInputControl extends ValidationControl {
         onChange={event => onChange(id, event.target.value)}
         endAdornment={endAdornment}/>
       {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
+    </GridFormControl>;
+  }
+}
+
+export class GridCheckboxControl extends ValidationControl {
+
+  render() {
+    const {valid, errors} = this.state;
+    const {id, checked, onChange, label, xs, sm, md} = this.props;
+    return <GridFormControl error={!valid} xs={xs} sm={sm} md={md}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            id={id}
+            checked={checked}
+            onChange={onChange}
+          />
+        }
+        label={label}
+      />
+      <FormHelperText>{errors}</FormHelperText>
     </GridFormControl>;
   }
 }

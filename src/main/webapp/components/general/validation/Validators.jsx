@@ -23,3 +23,8 @@ export const matches = (expectedValue, errorText = 'Die angegebenen Werte stimme
   valid: expectedValue === value,
   error: errorText
 });
+
+export const cheked = (errorText = 'Bitte bestätigen') => value => ({
+  valid: !!value,
+  error: errorText
+});
