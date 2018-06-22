@@ -86,7 +86,7 @@ pipeline {
       steps {
         sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
         sh '''
-          docker run --rm -d \
+          docker run --rm \
           -e DB_URL=${DB_URL} \
           -e DB_USR=${DB_USR} \
           -e DB_PSW=${DB_PSW} \
