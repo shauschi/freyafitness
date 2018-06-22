@@ -29,7 +29,7 @@ export const APP_STYLES = theme => ({
     height: '100%',
   },
   appBar: {
-    position: 'fixed',
+    position: 'sticky',
     marginLeft: DRAWER_WIDTH,
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${DRAWER_WIDTH}px)`,
