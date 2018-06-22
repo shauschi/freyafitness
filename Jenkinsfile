@@ -42,7 +42,6 @@ pipeline {
         docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
-        sh 'ls -ll'
         sh './gradlew clean build'
       }
     }
@@ -64,7 +63,6 @@ pipeline {
                                                keystoreVariable: 'SSL_CERTIFICATE', \
                                                passwordVariable: 'SSL_PSW')]) {
 
-          sh 'ls -ll'
           sh 'cp ${SSL_CERTIFICATE} src/main/resources/my.p12'
           sh './gradlew bootJar'
         }
@@ -97,6 +95,7 @@ pipeline {
           -e MONGO_HOST=${MONGO_HOST} \
           -e MONGO_PORT=${MONGO_PORT} \
           -p 80:9000 \
+          -p 443:9443 \
           --name ${APP_NAME} \
           ${APP_NAME}:latest
         '''
