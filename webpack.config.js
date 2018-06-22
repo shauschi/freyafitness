@@ -23,6 +23,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {from: './src/main/webapp/test1000.jpg', to: __dirname + '/src/main/resources/static/'},
       {from: './src/main/webapp/test1001.jpg', to: __dirname + '/src/main/resources/static/'},
+      {from: './src/main/webapp/about_freya.jpg', to: __dirname + '/src/main/resources/static/'},
       {from: './src/main/webapp/welcome.jpg', to: __dirname + '/src/main/resources/static/'}
     ]),
     new UglifyJSPlugin(),
