@@ -1,5 +1,10 @@
 server:
-  port: 9000
+  port: 9443
+  ssl:
+    key-store: src/main/resources/my.p12
+    key-store-password: ${SSL_PSW}
+    key-store-type: PKCS12
+    key-alias: freyafitness
   session:
     cookie:
       name: UISESSION

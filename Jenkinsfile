@@ -58,8 +58,15 @@ pipeline {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
       }
+
       steps {
-        sh './gradlew bootJar'
+        withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
+                                               keystoreVariable: 'SSL_CERTIFICATE', \
+                                               passwordVariable: 'SSL_PSW')]) {
+
+          sh 'cp ${SSL_CERTIFICATE} /src/main/resources/my.p12'
+          sh './gradlew bootJar'
+        }
       }
     }
     stage('containerize') {
