@@ -95,7 +95,7 @@ class ProfilePictureDialog extends Component {
       <Dialog
         onClose={this.handleRequestClose}
         fullScreen={fullScreen}
-        transition={Transition}
+        TransitionComponent={Transition}
         open={show}>
 
           <DialogTitle disableTypography
