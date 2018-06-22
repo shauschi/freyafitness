@@ -15,6 +15,7 @@
     content: counters(item, ".") ". ";
     display: table-cell;
     padding-right: 0.6em;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 .intended li li {
@@ -23,5 +24,6 @@
 
 .intended li li:before {
     content: counters(item, ".") " ";
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
