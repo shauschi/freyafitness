@@ -183,7 +183,7 @@ class CourseDetails extends Component {
 
   handleRequestSave = () => {
     // TODO onRequestSave
-    this.props.actions.saveCourseDetails(this.props.course);
+    this.props.actions.saveCourseDetails(this.props.courseDetails.course);
   };
 
   signInOut = () => {
