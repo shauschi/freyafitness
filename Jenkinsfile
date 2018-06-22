@@ -64,7 +64,8 @@ pipeline {
                                                keystoreVariable: 'SSL_CERTIFICATE', \
                                                passwordVariable: 'SSL_PSW')]) {
 
-          sh 'cp ${SSL_CERTIFICATE} /src/main/resources/my.p12'
+          sh 'ls -ll'
+          sh 'cp ${SSL_CERTIFICATE} src/main/resources/my.p12'
           sh './gradlew bootJar'
         }
       }
