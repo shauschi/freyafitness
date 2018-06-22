@@ -7,7 +7,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import './intendedList.css';
 
-const agbs = <ol>
+const agbs = <ol className='intended'>
   <li><h3>Allgemeine Informationen, Vertragspartner, Veranstaltungsort, Teilnehmer, Sporttauglichkeit</h3>
     <ol>
       <li>Vertragspartner der hier angebotenen Dienstleistung ist:
