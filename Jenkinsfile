@@ -2,7 +2,7 @@
 def mapBranchToAppName(branch) {
   def appName = 'freyafitness'
   if (branch == 'master') {
-    return appName;
+    return appName
   }
   if (branch == 'develop') {
     return appName + '_int'
@@ -10,9 +10,19 @@ def mapBranchToAppName(branch) {
   return appName + '_tst'
 }
 
+def mapBranchToNpm(branch) {
+  if (branch == 'master') {
+    return 'build_production'
+  }
+  if (branch == 'develop') {
+    return 'build_int'
+  }
+  return 'build_tst'
+}
+
 def mapBranchToPort(branch) {
   if (branch == 'master') {
-    return 80;
+    return 80
   }
   if (branch == 'develop') {
     return 9080
@@ -22,7 +32,7 @@ def mapBranchToPort(branch) {
 
 def mapBranchToPortHttps(branch) {
   if (branch == 'master') {
-    return 443;
+    return 443
   }
   if (branch == 'develop') {
     return 9443
@@ -37,6 +47,7 @@ pipeline {
   }
   environment{
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
+    NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
   }
   stages {
     stage('checkout') {
@@ -69,7 +80,7 @@ pipeline {
         docker { image 'node:9-alpine' }
       }
       steps {
-        sh 'npm run build_production'
+        sh 'npm run ${NPM_CMD}'
       }
     }
 
