@@ -118,7 +118,7 @@ pipeline {
       agent any
       environment {
         DB = credentials('db')
-        DB_URL = 'jdbc:postgresql://93.90.205.170/${APP_NAME}'
+        DB_URL = "jdbc:postgresql://93.90.205.170/${APP_NAME}"
         MONGO      = credentials('mongo')
         MONGO_HOST = '93.90.205.170'
         MONGO_PORT = 27017
