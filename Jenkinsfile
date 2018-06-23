@@ -36,7 +36,7 @@ pipeline {
     skipDefaultCheckout()
   }
   environment{
-    APP_NAME = mapBranchToAppName(${BRANCH_NAME})
+    APP_NAME = mapBranchToAppName(ENV.BRANCH_NAME)
   }
   stages {
     stage('checkout') {
@@ -122,8 +122,8 @@ pipeline {
         MONGO      = credentials('mongo')
         MONGO_HOST = '93.90.205.170'
         MONGO_PORT = 27017
-        APP_PORT   = mapBranchToPort(${BRANCH_NAME})
-        APP_PORT_S = mapBranchToPortHttps(${BRANCH_NAME})
+        APP_PORT   = mapBranchToPort(ENV.BRANCH_NAME)
+        APP_PORT_S = mapBranchToPortHttps(ENV.BRANCH_NAME)
       }
       steps {
         withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
