@@ -36,7 +36,7 @@ pipeline {
     skipDefaultCheckout()
   }
   environment{
-    APP_NAME = mapBranchToAppName("${ENV.BRANCH_NAME}")
+    APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
   }
   stages {
     stage('checkout') {
