@@ -1,10 +1,42 @@
+
+def mapBranchToAppName(branch) {
+  def appName = 'freyafitness'
+  if (branch == 'master') {
+    return appName;
+  }
+  if (branch == 'develop') {
+    return appName + '_int'
+  }
+  return appName + '_tst'
+}
+
+def mapBranchToPort(branch) {
+  if (branch == 'master') {
+    return 80;
+  }
+  if (branch == 'develop') {
+    return 9080
+  }
+  return 7080
+}
+
+def mapBranchToPortHttps(branch) {
+  if (branch == 'master') {
+    return 443;
+  }
+  if (branch == 'develop') {
+    return 9443
+  }
+  return 7443
+}
+
 pipeline {
   agent none
   options {
     skipDefaultCheckout()
   }
   environment{
-    APP_NAME = 'freyafitness'
+    APP_NAME = mapBranchToAppName(${BRANCH_NAME})
   }
   stages {
     stage('checkout') {
@@ -86,10 +118,12 @@ pipeline {
       agent any
       environment {
         DB = credentials('db')
-        DB_URL = 'jdbc:postgresql://93.90.205.170/freyafitness'
+        DB_URL = 'jdbc:postgresql://93.90.205.170/${APP_NAME}'
         MONGO      = credentials('mongo')
         MONGO_HOST = '93.90.205.170'
         MONGO_PORT = 27017
+        APP_PORT   = mapBranchToPort(${BRANCH_NAME})
+        APP_PORT_S = mapBranchToPortHttps(${BRANCH_NAME})
       }
       steps {
         withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
@@ -102,12 +136,13 @@ pipeline {
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \
             -e DB_PSW=${DB_PSW} \
+            -e MONGO_DB_NAME=${APP_NAME} \
             -e MONGO_USR=${MONGO_USR} \
             -e MONGO_PSW=${MONGO_PSW} \
             -e MONGO_HOST=${MONGO_HOST} \
             -e MONGO_PORT=${MONGO_PORT} \
-            -p 80:9000 \
-            -p 443:9443 \
+            -p ${APP_PORT}:9000 \
+            -p ${APP_PORT_S}:9443 \
             --name ${APP_NAME} \
             ${APP_NAME}:latest
           '''

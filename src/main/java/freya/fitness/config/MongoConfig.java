@@ -15,16 +15,18 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
   private final ServerAddress serverAddress;
   private final MongoCredential credentials;
-  private final String database = "freyafitness";
+  private final String database;
 
   public MongoConfig(
       @Value("${MONGO_HOST:localhost}") final String host,
       @Value("${MONGO_PORT:27017}") final Integer port,
       @Value("${MONGO_USR}") final String user,
-      @Value("${MONGO_PSW}") final String password) {
+      @Value("${MONGO_PSW}") final String password,
+      @Value("${MONGO_DB_NAME:freyafitness}}") final String database) {
     this.serverAddress = new ServerAddress(host, port);
     this.credentials = MongoCredential.createCredential(
         user, database, password.toCharArray());
+    this.database = database;
   }
 
   @Override
