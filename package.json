@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage --runInBand",
     "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot",
-    "dev": "webpack-dev-server --progress --inline --hot --config webpack.dev.config.js",
+    "dev": "webpack-dev-server --progress --inline --hot --config webpack.dev.config.js --https",
     "build_production": "webpack --config webpack.config.js"
   },
   "repository": {
