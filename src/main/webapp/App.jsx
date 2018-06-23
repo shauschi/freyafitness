@@ -65,7 +65,7 @@ class App extends Component {
       <MuiThemeProvider theme={Style.APP_THEME}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <div className={classes.root}>
-            <div className={classes.appFrame} style={{backgroundImage: 'url(' + __API__ + '/background.jpg)', backgroundSize: 'cover'}}>
+            <div className={classes.appFrame} style={{backgroundColor: 'lightgrey'}}>
               <MyAppBar
                 pending={profile.pending}
                 classes={classes}

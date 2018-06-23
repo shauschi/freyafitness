@@ -72,7 +72,7 @@ class Home extends Component {
   };
 
   getWelcomeGreetings = () => {
-    const {user} = this.props;
+    const {user, classes} = this.props;
     if (user) {
       return undefined;
     }
@@ -81,8 +81,9 @@ class Home extends Component {
         <Card>
           <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
-            src={__API__ + '/test1.png'}
-            style={{height: '250px', background: 'blue'}}
+            component={'img'}
+            image={__API__ + '/welcome.jpg'}
+            title={'Welcome'}
           />
           <CardContent>
             <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
@@ -185,20 +186,22 @@ class Home extends Component {
   render() {
     // TODO besser an die einzelnen Komponenten übergeben
     return (
-      <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-        <SimpleDialog
-          open={this.state.open}
-          onClose={this.handleRequestClose}/>
-        {/* Nur bei nicht angemeldeten Benutzern*/}
-        {this.getWelcomeGreetings()}
-        {this.getNews()}
-        {/* weitere Informationen bei angemeldeten Benutzern */}
-        {this.getUserDetails()}
-        {/* Die nächsten Kurse */}
-        {this.getUpcomingCourses()}
-        {/* Nur bei nicht angemeldeten Benutzern*/}
-        {this.getLoginCard()}
-      </Grid>
+      <div style={{height: '100%', overflow: 'scroll', WebkitOverflowScrolling: 'touch'}}>
+        <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+          <SimpleDialog
+            open={this.state.open}
+            onClose={this.handleRequestClose}/>
+          {/* Nur bei nicht angemeldeten Benutzern*/}
+          {this.getWelcomeGreetings()}
+          {this.getNews()}
+          {/* weitere Informationen bei angemeldeten Benutzern */}
+          {this.getUserDetails()}
+          {/* Die nächsten Kurse */}
+          {this.getUpcomingCourses()}
+          {/* Nur bei nicht angemeldeten Benutzern*/}
+          {this.getLoginCard()}
+        </Grid>
+      </div>
     );
   }
 }

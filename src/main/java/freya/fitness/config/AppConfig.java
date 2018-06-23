@@ -1,5 +1,7 @@
 package freya.fitness.config;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,20 +15,25 @@ import javax.sql.DataSource;
 @Configuration
 public class AppConfig {
 
-  @Value("${spring.datasource.driverClassName}")
+  private final Logger LOGGER = LogManager.getLogger(AppConfig.class);
+
+  @Value("${spring.datasource.driverClassName:org.postgresql.Driver}")
   private String driverClassName;
 
-  @Value("${spring.datasource.url}")
+  @Value("${DB_URL:jdbc:postgresql://localhost/freyafitness}")
   private String dataSourceUrl;
 
-  @Value("${spring.datasource.username}")
+  @Value("${DB_USR:postgres}")
   private String dataSourceUsername;
 
-  @Value("${spring.datasource.password}")
+  @Value("${DB_PSW:postgres}")
   private String dataSourcePassword;
 
   @Bean
   public DataSource dataSource() {
+    LOGGER.info("Connecting to: {}, {}:{}",
+        dataSourceUrl, dataSourceUsername, dataSourcePassword);
+
     final DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName(driverClassName);
     dataSource.setUrl(dataSourceUrl);
@@ -47,7 +54,11 @@ public class AppConfig {
         .csrf().disable()
         .antMatcher("/**")
         .authorizeRequests()
-        .antMatchers("/", "/profile/create",
+        .antMatchers(
+            "/",
+            "/bundle.min.js",
+            "/favicon.ico",
+            "/profile/create",
             "/news/previews",
             "/courses/from/**",
             "/coursetypes/",

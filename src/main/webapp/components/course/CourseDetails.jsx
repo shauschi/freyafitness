@@ -183,7 +183,7 @@ class CourseDetails extends Component {
 
   handleRequestSave = () => {
     // TODO onRequestSave
-    this.props.actions.saveCourseDetails(this.props.course);
+    this.props.actions.saveCourseDetails(this.props.courseDetails.course);
   };
 
   signInOut = () => {
@@ -292,7 +292,7 @@ class CourseDetails extends Component {
                 type='number'
                 readonly={readonly}
                 value={minutes}
-                onChange={value => onCourseDetailsChange('minutes', Number.parseInt(value))}
+                onChange={(id, value) => onCourseDetailsChange('minutes', Number.parseInt(value))}
                 endAdornment={<InputAdornment position="end">Minuten</InputAdornment>}
               />
               <GridInputControl
@@ -310,7 +310,7 @@ class CourseDetails extends Component {
                 type='number'
                 readonly={readonly}
                 value={maxParticipants}
-                onChange={value => onCourseDetailsChange('maxParticipants', Number.parseInt(value))}
+                onChange={(id, value) => onCourseDetailsChange('maxParticipants', Number.parseInt(value))}
               />
               <GridTextControl text={'Teilnehmer'}/>
               {this.getUserMenu()}

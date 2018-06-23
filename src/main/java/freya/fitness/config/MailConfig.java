@@ -1,10 +1,8 @@
 package freya.fitness.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerTokenServicesConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -13,20 +11,12 @@ import java.util.Properties;
 @Configuration
 public class MailConfig {
 
-  @Value("${mail.host}")
-  private String host;
-
-  @Value("${mail.port}")
-  private Integer port;
-
-  @Value("${mail.username}")
-  private String username;
-
-  @Value("${mail.password}")
-  private String password;
-
   @Bean
-  public JavaMailSender getJavaMailSender() {
+  public JavaMailSender getJavaMailSender(
+      @Value("${MAIL_HOST:localhost}") final String host,
+      @Value("${MAIL_PORT:1124}") final Integer port,
+      @Value("${MAIL_USR:todo}") final String username,
+      @Value("${MAIL_PSW:todo}") final String password) {
     final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     mailSender.setHost(host);
     mailSender.setPort(port);
@@ -38,6 +28,8 @@ public class MailConfig {
     props.put("mail.smtp.auth", "true");
     props.put("mail.smtp.starttls.enable", "true");
     props.put("mail.debug", "true");
+
+    mailSender.setJavaMailProperties(props);
 
     return mailSender;
   }

@@ -4,6 +4,7 @@ process.env.NODE_ENV = 'production';
 const webpack = require('webpack');
 const path = require('path');
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -19,10 +20,16 @@ module.exports = {
   entry: './src/main/webapp/index.js',
   plugins: [
     new CleanWebpackPlugin([__dirname + '/src/main/resources/static/']),
+    new CopyWebpackPlugin([
+      {from: './src/main/webapp/test1000.jpg', to: __dirname + '/src/main/resources/static/'},
+      {from: './src/main/webapp/test1001.jpg', to: __dirname + '/src/main/resources/static/'},
+      {from: './src/main/webapp/about_freya.jpg', to: __dirname + '/src/main/resources/static/'},
+      {from: './src/main/webapp/welcome.jpg', to: __dirname + '/src/main/resources/static/'}
+    ]),
     new UglifyJSPlugin(),
     HtmlWebpackPluginConfig,
     new webpack.DefinePlugin({
-      __API__: "'http://127.0.0.1:9000'"
+      __API__: "'https://freya.fitness'"
     })
   ],
   module: {
@@ -35,7 +42,11 @@ module.exports = {
           presets: ['react', 'es2015'],
           plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
         }
-      }
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader']
+      },
     ]
   },
   output: {

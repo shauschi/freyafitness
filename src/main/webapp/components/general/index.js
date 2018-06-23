@@ -13,8 +13,8 @@ export {
   GridTextControl,
   GridInputControl,
   GridButtonControl,
-  GridFormControl,
   GridPasswordControl,
   GridDateTimeControl,
-  GridItemSelectControl
+  GridItemSelectControl,
+  GridCheckboxControl
 } from './GridFormControl.jsx';

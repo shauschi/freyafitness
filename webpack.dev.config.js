@@ -18,6 +18,8 @@ module.exports = {
   entry: "./src/main/webapp/index.js",
   devServer: {
     inline: true,
+    https: true,
+    hot: true,
     port: 3333
   },
   resolve: {
@@ -72,7 +74,7 @@ module.exports = {
   plugins: [
     HtmlWebpackPluginConfig,
     new webpack.DefinePlugin({
-      __API__: "'http://127.0.0.1:9000'"
+      __API__: "'https://127.0.0.1:9000'"
     })
   ],
 };

@@ -14,10 +14,10 @@ class ProfilePicture extends Component {
 
   updatePicture() {
     const {user = {}} = this.props;
-    const {userId} = user;
-    if (this.state.userId !== userId) {
-      this.setState(assignPath([], {loading: true, userId: userId}, this.state));
-      getProfilePicture(userId)
+    const {id} = user;
+    if (this.state.userId !== id) {
+      this.setState(assignPath([], {loading: true, userId: id}, this.state));
+      getProfilePicture(id)
         .then(pictureData => {
           const objectURL = URL.createObjectURL(pictureData);
           this.setState(assignPath([],
