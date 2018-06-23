@@ -13,6 +13,7 @@ pipeline {
         checkout scm
       }
     }
+
     stage('npm install') {
       agent {
         docker { image 'node:9-alpine' }
@@ -21,6 +22,7 @@ pipeline {
         sh 'npm install'
       }
     }
+
     stage('npm test') {
       agent {
         docker { image 'node:9-alpine' }
@@ -29,6 +31,7 @@ pipeline {
         sh 'npm test'
       }
     }
+
     stage('npm build production') {
       agent {
         docker { image 'node:9-alpine' }
@@ -37,6 +40,7 @@ pipeline {
         sh 'npm run build_production'
       }
     }
+
     stage('build application') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
@@ -45,6 +49,7 @@ pipeline {
         sh './gradlew clean build'
       }
     }
+
     stage('test application') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
@@ -53,6 +58,7 @@ pipeline {
         sh './gradlew test'
       }
     }
+
     stage('build jar') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
@@ -68,12 +74,14 @@ pipeline {
         }
       }
     }
+
     stage('containerize') {
       agent any
       steps {
         sh 'docker build . -f Dockerfile -t ${APP_NAME}'
       }
     }
+
     stage('run container') {
       agent any
       environment {
@@ -89,7 +97,7 @@ pipeline {
                                                passwordVariable: 'SSL_PSW')]) {
           sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
           sh '''
-            docker run --rm \
+            docker run --rm -d \
             -e SSL_PSW=${SSL_PSW} \
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \
