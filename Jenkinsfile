@@ -131,7 +131,7 @@ pipeline {
                                                passwordVariable: 'SSL_PSW')]) {
           sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
           sh '''
-            docker run --rm -d \
+            docker run --rm \
             -e SSL_PSW=${SSL_PSW} \
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \
