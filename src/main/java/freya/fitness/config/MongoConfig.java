@@ -22,7 +22,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
       @Value("${MONGO_PORT:27017}") final Integer port,
       @Value("${MONGO_USR}") final String user,
       @Value("${MONGO_PSW}") final String password,
-      @Value("${MONGO_DB_NAME:freyafitness}}") final String database) {
+      @Value("${MONGO_DB_NAME:freyafitness}") final String database) {
     this.serverAddress = new ServerAddress(host, port);
     this.credentials = MongoCredential.createCredential(
         user, database, password.toCharArray());
