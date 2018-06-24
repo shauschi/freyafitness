@@ -41,7 +41,7 @@ class Course extends Component {
       minutes,
       instructor,
       signedIn,
-      attendees = [],
+      attendees,
       maxParticipants,
       canceled
     } = course;
@@ -55,7 +55,7 @@ class Course extends Component {
     const details = (<div>
       <Typography
         style={{display: 'inline-block', textDecoration: textDecoration}}>{'mit ' + instructor.firstname}</Typography>
-      {getAvailability(attendees.length, maxParticipants, textDecoration)}
+      {getAvailability(attendees, maxParticipants, textDecoration)}
     </div>);
     const additional = signedIn ? (<div>
       <Typography style={{color: 'green'}}>Du bist angemeldet</Typography>
