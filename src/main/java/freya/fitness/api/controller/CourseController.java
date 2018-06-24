@@ -1,6 +1,7 @@
 package freya.fitness.api.controller;
 
 import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.CourseOverviewDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.service.CourseService;
@@ -71,18 +72,19 @@ public class CourseController {
   }
 
   @GetMapping("/from/{from}")
-  public List<CourseDto> getCourses(@PathVariable("from") final String from) {
+  public List<CourseOverviewDto> getCourses(@PathVariable("from") final String from) {
     final User user = userService.getCurrentUser();
-    return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
+    return toOverviewDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("from/{from}/to/{to}")
-  public List<CourseDto> getCourses(
+  public List<CourseOverviewDto> getCourses(
       @PathVariable("from") final String from,
       @PathVariable("to") final String to) {
     final User user = userService.getCurrentUser();
-    return toDtos(user, courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to)));
+    final List<Course> courses = courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to));
+    return toOverviewDtos(user, courses);
   }
 
   @PreAuthorize("hasAuthority('USER')")
@@ -129,9 +131,9 @@ public class CourseController {
     return ResponseEntity.badRequest().build();
   }
 
-  private List<CourseDto> toDtos(User user, List<Course> courses) {
+  private List<CourseOverviewDto> toOverviewDtos(User user, List<Course> courses) {
     return courses.stream()
-        .map(course -> new CourseDto(user, course))
+        .map(course -> new CourseOverviewDto(user, course))
         .collect(Collectors.toList());
   }
 
