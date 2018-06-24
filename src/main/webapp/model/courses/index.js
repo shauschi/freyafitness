@@ -30,13 +30,6 @@ export const MODE = {
   }
 };
 
-// TODO craeteCourse in Backend /courses/create (GET for new DTO) + courses/create (POST for save)
-export const NEW_COURSE = {
-  id: 'create',
-  courseTypeId: 1000,
-  maxParticipants: 12,
-};
-
 const initialState = {
   pending: false,
   data: [],

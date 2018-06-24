@@ -177,12 +177,10 @@ class CourseDetails extends Component {
   };
 
   handleRequestClose = () => {
-    // TODO unsaved 000_user?
     this.props.actions.hideCourseDetails();
   };
 
   handleRequestSave = () => {
-    // TODO onRequestSave
     this.props.actions.saveCourseDetails(this.props.courseDetails.course);
   };
 
@@ -208,7 +206,7 @@ class CourseDetails extends Component {
     const {
       show,
       mode = MODE.CREATE,
-      course = NEW_COURSE
+      course = {}
     } = courseDetails;
     const {
       toggleEditCourse,
