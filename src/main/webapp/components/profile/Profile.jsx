@@ -60,43 +60,25 @@ class Profile extends Component {
 
           <Subheader label={"Persönliche Daten"}/>
           <ListItemInput id="firstname" label="Vorname" value={firstname}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['firstname'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['firstname'], value)}/>
           <ListItemInput id="lastname" label="Nachname" value={lastname}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['lastname'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['lastname'], value)}/>
           <ListItemInput id="dayOfBirth" label="Geburtsdatum" value={moment(dayOfBirth).format(Format.ISO_DATE_FORMAT)} type='date'
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['dayOfBirth'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['dayOfBirth'], value)}/>
           <ListItemInput id="email" label="E-Mail" value={email}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['email'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['email'], value)}/>
           <ListItemInput id="mobil" label="Mobil" value={mobil}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['mobil'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['mobil'], value)}/>
 
           <Subheader label={"Anschrift"}/>
           <ListItemInput id="zipCode" label="PLZ" value={zipCode}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['adress', 'zipCode'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['adress', 'zipCode'], value)}/>
           <ListItemInput id="city" label="Ort" value={city}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['adress', 'city'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['adress', 'city'], value)}/>
           <ListItemInput id="street" label="Straße" value={street}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['adress', 'street'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['adress', 'street'], value)}/>
           <ListItemInput id="nr" label="Hausnummer" value={nr}
-               readonly={false} /* TODO */
-               onChange={value => onProfileDetailsChange(['adress', 'nr'], value)}
-               icon={undefined /* TODO ??? */}/>
+               onChange={value => onProfileDetailsChange(['adress', 'nr'], value)}/>
         </List>
       </div>
     );
