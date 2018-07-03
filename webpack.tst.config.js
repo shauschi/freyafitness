@@ -1,5 +1,5 @@
 'use strict';
-process.env.NODE_ENV = 'tst';
+process.env.NODE_ENV = 'development';
 
 const webpack = require('webpack');
 const path = require('path');
