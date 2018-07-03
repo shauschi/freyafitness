@@ -6,13 +6,16 @@ import {
   changeProfilePicture,
   login as loginApiCall,
   createAccount as createAccountApiCall,
-  getAllUsers as getAllUsersApiCall
+  getAllUsers as getAllUsersApiCall,
+  passwordForgotten as passwordForgottenApiCall,
+  resetPassword as resetPasswordApiCall,
 } from '../../service/profile';
 import {
   actions as drawerActions
 } from './../drawer';
 import {setPath, assignPath} from '../../utils/RamdaUtils';
 import init from './../init.js';
+import {showNotification} from "../notification";
 
 const initialState = {
   pending: false,
@@ -33,27 +36,44 @@ const initialState = {
     pending: false,
     errorMessage: undefined
   },
+  showLogin: true,
   loginRef: undefined,
   login: {
     pending: false,
     error: undefined,
     data: {
-      email: undefined,
-      password: undefined
+      email: "",
+      password: ""
+    }
+  },
+  passwordForgotten: {
+    show: false,
+    data: {
+      email: undefined
+    }
+  },
+  resetPassword: {
+    show: false,
+    data: {
+      password: undefined,
+      matchingPassword: undefined
     }
   },
   createAccount: {
     data: {
-      firstname: undefined,
-      lastname: undefined,
-      email: undefined,
-      password: undefined,
-      matchingPassword: undefined
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      matchingPassword: "",
+      acceptAgb: false
     }
   }
 };
 
 export const actions = createActions({
+  SHOW_LOGIN: undefined,
+  SHOW_REGISTRATION: undefined,
   PROFILE: {
     LOAD: {
       PENDING: undefined,
@@ -91,6 +111,22 @@ export const actions = createActions({
     SUCCESS: undefined,
     ERROR: error => error,
   },
+  PASSWORD_FORGOTTEN: {
+    SHOW: undefined,
+    HIDE: undefined,
+    PENDING: undefined,
+    SUCCESS: message => message,
+    ERROR: error => error,
+    DATA_CHANGED: (id, value) => ({id: id, value: value}),
+  },
+  RESET_PASSWORD: {
+    SHOW: undefined,
+    HIDE: undefined,
+    PENDING: undefined,
+    SUCCESS: message => message,
+    ERROR: error => error,
+    DATA_CHANGED: (id, value) => ({id: id, value: value}),
+  },
   SET_LOGIN_REF: ref => ref,
   CREATE_ACCOUNT: {
     PENDING: undefined,
@@ -111,6 +147,12 @@ export const scrollToLogin = () => {
   }
 };
 
+export const showLogin = () =>
+  dispatch => dispatch(actions.showLogin());
+
+export const showRegistration = () =>
+  dispatch => dispatch(actions.showRegistration());
+
 export const login = loginData =>
   dispatch => {
     dispatch(actions.login.pending());
@@ -129,15 +171,50 @@ export const createAccount = (createData) =>
   dispatch => {
     dispatch(actions.createAccount.pending());
     return createAccountApiCall(createData)
-      .then(profile => {
+      .then(answer => {
         dispatch(actions.createAccount.success());
-        dispatch(actions.profile.load.success(profile));
+        dispatch(showNotification(answer.message, "success"));
+        dispatch(actions.showLogin());
       })
       .catch(error => dispatch(actions.createAccount.error(error)));
   };
 
 export const createAccountDataChanged = (id, value) =>
   dispatch => dispatch(actions.createAccount.dataChanged(id, value));
+
+export const showPasswordForgotten = () =>
+  dispatch => dispatch(actions.passwordForgotten.show());
+
+export const hidePasswordForgotten = () =>
+  dispatch => dispatch(actions.passwordForgotten.hide());
+
+export const passwordForgotten = (data) =>
+  dispatch => {
+    dispatch(actions.passwordForgotten.pending());
+    return passwordForgottenApiCall(data)
+      .then(() => {
+        dispatch(actions.passwordForgotten.success());
+        dispatch(showNotification("Wir haben dir eine Mail geschickt.", "success"));
+      })
+      .catch(error => dispatch(actions.passwordForgotten.error(error)));
+  };
+
+export const passwordForgottenDataChanged = (id, value) =>
+  dispatch => dispatch(actions.passwordForgotten.dataChanged(id, value));
+
+export const resetPassword = (data) =>
+  dispatch => {
+    dispatch(actions.resetPassword.pending());
+    return resetPasswordApiCall(data)
+      .then(() => {
+        dispatch(actions.resetPassword.success());
+        dispatch(showNotification("Deine Passwort wurde zurückgesetzt.", "success"));
+      })
+      .catch(error => dispatch(actions.resetPassword.error(error)));
+  };
+
+export const resetPasswordDataChanged = (id, value) =>
+  dispatch => dispatch(actions.resetPassword.dataChanged(id, value));
 
 export const logout = () => {
   return dispatch => {
@@ -200,6 +277,9 @@ export const saveProfilePicture = file => {
 };
 
 export default handleActions({
+  [actions.showLogin]: state => setPath(['showLogin'], true, state),
+  [actions.showRegistration]: state => setPath(['showLogin'], false, state),
+
   [actions.login.pending]: state => assignPath(['login'], {pending: true, error: undefined}, state),
   [actions.login.success]: state => assignPath(['login'], {pending: false, error: undefined}, state),
   [actions.login.error]: (state, {payload}) => assignPath(['login'], {pending: false, error: payload}, state),
@@ -215,6 +295,7 @@ export default handleActions({
   [actions.profile.onProfileDetailsChange]: (state, {payload}) =>
     setPath(['user', ...payload.path], payload.value, state),
 
+  // profile picture
   [actions.profile.picture.reset]: state =>
     setPath(['picture'], initialState.picture, state),
   [actions.profile.picture.dialog.open]: state =>
@@ -229,20 +310,51 @@ export default handleActions({
     assignPath(['picture'], {pending: false, errorMessage: undefined}, state),
   [actions.profile.picture.save.error]: (state, {payload}) =>
     setPath(['picture', 'errorMessage'], payload.message, state),
+
   [actions.setLoginRef]: (state, {payload}) =>
     setPath(['loginRef'], payload, state),
-
   [actions.login.dataChanged]: (state, {payload}) =>
     setPath(['login', 'data', payload.id], payload.value, state),
+
+  // create account
   [actions.createAccount.dataChanged]: (state, {payload}) =>
     setPath(['createAccount', 'data', payload.id], payload.value, state),
   [actions.createAccount.pending]: state =>
     assignPath(['createAccount'], {pending: true, error: undefined}, state),
   [actions.createAccount.success]: state =>
-    assignPath(['createAccount'], {pending: false, error: undefined}, state),
+    assignPath(['createAccount'], {pending: false, error: undefined, data: initialState.createAccount.data}, state),
   [actions.createAccount.error]: (state, {payload}) =>
     assignPath(['createAccount'], {pending: false, error: payload}, state),
 
+  // password forgotten
+  [actions.passwordForgotten.show]: state =>
+    setPath(['passwordForgotten', 'show'], true, state),
+  [actions.passwordForgotten.hide]: state =>
+    setPath(['passwordForgotten', 'show'], false, state),
+  [actions.passwordForgotten.dataChanged]: (state, {payload}) =>
+    setPath(['passwordForgotten', 'data', payload.id], payload.value, state),
+  [actions.passwordForgotten.pending]: state =>
+    assignPath(['passwordForgotten'], {pending: true, error: undefined}, state),
+  [actions.passwordForgotten.success]: state =>
+    assignPath(['passwordForgotten'], {pending: false, error: undefined, show:false}, state),
+  [actions.passwordForgotten.error]: (state, {payload}) =>
+    assignPath(['passwordForgotten'], {pending: false, error: payload}, state),
+
+  // reset password
+  [actions.resetPassword.show]: state =>
+    setPath(['resetPassword', 'show'], true, state),
+  [actions.resetPassword.hide]: state =>
+    setPath(['resetPassword', 'show'], false, state),
+  [actions.resetPassword.dataChanged]: (state, {payload}) =>
+    setPath(['resetPassword', 'data', payload.id], payload.value, state),
+  [actions.resetPassword.pending]: state =>
+    assignPath(['resetPassword'], {pending: true, error: undefined}, state),
+  [actions.resetPassword.success]: state =>
+    assignPath(['resetPassword'], {pending: false, error: undefined}, state),
+  [actions.resetPassword.error]: (state, {payload}) =>
+    assignPath(['resetPassword'], {pending: false, error: payload}, state),
+
+  // load users
   [actions.users.pending]: state =>
     assignPath(['users'], {pending: true, error: undefined}, state),
   [actions.users.updated]: (state, {payload}) =>

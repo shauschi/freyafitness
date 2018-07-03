@@ -1,5 +1,6 @@
 package freya.fitness.api.controller;
 
+import freya.fitness.api.dto.MessageDto;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.api.dto.ProfileDto;
@@ -46,11 +47,11 @@ public class ProfileController {
   }
 
   @PostMapping("/create")
-  public UserDto createAccount(
+  public MessageDto createAccount(
       @RequestBody @Valid final CreateAccountDto createAccountDto)
       throws UserAllreadyExistsException, RoleNotFoundException {
-    final User user = userService.createAccount(createAccountDto);
-    return new UserDto(user);
+    userService.createAccount(createAccountDto);
+    return new MessageDto("Deine Registrierung war erfolgreich.");
   }
 
   @PreAuthorize("hasAuthority('USER')")

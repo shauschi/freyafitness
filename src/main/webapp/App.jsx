@@ -10,7 +10,7 @@ import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsPr
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {MyAppBar, Footer, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
-import Snackbar from '@material-ui/core/Snackbar';
+import {CustomizedSnackbar} from './components/general';
 import {Home, Courses, ProfileSite, About, Agb, Impressum} from './sites';
 import {CourseDetails} from './components/course';
 import * as Style from './utils/Style';
@@ -107,10 +107,11 @@ class App extends Component {
                   ? <Footer {...this.props}/>
                   : undefined
               }
-              <Snackbar
+              <CustomizedSnackbar
                 open={notification.show}
-                onClose={this.props.actions.hideNotification}
+                variant={notification.variant}
                 message={notification.message}
+                onClose={this.props.actions.hideNotification}
                 autoHideDuration={notification.autoHideDuration}/>
             </div>
           </div>

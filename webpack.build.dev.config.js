@@ -1,5 +1,5 @@
 'use strict';
-process.env.NODE_ENV = 'tst';
+process.env.NODE_ENV = 'development';
 
 const webpack = require('webpack');
 const path = require('path');
@@ -29,7 +29,7 @@ module.exports = {
     new UglifyJSPlugin(),
     HtmlWebpackPluginConfig,
     new webpack.DefinePlugin({
-      __API__: "'https://freya.fitness:7443'"
+      __API__: "'https://localhost:9443'"
     })
   ],
   module: {

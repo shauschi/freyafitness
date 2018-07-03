@@ -4,30 +4,30 @@ import {assignPath} from '../../utils/RamdaUtils';
 
 const initialState = {
   show: false,
-  type: 'normal',
+  variant: 'normal',
   message: '',
-  authHideDuration: 1500
+  autoHideDuration: 1500
 };
 
 export const actions = createActions({
   NOTIFICATION: {
-    SHOW: data => ({message: data.message, type: data.type, autoHideDuration: data.autoHideDuration}),
+    SHOW: data => ({message: data.message, variant: data.variant, autoHideDuration: data.autoHideDuration}),
     HIDE: undefined
   }
 });
 
-export const showStickyNotification = (message, type) =>
-  dispatch => dispatch(actions.notification.show({message: message, type: type, autoHideDuration: undefined}));
+export const showStickyNotification = (message, variant) =>
+  dispatch => dispatch(actions.notification.show({message: message, variant: variant, autoHideDuration: undefined}));
 
-export const showNotification = (message, type) =>
-  dispatch => dispatch(actions.notification.show({message: message, type: type, autoHideDuration: 1500}));
+export const showNotification = (message, variant) =>
+  dispatch => dispatch(actions.notification.show({message: message, variant: variant, autoHideDuration: 1500}));
 
 export const hideNotification = () =>
   dispatch => dispatch(actions.notification.hide());
 
 export default handleActions({
   [actions.notification.show]: (state, {payload}) =>
-    assignPath([], {show: true, type: payload.type, message: payload.message}, state),
+    assignPath([], {show: true, variant: payload.variant, message: payload.message, autoHideDuration: payload.autoHideDuration}, state),
   [actions.notification.hide]: state =>
     assignPath([], {show: false, message: ''}, state),
 }, initialState);
