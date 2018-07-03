@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
@@ -18,8 +21,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -111,6 +121,21 @@ public class EmailService {
     final BodyPart messageBodyPart = new MimeBodyPart();
     messageBodyPart.setContent(message, "text/html; charset=utf-8");
     multipart.addBodyPart(messageBodyPart);
+
+    final BodyPart freyRaumSvg = new MimeBodyPart();
+    final URL resource = Thread.currentThread().getContextClassLoader().getResource("freyraum-white.png");
+    try {
+      final URI uri = resource.toURI();
+      final File file = new File(uri);
+      final DataSource fds = new FileDataSource(file);
+      freyRaumSvg.setDataHandler(new DataHandler(fds));
+      freyRaumSvg.addHeader("Content-Type", "image/png");
+      freyRaumSvg.addHeader("Content-ID", "<freyraum>");
+      multipart.addBodyPart(freyRaumSvg);
+    } catch (Exception e) {
+
+    }
+
     return multipart;
   }
 
