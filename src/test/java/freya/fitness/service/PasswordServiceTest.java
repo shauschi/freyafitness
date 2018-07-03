@@ -75,6 +75,7 @@ public class PasswordServiceTest {
     User user = new User();
     user.setEmail("user@test.mail");
     user.setFirstName("Testuser");
+    user.setFamilyName("007");
     when(userService.getUserByEmail(user.getEmail())).thenReturn(user);
 
     testee.processForgotPassword(user.getEmail(), mockRequest);
@@ -87,7 +88,7 @@ public class PasswordServiceTest {
     verify(emailService).sendMail(
         eq("user@test.mail"),
         eq("testing password service"),
-        contains("Dieser Link ist 24 Stunden gültig"));
+        contains("der Link ist 24 Stunden gültig"));
   }
 
   @Test
