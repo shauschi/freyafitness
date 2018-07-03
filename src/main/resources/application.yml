@@ -39,11 +39,13 @@ course:
     minutes: 60
     maxParticipants: 12
 mail:
+  sender: FreyRaum <admin@freya.fitness>
+  develop:
+    receiver: develop@freya.fitness
   resetpassword:
     success: Erfolg
     invalid: Nicht so erfolgreich
-    sender: admin@freya.fitness
     subject: Passwort für freya.fitness zurücksetzen
-    message: Bla bla bla
+    message:
     validity:
       hours: 24

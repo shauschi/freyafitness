@@ -62,6 +62,8 @@ public class AppConfig {
             "/news/previews",
             "/courses/from/**",
             "/coursetypes/",
+            "/password/forgot",
+            "/password/reset",
             "/*.jpg")
         .permitAll()
         .anyRequest()

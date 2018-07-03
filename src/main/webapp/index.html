@@ -22,6 +22,13 @@
                 height: 100%;
             }
         </style>
+        <script th:inline="javascript">
+          /*<![CDATA[*/
+          RESET_PASSWORD = /*[[${resetPassword}]]*/ false;
+          RESET_PASSWORD_TOKEN = /*[[${resetPasswordToken}]]*/ undefined;
+          ERROR_MESSAGE = /*[[${errorMessage}]]*/ undefined;
+          /*]]>*/
+        </script>
     </head>
     <body>
         <div id="app">

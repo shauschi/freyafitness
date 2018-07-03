@@ -1,8 +1,10 @@
 'use strict';
 import React, {Component} from 'react';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import {IconSignIn} from './../../utils/Icons';
-import {ValidationGroup} from './../general/validation';
+import {ValidationGroup, Validators} from './../general/validation';
+import {setPath} from '../../utils/RamdaUtils';
 import {
   GridTextControl,
   GridInputControl,
@@ -33,7 +35,7 @@ class LoginForm extends Component {
   };
 
   render() {
-    const {formData, formDataChanged, pending, error} = this.props;
+    const {formData, formDataChanged, pending, error, showPasswordForgotten} = this.props;
 
     return (
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
@@ -44,6 +46,7 @@ class LoginForm extends Component {
             id='email'
             label='E-Mail'
             value={formData.email}
+            validators={[Validators.email()]}
             onChange={formDataChanged}/>
           <GridPasswordControl
             id='password'
@@ -56,6 +59,12 @@ class LoginForm extends Component {
             label='login'
             icon={<IconSignIn style={{marginLeft: '8px'}} size={16}/>}
             onClick={this.doLogin}/>
+          <GridButtonControl
+            pending={pending}
+            size='small'
+            variant='flat'
+            label='Passwort vergessen?'
+            onClick={showPasswordForgotten}/>
         </ValidationGroup>
       </Grid>
     );

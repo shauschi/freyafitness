@@ -8,3 +8,7 @@ global.Request = Request;
 
 global.fetch = require('jest-fetch-mock');
 global.__API__ = 'backend';
+
+global.RESET_PASSWORD = false;
+global.RESET_PASSWORD_TOKEN = undefined;
+global.ERROR_MESSAGE = undefined;

@@ -72,14 +72,14 @@ export class GridCheckboxControl extends ValidationControl {
 
   render() {
     const {valid, errors} = this.state;
-    const {id, checked, onChange, label, xs, sm, md} = this.props;
+    const {id, value, onChange, label, xs, sm, md} = this.props;
     return <GridFormControl error={!valid} xs={xs} sm={sm} md={md}>
       <FormControlLabel
         control={
           <Checkbox
             id={id}
-            checked={checked}
-            onChange={onChange}
+            checked={value} // has to be value, because of ValidationControl
+            onChange={event => onChange(id, event.target.checked)}
           />
         }
         label={label}
@@ -181,11 +181,20 @@ export class GridDateTimeControl extends ValidationControl {
 export class GridButtonControl extends Component {
 
   render() {
-    const {label, icon, onClick, pending} = this.props;
+    const {
+      variant = 'raised',
+      size = 'medium',
+      color = 'primary',
+      label,
+      icon,
+      onClick,
+      pending
+    } = this.props;
     return <GridFormControl>
       <Button
-        variant='raised'
-        color='primary'
+        variant={variant}
+        size={size}
+        color={color}
         disabled={pending}
         onClick={onClick}>
         {label}
