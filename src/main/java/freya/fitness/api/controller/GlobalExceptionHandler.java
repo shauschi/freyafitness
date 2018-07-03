@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.MessagingException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler  {
 
@@ -21,6 +23,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler  {
 
   @ExceptionHandler(value = UsernameNotFoundException.class)
   public ResponseEntity<MessageDto> catchUsernameNotFoundException(
+      final Exception exception) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new MessageDto(exception.getMessage()));
+  }
+
+  @ExceptionHandler(value = MessagingException.class)
+  public ResponseEntity<MessageDto> catchMessagingException(
       final Exception exception) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(new MessageDto(exception.getMessage()));
