@@ -48,6 +48,7 @@ pipeline {
   environment{
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
     NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
+    BRANCH = ${BRANCH_NAME}
   }
   stages {
     stage('checkout') {
@@ -135,6 +136,8 @@ pipeline {
         MONGO_PORT = 27017
         APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
         APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
+        MAIL_HOST  = "smtp.1und1.de"
+        MAIL_PORT  = 587
       }
       steps {
         withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
@@ -152,6 +155,11 @@ pipeline {
             -e MONGO_PSW=${MONGO_PSW} \
             -e MONGO_HOST=${MONGO_HOST} \
             -e MONGO_PORT=${MONGO_PORT} \
+            -e BRANCH=${BRANCH} \
+            -e MAIL_HOST=${MAIL_HOST} \
+            -e MAIL_PORT=${MAIL_PORT} \
+            -e MAIL_USR=${MAIL_USR} \
+            -e MAIL_PSW=${MAIL_PSW} \
             -p ${APP_PORT}:9000 \
             -p ${APP_PORT_S}:9443 \
             --name ${APP_NAME} \

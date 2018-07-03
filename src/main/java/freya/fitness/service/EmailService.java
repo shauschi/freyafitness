@@ -36,14 +36,14 @@ public class EmailService {
 
   @Autowired
   public EmailService(
-      @Value("${isDevelop:true}") final Boolean isDevelop,
+      @Value("${BRANCH:true}") final String branch,
       @Value("${mail.develop.receiver}") final String developReceiver,
       @Value("${MAIL_HOST:localhost}") final String host,
       @Value("${MAIL_PORT:1124}") final Integer port,
       @Value("${MAIL_USR:todo}") final String username,
       @Value("${MAIL_PSW:todo}") final String password,
       @Value("${mail.sender}") final String sender) {
-    this.isDevelop = isDevelop;
+    this.isDevelop = !"MASTER".equalsIgnoreCase(branch);
     this.developReceiver = developReceiver;
     this.sender = sender;
 
