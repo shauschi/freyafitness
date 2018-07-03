@@ -5,6 +5,8 @@ import freya.fitness.domain.jpa.User;
 import freya.fitness.utils.InvalidPasswordException;
 import freya.fitness.utils.InvalidResetTokenException;
 import freya.fitness.utils.MailTemplateNotFoundException;
+import freya.fitness.utils.ResourceLoadingException;
+import freya.fitness.utils.ResourceUtils;
 import freya.fitness.utils.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,11 +84,7 @@ public class PasswordService {
     final String filename = "reset_password.html";
     final User user = resetToken.getUser();
     try {
-      final URL resource = Thread.currentThread().getContextClassLoader().getResource("reset_password.html");
-      final URI uri = resource.toURI();
-      final Path path = Paths.get(uri);
-      final List<String> lines = Files.readAllLines(path);
-      String template = String.join("", lines);
+      String template = ResourceUtils.getResourceAsString("reset_password.html");
       final Map<String, String> params = new HashMap<>();
       params.put("firstname", user.getFirstName());
       params.put("lastname", user.getFamilyName());
@@ -95,7 +93,7 @@ public class PasswordService {
         template = template.replaceAll("\\$\\{" + entry.getKey() + "}", entry.getValue());
       }
       return template;
-    } catch (IOException | URISyntaxException | NullPointerException e) {
+    } catch (final ResourceLoadingException e) {
       LOGGER.error("Could not read reset password file");
       throw new MailTemplateNotFoundException(filename);
     }
