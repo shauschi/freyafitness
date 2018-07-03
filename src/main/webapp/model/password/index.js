@@ -38,7 +38,7 @@ export const changePassword = (changePasswordData) =>
     return changePasswordApiCall(changePasswordData)
       .then(answer => {
         dispatch(actions.password.change.success());
-        dispatch(showNotification(answer.message));
+        dispatch(showNotification(answer.message, "success"));
       })
       .catch(error => dispatch(actions.password.error(error)));
   };

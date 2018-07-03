@@ -63,7 +63,6 @@ export default handleActions({
   [actions.news.load.error]: (state, {payload}) =>
     assignPath([], {pending: false, errorMessage: payload.message}, state),
 
-  //TODO
   [actions.news.create.pending]: state => setPath(['pending'], true, state),
   [actions.news.create.success]: (state, {payload}) =>
     assignPath([], {pending: false, data: payload, errorMessage: null}, state),

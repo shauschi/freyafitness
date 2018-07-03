@@ -133,11 +133,6 @@ class ProfilePictureDialog extends Component {
                 Ein anderes Bild wählen
               </Button>
             </div>
-            {/* TODO nach Login with Facebook
-            <div style={{margin: '16px auto', textAlign: 'center'}}>
-              <Button raised>Mein facebook Profilbild nehmen</Button>
-            </div>
-            */}
             <div>
               <Typography>Wähle einen Bildausschnitt für Dein neues Profilbild
                 und klicke anschließend auf Speichern.

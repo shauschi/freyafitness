@@ -84,7 +84,7 @@ class RegistrationForm extends Component {
           </Grid>
           <GridCheckboxControl
             id='acceptAgb'
-            checked={formData.acceptAgb}
+            value={formData.acceptAgb}
             validators={[Validators.cheked('Bitte die AGBs akzeptieren')]}
             onChange={formDataChanged}
             label='ich stimme zu'

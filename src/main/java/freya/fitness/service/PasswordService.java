@@ -4,47 +4,63 @@ import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.utils.InvalidPasswordException;
 import freya.fitness.utils.InvalidResetTokenException;
+import freya.fitness.utils.MailTemplateNotFoundException;
 import freya.fitness.utils.UserNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class PasswordService {
 
-  @Value("${mail.resetpassword.sender}")
-  private String sender;
+  private static final Logger LOGGER = LogManager.getLogger(PasswordService.class);
 
   @Value("${mail.resetpassword.subject}")
   private String subject;
 
-  @Value("${mail.resetpassword.message}")
-  private String message;
-
   @Value("${mail.resetpassword.validity.hours:24}")
   private Integer validityHours;
 
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
+
+  private final PasswordEncoder passwordEncoder;
+
+  private final EmailService emailService;
+
+  private final PasswordResetTokenService passwordResetTokenService;
 
   @Autowired
-  private PasswordEncoder passwordEncoder;
+  public PasswordService(
+      final UserService userService,
+      final PasswordEncoder passwordEncoder,
+      final EmailService emailService,
+      final PasswordResetTokenService passwordResetTokenService) {
+    this.userService = userService;
+    this.passwordEncoder = passwordEncoder;
+    this.emailService = emailService;
+    this.passwordResetTokenService = passwordResetTokenService;
+  }
 
-  @Autowired
-  private EmailService emailService;
-
-  @Autowired
-  private PasswordResetTokenService passwordResetTokenService;
-
-  public void processForgotPassword(
-      final String userEmail, final HttpServletRequest request) throws UserNotFoundException {
+  public void processForgotPassword(final String userEmail, final HttpServletRequest request)
+      throws UserNotFoundException, MailTemplateNotFoundException, MessagingException {
     final User user = userService.getUserByEmail(userEmail);
 
     final PasswordResetToken resetToken = new PasswordResetToken();
@@ -54,16 +70,43 @@ public class PasswordService {
     resetToken.setExpiryTime(now.plusHours(validityHours));
     passwordResetTokenService.save(resetToken);
 
-    final String appUrl = request.getScheme() + "://" + request.getServerName();
-    final String resetUrl = appUrl + "/reset?token=" + resetToken.getToken();
+    final String text = getEmailText(request, resetToken);
+    emailService.sendMail(user.getEmail(), subject, text);
+  }
 
-    final SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
-    passwordResetEmail.setFrom(sender);
-    passwordResetEmail.setTo(user.getEmail());
-    passwordResetEmail.setSubject(subject);
-    passwordResetEmail.setText(String.format(message, resetUrl));
+  private String getEmailText(final HttpServletRequest request, final PasswordResetToken resetToken)
+      throws MailTemplateNotFoundException {
+    final String port = getPortFromRequest(request);
+    final String appUrl = request.getScheme() + "://" + request.getServerName() + port;
+    final String resetUrl = appUrl + "/?resetPasswordToken=" + resetToken.getToken();
+    final String filename = "reset_password.html";
+    final User user = resetToken.getUser();
+    try {
+      final URL resource = Thread.currentThread().getContextClassLoader().getResource("reset_password.html");
+      final URI uri = resource.toURI();
+      final Path path = Paths.get(uri);
+      final List<String> lines = Files.readAllLines(path);
+      String template = String.join("", lines);
+      final Map<String, String> params = new HashMap<>();
+      params.put("firstname", user.getFirstName());
+      params.put("lastname", user.getFamilyName());
+      params.put("resetUrl", resetUrl);
+      for (Map.Entry<String, String> entry : params.entrySet()) {
+        template = template.replaceAll("\\$\\{" + entry.getKey() + "}", entry.getValue());
+      }
+      return template;
+    } catch (IOException | URISyntaxException | NullPointerException e) {
+      LOGGER.error("Could not read reset password file");
+      throw new MailTemplateNotFoundException(filename);
+    }
+  }
 
-    emailService.sendMail(passwordResetEmail);
+  private String getPortFromRequest(HttpServletRequest request) {
+    int serverPort = request.getServerPort();
+    if (80 == serverPort || 443 == serverPort) {
+      return "";
+    }
+    return ":" + serverPort;
   }
 
   public void processResetPassword(final String token, final String newPasswordRaw)

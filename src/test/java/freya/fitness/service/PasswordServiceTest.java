@@ -3,6 +3,7 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.utils.InvalidResetTokenException;
+import freya.fitness.utils.MailTemplateNotFoundException;
 import freya.fitness.utils.UserNotFoundException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -13,15 +14,17 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,14 +52,13 @@ public class PasswordServiceTest {
 
   @Before
   public void setUp() {
-    ReflectionTestUtils.setField(testee, "sender", "testsender@unit.test");
     ReflectionTestUtils.setField(testee, "subject", "testing password service");
-    ReflectionTestUtils.setField(testee, "message", "new message");
     ReflectionTestUtils.setField(testee, "validityHours", 3);
   }
 
   @Test
-  public void test_processForgotPassword_userNotFound() throws UserNotFoundException {
+  public void test_processForgotPassword_userNotFound()
+      throws UserNotFoundException, MailTemplateNotFoundException, MessagingException {
     HttpServletRequest mockRequest = mock(HttpServletRequest.class);
     expectedExeption.expect(UserNotFoundException.class);
     when(userService.getUserByEmail(any())).thenThrow(UserNotFoundException.withEmail(""));
@@ -65,13 +67,15 @@ public class PasswordServiceTest {
   }
 
   @Test
-  public void test_processForgotPassword() throws UserNotFoundException {
+  public void test_processForgotPassword()
+      throws UserNotFoundException, MailTemplateNotFoundException, MessagingException {
     HttpServletRequest mockRequest = mock(HttpServletRequest.class);
     when(mockRequest.getScheme()).thenReturn("http");
     when(mockRequest.getServerName()).thenReturn("test.server");
     User user = new User();
     user.setEmail("user@test.mail");
     user.setFirstName("Testuser");
+    user.setFamilyName("007");
     when(userService.getUserByEmail(user.getEmail())).thenReturn(user);
 
     testee.processForgotPassword(user.getEmail(), mockRequest);
@@ -81,12 +85,10 @@ public class PasswordServiceTest {
           && token.getExpiryTime().isBefore(LocalDateTime.now().plusHours(3));
     verify(passwordResetTokenService).save(argThat(expectedToken));
 
-    ArgumentMatcher<SimpleMailMessage> expectedMail = mail ->
-        user.getEmail().equals(mail.getTo()[0])
-        && "testsender@unit.test".equals(mail.getFrom())
-        && "testing password service".equals(mail.getSubject())
-        && mail.getText().contains("new message");
-    verify(emailService).sendMail(argThat(expectedMail));
+    verify(emailService).sendMail(
+        eq("user@test.mail"),
+        eq("testing password service"),
+        contains("der Link ist 24 Stunden gültig"));
   }
 
   @Test

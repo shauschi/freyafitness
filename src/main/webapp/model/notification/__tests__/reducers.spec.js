@@ -17,24 +17,24 @@ describe('notifications reducer', () => {
     it('should change the state', () => {
       const nextState = reducer(state, actions.notification.show({message: 'Test message'}));
 
-      expect(nextState).toEqual({show: true, message: 'Test message', type: undefined});
+      expect(nextState).toEqual({show: true, message: 'Test message', variant: undefined});
     });
 
     it('should change the state', () => {
-      const nextState = reducer(state, actions.notification.show({message: 'Test message', type: 'error'}));
+      const nextState = reducer(state, actions.notification.show({message: 'Test message', variant: 'error'}));
 
-      expect(nextState).toEqual({show: true, message: 'Test message', type: 'error'});
+      expect(nextState).toEqual({show: true, message: 'Test message', variant: 'error'});
     });
   });
 
   describe('with HIDE action', () => {
 
     it('should reset the message and hide the notification', () => {
-      state = {show: true, message: 'Any message', type: 'any'};
+      state = {show: true, message: 'Any message', variant: 'info'};
 
       const nextState = reducer(state, actions.notification.hide());
 
-      expect(nextState).toEqual({show: false, message: '', type: 'any'});
+      expect(nextState).toEqual({show: false, message: '', variant: 'info'});
     });
   });
 });

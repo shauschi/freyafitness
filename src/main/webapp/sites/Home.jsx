@@ -166,7 +166,6 @@ class Home extends Component {
     }
     return <Grid item xs={12} md={9} style={{padding: '0px'}}>
       <List style={{padding: '0'}}>
-        {/* TODO Das ganze mal als GridList ausprobieren */}
         {this.getMyCourses()}
         <Subheader label={"Status"}/>
         <ListItem button
@@ -184,7 +183,6 @@ class Home extends Component {
   };
 
   render() {
-    // TODO besser an die einzelnen Komponenten übergeben
     return (
       <div style={{height: '100%', overflow: 'scroll', WebkitOverflowScrolling: 'touch'}}>
         <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
