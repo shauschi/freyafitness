@@ -48,7 +48,7 @@ pipeline {
   environment{
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
     NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
-    BRANCH = ${BRANCH_NAME}
+    BRANCH = "${BRANCH_NAME}"
   }
   stages {
     stage('checkout') {
