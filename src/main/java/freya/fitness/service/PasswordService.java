@@ -23,7 +23,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -68,26 +70,43 @@ public class PasswordService {
     resetToken.setExpiryTime(now.plusHours(validityHours));
     passwordResetTokenService.save(resetToken);
 
-    final String text = getEmailText(userEmail, request, resetToken);
+    final String text = getEmailText(request, resetToken);
     emailService.sendMail(user.getEmail(), subject, text);
   }
 
-  private String getEmailText(String userEmail, final HttpServletRequest request, final PasswordResetToken resetToken)
+  private String getEmailText(final HttpServletRequest request, final PasswordResetToken resetToken)
       throws MailTemplateNotFoundException {
-    final String appUrl = request.getScheme() + "://" + request.getServerName();
-    final String resetUrl = appUrl + "/?resetPasswordToken=" + resetToken.getToken() + "/#/";
+    final String port = getPortFromRequest(request);
+    final String appUrl = request.getScheme() + "://" + request.getServerName() + port;
+    final String resetUrl = appUrl + "/?resetPasswordToken=" + resetToken.getToken();
     final String filename = "reset_password.html";
+    final User user = resetToken.getUser();
     try {
       final URL resource = Thread.currentThread().getContextClassLoader().getResource("reset_password.html");
       final URI uri = resource.toURI();
       final Path path = Paths.get(uri);
       final List<String> lines = Files.readAllLines(path);
-      final String template = String.join("", lines);
-      return String.format(template, userEmail, resetUrl);
+      String template = String.join("", lines);
+      final Map<String, String> params = new HashMap<>();
+      params.put("firstname", user.getFirstName());
+      params.put("lastname", user.getFamilyName());
+      params.put("resetUrl", resetUrl);
+      for (Map.Entry<String, String> entry : params.entrySet()) {
+        template = template.replaceAll("\\$\\{" + entry.getKey() + "}", entry.getValue());
+      }
+      return template;
     } catch (IOException | URISyntaxException | NullPointerException e) {
       LOGGER.error("Could not read reset password file");
       throw new MailTemplateNotFoundException(filename);
     }
+  }
+
+  private String getPortFromRequest(HttpServletRequest request) {
+    int serverPort = request.getServerPort();
+    if (80 == serverPort || 443 == serverPort) {
+      return "";
+    }
+    return ":" + serverPort;
   }
 
   public void processResetPassword(final String token, final String newPasswordRaw)
