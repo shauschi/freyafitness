@@ -9,9 +9,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.stream.Collectors;
 
 @Component
 public class ResourceService {
@@ -32,14 +37,10 @@ public class ResourceService {
   public String getResourceAsString(final String filename) throws ResourceLoadingException {
     try {
       final Resource resource = resourceLoader.getResource("classpath:" + filename);
-      long length = resource.getFile().length();
-      final InputStream in = resource.getInputStream();
-      byte[] bytes = new byte[(int) length];
-      int result = in.read(bytes);
-      if (-1 == result) {
-        throw new ResourceLoadingException(filename);
-      }
-      return new String(bytes);
+      final InputStream inputStream = resource.getInputStream();
+      return new BufferedReader(new InputStreamReader(inputStream))
+          .lines()
+          .collect(Collectors.joining("\n"));
     } catch (final IOException cause) {
       LOGGER.error("Could not read file {}", filename, cause);
       throw new ResourceLoadingException(filename, cause);
@@ -55,7 +56,21 @@ public class ResourceService {
    */
   public File getResourceAsFile(final String filename) throws ResourceLoadingException {
     try {
-      return resourceLoader.getResource("classpath:" + filename).getFile();
+      final Resource resource = resourceLoader.getResource("classpath:" + filename);
+      final InputStream inputStream = resource.getInputStream();
+
+      byte[] buffer = new byte[inputStream.available()];
+      int result = inputStream.read(buffer);
+      if (result == -1) {
+        LOGGER.error("Error reading file {}, result: {}", filename, result);
+        throw new ResourceLoadingException(filename);
+      }
+
+      final File targetFile = new File(filename);
+      final OutputStream outStream = new FileOutputStream(targetFile);
+      outStream.write(buffer);
+
+      return targetFile;
     } catch (final IOException cause) {
       LOGGER.error("Could not read file {}", filename, cause);
       throw new ResourceLoadingException(filename, cause);
