@@ -22,6 +22,13 @@ public class ResourceService {
   @Autowired
   private ResourceLoader resourceLoader;
 
+  /**
+   * Allows loading files from resources folder
+   *
+   * @param filename filename relatively to resources
+   * @return file content as {@link String}
+   * @throws ResourceLoadingException when the file was not found or could not be loaded
+   */
   public String getResourceAsString(final String filename) throws ResourceLoadingException {
     try {
       final Resource resource = resourceLoader.getResource("classpath:" + filename);
@@ -39,7 +46,13 @@ public class ResourceService {
     }
   }
 
-
+  /**
+   * Allows loading files from resources folder
+   *
+   * @param filename filename relatively to resources
+   * @return file resource as {@link File}
+   * @throws ResourceLoadingException when the file was not found or could not be loaded
+   */
   public File getResourceAsFile(final String filename) throws ResourceLoadingException {
     try {
       return resourceLoader.getResource("classpath:" + filename).getFile();

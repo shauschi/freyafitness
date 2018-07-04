@@ -13,7 +13,12 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -47,6 +52,9 @@ public class PasswordServiceTest {
   @Mock
   private PasswordResetTokenService passwordResetTokenService;
 
+  @Spy
+  private ResourceService resourceService;
+
   @Rule
   public ExpectedException expectedExeption = ExpectedException.none();
 
@@ -54,6 +62,8 @@ public class PasswordServiceTest {
   public void setUp() {
     ReflectionTestUtils.setField(testee, "subject", "testing password service");
     ReflectionTestUtils.setField(testee, "validityHours", 3);
+    ResourceLoader resourceLoader = new DefaultResourceLoader();
+    ReflectionTestUtils.setField(resourceService, "resourceLoader", resourceLoader);
   }
 
   @Test
