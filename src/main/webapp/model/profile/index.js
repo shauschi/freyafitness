@@ -324,7 +324,7 @@ export default handleActions({
   [actions.createAccount.success]: state =>
     assignPath(['createAccount'], {pending: false, error: undefined, data: initialState.createAccount.data}, state),
   [actions.createAccount.error]: (state, {payload}) =>
-    assignPath(['createAccount'], {pending: false, error: payload}, state),
+    assignPath(['createAccount'], {pending: false, error: payload.message}, state),
 
   // password forgotten
   [actions.passwordForgotten.show]: state =>
@@ -338,7 +338,7 @@ export default handleActions({
   [actions.passwordForgotten.success]: state =>
     assignPath(['passwordForgotten'], {pending: false, error: undefined, show:false}, state),
   [actions.passwordForgotten.error]: (state, {payload}) =>
-    assignPath(['passwordForgotten'], {pending: false, error: payload}, state),
+    assignPath(['passwordForgotten'], {pending: false, error: payload.message}, state),
 
   // reset password
   [actions.resetPassword.show]: state =>
@@ -352,7 +352,7 @@ export default handleActions({
   [actions.resetPassword.success]: state =>
     assignPath(['resetPassword'], {pending: false, error: undefined}, state),
   [actions.resetPassword.error]: (state, {payload}) =>
-    assignPath(['resetPassword'], {pending: false, error: payload}, state),
+    assignPath(['resetPassword'], {pending: false, error: payload.message}, state),
 
   // load users
   [actions.users.pending]: state =>

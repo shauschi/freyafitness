@@ -136,6 +136,7 @@ pipeline {
         MONGO_PORT = 27017
         APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
         APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
+        MAIL       = credentials('mail')
         MAIL_HOST  = "smtp.1und1.de"
         MAIL_PORT  = 587
       }
@@ -145,7 +146,7 @@ pipeline {
                                                passwordVariable: 'SSL_PSW')]) {
           sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
           sh '''
-            docker run --rm -d \
+            docker run --rm  -d \
             -e SSL_PSW=${SSL_PSW} \
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \

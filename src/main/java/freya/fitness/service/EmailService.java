@@ -1,5 +1,6 @@
 package freya.fitness.service;
 
+import freya.fitness.utils.ResourceLoadingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -43,6 +38,7 @@ public class EmailService {
   private final String developReceiver;
   private final String sender;
   private final Authenticator auth;
+  private ResourceService resourceService;
 
   @Autowired
   public EmailService(
@@ -52,7 +48,8 @@ public class EmailService {
       @Value("${MAIL_PORT:1124}") final Integer port,
       @Value("${MAIL_USR:todo}") final String username,
       @Value("${MAIL_PSW:todo}") final String password,
-      @Value("${mail.sender}") final String sender) {
+      @Value("${mail.sender}") final String sender,
+      final ResourceService resourceService) {
     this.isDevelop = !"MASTER".equalsIgnoreCase(branch);
     this.developReceiver = developReceiver;
     this.sender = sender;
@@ -70,6 +67,8 @@ public class EmailService {
         return new PasswordAuthentication(username, password);
       }
     };
+
+    this.resourceService = resourceService;
   }
 
   public void sendMail(
@@ -123,17 +122,15 @@ public class EmailService {
     multipart.addBodyPart(messageBodyPart);
 
     final BodyPart freyRaumSvg = new MimeBodyPart();
-    final URL resource = Thread.currentThread().getContextClassLoader().getResource("freyraum-white.png");
     try {
-      final URI uri = resource.toURI();
-      final File file = new File(uri);
+      final File file = resourceService.getResourceAsFile("freyraum-white.png");
       final DataSource fds = new FileDataSource(file);
       freyRaumSvg.setDataHandler(new DataHandler(fds));
       freyRaumSvg.addHeader("Content-Type", "image/png");
       freyRaumSvg.addHeader("Content-ID", "<freyraum>");
       multipart.addBodyPart(freyRaumSvg);
-    } catch (Exception e) {
-
+    } catch (final ResourceLoadingException e) {
+      LOGGER.error("Unable to load FreyRaum png for mail");
     }
 
     return multipart;
