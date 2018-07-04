@@ -42,7 +42,7 @@ class PasswordForgottenDialog extends Component {
   };
 
   render() {
-    const {open, onClose, pending, formData, formDataChanged} = this.props;
+    const {open, onClose, error, pending, formData, formDataChanged} = this.props;
 
     return (
       <Dialog
@@ -90,6 +90,7 @@ class PasswordForgottenDialog extends Component {
                 validators={[Validators.email()]}
                 onChange={formDataChanged}/>
             </ValidationGroup>
+            {error ? <GridTextControl text={error} error={true}/> : undefined}
           </Grid>
         </DialogContent>
         <DialogActions>
