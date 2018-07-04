@@ -13,8 +13,8 @@ public class ResourceUtils {
   private static final Logger LOGGER = LogManager.getLogger(ResourceUtils.class);
 
   public static String getResourceAsString(final String filename) throws ResourceLoadingException {
+    final File file = getResourceAsFile(filename);
     try {
-      final File file = getResourceAsFile(filename);
       final InputStream in = new FileInputStream(file);
       byte[] bytes = new byte[(int) file.length()];
       int result = in.read(bytes);
@@ -23,7 +23,7 @@ public class ResourceUtils {
       }
       return new String(bytes);
     } catch (final IOException cause) {
-      LOGGER.error("Could not read file {}", filename);
+      LOGGER.error("Could not read file {}", filename, cause);
       throw new ResourceLoadingException(filename, cause);
     }
   }
@@ -33,7 +33,7 @@ public class ResourceUtils {
     try {
       return org.springframework.util.ResourceUtils.getFile("classpath:" + filename);
     } catch (final IOException cause) {
-      LOGGER.error("Could not read file {}", filename);
+      LOGGER.error("Could not read file {}", filename, cause);
       throw new ResourceLoadingException(filename, cause);
     }
   }
