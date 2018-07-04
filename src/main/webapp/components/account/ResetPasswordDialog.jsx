@@ -98,7 +98,7 @@ class PasswordForgottenDialog extends Component {
   };
 
   render() {
-    const {open, onClose} = this.props;
+    const {open, onClose, error} = this.props;
 
     return (
       <Dialog
@@ -137,6 +137,7 @@ class PasswordForgottenDialog extends Component {
         <DialogContent>
           <Grid container spacing={16} justify='center' style={{width: '100%', margin: '0px'}}>
             {this.getContent()}
+            {error ? <GridTextControl text={error} error={true}/> : undefined}
           </Grid>
         </DialogContent>
         {this.getActions()}

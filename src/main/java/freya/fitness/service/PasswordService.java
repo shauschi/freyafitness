@@ -5,6 +5,7 @@ import freya.fitness.domain.jpa.User;
 import freya.fitness.utils.InvalidPasswordException;
 import freya.fitness.utils.InvalidResetTokenException;
 import freya.fitness.utils.MailTemplateNotFoundException;
+import freya.fitness.utils.ResourceLoadingException;
 import freya.fitness.utils.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,16 +16,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,17 +39,20 @@ public class PasswordService {
   private final EmailService emailService;
 
   private final PasswordResetTokenService passwordResetTokenService;
+  private final ResourceService resourceService;
 
   @Autowired
   public PasswordService(
       final UserService userService,
       final PasswordEncoder passwordEncoder,
       final EmailService emailService,
-      final PasswordResetTokenService passwordResetTokenService) {
+      final PasswordResetTokenService passwordResetTokenService,
+      final ResourceService resourceService) {
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
     this.emailService = emailService;
     this.passwordResetTokenService = passwordResetTokenService;
+    this.resourceService = resourceService;
   }
 
   public void processForgotPassword(final String userEmail, final HttpServletRequest request)
@@ -82,11 +78,7 @@ public class PasswordService {
     final String filename = "reset_password.html";
     final User user = resetToken.getUser();
     try {
-      final URL resource = Thread.currentThread().getContextClassLoader().getResource("reset_password.html");
-      final URI uri = resource.toURI();
-      final Path path = Paths.get(uri);
-      final List<String> lines = Files.readAllLines(path);
-      String template = String.join("", lines);
+      String template = resourceService.getResourceAsString("reset_password.html");
       final Map<String, String> params = new HashMap<>();
       params.put("firstname", user.getFirstName());
       params.put("lastname", user.getFamilyName());
@@ -95,7 +87,7 @@ public class PasswordService {
         template = template.replaceAll("\\$\\{" + entry.getKey() + "}", entry.getValue());
       }
       return template;
-    } catch (IOException | URISyntaxException | NullPointerException e) {
+    } catch (final ResourceLoadingException e) {
       LOGGER.error("Could not read reset password file");
       throw new MailTemplateNotFoundException(filename);
     }
