@@ -96,6 +96,7 @@ class LoginAndRegistrationCard extends Component {
     const showResetPassword = RESET_PASSWORD; // global variable from index.html
     const errorMessage = ERROR_MESSAGE; // global variable from index.html
     const showPasswordForgotten = viewPath(['profile', 'passwordForgotten', 'show'], this.props);
+    const errorPasswordForgotten = viewPath(['profile', 'passwordForgotten', 'error'], this.props);
     const pendingPasswordForgotten = viewPath(['profile', 'passwordForgotten', 'pending'], this.props);
     const passwordForgottenData = viewPath(['profile', 'passwordForgotten', 'data'], this.props);
     const resetPasswordData = viewPath(['profile', 'resetPassword', 'data'], this.props);
@@ -121,6 +122,7 @@ class LoginAndRegistrationCard extends Component {
           <CardContent>
             <PasswordForgottenDialog
               open={showPasswordForgotten}
+              error={errorPasswordForgotten}
               pending={pendingPasswordForgotten}
               onClose={hidePasswordForgotten}
               formData={passwordForgottenData}
