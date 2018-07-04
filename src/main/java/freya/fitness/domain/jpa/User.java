@@ -42,7 +42,6 @@ public class User {
 
   private LocalDateTime lastLogin;
 
-  @CreatedDate
   private LocalDateTime accountCreationTime;
 
   @ManyToMany(fetch = FetchType.EAGER)
