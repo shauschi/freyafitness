@@ -169,12 +169,17 @@ pipeline {
         }
       }
     }
+  }
 
-    stage('send slack') {
-      agent any
-      steps {
-        slackSend "Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>"
-      }
+  post {
+    environment {
+      APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
+    }
+    success {
+      slackSend(color: "#BDFFC3", message: "Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>")
+    }
+    failure {
+      slackSend(color: "#FF9FA1", message: "build failed - ${env.BRANCH} ${env.BUILD_NUMBER}")
     }
   }
 }
