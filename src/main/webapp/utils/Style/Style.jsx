@@ -39,54 +39,23 @@ export const APP_STYLES = theme => ({
   },
   appBar: {
     position: 'fixed',
-    marginLeft: DRAWER_WIDTH,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${DRAWER_WIDTH}px)`,
-    },
-  },
-  appBar2: {
-    position: 'relative',
-    marginLeft: '0px',
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: DRAWER_WIDTH,
-      width: `calc(100% - ${DRAWER_WIDTH}px)`,
-    }
-  },
-  navIconHide: {
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
+    marginLeft: DRAWER_WIDTH
   },
   drawerHeader: theme.mixins.toolbar,
   drawerPaper: {
-    width: DRAWER_WIDTH + 10,
-    [theme.breakpoints.up('sm')]: {
-      width: DRAWER_WIDTH,
-      position: 'relative',
-      height: '100%',
-    },
+    width: DRAWER_WIDTH + 10
   },
   content: {
     position: 'relative',
     width: '100%',
     height: 'calc(100% - 102px)',
     marginTop: '55px',
-    marginBottom: '46px',
-    [theme.breakpoints.up('sm')]: {
-      height: 'calc(100% - 110px)',
-      marginTop: '64px',
-      width: `calc(100% - ${DRAWER_WIDTH}px)`
-    },
+    marginBottom: '46px'
   },
   contentScroll: {
     position: 'relative',
     width: '100%',
     marginTop: '55px',
-    overflow: 'scroll',
-    [theme.breakpoints.up('sm')]: {
-      marginTop: '64px',
-      width: `calc(100% - ${DRAWER_WIDTH}px)`
-    },
+    overflow: 'scroll'
   }
 });

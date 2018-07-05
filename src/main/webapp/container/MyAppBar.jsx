@@ -67,37 +67,20 @@ class MyAppBar extends Component {
     this.setState({anchor: null});
   };
 
-  getMenu = () => {
-    const {anchor} = this.state;
-    const {createCourse} = this.props;
-    return <Menu
-      open={!!anchor}
-      anchorEl={anchor}
-      onClose={this.closeMenu}
-      >
-      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
-      <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
-      <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
-    </Menu>
-  };
-
   render() {
     const {classes, toggleDrawer} = this.props;
 
     return (
-      <div style={{flexGrow: 1}}>
-        <AppBar style={{background: PRIMARY}} className={classes.appBar}>
-          <Toolbar>
-          <Hidden smUp>
-            <IconButton
-              color='inherit'
-              aria-label='Navigation'
-              onClick={toggleDrawer}
-              style={{position: 'absolute', left: '8px', zIndex: 20}}
-            >
-              <img src='/logo.svg' width={48} />
-            </IconButton>
-          </Hidden>
+      <AppBar color='primary'>
+        <Toolbar>
+          <IconButton
+            color='inherit'
+            aria-label='Navigation'
+            onClick={toggleDrawer}
+            style={{position: 'absolute', left: '8px', zIndex: 20}}
+          >
+            <img src='/logo.svg' width={48} />
+          </IconButton>
           <Typography type='title' color='inherit' style={{marginTop: '4px', width: '100%', textAlign: 'center'}}>
             <span style={{
               fontSize: '31px',
@@ -110,10 +93,23 @@ class MyAppBar extends Component {
           </Typography>
           {this.getAdditionalAction()}
         </Toolbar>
-        </AppBar>
         {this.getMenu()}
-      </div>
-    );
+      </AppBar>
+  );
+  };
+
+  getMenu = () => {
+    const {anchor} = this.state;
+    const {createCourse} = this.props;
+    return <Menu
+      open={!!anchor}
+      anchorEl={anchor}
+      onClose={this.closeMenu}
+      >
+      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
+      <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
+      <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
+    </Menu>
   };
 }
 
