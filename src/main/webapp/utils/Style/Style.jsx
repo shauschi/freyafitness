@@ -2,12 +2,21 @@
 import {blueGrey, green, lightBlue, red} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 
-export const TITLE_BG = blueGrey[800];
+export const PRIMARY = '#00B0DB';
+export const SECONDARY = '#b000db';
+export const PRIMARY_FONT = '#FFFFFF';
+
+export const TITLE_BG = PRIMARY;
 
 export const APP_THEME = createMuiTheme({
   palette: {
-    primary: lightBlue,
-    secondary: green,
+    primary: {
+      main: PRIMARY,
+      contrastText: PRIMARY_FONT
+    },
+    secondary: {
+      main: SECONDARY
+    },
     error: red,
   }
 });

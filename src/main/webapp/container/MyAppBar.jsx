@@ -9,11 +9,12 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
 
 import {IconMenu, IconPreferences} from '../utils/Icons';
-import {blueGrey} from '@material-ui/core/colors';
+import {PRIMARY, PRIMARY_FONT} from '../utils/Style';
 
 class MyAppBar extends Component {
 
@@ -25,11 +26,11 @@ class MyAppBar extends Component {
     const {scrollToLogin} = this.props;
     return (
       <Button
-        color='primary'
+        color='inherit'
         onClick={scrollToLogin}
         style={{
           position: 'absolute',
-          right: '8px',
+          right: '0px',
           padding: '0 16px',
           zIndex: 20
         }}>
@@ -49,6 +50,7 @@ class MyAppBar extends Component {
     const roles = this.props.currentUser.roles;
     if (roles.ADMIN || roles.TRAINER) {
       return <IconButton
+        color='default'
         aria-label='Einstellungen'
         onClick={this.openMenu}
         style={{position: 'absolute', right: '8px', zIndex: 20}}>
@@ -84,39 +86,27 @@ class MyAppBar extends Component {
 
     return (
       <div style={{flexGrow: 1}}>
-        <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
+        <AppBar style={{background: PRIMARY}} className={classes.appBar}>
           <Toolbar>
           <Hidden smUp>
             <IconButton
+              color='inherit'
               aria-label='Navigation'
               onClick={toggleDrawer}
               style={{position: 'absolute', left: '8px', zIndex: 20}}
             >
-              <IconMenu size={28}/>
+              <img src='/logo.svg' width={48} />
             </IconButton>
           </Hidden>
-          <Typography type='title' style={{position: 'absolute', left: '0px', width: '100%', textAlign: 'center'}}>
+          <Typography type='title' color='inherit' style={{marginTop: '4px', width: '100%', textAlign: 'center'}}>
             <span style={{
-              color: 'white',
               fontSize: '31px',
-              fontWeight: 'bold',
-              textShadow: '-2px -2px 0px #444'
-            }}>freya</span>
+              fontWeight: 'lighter'
+            }}>FREY</span>
             <span style={{
-              color: '#03a9f4',
-              fontSize: '42px',
-              fontWeight: 'bold',
-              textShadow: '-2px -2px 0px #444'
-            }}>.</span>
-            <span style={{
-              color: 'white',
               fontSize: '31px',
-              fontWeight: 'bold',
-              textShadow: '-2px -2px 0px #444'
-            }}>fitness</span>
-            <Hidden smDown>
-              <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
-            </Hidden>
+              fontWeight: 'bold'
+            }}>RAUM</span>
           </Typography>
           {this.getAdditionalAction()}
         </Toolbar>
