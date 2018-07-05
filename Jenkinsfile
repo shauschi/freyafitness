@@ -169,5 +169,12 @@ pipeline {
         }
       }
     }
+
+    stage('send slack') {
+      agent any
+      steps {
+        slackSend "Started docker container successfully - ${env.BRANCH}"
+      }
+    }
   }
 }
