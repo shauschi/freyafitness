@@ -173,7 +173,7 @@ pipeline {
     stage('send slack') {
       agent any
       steps {
-        slackSend "Started docker container successfully - ${env.BRANCH}"
+        slackSend "Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>"
       }
     }
   }
