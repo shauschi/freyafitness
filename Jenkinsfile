@@ -1,4 +1,15 @@
 
+def mapBranchToEnvironment(branch) {
+  def appName = 'freyafitness'
+  if (branch == 'master') {
+    return '[PRODUCTION]'
+  }
+  if (branch == 'develop') {
+    return '[TEST]'
+  }
+  return '[DEVELOPMENT]'
+}
+
 def mapBranchToAppName(branch) {
   def appName = 'freyafitness'
   if (branch == 'master') {
@@ -46,6 +57,7 @@ pipeline {
     skipDefaultCheckout()
   }
   environment{
+    ENV_NAME = mapBranchToEnvironment("${BRANCH_NAME}")
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
     NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
     BRANCH = "${BRANCH_NAME}"
@@ -172,10 +184,10 @@ pipeline {
 
   post {
     success {
-      slackSend(color: "#BDFFC3", message: "Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>")
+      slackSend(color: "#BDFFC3", message: "${ENV_NAME} Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>")
     }
     failure {
-      slackSend(color: "#FF9FA1", message: "build failed - ${env.BRANCH} ${env.BUILD_NUMBER}")
+      slackSend(color: "#FF9FA1", message: "{ENV_NAME} build failed - ${env.BRANCH} ${env.BUILD_NUMBER}")
     }
   }
 }
