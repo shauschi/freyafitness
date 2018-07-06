@@ -26,36 +26,12 @@ export const DRAWER_WIDTH = 240;
 export const APP_STYLES = theme => ({
   root: {
     width: '100%',
-    height: '100%',
-    marginTop: 0,
+    paddingTop: '56px',
     zIndex: 1,
-    overflow: 'hidden',
-  },
-  appFrame: {
-    position: 'relative',
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-  },
-  appBar: {
-    position: 'fixed',
-    marginLeft: DRAWER_WIDTH
+    backgroundColor: 'lightgrey'
   },
   drawerHeader: theme.mixins.toolbar,
   drawerPaper: {
     width: DRAWER_WIDTH + 10
-  },
-  content: {
-    position: 'relative',
-    width: '100%',
-    height: 'calc(100% - 102px)',
-    marginTop: '55px',
-    marginBottom: '46px'
-  },
-  contentScroll: {
-    position: 'relative',
-    width: '100%',
-    marginTop: '55px',
-    overflow: 'scroll'
   }
 });

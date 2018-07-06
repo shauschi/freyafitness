@@ -79,7 +79,7 @@ class MyAppBar extends Component {
             onClick={toggleDrawer}
             style={{position: 'absolute', left: '8px', zIndex: 20}}
           >
-            <img src='/logo.png' width={48} />
+            <img src='/logo.png' width={42} />
           </IconButton>
           <Typography type='title' color='inherit' style={{marginTop: '4px', width: '100%', textAlign: 'center'}}>
             <span style={{
