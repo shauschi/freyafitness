@@ -9,12 +9,10 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import Button from '@material-ui/core/Button';
-import Hidden from '@material-ui/core/Hidden';
 
-import {IconMenu, IconPreferences} from '../utils/Icons';
-import {PRIMARY, PRIMARY_FONT} from '../utils/Style';
+import {IconPreferences} from '../utils/Icons';
+import PropTypes from "prop-types";
 
 class MyAppBar extends Component {
 
@@ -27,7 +25,7 @@ class MyAppBar extends Component {
     return (
       <Button
         color='inherit'
-        onClick={scrollToLogin}
+        onClick={() => {scrollToLogin(this.context.router);}}
         style={{
           position: 'absolute',
           right: '0px',
@@ -112,6 +110,10 @@ class MyAppBar extends Component {
     </Menu>
   };
 }
+
+MyAppBar.contextTypes = {
+  router: PropTypes.object.isRequired
+};
 
 export default compose(
   withRouter,

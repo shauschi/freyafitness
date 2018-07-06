@@ -200,32 +200,30 @@ class Agb extends Component {
 
   render() {
     return (
-      <div style={{height: '100%', overflow: 'scroll', WebkitOverflowScrolling: 'touch'}}>
-        <Grid container spacing={16} justify="center" style={{height: '100%', width: '100%', margin: '0px'}}>
-          <Grid item xs={12}>
-            <Card>
-              <CardHeader title={'Allgemeine Geschäftsbedingungen'}/>
-              <CardMedia src={__API__ + '/about_freya.png'}/>
-              <CardContent>
-                <div style={{margin: '16px 0'}}>
-                  <Typography>Freya Heine</Typography>
-                  <Typography>Tangendorfer Straße 2a</Typography>
-                  <Typography>21442 Toppenstedt</Typography>
-                </div>
-                <div style={{margin: '16px 0'}}>
-                  <Typography>0151 20712506</Typography>
-                  <Typography>https://freya.fitness</Typography>
-                  <Typography>freyraum@freya.fitness</Typography>
-                </div>
-                {agbs}
-                <div style={{textAlign: 'right'}}>
-                  <Typography variant='headline'>Toppenstedt, 2018</Typography>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
+      <Grid container spacing={16} justify="center" style={{height: '100%', width: '100%', margin: '0px'}}>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader title={'Allgemeine Geschäftsbedingungen'}/>
+            <CardMedia src={__API__ + '/about_freya.png'}/>
+            <CardContent>
+              <div style={{margin: '16px 0'}}>
+                <Typography>Freya Heine</Typography>
+                <Typography>Tangendorfer Straße 2a</Typography>
+                <Typography>21442 Toppenstedt</Typography>
+              </div>
+              <div style={{margin: '16px 0'}}>
+                <Typography>0151 20712506</Typography>
+                <Typography>https://freya.fitness</Typography>
+                <Typography>freyraum@freya.fitness</Typography>
+              </div>
+              {agbs}
+              <div style={{textAlign: 'right'}}>
+                <Typography variant='headline'>Toppenstedt, 2018</Typography>
+              </div>
+            </CardContent>
+          </Card>
         </Grid>
-      </div>
+      </Grid>
     );
   }
 }
