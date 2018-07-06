@@ -26,8 +26,8 @@ export const DRAWER_WIDTH = 240;
 export const APP_STYLES = theme => ({
   root: {
     width: '100%',
-    paddingTop: '56px',
-    paddingBottom: '56px',
+    paddingTop: '64px',
+    paddingBottom: '64px',
     zIndex: 1,
     backgroundColor: 'lightgrey',
     WebkitOverflowScrolling: 'touch'

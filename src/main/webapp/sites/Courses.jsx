@@ -17,7 +17,7 @@ class Courses extends Component {
     return (
       <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
         <CourseDetails/>
-        <Grid item xs={12} md={12} style={{padding: '0px'}}>
+        <Grid item xs={12} md={9} style={{padding: '0px'}}>
           <CourseList courses={data} showCourseDetails={showCourseDetails}/>
         </Grid>
       </Grid>

@@ -201,7 +201,7 @@ class Agb extends Component {
   render() {
     return (
       <Grid container spacing={16} justify="center" style={{height: '100%', width: '100%', margin: '0px'}}>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={9}>
           <Card>
             <CardHeader title={'Allgemeine Geschäftsbedingungen'}/>
             <CardMedia src={__API__ + '/about_freya.png'}/>

@@ -11,7 +11,7 @@ class About extends Component {
   render() {
     return (
       <Grid container spacing={16} justify="center" style={{height: '100%', width: '100%', margin: '0px'}}>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={8}>
           <Card>
             <CardHeader title={'Wer ist Freya?'}/>
             <CardMedia
@@ -37,7 +37,7 @@ class About extends Component {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <Card>
             <CardHeader title={'Was für Kurse sind das?'}/>
             <CardMedia src={__API__ + '/about_course_example.png'}/>
@@ -56,7 +56,7 @@ class About extends Component {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <Card>
             <CardHeader title={'Wo muss ich hin?'}/>
             <CardMedia src={__API__ + '/about_location.png'}/>

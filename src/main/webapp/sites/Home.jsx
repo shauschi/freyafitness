@@ -139,7 +139,7 @@ class Home extends Component {
     const {data = {}} = this.props.courses;
     const notifyUser = () => this.props.actions.showNotification('Bitte melde dich, um weitere Details zu sehen');
     return (
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={9}>
         <Card>
           <CardHeader title={'Anstehende Kurse'}/>
           <CardContent style={{maxHeight: '300px', overflow: 'auto', padding: '0px'}}>
@@ -154,7 +154,7 @@ class Home extends Component {
     if (this.props.user) {
       return undefined;
     }
-    return <Grid item xs={12} md={6}>
+    return <Grid item xs={12} md={9}>
       <LoginAndRegistrationCard/>
     </Grid>;
   };
