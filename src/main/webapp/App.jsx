@@ -72,24 +72,22 @@ class App extends Component {
               toggleDrawer={actions.toggleDrawer}
               currentUser={currentUser}
               {...drawer}/>
-            <div className={classes.content}>
-              {
-                profile.pending
-                  ? <LoadingIndicator/>
-                  : <Switch>
-                    <Redirect from='/index' to='/'/>
-                    <Redirect from='/home' to='/'/>
-                    <Route exact path='/about' render={() => <About {...this.props}/>}/>
-                    <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
-                    <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                    {
-                      currentUser
-                        ? SWIPEABLE_ROUTE
-                        : HOME_ROUTE
-                    }
-                  </Switch>
-              }
-            </div>
+            {
+              profile.pending
+                ? <LoadingIndicator/>
+                : <Switch>
+                  <Redirect from='/index' to='/'/>
+                  <Redirect from='/home' to='/'/>
+                  <Route exact path='/about' render={() => <About {...this.props}/>}/>
+                  <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
+                  <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
+                  {
+                    currentUser
+                      ? SWIPEABLE_ROUTE
+                      : HOME_ROUTE
+                  }
+                </Switch>
+            }
             {
               currentUser
                 ? <Footer {...this.props}/>
