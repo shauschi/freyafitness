@@ -16,6 +16,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -82,13 +87,13 @@ class Home extends Component {
     return (
       <Grid item xs={12} md={8}>
         <Card>
-          <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
             component={'img'}
             image={__API__ + '/welcome_' + suffix + '.jpg'}
             title={'Welcome'}
           />
           <CardContent>
+            <Typography variant='title'>Willkommen im FreyRaum</Typography>
             <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
             <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept. Ein Raum indem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches Trainingsprogramm wartet.
               Jedes Mal anders, jedes Mal Neu!</Typography>
@@ -101,7 +106,7 @@ class Home extends Component {
 
   getNews = () => {
     const newsData = this.props.news.data || [];
-    return <Grid item xs={12} md={8} style={{padding: '0px'}}>
+    return <Grid item xs={12} md={8}>
       <Slider loading={this.props.news.pending}>
         {newsData.map((newsItem, idx) => (
           <NewsItem
@@ -153,11 +158,90 @@ class Home extends Component {
     );
   };
 
+  getCoursePlan = () => {
+
+    const data = [
+      {
+        time: '07:00-07:45',
+        mo: 'KRAFT & TECHNIK',
+        mi: 'FUN.BASE'
+      },
+      {
+        time: '09:00-10:00',
+        mo: 'FUN.POWER',
+        di: 'FUN.BASE',
+        mi: 'FUN.POWER',
+        fr: 'FUN.POWER'
+      },
+      {
+        time: '10:00-11:00',
+        mo: 'TRX FIT MOMS',
+        di: 'BEST AGER CLASS (65+)',
+        mi: 'FUN.BASE',
+        do: 'FUN.BASE',
+      },
+      {
+        time: '11:00-11:45',
+        di: 'FUN.POWER',
+        mi: 'TRX FIT MOMS',
+        fr: 'TRX FIT MOMS',
+        sa: <span><Typography variant='caption' style={{color: 'lightgrey'}}>11:00-12:00</Typography>FUN.TEAM</span>,
+      },
+      {
+        time: '16:30-17:30',
+        do: 'KRAFT & TECHNIK',
+        fr: 'KRAFT & TECHNIK'
+      },
+    ];
+
+    return (
+      <Grid item xs={12} md={8}>
+        <Card>
+          <CardHeader title={'Kursplan'}/>
+          <CardContent style={{overflowX: 'auto'}}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Zeit</TableCell>
+                  <TableCell numeric>Montag</TableCell>
+                  <TableCell numeric>Dienstag</TableCell>
+                  <TableCell numeric>Mittwoch</TableCell>
+                  <TableCell numeric>Donnerstag</TableCell>
+                  <TableCell numeric>Freitag</TableCell>
+                  <TableCell numeric>Samstag</TableCell>
+                  <TableCell numeric>Sonntag</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((n, idx) => {
+                  return (
+                    <TableRow key={idx}>
+                      <TableCell component="th" scope="row">
+                        {n.time}
+                      </TableCell>
+                      <TableCell numeric>{n.mo}</TableCell>
+                      <TableCell numeric>{n.di}</TableCell>
+                      <TableCell numeric>{n.mi}</TableCell>
+                      <TableCell numeric>{n.do}</TableCell>
+                      <TableCell numeric>{n.fr}</TableCell>
+                      <TableCell numeric>{n.sa}</TableCell>
+                      <TableCell numeric>{n.so}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  };
+
   getLoginCard = () => {
     if (this.props.user) {
       return undefined;
     }
-    return <Grid item xs={12} md={6}>
+    return <Grid item xs={12} sm={8} md={6}>
       <LoginAndRegistrationCard/>
     </Grid>;
   };
@@ -197,8 +281,8 @@ class Home extends Component {
           {this.getNews()}
           {/* weitere Informationen bei angemeldeten Benutzern */}
           {this.getUserDetails()}
-          {/* Die nächsten Kurse */}
-          {this.getUpcomingCourses()}
+          {/* Der Kursplan */}
+          {this.getCoursePlan()}
           {/* Nur bei nicht angemeldeten Benutzern*/}
           {this.getLoginCard()}
         </Grid>
