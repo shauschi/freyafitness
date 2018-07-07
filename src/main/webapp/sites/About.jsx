@@ -37,7 +37,7 @@ class About extends Component {
           </Card>
         </Grid>
 
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <Card>
             <CardHeader title={'Was für Kurse sind das?'}/>
             <CardMedia src={__API__ + '/about_course_example.png'}/>
@@ -56,7 +56,7 @@ class About extends Component {
           </Card>
         </Grid>
 
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <Card>
             <CardHeader title={'Wo muss ich hin?'}/>
             <CardMedia src={__API__ + '/about_location.png'}/>

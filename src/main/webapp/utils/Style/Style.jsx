@@ -29,7 +29,6 @@ export const APP_STYLES = theme => ({
     paddingTop: '64px',
     paddingBottom: '64px',
     zIndex: 1,
-    backgroundColor: 'lightgrey',
     WebkitOverflowScrolling: 'touch'
   },
   drawerHeader: theme.mixins.toolbar,

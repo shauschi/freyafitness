@@ -10,7 +10,7 @@ class Impressum extends Component {
   render() {
     return (
       <Grid container spacing={16} justify="center" style={{height: '100%', width: '100%', margin: '0px'}}>
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} md={8}>
           <Card>
             <CardHeader title={'Betreiber und Kontakt'}/>
             <CardContent>
@@ -33,7 +33,7 @@ class Impressum extends Component {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} md={8}>
           <Card>
             <CardHeader title={'Haftung für Links'}/>
             <CardContent>

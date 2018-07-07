@@ -77,7 +77,7 @@ class Home extends Component {
       return undefined;
     }
     return (
-      <Grid item xs={12} md={9}>
+      <Grid item xs={12} md={8}>
         <Card>
           <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
@@ -98,7 +98,7 @@ class Home extends Component {
 
   getNews = () => {
     const newsData = this.props.news.data || [];
-    return <Grid item xs={12} md={9} style={{padding: '0px'}}>
+    return <Grid item xs={12} md={8} style={{padding: '0px'}}>
       <Slider loading={this.props.news.pending}>
         {newsData.map((newsItem, idx) => (
           <NewsItem
@@ -139,7 +139,7 @@ class Home extends Component {
     const {data = {}} = this.props.courses;
     const notifyUser = () => this.props.actions.showNotification('Bitte melde dich, um weitere Details zu sehen');
     return (
-      <Grid item xs={12} md={9}>
+      <Grid item xs={12} md={8}>
         <Card>
           <CardHeader title={'Anstehende Kurse'}/>
           <CardContent style={{maxHeight: '300px', overflow: 'auto', padding: '0px'}}>
@@ -154,7 +154,7 @@ class Home extends Component {
     if (this.props.user) {
       return undefined;
     }
-    return <Grid item xs={12} md={9}>
+    return <Grid item xs={12} md={6}>
       <LoginAndRegistrationCard/>
     </Grid>;
   };
@@ -164,7 +164,7 @@ class Home extends Component {
     if (!signedIn) {
       return undefined;
     }
-    return <Grid item xs={12} md={9} style={{padding: '0px'}}>
+    return <Grid item xs={12} md={8} style={{padding: '0px'}}>
       <List style={{padding: '0'}}>
         {this.getMyCourses()}
         <Subheader label={"Status"}/>

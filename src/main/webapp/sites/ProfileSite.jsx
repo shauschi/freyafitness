@@ -52,7 +52,7 @@ class ProfileSite extends Component {
             onPasswordChange={actions.onPasswordChange}
             onSave={actions.changePassword}
           />
-          <Grid item xs={12} md={9} style={{padding: '0px'}}>
+          <Grid item xs={12} md={8} style={{padding: '0px'}}>
             <Profile
               profile={profile}
               onProfileDetailsChange={actions.onProfileDetailsChange}
