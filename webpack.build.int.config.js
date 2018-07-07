@@ -6,7 +6,7 @@ const webpack = require('webpack');
 module.exports = base.merge({
   plugins: [
     new webpack.DefinePlugin({
-      __API__: "'https://localhost:9443'"
+      __API__: "'https://freya.fitness:9443'"
     })
   ]
 });
