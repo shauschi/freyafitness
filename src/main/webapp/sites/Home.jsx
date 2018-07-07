@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import compose from 'recompose/compose';
+import withWidth, {isWidthDown} from '@material-ui/core/withWidth';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -72,17 +74,18 @@ class Home extends Component {
   };
 
   getWelcomeGreetings = () => {
-    const {user, classes} = this.props;
+    const {user, classes, width} = this.props;
     if (user) {
       return undefined;
     }
+    const suffix = isWidthDown('sm', width) ? 'xs' : 'md';
     return (
       <Grid item xs={12} md={8}>
         <Card>
           <CardHeader title={'Willkommen im FreyRaum'}/>
           <CardMedia
             component={'img'}
-            image={__API__ + '/welcome.jpg'}
+            image={__API__ + '/welcome_' + suffix + '.jpg'}
             title={'Welcome'}
           />
           <CardContent>
@@ -220,7 +223,10 @@ const mapDispatchToProps = dispatch => ({
   dispatch
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+export default compose(
+  withWidth(),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(Home);
