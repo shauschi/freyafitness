@@ -1,14 +1,19 @@
 'use strict';
 import React, {Component} from 'react';
+import compose from 'recompose/compose';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import withWidth, {isWidthDown} from '@material-ui/core/withWidth';
 
 class About extends Component {
+
   render() {
+    const {width} = this.props;
+    const suffix = isWidthDown('sm', width) ? 'xs' : 'md';
     return (
       <Grid container spacing={16} justify="center" style={{height: '100%', width: '100%', margin: '0px'}}>
         <Grid item xs={12} md={8}>
@@ -16,7 +21,7 @@ class About extends Component {
             <CardHeader title={'Wer ist Freya?'}/>
             <CardMedia
               component={'img'}
-              image={__API__ + '/about_freya.jpg'}
+              image={__API__ + '/about_freya_' + suffix + '.jpg'}
               title={'Freya Heine'}
             />
             <CardContent>
@@ -78,4 +83,6 @@ class About extends Component {
   }
 }
 
-export default About;
+export default compose(
+  withWidth()
+)(About);
