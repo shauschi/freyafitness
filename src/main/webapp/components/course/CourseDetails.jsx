@@ -229,7 +229,7 @@ class CourseDetails extends Component {
         onClose={this.handleRequestClose}
         secondAction={
           (mode === MODE.VIEW && (roles.ADMIN || roles.TRAINER))
-            ? <IconButton onClick={toggleEditCourse}>
+            ? <IconButton color='default' onClick={toggleEditCourse}>
                 <IconPencil/>
               </IconButton>
             : undefined

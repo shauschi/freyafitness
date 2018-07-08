@@ -95,7 +95,7 @@ class Home extends Component {
             title={'Welcome'}
           />
           <CardContent>
-            <Typography variant='title'>Willkommen im FreyRaum</Typography>
+            <Typography variant='title' style={{marginBottom: '8px'}}>Willkommen im FreyRaum</Typography>
             <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
             <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept. Ein Raum indem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches Trainingsprogramm wartet.
               Jedes Mal anders, jedes Mal Neu!</Typography>
@@ -142,21 +142,6 @@ class Home extends Component {
             )
         }
       </div>
-    );
-  };
-
-  getUpcomingCourses = () => {
-    const {data = {}} = this.props.courses;
-    const notifyUser = () => this.props.actions.showNotification('Bitte melde dich, um weitere Details zu sehen');
-    return (
-      <Grid item xs={12} md={8}>
-        <Card>
-          <CardHeader title={'Anstehende Kurse'}/>
-          <CardContent style={{maxHeight: '300px', overflow: 'auto', padding: '0px'}}>
-            <CourseList courses={data} showCourseDetails={notifyUser}/>
-          </CardContent>
-        </Card>
-      </Grid>
     );
   };
 
@@ -225,44 +210,54 @@ class Home extends Component {
       }
     ];
 
+    const {classes} = this.props;
+    const Cell = ({children, numeric}) => <TableCell
+      numeric={numeric}
+      className={classes.courseCell}
+      >
+      {children}
+    </TableCell>;
+
     return (
       <Grid item xs={12} md={8}>
         <Card>
           <CardHeader title={'Kursplan'}/>
-          <CardContent style={{overflowX: 'auto'}}>
+          <CardContent>
             <Typography>Hier findest du den allgemeinen Kursplan. Für Details zu den Kursen und freien Plätzen, melde dich einfach an.</Typography>
-            <Table>
+            <div style={{overflowX: 'auto'}}>
+              <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Zeit</TableCell>
-                  <TableCell numeric>Montag</TableCell>
-                  <TableCell numeric>Dienstag</TableCell>
-                  <TableCell numeric>Mittwoch</TableCell>
-                  <TableCell numeric>Donnerstag</TableCell>
-                  <TableCell numeric>Freitag</TableCell>
-                  <TableCell numeric>Samstag</TableCell>
-                  <TableCell numeric>Sonntag</TableCell>
+                  <Cell>Zeit</Cell>
+                  <Cell numeric>Montag</Cell>
+                  <Cell numeric>Dienstag</Cell>
+                  <Cell numeric>Mittwoch</Cell>
+                  <Cell numeric>Donnerstag</Cell>
+                  <Cell numeric>Freitag</Cell>
+                  <Cell numeric>Samstag</Cell>
+                  <Cell numeric>Sonntag</Cell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data.map((n, idx) => {
                   return (
                     <TableRow key={idx}>
-                      <TableCell component="th" scope="row">
+                      <Cell component="th" scope="row">
                         {n.time}
-                      </TableCell>
-                      <TableCell numeric>{n.mo}</TableCell>
-                      <TableCell numeric>{n.di}</TableCell>
-                      <TableCell numeric>{n.mi}</TableCell>
-                      <TableCell numeric>{n.do}</TableCell>
-                      <TableCell numeric>{n.fr}</TableCell>
-                      <TableCell numeric>{n.sa}</TableCell>
-                      <TableCell numeric>{n.so}</TableCell>
+                      </Cell>
+                      <Cell numeric>{n.mo}</Cell>
+                      <Cell numeric>{n.di}</Cell>
+                      <Cell numeric>{n.mi}</Cell>
+                      <Cell numeric>{n.do}</Cell>
+                      <Cell numeric>{n.fr}</Cell>
+                      <Cell numeric>{n.sa}</Cell>
+                      <Cell numeric>{n.so}</Cell>
                     </TableRow>
                   );
                 })}
               </TableBody>
             </Table>
+            </div>
             <Typography variant='subheading' style={{marginTop: '8px'}}>FUN.BASE</Typography>
             <Typography>Der Einstieg. Die Grundlage des funktionalen Trainings</Typography>
             <Typography variant='subheading' style={{marginTop: '8px'}}>FUN.POWER</Typography>

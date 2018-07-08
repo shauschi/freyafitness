@@ -34,5 +34,8 @@ export const APP_STYLES = theme => ({
   drawerHeader: theme.mixins.toolbar,
   drawerPaper: {
     width: DRAWER_WIDTH + 10
+  },
+  courseCell: {
+    padding: '4px 16px'
   }
 });
