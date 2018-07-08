@@ -220,7 +220,7 @@ class CourseDetails extends Component {
       return <LoadingIndicator/>;
     }
 
-    const {name = " ", color} = findById(courseTypes.data, courseTypeId) || TypeMapper['SOFT'];
+    const {name = " ", color} = findById(courseTypes.data, courseTypeId) || TypeMapper.UNKNOWN;
     const short = name.charAt(0);
     const {roles = {}} = currentUser;
     return (

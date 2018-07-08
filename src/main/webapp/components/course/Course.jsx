@@ -7,16 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import {findById} from './../../utils/RamdaUtils';
 
-import {green, blue, red} from '@material-ui/core/colors';
+import {red} from '@material-ui/core/colors';
 
 export const TypeMapper = {
-  SOFT: {label: 'sanfter Kurs', short: 'S', color: green['A200']},
-  NORMAL: {label: 'normaler Kurs', short: 'N', color: blue['A200']},
-  HARD: {label: 'harter Kurs', short: 'H', color: red['A200']}
+  UNKNOWN: {name: 'unbekannter Kurs', color: red['A200']}
 };
 
 const getAvailability = (participants, maxParticipants, textDecoration) => {
-  const free = maxParticipants - participants;
+  const free = maxParticipants - participants.length;
   let color = free > 2 ? 'grey' : 'orange';
   let text = (free) + (free === 1 ? ' freier Platz' : ' freie Plätze');
   if (free <= 0) {
@@ -46,7 +44,7 @@ class Course extends Component {
       canceled
     } = course;
 
-    const {name, color} = findById(courseTypes.data, courseTypeId) || TypeMapper['SOFT'];
+    const {name, color} = findById(courseTypes.data, courseTypeId) || TypeMapper.UNKNOWN;
     const textDecoration = canceled ? 'line-through' : undefined;
 
     const title = (<div>
