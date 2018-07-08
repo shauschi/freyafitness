@@ -1,8 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
+import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import compose from 'recompose/compose';
 import withWidth, {isWidthDown} from '@material-ui/core/withWidth';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -34,6 +34,8 @@ import {red} from '@material-ui/core/colors';
 import {LoginAndRegistrationCard} from '../components/account';
 import {MenuLink} from '../components/general';
 import {showNotification} from "../model/notification";
+import {withStyles} from "@material-ui/core/styles/index";
+import * as Style from "../utils/Style";
 
 class SimpleDialog extends Component {
 
@@ -315,7 +317,7 @@ class Home extends Component {
 
   render() {
     return (
-      <div style={{height: '100%', overflow: 'scroll', WebkitOverflowScrolling: 'touch'}}>
+      <div className={this.props.classes.root}>
         <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
           <SimpleDialog
             open={this.state.open}
@@ -353,6 +355,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   withWidth(),
+  withStyles(Style.APP_STYLES, {withTheme: true}),
   connect(
     mapStateToProps,
     mapDispatchToProps

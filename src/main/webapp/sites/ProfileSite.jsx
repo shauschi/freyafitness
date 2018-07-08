@@ -1,5 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
+import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Grid from '@material-ui/core/Grid';
@@ -7,19 +8,16 @@ import Profile, {ProfilePictureDialog} from './../components/profile';
 import {ChangePasswordDialog} from '../components/account';
 import {LoadingIndicator} from '../components/general';
 import {
-  fetchOwnProfile,
   changeTempProfilePicture,
-  openProfilePictureChangeDialog,
   closeProfilePictureChangeDialog,
-  saveProfilePicture,
-  onProfileDetailsChange
+  fetchOwnProfile,
+  onProfileDetailsChange,
+  openProfilePictureChangeDialog,
+  saveProfilePicture
 } from './../model/profile';
-import {
-  onPasswordChange,
-  onOpenPasswordChange,
-  onCancelPasswordChange,
-  changePassword
-} from './../model/password';
+import {changePassword, onCancelPasswordChange, onOpenPasswordChange, onPasswordChange} from './../model/password';
+import {withStyles} from "@material-ui/core/styles/index";
+import * as Style from "../utils/Style";
 
 class ProfileSite extends Component {
   render() {
@@ -33,34 +31,36 @@ class ProfileSite extends Component {
       return (<LoadingIndicator/>);
     } else {
       return (
-        <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-          <ProfilePictureDialog
-            show={profile.picture.dialog.open}
-            temp={profile.picture.temp}
-            pending={profile.picture.pending}
-            errorMessage={profile.picture.errorMessage}
-            changeTempProfilePicture={actions.changeTempProfilePicture}
-            onSave={actions.saveProfilePicture}
-            onClose={actions.closeProfilePictureChangeDialog}
-          />
-          <ChangePasswordDialog
-            formData={password}
-            pending={password.pending}
-            open={password.open}
-            errorMessage={password.errorMessage}
-            onClose={actions.onCancelPasswordChange}
-            onPasswordChange={actions.onPasswordChange}
-            onSave={actions.changePassword}
-          />
-          <Grid item xs={12} md={8} style={{padding: '0px'}}>
-            <Profile
-              profile={profile}
-              onProfileDetailsChange={actions.onProfileDetailsChange}
-              onOpenPasswordChange={actions.onOpenPasswordChange}
-              onOpenProfilPictureChange={actions.openProfilePictureChangeDialog}
+        <div className={this.props.classes.root}>
+          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+            <ProfilePictureDialog
+              show={profile.picture.dialog.open}
+              temp={profile.picture.temp}
+              pending={profile.picture.pending}
+              errorMessage={profile.picture.errorMessage}
+              changeTempProfilePicture={actions.changeTempProfilePicture}
+              onSave={actions.saveProfilePicture}
+              onClose={actions.closeProfilePictureChangeDialog}
             />
+            <ChangePasswordDialog
+              formData={password}
+              pending={password.pending}
+              open={password.open}
+              errorMessage={password.errorMessage}
+              onClose={actions.onCancelPasswordChange}
+              onPasswordChange={actions.onPasswordChange}
+              onSave={actions.changePassword}
+            />
+            <Grid item xs={12} md={8} style={{padding: '0px'}}>
+              <Profile
+                profile={profile}
+                onProfileDetailsChange={actions.onProfileDetailsChange}
+                onOpenPasswordChange={actions.onOpenPasswordChange}
+                onOpenProfilPictureChange={actions.openProfilePictureChangeDialog}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       );
     }
   }
@@ -90,4 +90,10 @@ const mapDispatchToProps = dispatch => ({
   dispatch
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileSite);
+export default compose(
+  withStyles(Style.APP_STYLES, {withTheme: true}),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(ProfileSite);

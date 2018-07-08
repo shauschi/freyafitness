@@ -53,53 +53,51 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
-          <div className={classes.root}>
-            <MyAppBar
-              pending={profile.pending}
-              classes={classes}
-              toggleDrawer={actions.toggleDrawer}
-              createCourse={actions.createCourse}
-              scrollToLogin={actions.scrollToLogin}
-              currentUser={currentUser}
-              {...this.props}/>
-            <div style={{position: 'absolute'}}>
-              {/* All Dialogs */}
-              <CourseDetails/>
-            </div>
-            <MyDrawer
-              classes={classes}
-              logout={actions.logout}
-              toggleDrawer={actions.toggleDrawer}
-              currentUser={currentUser}
-              {...drawer}/>
-            {
-              profile.pending
-                ? <LoadingIndicator/>
-                : <Switch>
-                  <Redirect from='/index' to='/'/>
-                  <Redirect from='/home' to='/'/>
-                  <Route exact path='/about' render={() => <About {...this.props}/>}/>
-                  <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
-                  <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                  {
-                    currentUser
-                      ? SWIPEABLE_ROUTE
-                      : HOME_ROUTE
-                  }
-                </Switch>
-            }
-            {
-              currentUser
-                ? <Footer {...this.props}/>
-                : undefined
-            }
-            <CustomizedSnackbar
-              open={notification.show}
-              variant={notification.variant}
-              message={notification.message}
-              onClose={this.props.actions.hideNotification}
-              autoHideDuration={notification.autoHideDuration}/>
+          <MyAppBar
+            pending={profile.pending}
+            classes={classes}
+            toggleDrawer={actions.toggleDrawer}
+            createCourse={actions.createCourse}
+            scrollToLogin={actions.scrollToLogin}
+            currentUser={currentUser}
+            {...this.props}/>
+          <div style={{position: 'absolute'}}>
+            {/* All Dialogs */}
+            <CourseDetails/>
           </div>
+          <MyDrawer
+            classes={classes}
+            logout={actions.logout}
+            toggleDrawer={actions.toggleDrawer}
+            currentUser={currentUser}
+            {...drawer}/>
+          {
+            profile.pending
+              ? <LoadingIndicator/>
+              : <Switch>
+                <Redirect from='/index' to='/'/>
+                <Redirect from='/home' to='/'/>
+                <Route exact path='/about' render={() => <About {...this.props}/>}/>
+                <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
+                <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
+                {
+                  currentUser
+                    ? SWIPEABLE_ROUTE
+                    : HOME_ROUTE
+                }
+              </Switch>
+          }
+          {
+            currentUser
+              ? <Footer {...this.props}/>
+              : undefined
+          }
+          <CustomizedSnackbar
+            open={notification.show}
+            variant={notification.variant}
+            message={notification.message}
+            onClose={this.props.actions.hideNotification}
+            autoHideDuration={notification.autoHideDuration}/>
         </MuiPickersUtilsProvider>
       </MuiThemeProvider>
     );
