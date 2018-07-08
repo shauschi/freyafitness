@@ -11,7 +11,7 @@ import withWidth, {isWidthDown} from '@material-ui/core/withWidth';
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
 
-class About extends Component {
+class AboutFreya extends Component {
 
   render() {
     const {width} = this.props;
@@ -45,46 +45,6 @@ class About extends Component {
               </CardContent>
             </Card>
           </Grid>
-
-          <Grid item xs={12} md={8}>
-            <Card>
-              <CardHeader title={'Was für Kurse sind das?'}/>
-              <CardMedia src={__API__ + '/about_course_example.png'}/>
-              <CardContent>
-                <Typography>
-                  In jedem Kurs werden 10 - 30 verschiedene Übungen trainiert. Das Konzept wird jedes Mal individuell
-                  und
-                  neu für den Tag entwickelt.
-                  Wichtig ist hierbei vor allem das Einbeziehen von funktionellen Übungen, die alltagsnah trainiert
-                  werden. Dabei werden auch Eigenschaften wie Koordination, Gleichgewicht, Beweglichkeit, Kraft und
-                  Schnelligkeit einbezogen und je nach Trainingsstand verbessert.
-                </Typography>
-                <Typography>
-                  Inzwischen gibt es verschiedene Abstufungen der Kurse:
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={8}>
-            <Card>
-              <CardHeader title={'Wo muss ich hin?'}/>
-              <CardMedia src={__API__ + '/about_location.png'}/>
-              <CardContent>
-                <Typography>
-                  FreyRaum findest du in der Tangendorfer Straße 2a in 21442 Toppenstedt. Ein Großteil der Kurse findet
-                  ab
-                  August 2018 im ehemaligen „Blumenstübchen“ von Toppenstedt statt.
-                  Parkplätze sind direkt vor der Tür vorhanden.
-                </Typography>
-                <Typography>
-                  Während der Sommersaison kann es vereinzelt vorkommen, dass Kurse in „die Scheune“ verlegt werden.
-                  Diese
-                  befindet sich in der Hauptstraße 15 und war bis vor kurzem noch unser Hauptquartier.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
         </Grid>
       </div>
     );
@@ -94,4 +54,4 @@ class About extends Component {
 export default compose(
   withWidth(),
   withStyles(Style.APP_STYLES, {withTheme: true})
-)(About);
+)(AboutFreya);

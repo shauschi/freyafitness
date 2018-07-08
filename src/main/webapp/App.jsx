@@ -11,7 +11,7 @@ import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import {Footer, MyAppBar, MyDrawer} from './container';
 import SwipeableRoutes from 'react-swipeable-routes';
 import {CustomizedSnackbar, LoadingIndicator} from './components/general';
-import {About, Agb, Courses, Home, Impressum, ProfileSite} from './sites';
+import {AboutCourses, AboutFreya, AboutFreyRaum, Agb, Courses, Home, Impressum, ProfileSite} from './sites';
 import {CourseDetails} from './components/course';
 import * as Style from './utils/Style';
 import {toggleDrawer} from './model/drawer';
@@ -77,7 +77,9 @@ class App extends Component {
               : <Switch>
                 <Redirect from='/index' to='/'/>
                 <Redirect from='/home' to='/'/>
-                <Route exact path='/about' render={() => <About {...this.props}/>}/>
+                <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
+                <Route exact path='/about/freyraum' render={() => <AboutFreyRaum {...this.props}/>}/>
+                <Route exact path='/about/courses' render={() => <AboutCourses {...this.props}/>}/>
                 <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
                 <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
                 {
