@@ -42,13 +42,13 @@ class Profile extends Component {
             <ListItemIcon>
               <IconBatteryLow color={red.A200}/>
             </ListItemIcon>
-            <ListItemText primary={"10-er Karte"} secondary={"2 von 10 frei"}/>
+            <ListItemText primary={"10-er Karte (folgt)"} secondary={"2 von 10 frei"}/>
           </ListItem>
           <ListItem button style={{backgroundColor: backgroundColor}}>
             <ListItemIcon>
               <IconLineChart/>
             </ListItemIcon>
-            <ListItemText primary={"Statistiken (PR)"}/>
+            <ListItemText primary={"Statistiken (folgt)"}/>
           </ListItem>
           <ListItem button style={{backgroundColor: backgroundColor}}
                     onClick={() => onOpenPasswordChange()}>
@@ -63,10 +63,14 @@ class Profile extends Component {
                onChange={value => onProfileDetailsChange(['firstname'], value)}/>
           <ListItemInput id="lastname" label="Nachname" value={lastname}
                onChange={value => onProfileDetailsChange(['lastname'], value)}/>
-          <ListItemInput id="dayOfBirth" label="Geburtsdatum" value={moment(dayOfBirth).format(Format.ISO_DATE_FORMAT)} type='date'
-               onChange={value => onProfileDetailsChange(['dayOfBirth'], value)}/>
+          {/*
+            <ListItemInput id="dayOfBirth" label="Geburtsdatum"
+                           value={moment(dayOfBirth).format(Format.ISO_DATE_FORMAT)} type='date'
+                           onChange={value => onProfileDetailsChange(['dayOfBirth'], value)}/>
+          */}
           <ListItemInput id="email" label="E-Mail" value={email}
                onChange={value => onProfileDetailsChange(['email'], value)}/>
+          {/*
           <ListItemInput id="mobil" label="Mobil" value={mobil}
                onChange={value => onProfileDetailsChange(['mobil'], value)}/>
 
@@ -79,6 +83,7 @@ class Profile extends Component {
                onChange={value => onProfileDetailsChange(['adress', 'street'], value)}/>
           <ListItemInput id="nr" label="Hausnummer" value={nr}
                onChange={value => onProfileDetailsChange(['adress', 'nr'], value)}/>
+          */}
         </List>
       </div>
     );
