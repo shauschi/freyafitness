@@ -192,6 +192,35 @@ class Home extends Component {
         do: 'KRAFT & TECHNIK',
         fr: 'KRAFT & TECHNIK'
       },
+      {
+        time: '17:30-18:30',
+        mo: 'FUN.POWER',
+        di: 'FUN.POWER',
+        mi: 'FUN.POWER',
+        do: 'FUN.BASE',
+        fr: 'FUN.TEAM'
+      },
+      {
+        time: '18:30-19:30',
+        mo: 'FUN.BASE',
+        di: 'FUN.BASE',
+        mi: 'FUN.BASE',
+        do: 'FUN.POWER',
+        so: 'FUN.TEAM'
+      },
+      {
+        time: '18:30-19:30',
+        mo: 'FUN.BASE',
+        di: 'FUN.BASE',
+        mi: 'FUN.TEAM',
+        do: 'MÄNNER ABEND',
+      },
+      {
+        time: '18:30-19:30',
+        mo: 'FUN.POWER',
+        di: 'FUN.POWER',
+        mi: 'FUN.POWER',
+      }
     ];
 
     return (
@@ -199,6 +228,7 @@ class Home extends Component {
         <Card>
           <CardHeader title={'Kursplan'}/>
           <CardContent style={{overflowX: 'auto'}}>
+            <Typography>Hier findest du den allgemeinen Kursplan. Für Details zu den Kursen und freien Plätzen, melde dich einfach an.</Typography>
             <Table>
               <TableHead>
                 <TableRow>
@@ -231,6 +261,20 @@ class Home extends Component {
                 })}
               </TableBody>
             </Table>
+            <Typography variant='subheading' style={{marginTop: '8px'}}>FUN.BASE</Typography>
+            <Typography>Der Einstieg. Die Grundlage des funktionalen Trainings</Typography>
+            <Typography variant='subheading' style={{marginTop: '8px'}}>FUN.POWER</Typography>
+            <Typography>Das volle Programm. Immer neue Herausforderungen. Schweißtreibend!</Typography>
+            <Typography variant='subheading' style={{marginTop: '8px'}}>FUN.TEAM</Typography>
+            <Typography>Teamwork. Wir nutzen die Grundübungen und arbeiten uns gemeinsam ans Ziel.</Typography>
+            <Typography variant='subheading' style={{marginTop: '8px'}}>KRAFT & TECHNIK</Typography>
+            <Typography>Man lernt nie aus. Techniktraining und Gewichte steigern.</Typography>
+            <Typography variant='subheading' style={{marginTop: '8px'}}>FIT MOMS</Typography>
+            <Typography>Mutter & Kind Zeit. Nach der Rückbildungsgymnastik mit dem Kind gemeinsam fit werden.</Typography>
+            <Typography variant='subheading' style={{marginTop: '8px'}}>MÄNNER ABEND</Typography>
+            <Typography>Krafttraining. Technik erlernen und gemeinsam Gewichte bewegen.</Typography>
+            <Typography variant='subheading' style={{marginTop: '8px'}}>BEST AGERS(65+)</Typography>
+            <Typography>Da geht noch was. Funktionelles Training, egal in welchem Alter.</Typography>
           </CardContent>
         </Card>
       </Grid>
