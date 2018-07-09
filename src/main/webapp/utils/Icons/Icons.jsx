@@ -31,3 +31,10 @@ export {
   FaEye as IconEye,
   FaEyeSlash as IconEyeSlash
 } from 'react-icons/lib/fa';
+
+export {
+  MdRotateLeft as IconRotateLeft,
+  MdRotateRight as IconRotateRight,
+  MdZoomIn as IconZoomIn,
+  MdZoomOut as IconZoomOut
+} from 'react-icons/lib/md';

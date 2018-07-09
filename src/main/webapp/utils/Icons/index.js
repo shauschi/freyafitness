@@ -21,9 +21,13 @@ export {
   IconPencil,
   IconPlus,
   IconPreferences,
+  IconRotateLeft,
+  IconRotateRight,
   IconSignIn,
   IconSignOut,
   IconUser,
   IconUserAdd,
-  IconUserGroup
+  IconUserGroup,
+  IconZoomIn,
+  IconZoomOut
 } from './Icons.jsx';

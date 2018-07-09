@@ -1,33 +1,29 @@
 'use strict';
 import React, {Component} from 'react';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
 import AvatarEditor from 'react-avatar-editor';
-import Slide from '@material-ui/core/Slide';
 import {setPath} from '../../utils/RamdaUtils';
-
-import {IconClose} from '../../utils/Icons';
-import {blueGrey} from '@material-ui/core/colors';
-
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
+import {IconRotateLeft, IconRotateRight, IconZoomIn, IconZoomOut} from '../../utils/Icons';
+import {Dialog} from './../general';
 
 class ProfilePictureDialog extends Component {
 
+  state = {
+    rotate: 0,
+    zoom: 1,
+    acceptAGB: false
+  };
+
   constructor(props) {
     super(props);
-    this.state = {acceptAGB: false};
     this.handleUpload = this.handleUpload.bind(this);
     this.handleRequestSave = this.handleRequestSave.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
@@ -65,8 +61,8 @@ class ProfilePictureDialog extends Component {
     canvasScaled.toBlob(blob => {
       const formData = new FormData();
       formData.append('image', blob, file.name);
-      this.resetState();
       this.props.onSave(formData);
+      this.resetState();
     });
   };
 
@@ -80,7 +76,23 @@ class ProfilePictureDialog extends Component {
   };
 
   resetState = () => {
-    this.setState({acceptAGB: false, errorText: undefined});
+    this.setState({acceptAGB: false, rotate: 0, errorText: undefined});
+  };
+
+  rotateLeft = () => {
+    this.setState(setPath(['rotate'], this.state.rotate - 90, this.state));
+  };
+
+  rotateRight = () => {
+    this.setState(setPath(['rotate'], this.state.rotate + 90, this.state));
+  };
+
+  zoomIn = () => {
+    this.setState(setPath(['zoom'], this.state.zoom + 0.1, this.state));
+  };
+
+  zoomOut = () => {
+    this.setState(setPath(['zoom'], this.state.zoom - 0.1, this.state));
   };
 
   onCheckboxChange = event => {
@@ -88,26 +100,14 @@ class ProfilePictureDialog extends Component {
   };
 
   render() {
-    const {acceptAGB, errorText} = this.state;
-    const {show, fullScreen, temp} = this.props;
+    const {acceptAGB, rotate, zoom, errorText} = this.state;
+    const {show, temp} = this.props;
 
     return (
       <Dialog
+        title='Profilbild anpassen'
         onClose={this.handleRequestClose}
-        fullScreen={fullScreen}
-        TransitionComponent={Transition}
         open={show}>
-
-          <DialogTitle disableTypography
-                       style={{color: 'white', background: blueGrey[800], display: 'flex', padding: '2px 16px'}}>
-            <IconButton style={{color: 'white'}} onClick={this.handleRequestClose} aria-label="Close">
-              <IconClose/>
-            </IconButton>
-            <Typography type="title" style={{color: 'white', flex: 1, textAlign: 'center', padding: '14px 0'}}>
-              Profilbild anpassen
-            </Typography>
-          </DialogTitle>
-
           <DialogContent>
             <div style={{margin: '24px auto', width: '250px', height: '250px'}}>
               <AvatarEditor
@@ -117,11 +117,25 @@ class ProfilePictureDialog extends Component {
                 height={200}
                 border={25}
                 color={[200, 200, 200, 0.75]}
-                scale={1.5}
-                rotate={0}
+                scale={zoom}
+                rotate={rotate}
               />
             </div>
             <div style={{margin: '16px auto', textAlign: 'center'}}>
+              <div>
+                <IconButton onClick={this.zoomIn}>
+                  <IconZoomIn/>
+                </IconButton>
+                <IconButton onClick={this.zoomOut}>
+                  <IconZoomOut/>
+                </IconButton>
+                <IconButton onClick={this.rotateRight}>
+                  <IconRotateRight/>
+                </IconButton>
+                <IconButton onClick={this.rotateLeft}>
+                  <IconRotateLeft/>
+                </IconButton>
+              </div>
               <Button variant='raised' color='primary'>
                 <input
                   type={'file'}
@@ -157,11 +171,11 @@ class ProfilePictureDialog extends Component {
 
           <DialogActions>
             <Button onClick={this.handleRequestSave} color="primary">Speichern</Button>
-            <Button onClick={this.handleRequestClose} color="primary">Abbrechen</Button>
+            <Button onClick={this.handleRequestClose}>Abbrechen</Button>
           </DialogActions>
       </Dialog>
     );
   };
 }
 
-export default withMobileDialog()(ProfilePictureDialog);
+export default ProfilePictureDialog;
