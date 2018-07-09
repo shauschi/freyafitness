@@ -1,5 +1,5 @@
 server:
-  port: 9443
+  port: ${APP_PORT_S:9443}
   ssl:
     key-store: classpath:my.p12
     key-store-password: ${SSL_PSW}

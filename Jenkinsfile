@@ -158,6 +158,7 @@ pipeline {
           sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
           sh '''
             docker run --rm  -d \
+            -e APP_PORT_S=${APP_PORT_S} \
             -e SSL_PSW=${SSL_PSW} \
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \
@@ -173,7 +174,7 @@ pipeline {
             -e MAIL_USR=${MAIL_USR} \
             -e MAIL_PSW=${MAIL_PSW} \
             -p ${APP_PORT}:9000 \
-            -p ${APP_PORT_S}:9443 \
+            -p ${APP_PORT_S}:${APP_PORT_S} \
             --name ${APP_NAME} \
             ${APP_NAME}:latest
           '''
