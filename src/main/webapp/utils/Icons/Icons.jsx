@@ -7,6 +7,7 @@ export {
   TiBatteryHigh as IconBatteryHigh,
   TiBatteryFull as IconBatteryFull,
   TiCalendar as IconCalendar,
+  TiCamera as IconCamera,
   TiTime as IconClock,
   TiTimes as IconClose,
   TiDocumentText as IconDocument,

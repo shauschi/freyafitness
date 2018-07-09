@@ -5,6 +5,7 @@ export {
   IconBatteryHigh,
   IconBatteryFull,
   IconCalendar,
+  IconCamera,
   IconClock,
   IconClose,
   IconDelete,
@@ -29,5 +30,5 @@ export {
   IconUserAdd,
   IconUserGroup,
   IconZoomIn,
-  IconZoomOut
+  IconZoomOut,
 } from './Icons.jsx';

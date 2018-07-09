@@ -106,7 +106,7 @@ class ProfilePictureDialog extends Component {
 
     return (
       <Dialog
-        title='Profilbild anpassen'
+        title='Profilbild ändern'
         onClose={this.handleRequestClose}
         open={show}>
         <DialogContent style={{padding: '0px'}}>

@@ -26,10 +26,14 @@ export const DRAWER_WIDTH = 240;
 export const APP_STYLES = theme => ({
   root: {
     width: '100%',
-    paddingTop: '64px',
-    paddingBottom: '64px',
+    paddingTop: '56px',
+    paddingBottom: '56px',
     zIndex: 1,
-    WebkitOverflowScrolling: 'touch'
+    WebkitOverflowScrolling: 'touch',
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: '64px',
+      paddingBottom: '64px'
+    },
   },
   drawerHeader: theme.mixins.toolbar,
   drawerPaper: {
