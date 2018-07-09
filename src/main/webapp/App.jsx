@@ -9,7 +9,6 @@ import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import {Footer, MyAppBar, MyDrawer} from './container';
-import SwipeableRoutes from 'react-swipeable-routes';
 import {CustomizedSnackbar, LoadingIndicator} from './components/general';
 import {AboutCourses, AboutFreya, AboutFreyRaum, Agb, Courses, Home, Impressum, ProfileSite} from './sites';
 import {CourseDetails} from './components/course';
@@ -19,21 +18,6 @@ import {hideNotification} from './model/notification';
 import {createCourse} from './model/courses';
 import {login, logout, scrollToLogin} from './model/profile';
 import init from './model/init.js';
-
-const HOME_ROUTE = <Route exact path='/' component={Home}/>;
-const SWIPEABLE_ROUTE = <SwipeableRoutes
-  resistance
-  style={{height: '100%'}}
-  containerStyle={{
-    height: '100%',
-    WebkitOverflowScrolling: 'touch',
-  }}
->
-  {HOME_ROUTE}
-  <Route exact path='/courses/all' component={Courses}/>
-  <Route exact path='/profile' component={ProfileSite}/>
-</SwipeableRoutes>;
-
 
 class App extends Component {
 
@@ -82,11 +66,9 @@ class App extends Component {
                 <Route exact path='/about/courses' render={() => <AboutCourses {...this.props}/>}/>
                 <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
                 <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                {
-                  currentUser
-                    ? SWIPEABLE_ROUTE
-                    : HOME_ROUTE
-                }
+                <Route exact path='/' component={Home}/>
+                <Route exact path='/courses/all' component={Courses}/>
+                <Route exact path='/profile' component={ProfileSite}/>
               </Switch>
           }
           {
