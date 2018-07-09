@@ -41,6 +41,7 @@ class ProfileSite extends Component {
     if (profile.pending) {
       return (<LoadingIndicator/>);
     } else {
+      const {user = {}} = profile;
       const {
         id,
         firstname = '',
@@ -49,7 +50,7 @@ class ProfileSite extends Component {
         email,
         mobil,
         adress = {}
-      } = profile.user;
+      } = user;
 
       return (
         <div className={this.props.classes.root}>

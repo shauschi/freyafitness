@@ -19,7 +19,7 @@ import {showNotification} from "../notification";
 
 const initialState = {
   pending: false,
-  user: {},
+  user: undefined,
   users: {
     lastUpdate: undefined,
     pending: false,
