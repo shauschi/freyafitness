@@ -10,7 +10,6 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Slide from '@material-ui/core/Slide';
 
 import {IconClose} from '../../utils/Icons';
-import {blueGrey} from '@material-ui/core/colors';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
@@ -52,8 +51,8 @@ class Dialog extends Component {
         fullScreen={fullScreen}
         TransitionComponent={Transition}
         open={open}>
-        <DialogTitle>
-          <AppBa style={{marginBottom: '12px'}}r>
+        <DialogTitle style={{marginBottom: '12px'}}>
+          <AppBar>
             <Toolbar>
               <IconButton
                 color='inherit'
