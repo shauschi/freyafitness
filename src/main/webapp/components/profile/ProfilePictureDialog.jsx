@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -108,46 +109,53 @@ class ProfilePictureDialog extends Component {
         title='Profilbild anpassen'
         onClose={this.handleRequestClose}
         open={show}>
-          <DialogContent>
-            <div style={{margin: '24px auto', width: '250px', height: '250px'}}>
+        <DialogContent style={{padding: '0px'}}>
+          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+            <Grid item xs={12} sm={10} md={8} style={{position: 'relative', padding: '0px'}}>
               <AvatarEditor
                 ref={this.setAvatarEditorRef}
                 image={temp.dataUrl}
-                width={200}
-                height={200}
-                border={25}
-                color={[200, 200, 200, 0.75]}
+                width={300}
+                height={300}
+                border={60}
+                color={[100, 100, 100, 0.75]}
                 scale={zoom}
                 rotate={rotate}
+                style={{width: '100%', height: '100%'}}
               />
-            </div>
-            <div style={{margin: '16px auto', textAlign: 'center'}}>
-              <div>
-                <IconButton onClick={this.zoomIn}>
+              <div style={{
+                position: 'absolute',
+                width: '100%',
+                bottom: '0px',
+                padding: '16px auto',
+                textAlign: 'center'
+              }}>
+                <Button variant='flat' style={{color: 'white'}}>
+                  <input
+                    type={'file'}
+                    accept={'image/*'}
+                    name={'image'}
+                    style={{position: 'absolute', width: '100%', height: '100%', top: '0', left: '0', opacity: '0'}}
+                    onChange={this.handleUpload}
+                  />
+                  Bild wählen
+                </Button>
+                <IconButton onClick={this.zoomIn} style={{color: 'white'}}>
                   <IconZoomIn/>
                 </IconButton>
-                <IconButton onClick={this.zoomOut}>
+                <IconButton onClick={this.zoomOut} style={{color: 'white'}}>
                   <IconZoomOut/>
                 </IconButton>
-                <IconButton onClick={this.rotateRight}>
+                <IconButton onClick={this.rotateRight} style={{color: 'white'}}>
                   <IconRotateRight/>
                 </IconButton>
-                <IconButton onClick={this.rotateLeft}>
+                <IconButton onClick={this.rotateLeft} style={{color: 'white'}}>
                   <IconRotateLeft/>
                 </IconButton>
               </div>
-              <Button variant='raised' color='primary'>
-                <input
-                  type={'file'}
-                  accept={'image/*'}
-                  name={'image'}
-                  style={{position: 'absolute', width: '100%', opacity: '0'}}
-                  onChange={this.handleUpload}
-                />
-                Ein anderes Bild wählen
-              </Button>
-            </div>
-            <div>
+            </Grid>
+
+            <Grid item xs={12} style={{padding: '24px', width: '100%'}}>
               <Typography>Wähle einen Bildausschnitt für Dein neues Profilbild
                 und klicke anschließend auf Speichern.
                 Mit dem Speichern bestätigst Du, dass Du die Rechte an diesem Bild besitzt
@@ -166,13 +174,14 @@ class ProfilePictureDialog extends Component {
                 />
                 <FormHelperText>{errorText}</FormHelperText>
               </FormControl>
-            </div>
-          </DialogContent>
+            </Grid>
+          </Grid>
+        </DialogContent>
 
-          <DialogActions>
-            <Button onClick={this.handleRequestSave} color="primary">Speichern</Button>
-            <Button onClick={this.handleRequestClose}>Abbrechen</Button>
-          </DialogActions>
+        <DialogActions>
+          <Button onClick={this.handleRequestSave} color="primary">Speichern</Button>
+          <Button onClick={this.handleRequestClose}>Abbrechen</Button>
+        </DialogActions>
       </Dialog>
     );
   };
