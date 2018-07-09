@@ -115,6 +115,7 @@ class LoginAndRegistrationCard extends Component {
             value={tabIdx}
             onChange={this.onTabChange}
             indicatorColor='primary'
+            textColor='primary'
             fullWidth>
             <Tab label='Login'/>
             <Tab label='Konto erstellen'/>
