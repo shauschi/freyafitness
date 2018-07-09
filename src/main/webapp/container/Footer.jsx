@@ -48,8 +48,8 @@ class Footer extends Component {
         onChange={this.handleChange}
         style={{position: 'fixed', bottom: '0px', width: '100%'}}>
         <BottomNavigationAction label="Home" icon={<IconHome size={24}/>}/>
-        <BottomNavigationAction label="Courses" icon={<IconCalendar size={24}/>}/>
-        <BottomNavigationAction label="Profile" icon={<IconUser size={24}/>}/>
+        <BottomNavigationAction label="Kurse" icon={<IconCalendar size={24}/>}/>
+        <BottomNavigationAction label="Profil" icon={<IconUser size={24}/>}/>
       </BottomNavigation>
     );
   };
