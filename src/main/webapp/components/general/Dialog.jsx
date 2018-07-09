@@ -48,32 +48,31 @@ class Dialog extends Component {
 
     return (
       <MaterialDialog
-        color='secondary'
         onClose={this.handleRequestClose}
         fullScreen={fullScreen}
         TransitionComponent={Transition}
         open={open}>
         <DialogTitle>
-        <AppBar>
-          <Toolbar>
-            <IconButton
-              color='inherit'
-              aria-label='Close'
-              style={{position: 'absolute', left: '8px', zIndex: 20}}
-              onClick={this.handleRequestClose}>
-              <IconClose/>
-            </IconButton>
-            <Typography
-              type='title'
-              color='inherit'
-              style={{marginTop: '4px', width: '100%', textAlign: 'center'}}>
-              {title}
-            </Typography>
-            <div style={{position: 'absolute', right: '8px', zIndex: 20}}>
-              {secondAction}
-            </div>
-          </Toolbar>
-        </AppBar>
+          <AppBa style={{marginBottom: '12px'}}r>
+            <Toolbar>
+              <IconButton
+                color='inherit'
+                aria-label='Close'
+                style={{position: 'absolute', left: '8px', zIndex: 20}}
+                onClick={this.handleRequestClose}>
+                <IconClose/>
+              </IconButton>
+              <Typography
+                type='title'
+                color='inherit'
+                style={{marginTop: '4px', width: '100%', textAlign: 'center'}}>
+                {title}
+              </Typography>
+              <div style={{position: 'absolute', right: '8px', zIndex: 20}}>
+                {secondAction}
+              </div>
+            </Toolbar>
+          </AppBar>
         </DialogTitle>
         {children}
       </MaterialDialog>
