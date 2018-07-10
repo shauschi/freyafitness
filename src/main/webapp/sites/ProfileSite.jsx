@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
@@ -55,21 +55,23 @@ class ProfileSite extends Component {
       return (
         <div className={this.props.classes.root}>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-            <div style={{position: 'relative', width: '100%', paddingTop: '75%'}}>
-              <div style={{position: 'absolute', top: '0px', width: '100%', zIndex: -20}}>
-                <ProfilePicture user={profile.user} style={{width: '100%'}}/>
+            <Grid item xs={12} sm={8} style={{padding: '0px'}}>
+              <div style={{position: 'relative', width: '100%', paddingTop: '75%'}}>
+                <div style={{position: 'absolute', top: '0px', width: '100%', zIndex: -20}}>
+                  <ProfilePicture user={profile.user} style={{width: '100%'}}/>
+                </div>
+                <div style={{position: 'absolute', bottom: '0px', right: '24px'}}>
+                  <Button
+                    variant='fab'
+                    color='secondary'
+                    aria-label='edit'
+                    onClick={actions.openProfilePictureChangeDialog}>
+                    <IconCamera/>
+                  </Button>
+                </div>
               </div>
-              <div style={{position: 'absolute', bottom: '0px', right: '24px'}}>
-                <IconButton
-                  onClick={actions.openProfilePictureChangeDialog}
-                  style={{color: 'white'}}>
-                  <IconCamera/>
-                </IconButton>
-              </div>
-            </div>
 
-            <Grid item xs={12}>
-              <Card>
+              <Card style={{margin: '8px'}}>
                 <CardHeader title={firstname + " " + lastname}/>
                 <CardContent>
                   <Typography variant='caption'>Über mich</Typography>
@@ -80,7 +82,7 @@ class ProfileSite extends Component {
               </Card>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={8}>
               <Card>
                 <List style={{padding: '0'}}>
                   <ListItem button>

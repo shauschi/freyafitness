@@ -115,9 +115,9 @@ class ProfilePictureDialog extends Component {
               <AvatarEditor
                 ref={this.setAvatarEditorRef}
                 image={temp.dataUrl}
-                width={300}
-                height={300}
-                border={60}
+                width={1280}
+                height={1280}
+                border={216}
                 color={[100, 100, 100, 0.75]}
                 scale={zoom}
                 rotate={rotate}
