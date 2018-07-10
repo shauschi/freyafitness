@@ -24,7 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +75,7 @@ public class UserServiceTest {
     roleUser.setAuthority("USER");
 
     when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-    when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+    when(userRepository.findByEmailIgnoreCase(user.getEmail())).thenReturn(Optional.of(user));
     when(passwordEncoder.encode(any())).thenAnswer(answer -> answer.getArgument(0));
     when(roleRepository.findByAuthority("USER"))
         .thenReturn(Optional.of(roleUser));
@@ -174,7 +173,7 @@ public class UserServiceTest {
   @Test
   public void test_loadUserByUsername_userNotFound() {
     expectedException.expect(UsernameNotFoundException.class);
-    when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+    when(userRepository.findByEmailIgnoreCase(any())).thenReturn(Optional.empty());
 
     testee.loadUserByUsername("any@test.mail");
   }
@@ -186,11 +185,11 @@ public class UserServiceTest {
     user.setEmail(username);
     user.setPassword("test_password");
     user.setRoles(Collections.singletonList(new Role()));
-    when(userRepository.findByEmail(username)).thenReturn(Optional.of(user));
+    when(userRepository.findByEmailIgnoreCase(username)).thenReturn(Optional.of(user));
 
     UserDetails result = testee.loadUserByUsername(username);
 
-    verify(userRepository).findByEmail(username);
+    verify(userRepository).findByEmailIgnoreCase(username);
     assertThat(result, notNullValue());
     assertThat(result.getUsername(), equalTo(username));
     assertThat(result.getPassword(), equalTo(user.getPassword()));
