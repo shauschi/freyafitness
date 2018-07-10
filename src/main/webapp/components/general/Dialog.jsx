@@ -73,7 +73,7 @@ class Dialog extends Component {
                   </div>
                 </Toolbar>
               </AppBar>
-              : title
+              : <span>{title}<span style={{marginLeft: '16px'}}>{secondAction}</span></span>
           }
         </DialogTitle>
         {children}
