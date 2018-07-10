@@ -100,6 +100,16 @@ class ProfilePictureDialog extends Component {
     this.setState({acceptAGB: event.target.checked, errorText: undefined});
   };
 
+  getInput = () => {
+    return <input
+      type={'file'}
+      accept={'image/*'}
+      name={'image'}
+      style={{position: 'absolute', width: '100%', height: '100%', top: '0', left: '0', opacity: '0'}}
+      onChange={this.handleUpload}
+    />;
+  };
+
   render() {
     const {acceptAGB, rotate, zoom, errorText} = this.state;
     const {show, temp} = this.props;
@@ -123,6 +133,11 @@ class ProfilePictureDialog extends Component {
                 rotate={rotate}
                 style={{width: '100%', height: '100%'}}
               />
+              {
+                temp.dataUrl
+                  ? undefined
+                  : this.getInput()
+              }
               <div style={{
                 position: 'absolute',
                 width: '100%',
@@ -131,13 +146,7 @@ class ProfilePictureDialog extends Component {
                 textAlign: 'center'
               }}>
                 <Button variant='flat' style={{color: 'white'}}>
-                  <input
-                    type={'file'}
-                    accept={'image/*'}
-                    name={'image'}
-                    style={{position: 'absolute', width: '100%', height: '100%', top: '0', left: '0', opacity: '0'}}
-                    onChange={this.handleUpload}
-                  />
+                  {this.getInput()}
                   Bild wählen
                 </Button>
                 <IconButton onClick={this.zoomIn} style={{color: 'white'}}>

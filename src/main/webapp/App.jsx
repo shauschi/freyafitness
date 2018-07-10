@@ -37,6 +37,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
+          <div>
           <MyAppBar
             pending={profile.pending}
             classes={classes}
@@ -82,6 +83,7 @@ class App extends Component {
             message={notification.message}
             onClose={this.props.actions.hideNotification}
             autoHideDuration={notification.autoHideDuration}/>
+          </div>
         </MuiPickersUtilsProvider>
       </MuiThemeProvider>
     );
