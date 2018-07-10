@@ -21,7 +21,7 @@ class Courses extends Component {
       <div className={this.props.classes.root}>
         <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
           <CourseDetails/>
-          <Grid item xs={12} md={8} style={{padding: '0px'}}>
+          <Grid item xs={12} sm={10} md={8} lg={6} style={{padding: '0px'}}>
             <CourseList courses={data} showCourseDetails={showCourseDetails} signIn={signIn} signOut={signOut}/>
           </Grid>
         </Grid>
