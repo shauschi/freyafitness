@@ -21,7 +21,7 @@ import * as Format from '../../utils/Format';
 import {ProfilePicture} from './../profile';
 import {showNotification} from './../../model/notification';
 import {MODE, NEW_COURSE} from './../../model/courses';
-import {TITLE_BG} from '../../utils/Style';
+import {TITLE_BG, SECONDARY} from '../../utils/Style';
 import {IconDelete, IconPencil, IconUser, IconUserAdd} from '../../utils/Icons';
 import {findById, setPath, viewPath} from '../../utils/RamdaUtils';
 import {LoadingIndicator} from '../general';
@@ -130,8 +130,11 @@ class CourseDetails extends Component {
   getAttendeeList = attendees => {
     const roles = viewPath(['currentUser', 'roles'], this.props) || {};
     const actionAllowed = roles['TRAINER'] || roles['ADMIN'];
-    return attendees.map((user, idx) =>
-      <Grid
+    const maxParticipants = viewPath(['courseDetails', 'course', 'maxParticipants'], this.props) || 0;
+    return attendees.map((user, idx) => {
+      const onWaitlist = idx >= maxParticipants;
+
+      return (<Grid
         item xs={3} key={idx}
         style={{cursor: 'pointer'}}
         onClick={actionAllowed ? event => this.openMenu(event, user) : undefined}>
@@ -144,8 +147,20 @@ class CourseDetails extends Component {
           align='center'>
           {user.firstname + ' ' + user.lastname}
         </Typography>
+        {
+          onWaitlist
+          ? <Typography
+              variant='caption'
+              style={{color: 'rgba(255, 0, 0, 0.65'}}
+              gutterBottom
+              align='center'>
+              (auf Warteliste)
+            </Typography>
+          : undefined
+        }
       </Grid>
-    );
+      );
+    });
   };
 
   getAddUserButton = () => {
@@ -154,7 +169,7 @@ class CourseDetails extends Component {
       style={{cursor: 'pointer'}}
       onClick={this.openAddUserMenu}
     >
-      <Avatar style={{backgroundColor: '#03a9f4', margin: '0 auto'}}>
+      <Avatar style={{backgroundColor: SECONDARY, margin: '0 auto'}}>
         <IconUserAdd/>
       </Avatar>
       <Typography
