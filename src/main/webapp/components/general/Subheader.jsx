@@ -4,7 +4,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 
 const Subheader = ({label}) => (
-  <ListSubheader style={{background: blueGrey[600], color: 'white', lineHeight: '32px'}}>
+  <ListSubheader>
     {label}
   </ListSubheader>
 );

@@ -10,16 +10,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import {ValidationGroup} from './../general/validation';
-import {
-  Dialog,
-  GridInputControl,
-  GridDateTimeControl,
-  GridItemSelectControl, GridTextControl
-} from './../general';
+import {Dialog, GridDateTimeControl, GridInputControl, GridItemSelectControl, GridTextControl} from './../general';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import {TypeMapper} from '.';
@@ -28,25 +22,21 @@ import {ProfilePicture} from './../profile';
 import {showNotification} from './../../model/notification';
 import {MODE, NEW_COURSE} from './../../model/courses';
 import {TITLE_BG} from '../../utils/Style';
-import {IconUserAdd, IconDelete, IconPencil, IconUser} from '../../utils/Icons';
-import {setPath, view, viewPath} from '../../utils/RamdaUtils';
-
-import {findById} from '../../utils/RamdaUtils';
+import {IconDelete, IconPencil, IconUser, IconUserAdd} from '../../utils/Icons';
+import {findById, setPath, viewPath} from '../../utils/RamdaUtils';
 import {LoadingIndicator} from '../general';
 import {
+  addUserToCourse,
   fetchCourses,
   hideCourseDetails,
   onCourseDetailsChange,
+  removeUserFromCourse,
   saveCourseDetails,
   signIn,
   signOut,
-  toggleEditCourse,
-  addUserToCourse,
-  removeUserFromCourse
+  toggleEditCourse
 } from '../../model/courses';
-import {
-  updateUsers
-} from '../../model/profile';
+import {updateUsers} from '../../model/profile';
 
 class CourseDetails extends Component {
 
@@ -222,7 +212,9 @@ class CourseDetails extends Component {
 
     const {name = " ", color} = findById(courseTypes.data, courseTypeId) || TypeMapper.UNKNOWN;
     const short = name.charAt(0);
-    const {roles = {}} = currentUser;
+    const roles = viewPath(['currentUser', 'roles'], this.props) || {};
+    const trainerOrAdmin = roles['TRAINER'] || roles['ADMIN'];
+
     return (
       <Dialog
         title={title}
@@ -311,10 +303,10 @@ class CourseDetails extends Component {
                 onChange={(id, value) => onCourseDetailsChange('maxParticipants', Number.parseInt(value))}
               />
               <GridTextControl text={'Teilnehmer'}/>
-              {this.getUserMenu()}
-              {this.getAttendeeList(attendees)}
-              {this.getAddUserButton()}
-              {this.getAddUserMenu()}
+              {trainerOrAdmin ? this.getUserMenu() : undefined}
+              {trainerOrAdmin ? this.getAttendeeList(attendees) : undefined}
+              {trainerOrAdmin ? this.getAddUserButton() : undefined}
+              {trainerOrAdmin ? this.getAddUserMenu() : undefined}
             </ValidationGroup>
           </Grid>
         </DialogContent>

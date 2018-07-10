@@ -34,6 +34,7 @@ export {
 } from 'react-icons/lib/fa';
 
 export {
+  MdMoreVert as IconMoreVert,
   MdRotateLeft as IconRotateLeft,
   MdRotateRight as IconRotateRight,
   MdZoomIn as IconZoomIn,

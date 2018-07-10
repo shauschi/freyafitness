@@ -74,8 +74,12 @@ class ProfileSite extends Component {
               <Card style={{margin: '8px'}}>
                 <CardHeader title={firstname + " " + lastname}/>
                 <CardContent>
-                  <Typography variant='caption'>Über mich</Typography>
-                  <Typography>Hier kann man ganz tolle Sachen über sich schreiben.</Typography>
+                  {
+                    /*
+                    <Typography variant='caption'>Über mich</Typography>
+                    <Typography>Hier kann man ganz tolle Sachen über sich schreiben.</Typography>
+                    */
+                  }
                   <Typography variant='caption'>E-Mail</Typography>
                   <Typography>{email}</Typography>
                 </CardContent>

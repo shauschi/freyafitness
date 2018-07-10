@@ -18,6 +18,7 @@ export {
   IconLocation,
   IconLockClosed,
   IconMenu,
+  IconMoreVert,
   IconPaperPlane,
   IconPencil,
   IconPlus,
