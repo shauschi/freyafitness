@@ -28,7 +28,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {Slider, Subheader} from './../components/general';
 import {NewsItem} from './../components/news';
 import Course, {CourseList} from './../components/course';
-import {showCourseDetails} from '../model/courses';
+import {showCourseDetails, signIn, signOut} from '../model/courses';
 import {IconBatteryLow, IconCalendar} from '../utils/Icons';
 import {red} from '@material-ui/core/colors';
 import {LoginAndRegistrationCard} from '../components/account';
@@ -122,7 +122,7 @@ class Home extends Component {
   };
 
   getMyCourses = () => {
-    const {showCourseDetails} = this.props.actions;
+    const {showCourseDetails, signIn, signOut} = this.props.actions;
     const {data = {}} = this.props.courses;
     const myCourses = data.filter(course => course.signedIn);
     return (
@@ -138,6 +138,8 @@ class Home extends Component {
                 key={idx}
                 course={course}
                 showCourseDetails={showCourseDetails}
+                signIn={signIn}
+                signOut={signOut}
                 showDate/>)
             )
         }
@@ -342,6 +344,8 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     // courses
     showCourseDetails: showCourseDetails,
+    signIn: signIn,
+    signOut: signOut,
     // notification
     showNotification: showNotification
   }, dispatch),
