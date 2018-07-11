@@ -36,11 +36,18 @@ public class ProfilePictureRepository {
     }
     final String filename = result.getFilename();
     final GridFsResource resource = gridFsTemplate.getResource(filename);
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     try (final InputStream is = resource.getInputStream()){
-      byte[] buffer = new byte[(int) resource.contentLength()];
-      int bytes = is.read(buffer);
-      LOGGER.debug(bytes + " bytes read");
-      return buffer;
+      int nRead;
+      byte[] data = new byte[1024];
+      while ((nRead = is.read(data, 0, data.length)) != -1) {
+        buffer.write(data, 0, nRead);
+      }
+      buffer.flush();
+      byte[] byteArray = buffer.toByteArray();
+
+      LOGGER.debug(byteArray.length + " bytes read");
+      return byteArray;
     }
   }
 

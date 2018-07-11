@@ -7,6 +7,7 @@ export {
   TiBatteryHigh as IconBatteryHigh,
   TiBatteryFull as IconBatteryFull,
   TiCalendar as IconCalendar,
+  TiCamera as IconCamera,
   TiTime as IconClock,
   TiTimes as IconClose,
   TiDocumentText as IconDocument,
@@ -31,3 +32,11 @@ export {
   FaEye as IconEye,
   FaEyeSlash as IconEyeSlash
 } from 'react-icons/lib/fa';
+
+export {
+  MdMoreVert as IconMoreVert,
+  MdRotateLeft as IconRotateLeft,
+  MdRotateRight as IconRotateRight,
+  MdZoomIn as IconZoomIn,
+  MdZoomOut as IconZoomOut
+} from 'react-icons/lib/md';

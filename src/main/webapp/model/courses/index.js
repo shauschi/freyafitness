@@ -124,20 +124,14 @@ export const hideCourseDetails = () => {
 export const saveCourseDetails = course => {
   return dispatch => {
     dispatch(actions.courses.save.pending());
-
-    if (course.id) {
-      return saveCourse(course)
-        .then(updatedCourse => {
-          dispatch(actions.courses.save.success(updatedCourse));
-          dispatch(actions.courses.courseDetails.hide());
-          dispatch(showNotification('Kurs gespeichert'));
-        })
-        .catch(error=> dispatch(actions.courses.save.error(error)));
-    } else {
-      return saveNewCourse(course)
-        .then(updatedCourse => dispatch(actions.courses.save.success(updatedCourse)))
-        .catch(error=> dispatch(actions.courses.save.error(error)));
-    }
+    const func = !!course.id ? saveCourse : saveNewCourse;
+    return func(course)
+      .then(updatedCourse => {
+        dispatch(actions.courses.save.success(updatedCourse));
+        dispatch(actions.courses.courseDetails.hide());
+        dispatch(showNotification('Kurs gespeichert', 'success'));
+      })
+      .catch(error=> dispatch(actions.courses.save.error(error)));
   };
 };
 
@@ -155,11 +149,11 @@ export const signIn = courseId => {
     return signInApiCall(courseId)
       .then(course => {
         dispatch(actions.courses.signIn.success(course));
-        dispatch(showNotification('angemeldet'));
+        dispatch(showNotification('angemeldet', 'success'));
       })
       .catch(error => {
         dispatch(actions.courses.signIn.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal'));
+        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
       });
   }
 };
@@ -170,11 +164,11 @@ export const signOut = courseId => {
     return signOutApiCall(courseId)
       .then(course => {
         dispatch(actions.courses.signOut.success(course));
-        dispatch(showNotification('abgemeldet'));
+        dispatch(showNotification('abgemeldet', 'success'));
       })
       .catch(error => {
         dispatch(actions.courses.signOut.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal'));
+        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
       });
   }
 };
@@ -188,7 +182,7 @@ export const addUserToCourse = (courseId, userId) => {
       })
       .catch(error => {
         dispatch(actions.course.addUser.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal'));
+        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
       });
   }
 };
@@ -199,11 +193,11 @@ export const removeUserFromCourse = (courseId, userId) => {
     return removeUserFromCourseApiCall(courseId, userId)
       .then(course => {
         dispatch(actions.courses.removeUser.success(course));
-        dispatch(showNotification('Teilnehmer entfernt'));
+        dispatch(showNotification('Teilnehmer entfernt', 'success'));
       })
       .catch(error => {
         dispatch(actions.course.removeUser.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal'));
+        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
       });
   }
 };

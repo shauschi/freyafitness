@@ -4,7 +4,7 @@ import {assignPath} from '../../utils/RamdaUtils';
 
 const initialState = {
   show: false,
-  variant: 'normal',
+  variant: 'info',
   message: '',
   autoHideDuration: 1500
 };

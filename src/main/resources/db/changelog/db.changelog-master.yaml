@@ -11,3 +11,5 @@ databaseChangeLog:
         path: db/changelog/003__roles/
     - includeAll:
         path: db/changelog/003__testdata/
+    - includeAll:
+        path: db/changelog/004__course_type/

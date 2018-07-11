@@ -1,4 +1,15 @@
 
+def mapBranchToEnvironment(branch) {
+  def appName = 'freyafitness'
+  if (branch == 'master') {
+    return '[PRODUCTION]'
+  }
+  if (branch == 'develop') {
+    return '[TEST]'
+  }
+  return '[DEVELOPMENT]'
+}
+
 def mapBranchToAppName(branch) {
   def appName = 'freyafitness'
   if (branch == 'master') {
@@ -46,9 +57,21 @@ pipeline {
     skipDefaultCheckout()
   }
   environment{
+    ENV_NAME = mapBranchToEnvironment("${BRANCH_NAME}")
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
     NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
     BRANCH = "${BRANCH_NAME}"
+    DB = credentials('db')
+    DB_URL = "jdbc:postgresql://93.90.205.170/${APP_NAME}"
+    MONGO      = credentials('mongo')
+    MONGO_HOST = '93.90.205.170'
+    MONGO_PORT = 27017
+
+    MAIL       = credentials('mail')
+    MAIL_HOST  = "smtp.1und1.de"
+    MAIL_PORT  = 587
+    APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
+    APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
   }
   stages {
     stage('checkout') {
@@ -128,18 +151,6 @@ pipeline {
 
     stage('run container') {
       agent any
-      environment {
-        DB = credentials('db')
-        DB_URL = "jdbc:postgresql://93.90.205.170/${APP_NAME}"
-        MONGO      = credentials('mongo')
-        MONGO_HOST = '93.90.205.170'
-        MONGO_PORT = 27017
-        APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
-        APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
-        MAIL       = credentials('mail')
-        MAIL_HOST  = "smtp.1und1.de"
-        MAIL_PORT  = 587
-      }
       steps {
         withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
                                                keystoreVariable: 'SSL_CERTIFICATE', \
@@ -147,6 +158,7 @@ pipeline {
           sh 'docker stop ${APP_NAME} || true && docker rm ${APP_NAME} || true'
           sh '''
             docker run --rm  -d \
+            -e APP_PORT_S=${APP_PORT_S} \
             -e SSL_PSW=${SSL_PSW} \
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \
@@ -162,12 +174,21 @@ pipeline {
             -e MAIL_USR=${MAIL_USR} \
             -e MAIL_PSW=${MAIL_PSW} \
             -p ${APP_PORT}:9000 \
-            -p ${APP_PORT_S}:9443 \
+            -p ${APP_PORT_S}:${APP_PORT_S} \
             --name ${APP_NAME} \
             ${APP_NAME}:latest
           '''
         }
       }
+    }
+  }
+
+  post {
+    success {
+      slackSend(color: "#BDFFC3", message: "${ENV_NAME} Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>")
+    }
+    failure {
+      slackSend(color: "#FF9FA1", message: "{ENV_NAME} build failed - ${env.BRANCH} ${env.BUILD_NUMBER}")
     }
   }
 }

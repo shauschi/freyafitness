@@ -2,16 +2,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
-import {withStyles} from '@material-ui/core/styles';
-import withWidth from '@material-ui/core/withWidth';
-import Paper from '@material-ui/core/Paper';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import {withRouter} from 'react-router-dom';
-import * as Style from '../utils/Style';
-import {IconHome, IconCalendar, IconUser} from '../utils/Icons';
-
-import {blueGrey} from '@material-ui/core/colors';
+import {IconCalendar, IconHome, IconUser} from '../utils/Icons';
 
 class Footer extends Component {
 
@@ -47,25 +41,16 @@ class Footer extends Component {
   }
 
   render() {
-    const {classes} = this.props;
     const value = this.fromRoute();
     return (
-      <Paper style={{position: 'absolute', bottom: '0px', left: '0px', width: '100%', background: blueGrey[800]}}>
-        <div className={classes.appBar2}>
-          <Tabs
-            value={value}
-            onChange={this.handleChange}
-            fullWidth
-            scrollable
-            indicatorColor="primary"
-            textColor="primary"
-          >
-            <Tab icon={<IconHome size={28}/>}/>
-            <Tab icon={<IconCalendar size={28}/>}/>
-            <Tab icon={<IconUser size={28}/>}/>
-          </Tabs>
-        </div>
-      </Paper>
+      <BottomNavigation
+        value={value}
+        onChange={this.handleChange}
+        style={{position: 'fixed', bottom: '0px', width: '100%', zIndex: 1000}}>
+        <BottomNavigationAction label="Home" icon={<IconHome size={24}/>}/>
+        <BottomNavigationAction label="Kurse" icon={<IconCalendar size={24}/>}/>
+        <BottomNavigationAction label="Profil" icon={<IconUser size={24}/>}/>
+      </BottomNavigation>
     );
   };
 }
@@ -75,6 +60,5 @@ Footer.contextTypes = {
 };
 
 export default compose(
-  withRouter,
-  withStyles(Style.APP_STYLES, {withTheme: true}),
-  withWidth())(Footer);
+  withRouter
+)(Footer);

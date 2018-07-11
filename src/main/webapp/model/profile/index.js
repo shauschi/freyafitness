@@ -38,6 +38,7 @@ const initialState = {
   },
   showLogin: true,
   loginRef: undefined,
+  shouldScrollToLogin: false,
   login: {
     pending: false,
     error: undefined,
@@ -128,6 +129,7 @@ export const actions = createActions({
     DATA_CHANGED: (id, value) => ({id: id, value: value}),
   },
   SET_LOGIN_REF: ref => ref,
+  SHOULD_SCROLL_TO_LOGIN: shouldScroll => shouldScroll,
   CREATE_ACCOUNT: {
     PENDING: undefined,
     SUCCESS: profile => profile,
@@ -137,13 +139,25 @@ export const actions = createActions({
 });
 
 export const setLoginRef = (ref) => {
-  return dispatch => dispatch(actions.setLoginRef(ref));
+  return (dispatch, getState) => {
+    dispatch(actions.setLoginRef(ref));
+    if (getState().profile.shouldScrollToLogin) {
+      const loginRef = getState().profile.loginRef;
+      loginRef.scrollIntoView({behaviour: 'smooth', block: 'start'});
+      dispatch(actions.shouldScrollToLogin(false));
+    }
+  }
 };
 
-export const scrollToLogin = () => {
+export const scrollToLogin = router => {
   return (dispatch, getState) => {
     const loginRef = getState().profile.loginRef;
-    loginRef.scrollIntoView({behaviour: 'smooth', block: 'start'});
+    if (router.history.location.pathname === '/' && !!loginRef) {
+      loginRef.scrollIntoView({behaviour: 'smooth', block: 'start'});
+    } else {
+      dispatch(actions.shouldScrollToLogin(true));
+      router.history.push('/');
+    }
   }
 };
 
@@ -313,6 +327,8 @@ export default handleActions({
 
   [actions.setLoginRef]: (state, {payload}) =>
     setPath(['loginRef'], payload, state),
+  [actions.shouldScrollToLogin]: (state, {payload}) =>
+    setPath(['shouldScrollToLogin'], payload, state),
   [actions.login.dataChanged]: (state, {payload}) =>
     setPath(['login', 'data', payload.id], payload.value, state),
 

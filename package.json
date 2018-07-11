@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage --runInBand",
-    "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot",
     "dev": "webpack-dev-server --progress --inline --hot --config webpack.dev.config.js --https",
     "build_dev": "webpack --config webpack.build.dev.config.js",
-    "build_tst": "webpack --config webpack.tst.config.js",
-    "build_int": "webpack --config webpack.int.config.js",
-    "build_production": "webpack --config webpack.config.js"
+    "build_tst": "webpack --config webpack.build.tst.config.js",
+    "build_int": "webpack --config webpack.build.int.config.js",
+    "build_production": "webpack --config webpack.build.prod.config.js"
   },
   "repository": {
     "type": "git",

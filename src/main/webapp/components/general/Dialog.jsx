@@ -10,7 +10,6 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Slide from '@material-ui/core/Slide';
 
 import {IconClose} from '../../utils/Icons';
-import {blueGrey} from '@material-ui/core/colors';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
@@ -36,8 +35,7 @@ class Dialog extends Component {
     }
   };
 
-  render()
-  {
+  render() {
     const {
       title,
       fullScreen,
@@ -52,44 +50,31 @@ class Dialog extends Component {
         fullScreen={fullScreen}
         TransitionComponent={Transition}
         open={open}>
-        <DialogTitle>
-        <AppBar style={{background: blueGrey[800], position: 'absolute'}}>
-          <Toolbar>
-            <IconButton
-              aria-label='Close'
-              style={{
-                zIndex: 20
-              }}
-              onClick={this.handleRequestClose}>
-              <IconClose/>
-            </IconButton>
-            <Typography
-              type='title'
-              style={{
-                color: 'white',
-                zIndex: 10,
-                position: 'absolute',
-                left: 0,
-                width: '100%',
-                textAlign: 'center',
-                fontSize: '23px',
-                fontWeight: 'bold',
-                textShadow: '-2px -2px 0px #444'
-              }}>
-              {title}
-            </Typography>
-            <div
-              style={{
-                position: 'absolute',
-                right: '0px',
-                padding: '0 12px',
-                zIndex: 20
-              }}
-            >
-              {secondAction}
-            </div>
-          </Toolbar>
-        </AppBar>
+        <DialogTitle style={{marginBottom: '12px'}}>
+          {
+            fullScreen
+              ? <AppBar>
+                <Toolbar>
+                  <IconButton
+                    color='inherit'
+                    aria-label='Close'
+                    style={{position: 'absolute', left: '8px', zIndex: 20}}
+                    onClick={this.handleRequestClose}>
+                    <IconClose/>
+                  </IconButton>
+                  <Typography
+                    type='title'
+                    color='inherit'
+                    style={{marginTop: '4px', width: '100%', textAlign: 'center'}}>
+                    {title}
+                  </Typography>
+                  <div style={{position: 'absolute', right: '8px', zIndex: 20}}>
+                    {secondAction}
+                  </div>
+                </Toolbar>
+              </AppBar>
+              : <span>{title}<span style={{marginLeft: '16px'}}>{secondAction}</span></span>
+          }
         </DialogTitle>
         {children}
       </MaterialDialog>

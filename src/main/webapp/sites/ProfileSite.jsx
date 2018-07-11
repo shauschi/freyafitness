@@ -1,25 +1,34 @@
 'use strict';
 import React, {Component} from 'react';
+import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import Profile, {ProfilePictureDialog} from './../components/profile';
+import Card from '@material-ui/core/Card';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import {IconBatteryLow, IconCamera, IconLineChart, IconLockClosed} from './../utils/Icons';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Typography from '@material-ui/core/Typography';
+import {ProfilePicture, ProfilePictureDialog} from './../components/profile';
 import {ChangePasswordDialog} from '../components/account';
 import {LoadingIndicator} from '../components/general';
 import {
-  fetchOwnProfile,
   changeTempProfilePicture,
-  openProfilePictureChangeDialog,
   closeProfilePictureChangeDialog,
-  saveProfilePicture,
-  onProfileDetailsChange
+  fetchOwnProfile,
+  onProfileDetailsChange,
+  openProfilePictureChangeDialog,
+  saveProfilePicture
 } from './../model/profile';
-import {
-  onPasswordChange,
-  onOpenPasswordChange,
-  onCancelPasswordChange,
-  changePassword
-} from './../model/password';
+import {changePassword, onCancelPasswordChange, onOpenPasswordChange, onPasswordChange} from './../model/password';
+import {withStyles} from "@material-ui/core/styles/index";
+import * as Style from "../utils/Style";
+import {red} from "@material-ui/core/colors/index";
 
 class ProfileSite extends Component {
   render() {
@@ -32,8 +41,77 @@ class ProfileSite extends Component {
     if (profile.pending) {
       return (<LoadingIndicator/>);
     } else {
+      const {user = {}} = profile;
+      const {
+        id,
+        firstname = '',
+        lastname = '',
+        dayOfBirth,
+        email,
+        mobil,
+        adress = {}
+      } = user;
+
       return (
-        <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+        <div className={this.props.classes.root}>
+          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+            <Grid item xs={12} sm={8} style={{padding: '0px'}}>
+              <div style={{position: 'relative', width: '100%', paddingTop: '75%'}}>
+                <div style={{position: 'absolute', top: '0px', width: '100%', zIndex: -20}}>
+                  <ProfilePicture user={profile.user} style={{width: '100%'}}/>
+                </div>
+                <div style={{position: 'absolute', bottom: '0px', right: '24px'}}>
+                  <Button
+                    variant='fab'
+                    color='secondary'
+                    aria-label='edit'
+                    onClick={actions.openProfilePictureChangeDialog}>
+                    <IconCamera/>
+                  </Button>
+                </div>
+              </div>
+
+              <Card style={{margin: '8px'}}>
+                <CardHeader title={firstname + " " + lastname}/>
+                <CardContent>
+                  {
+                    /*
+                    <Typography variant='caption'>Über mich</Typography>
+                    <Typography>Hier kann man ganz tolle Sachen über sich schreiben.</Typography>
+                    */
+                  }
+                  <Typography variant='caption'>E-Mail</Typography>
+                  <Typography>{email}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} sm={8}>
+              <Card>
+                <List style={{padding: '0'}}>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <IconBatteryLow color={red.A200}/>
+                    </ListItemIcon>
+                    <ListItemText primary={"10-er Karte (folgt)"} secondary={"2 von 10 frei"}/>
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <IconLineChart/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Statistiken (folgt)"}/>
+                  </ListItem>
+                  <ListItem button onClick={() => actions.onOpenPasswordChange()}>
+                    <ListItemIcon>
+                      <IconLockClosed/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Passwort ändern"}/>
+                  </ListItem>
+                </List>
+              </Card>
+            </Grid>
+          </Grid>
+
           <ProfilePictureDialog
             show={profile.picture.dialog.open}
             temp={profile.picture.temp}
@@ -52,15 +130,7 @@ class ProfileSite extends Component {
             onPasswordChange={actions.onPasswordChange}
             onSave={actions.changePassword}
           />
-          <Grid item xs={12} md={12} style={{padding: '0px'}}>
-            <Profile
-              profile={profile}
-              onProfileDetailsChange={actions.onProfileDetailsChange}
-              onOpenPasswordChange={actions.onOpenPasswordChange}
-              onOpenProfilPictureChange={actions.openProfilePictureChangeDialog}
-            />
-          </Grid>
-        </Grid>
+        </div>
       );
     }
   }
@@ -90,4 +160,10 @@ const mapDispatchToProps = dispatch => ({
   dispatch
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileSite);
+export default compose(
+  withStyles(Style.APP_STYLES, {withTheme: true}),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(ProfileSite);
