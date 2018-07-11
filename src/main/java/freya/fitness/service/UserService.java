@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
           "Keine Rollen zu Benutzer: " + user + " gefunden.");
     }
     return new org.springframework.security.core.userdetails.User(
-        email, user.getPassword(), userRoles);
+        user.getEmail(), user.getPassword(), userRoles);
   }
 
   public User getCurrentUser() {
