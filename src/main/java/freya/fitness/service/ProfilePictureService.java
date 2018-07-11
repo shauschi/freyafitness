@@ -1,8 +1,8 @@
 package freya.fitness.service;
 
-import freya.fitness.domain.jpa.User;
-import freya.fitness.repository.jpa.UserRepository;
 import freya.fitness.repository.mongodb.ProfilePictureRepository;
+import freya.fitness.utils.Size;
+import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,21 +18,17 @@ public class ProfilePictureService {
   private ProfilePictureRepository profilePictureRepository;
 
   @Autowired
-  private UserRepository userRepository;
+  private UserService userService;
 
-  public byte[] getProfilePictureData(final String profilePictureId) throws IOException {
-    return profilePictureRepository.getById(profilePictureId);
+  public byte[] getProfilePictureData(final UUID userId, final Size size) throws IOException {
+    return profilePictureRepository.getByUserIdAndSize(userId, size);
   }
 
   @Transactional
-  public User changeProfilePicture(final UUID userId, final MultipartFile multipartFile)
-      throws IOException {
-    final User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
-    if (user.getProfilePictureId() != null) {
-      profilePictureRepository.delete(user.getProfilePictureId());
-    }
-    final String pictureId = profilePictureRepository.save(multipartFile);
-    user.setProfilePictureId(pictureId);
-    return userRepository.save(user);
+  public void changeProfilePicture(final UUID userId, final MultipartFile multipartFile)
+      throws IOException, UserNotFoundException {
+    userService.assertUserExists(userId);
+    profilePictureRepository.delete(userId);
+    profilePictureRepository.save(multipartFile, userId);
   }
 }
