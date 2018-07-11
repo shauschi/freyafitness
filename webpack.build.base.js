@@ -15,7 +15,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 const defaults = {
   cache: debug,
   context: __dirname,
-  devtool: debug ? "eval" : null,
+  devtool: debug ? "eval" : false,
   entry: './src/main/webapp/index.js',
   module: {
     loaders: [
