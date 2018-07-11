@@ -1,5 +1,5 @@
 server:
-  port: 9443
+  port: ${APP_PORT_S:9443}
   ssl:
     key-store: classpath:my.p12
     key-store-password: ${SSL_PSW}
@@ -12,6 +12,10 @@ spring:
   data:
     rest:
       base-path: /api
+  servlet:
+    multipart:
+      max-file-size: 10Mb
+      max-request-size: 10Mb
   thymeleaf:
     check-template: true
     check-template-location: true

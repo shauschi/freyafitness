@@ -10,10 +10,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Hidden from '@material-ui/core/Hidden';
 
-import {IconMenu, IconPreferences} from '../utils/Icons';
-import {blueGrey} from '@material-ui/core/colors';
+import {IconPreferences} from '../utils/Icons';
+import PropTypes from "prop-types";
 
 class MyAppBar extends Component {
 
@@ -25,11 +24,11 @@ class MyAppBar extends Component {
     const {scrollToLogin} = this.props;
     return (
       <Button
-        color='primary'
-        onClick={scrollToLogin}
+        color='inherit'
+        onClick={() => {scrollToLogin(this.context.router);}}
         style={{
           position: 'absolute',
-          right: '8px',
+          right: '0px',
           padding: '0 16px',
           zIndex: 20
         }}>
@@ -49,6 +48,7 @@ class MyAppBar extends Component {
     const roles = this.props.currentUser.roles;
     if (roles.ADMIN || roles.TRAINER) {
       return <IconButton
+        color='default'
         aria-label='Einstellungen'
         onClick={this.openMenu}
         style={{position: 'absolute', right: '8px', zIndex: 20}}>
@@ -65,6 +65,37 @@ class MyAppBar extends Component {
     this.setState({anchor: null});
   };
 
+  render() {
+    const {classes, toggleDrawer} = this.props;
+
+    return (
+      <AppBar color='primary'>
+        <Toolbar>
+          <IconButton
+            color='inherit'
+            aria-label='Navigation'
+            onClick={toggleDrawer}
+            style={{position: 'absolute', left: '8px', zIndex: 20}}
+          >
+            <img src='/logo.png' width={42} />
+          </IconButton>
+          <Typography type='title' color='inherit' style={{marginTop: '4px', width: '100%', textAlign: 'center'}}>
+            <span style={{
+              fontSize: '31px',
+              fontWeight: 'lighter'
+            }}>FREY</span>
+            <span style={{
+              fontSize: '31px',
+              fontWeight: 'bold'
+            }}>RAUM</span>
+          </Typography>
+          {this.getAdditionalAction()}
+        </Toolbar>
+        {this.getMenu()}
+      </AppBar>
+  );
+  };
+
   getMenu = () => {
     const {anchor} = this.state;
     const {createCourse} = this.props;
@@ -78,54 +109,11 @@ class MyAppBar extends Component {
       <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
     </Menu>
   };
-
-  render() {
-    const {classes, toggleDrawer} = this.props;
-
-    return (
-      <div style={{flexGrow: 1}}>
-        <AppBar style={{background: blueGrey[800]}} className={classes.appBar}>
-          <Toolbar>
-          <Hidden smUp>
-            <IconButton
-              aria-label='Navigation'
-              onClick={toggleDrawer}
-              style={{position: 'absolute', left: '8px', zIndex: 20}}
-            >
-              <IconMenu size={28}/>
-            </IconButton>
-          </Hidden>
-          <Typography type='title' style={{position: 'absolute', left: '0px', width: '100%', textAlign: 'center'}}>
-            <span style={{
-              color: 'white',
-              fontSize: '31px',
-              fontWeight: 'bold',
-              textShadow: '-2px -2px 0px #444'
-            }}>freya</span>
-            <span style={{
-              color: '#03a9f4',
-              fontSize: '42px',
-              fontWeight: 'bold',
-              textShadow: '-2px -2px 0px #444'
-            }}>.</span>
-            <span style={{
-              color: 'white',
-              fontSize: '31px',
-              fontWeight: 'bold',
-              textShadow: '-2px -2px 0px #444'
-            }}>fitness</span>
-            <Hidden smDown>
-              <span style={{color: 'white'}}> - Willkommen beim Fitnessprogramm mit Freya</span>
-            </Hidden>
-          </Typography>
-          {this.getAdditionalAction()}
-        </Toolbar>
-        </AppBar>
-        {this.getMenu()}
-      </div>
-    );
-  };
 }
+
+MyAppBar.contextTypes = {
+  router: PropTypes.object.isRequired
+};
 
 export default compose(
   withRouter,

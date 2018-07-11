@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SslConfig {
 
-  @Value("${server.port:9443}")
+  @Value("${server.port}")
   private Integer serverPort;
 
   @Bean

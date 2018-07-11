@@ -9,7 +9,7 @@ import Course from '.';
 
 const compareCourseByStartDate = comparingMod('start', moment);
 
-const CourseList = ({courses, showCourseDetails}) => {
+const CourseList = ({courses, showCourseDetails, signIn, signOut}) => {
   const elements = [];
   courses.sort(compareCourseByStartDate);
   let lastFormatted = undefined;
@@ -22,7 +22,7 @@ const CourseList = ({courses, showCourseDetails}) => {
         <Subheader key={formattedDayOfCourse} label={formattedDayOfCourse} />
       );
     }
-    elements.push(<Course key={idx} course={course} showCourseDetails={showCourseDetails}/>);
+    elements.push(<Course key={idx} course={course} showCourseDetails={showCourseDetails} signIn={signIn} signOut={signOut}/>);
   }
 
   return (<List style={{padding: '0'}}>{elements}</List>);

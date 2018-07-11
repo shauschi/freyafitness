@@ -1,33 +1,30 @@
 'use strict';
 import React, {Component} from 'react';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
 import AvatarEditor from 'react-avatar-editor';
-import Slide from '@material-ui/core/Slide';
 import {setPath} from '../../utils/RamdaUtils';
-
-import {IconClose} from '../../utils/Icons';
-import {blueGrey} from '@material-ui/core/colors';
-
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
+import {IconRotateLeft, IconRotateRight, IconZoomIn, IconZoomOut} from '../../utils/Icons';
+import {Dialog} from './../general';
 
 class ProfilePictureDialog extends Component {
 
+  state = {
+    rotate: 0,
+    zoom: 1,
+    acceptAGB: false
+  };
+
   constructor(props) {
     super(props);
-    this.state = {acceptAGB: false};
     this.handleUpload = this.handleUpload.bind(this);
     this.handleRequestSave = this.handleRequestSave.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
@@ -65,8 +62,8 @@ class ProfilePictureDialog extends Component {
     canvasScaled.toBlob(blob => {
       const formData = new FormData();
       formData.append('image', blob, file.name);
-      this.resetState();
       this.props.onSave(formData);
+      this.resetState();
     });
   };
 
@@ -80,60 +77,94 @@ class ProfilePictureDialog extends Component {
   };
 
   resetState = () => {
-    this.setState({acceptAGB: false, errorText: undefined});
+    this.setState({acceptAGB: false, rotate: 0, errorText: undefined});
+  };
+
+  rotateLeft = () => {
+    this.setState(setPath(['rotate'], this.state.rotate - 90, this.state));
+  };
+
+  rotateRight = () => {
+    this.setState(setPath(['rotate'], this.state.rotate + 90, this.state));
+  };
+
+  zoomIn = () => {
+    this.setState(setPath(['zoom'], this.state.zoom + 0.1, this.state));
+  };
+
+  zoomOut = () => {
+    this.setState(setPath(['zoom'], this.state.zoom - 0.1, this.state));
   };
 
   onCheckboxChange = event => {
     this.setState({acceptAGB: event.target.checked, errorText: undefined});
   };
 
+  getInput = () => {
+    return <input
+      type={'file'}
+      accept={'image/*'}
+      name={'image'}
+      style={{position: 'absolute', width: '100%', height: '100%', top: '0', left: '0', opacity: '0'}}
+      onChange={this.handleUpload}
+    />;
+  };
+
   render() {
-    const {acceptAGB, errorText} = this.state;
-    const {show, fullScreen, temp} = this.props;
+    const {acceptAGB, rotate, zoom, errorText} = this.state;
+    const {show, temp} = this.props;
 
     return (
       <Dialog
+        title='Profilbild ändern'
         onClose={this.handleRequestClose}
-        fullScreen={fullScreen}
-        TransitionComponent={Transition}
         open={show}>
-
-          <DialogTitle disableTypography
-                       style={{color: 'white', background: blueGrey[800], display: 'flex', padding: '2px 16px'}}>
-            <IconButton style={{color: 'white'}} onClick={this.handleRequestClose} aria-label="Close">
-              <IconClose/>
-            </IconButton>
-            <Typography type="title" style={{color: 'white', flex: 1, textAlign: 'center', padding: '14px 0'}}>
-              Profilbild anpassen
-            </Typography>
-          </DialogTitle>
-
-          <DialogContent>
-            <div style={{margin: '24px auto', width: '250px', height: '250px'}}>
+        <DialogContent style={{padding: '0px'}}>
+          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+            <Grid item xs={12} sm={10} md={8} style={{position: 'relative', padding: '0px'}}>
               <AvatarEditor
                 ref={this.setAvatarEditorRef}
                 image={temp.dataUrl}
-                width={200}
-                height={200}
-                border={25}
-                color={[200, 200, 200, 0.75]}
-                scale={1.5}
-                rotate={0}
+                width={1280}
+                height={1280}
+                border={216}
+                color={[100, 100, 100, 0.75]}
+                scale={zoom}
+                rotate={rotate}
+                style={{width: '100%', height: '100%'}}
               />
-            </div>
-            <div style={{margin: '16px auto', textAlign: 'center'}}>
-              <Button variant='raised' color='primary'>
-                <input
-                  type={'file'}
-                  accept={'image/*'}
-                  name={'image'}
-                  style={{position: 'absolute', width: '100%', opacity: '0'}}
-                  onChange={this.handleUpload}
-                />
-                Ein anderes Bild wählen
-              </Button>
-            </div>
-            <div>
+              {
+                temp.dataUrl
+                  ? undefined
+                  : this.getInput()
+              }
+              <div style={{
+                position: 'absolute',
+                width: '100%',
+                bottom: '0px',
+                padding: '16px auto',
+                textAlign: 'center'
+              }}>
+                <Button variant='flat' style={{color: 'white'}}>
+                  {this.getInput()}
+                  Bild wählen
+                </Button>
+                <IconButton onClick={this.zoomIn} style={{color: 'white'}}>
+                  <IconZoomIn/>
+                </IconButton>
+                <IconButton onClick={this.zoomOut} style={{color: 'white'}}>
+                  <IconZoomOut/>
+                </IconButton>
+                <IconButton onClick={this.rotateRight} style={{color: 'white'}}>
+                  <IconRotateRight/>
+                </IconButton>
+                <IconButton onClick={this.rotateLeft} style={{color: 'white'}}>
+                  <IconRotateLeft/>
+                </IconButton>
+              </div>
+            </Grid>
+
+            <Grid item xs={12} style={{padding: '24px', width: '100%'}}>
               <Typography>Wähle einen Bildausschnitt für Dein neues Profilbild
                 und klicke anschließend auf Speichern.
                 Mit dem Speichern bestätigst Du, dass Du die Rechte an diesem Bild besitzt
@@ -152,16 +183,17 @@ class ProfilePictureDialog extends Component {
                 />
                 <FormHelperText>{errorText}</FormHelperText>
               </FormControl>
-            </div>
-          </DialogContent>
+            </Grid>
+          </Grid>
+        </DialogContent>
 
-          <DialogActions>
-            <Button onClick={this.handleRequestSave} color="primary">Speichern</Button>
-            <Button onClick={this.handleRequestClose} color="primary">Abbrechen</Button>
-          </DialogActions>
+        <DialogActions>
+          <Button onClick={this.handleRequestSave} color="primary">Speichern</Button>
+          <Button onClick={this.handleRequestClose}>Abbrechen</Button>
+        </DialogActions>
       </Dialog>
     );
   };
 }
 
-export default withMobileDialog()(ProfilePictureDialog);
+export default ProfilePictureDialog;

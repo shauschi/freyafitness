@@ -41,17 +41,17 @@ public class UserService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(final String username) {
-    final User user = userRepository.findByEmail(username)
+  public UserDetails loadUserByUsername(final String email) {
+    final User user = userRepository.findByEmailIgnoreCase(email)
         .orElseThrow(() -> new UsernameNotFoundException(
-            "Kein User zu E-Mail: '" + username + "' gefunden."));
+            "Kein User zu E-Mail: '" + email + "' gefunden."));
     final List<Role> userRoles = user.getRoles();
     if (userRoles.isEmpty()) {
       throw new UsernameNotFoundException(
           "Keine Rollen zu Benutzer: " + user + " gefunden.");
     }
     return new org.springframework.security.core.userdetails.User(
-        username, user.getPassword(), userRoles);
+        email, user.getPassword(), userRoles);
   }
 
   public User getCurrentUser() {
@@ -61,8 +61,8 @@ public class UserService implements UserDetailsService {
     }
     final org.springframework.security.core.userdetails.User user =
         (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-    final String userId = user.getUsername();
-    return userRepository.findByEmail(userId)
+    final String email = user.getUsername();
+    return userRepository.findByEmailIgnoreCase(email)
         .orElseThrow(RuntimeException::new);
   }
 
@@ -75,9 +75,9 @@ public class UserService implements UserDetailsService {
         .orElseThrow(() -> UserNotFoundException.withId(userId));
   }
 
-  public User getUserByEmail(final String userEmail) throws UserNotFoundException {
-    return userRepository.findByEmail(userEmail)
-        .orElseThrow(() -> UserNotFoundException.withEmail(userEmail));
+  public User getUserByEmail(final String email) throws UserNotFoundException {
+    return userRepository.findByEmailIgnoreCase(email)
+        .orElseThrow(() -> UserNotFoundException.withEmail(email));
   }
 
   public User saveUser(final User user) {
@@ -87,7 +87,7 @@ public class UserService implements UserDetailsService {
   public User createAccount(final CreateAccountDto createAccountDto)
       throws UserAllreadyExistsException, RoleNotFoundException {
     final String email = createAccountDto.getEmail();
-    final Optional<User> existingUser = userRepository.findByEmail(email);
+    final Optional<User> existingUser = userRepository.findByEmailIgnoreCase(email);
     if (existingUser.isPresent()) {
       throw new UserAllreadyExistsException(email);
     }

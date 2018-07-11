@@ -1,9 +1,7 @@
 'use strict';
-process.env.NODE_ENV = 'test';
-
-const webpack = require('webpack');
-const path = require('path');
-
+const _ = require("lodash");
+const env = process.env.NODE_ENV || "development";
+const debug = ["development", "test"].indexOf(env) !== -1;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
@@ -14,24 +12,11 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: 'body'
 });
 
-module.exports = {
+const defaults = {
+  cache: debug,
   context: __dirname,
-  devtool: 'eval',
+  devtool: debug ? "eval" : null,
   entry: './src/main/webapp/index.js',
-  plugins: [
-    new CleanWebpackPlugin([__dirname + '/src/main/resources/static/']),
-    new CopyWebpackPlugin([
-      {from: './src/main/webapp/test1000.jpg', to: __dirname + '/src/main/resources/static/'},
-      {from: './src/main/webapp/test1001.jpg', to: __dirname + '/src/main/resources/static/'},
-      {from: './src/main/webapp/about_freya.jpg', to: __dirname + '/src/main/resources/static/'},
-      {from: './src/main/webapp/welcome.jpg', to: __dirname + '/src/main/resources/static/'}
-    ]),
-    new UglifyJSPlugin(),
-    HtmlWebpackPluginConfig,
-    new webpack.DefinePlugin({
-      __API__: "'https://freya.fitness:9443'"
-    })
-  ],
   module: {
     loaders: [
       {
@@ -46,11 +31,33 @@ module.exports = {
       {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader']
-      },
-    ]
+      }
+    ],
   },
   output: {
     path: __dirname + '/src/main/resources/static/',
     filename: 'bundle.min.js'
-  }
+  },
+  plugins: [
+    new CleanWebpackPlugin([__dirname + '/src/main/resources/static/']),
+    new CopyWebpackPlugin([
+      {
+        from: './src/main/webapp/*.+(png|jpg)',
+        flatten: true
+      }
+    ]),
+    new UglifyJSPlugin(),
+    HtmlWebpackPluginConfig
+  ],
+  target: "web",
+};
+
+module.exports.defaults = defaults;
+
+module.exports.extend = function merge(config) {
+  return _.extend({}, defaults, config);
+};
+
+module.exports.merge = function merge(config) {
+  return _.merge({}, defaults, config);
 };
