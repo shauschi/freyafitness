@@ -75,6 +75,12 @@ public class UserService implements UserDetailsService {
         .orElseThrow(() -> UserNotFoundException.withId(userId));
   }
 
+  public void assertUserExists(final UUID userId) throws UserNotFoundException {
+    if (!userRepository.existsById(userId)) {
+      throw UserNotFoundException.withId(userId);
+    }
+  }
+
   public User getUserByEmail(final String email) throws UserNotFoundException {
     return userRepository.findByEmailIgnoreCase(email)
         .orElseThrow(() -> UserNotFoundException.withEmail(email));
