@@ -1,6 +1,9 @@
 package freya.fitness.repository.mongodb;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import freya.fitness.utils.Size;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -12,7 +15,17 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
 
 @Repository
 public class ProfilePictureRepository {
@@ -22,18 +35,19 @@ public class ProfilePictureRepository {
   @Autowired
   private GridFsTemplate gridFsTemplate;
 
-  public byte[] getById(final String profilePictureId) throws IOException {
-    LOGGER.debug("get profile picture by id " + profilePictureId);
-    if (profilePictureId == null) {
+  public byte[] getByUserIdAndSize(final UUID userId, final Size size) throws IOException {
+    LOGGER.debug("get profile picture by user id " + userId + " (" + size + ")");
+    if (userId == null) {
       return null;
     }
 
-    final GridFSFile result = gridFsTemplate.findOne(whereId(profilePictureId));
+    final GridFSFile result = gridFsTemplate.findOne(whereUserAndSize(userId, size));
     if (result == null) {
-      final String message = "no profile picture available for " + profilePictureId;
+      final String message = "no profile picture available for " + userId + " (" + size + ")";
       LOGGER.debug(message);
       return null;
     }
+
     final String filename = result.getFilename();
     final GridFsResource resource = gridFsTemplate.getResource(filename);
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -49,28 +63,81 @@ public class ProfilePictureRepository {
       LOGGER.debug(byteArray.length + " bytes read");
       return byteArray;
     }
+
   }
 
-  public String save(final MultipartFile multipartFile) throws IOException {
+  public void save(final MultipartFile multipartFile, final UUID userId) throws IOException {
     if (multipartFile == null) {
       throw new IllegalArgumentException("cannot save null");
     }
     final String filename = multipartFile.getOriginalFilename();
     LOGGER.debug("save multipartFile " + filename);
-    final ObjectId objectId = gridFsTemplate.store(
-        multipartFile.getInputStream(),
-        filename);
-    LOGGER.debug("multipartFile saved: " + objectId);
-    return objectId.toString();
+
+    final InputStream is = multipartFile.getInputStream();
+    final BufferedImage image = ImageIO.read(is);
+    for (Size size : Size.values()) {
+      final BufferedImage resizedImage = getResizedImage(image, size);
+      final InputStream resizedInputStream = getImageAsInputStream(resizedImage);
+      save(resizedInputStream, userId, size, filename);
+    }
   }
 
-  public void delete(final String profilePictureId) {
-    if (profilePictureId != null) {
-      gridFsTemplate.delete(whereId(profilePictureId));
+  private InputStream getImageAsInputStream(final BufferedImage image) throws IOException {
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    ImageIO.write(image,"png", os);
+    return new ByteArrayInputStream(os.toByteArray());
+  }
+
+  private BufferedImage getResizedImage(BufferedImage original, Size targetSize) {
+    if (Size.ORIGINAL == targetSize) {
+      return original;
     }
+    int preferredSize = targetSize.getPreferredSize();
+    return createResizedCopy(original, preferredSize, preferredSize);
+  }
+
+  private BufferedImage createResizedCopy(final Image originalImage, int scaledWidth, int scaledHeight) {
+    final Image tmp = originalImage.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+    final BufferedImage resized = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
+    final Graphics2D g = resized.createGraphics();
+    g.setComposite(AlphaComposite.Src);
+    g.drawImage(tmp, 0, 0, scaledWidth, scaledHeight, null);
+    g.dispose();
+    return resized;
+  }
+
+  private void save(final InputStream inputStream, final UUID userId, final Size size, final String filename) {
+    final DBObject metadata = new BasicDBObject();
+    metadata.put("userId", userId);
+    metadata.put("size", size);
+
+    final ObjectId objectId = gridFsTemplate.store(
+        inputStream,
+        filename +  "_" + size,
+        metadata);
+    LOGGER.debug("file saved for userId {} ({} ,{}) with id {}", userId, size, filename, objectId);
+  }
+
+  public void delete(final UUID userId) {
+    gridFsTemplate.delete(whereUser(userId));
   }
 
   private Query whereId(final String id) {
     return new Query(Criteria.where("_id").is(new ObjectId(id)));
   }
+
+  private Query whereUser(final UUID userId) {
+    return new Query(Criteria
+        .where("metadata.userId").is(userId)
+    );
+  }
+
+  private Query whereUserAndSize(final UUID userId, final Size size) {
+    return new Query(Criteria
+        .where("metadata.userId").is(userId)
+        .and("metadata.size").is(size)
+    );
+  }
+
+
 }
