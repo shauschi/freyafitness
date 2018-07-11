@@ -69,6 +69,8 @@ const updateAccessToken = () => {
     return new Promise(resolve => resolve(tokenData))
   }).catch(error => {
     updatingAccessToken = undefined;
+    console.info("Could not refresh the oauth token => delete cookie");
+    cookie.remove('tokenData', {path: '/'});
     return new Promise((resolve, reject) => reject(error))
   });
 };
@@ -77,7 +79,7 @@ const fetchWithToken = (url, params, retry = true) =>
   fetch(url, params)
     .then(async response => {
       // 401 indicates that the access token is expired
-      if (response.status === 401 && retry) {
+      if (response.status === 401 && retry && !!cookie.load('tokenData')) {
         return updateAccessToken()
           .then(() => {
             // update headers with new token
@@ -85,6 +87,11 @@ const fetchWithToken = (url, params, retry = true) =>
               ...params.headers,
               ...getAccessTokenHeader()
             };
+            return fetchWithToken(url, params, false);
+          })
+          .catch(e => {
+            console.error("error while fetching token => retry once", e);
+            params.headers.Authorization = null;
             return fetchWithToken(url, params, false);
           });
       }
