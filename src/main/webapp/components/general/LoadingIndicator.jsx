@@ -28,17 +28,18 @@ class LoadingIndicator extends Component {
 
   render()
   {
-    const {noLabel, small} = this.props;
+    const {noLabel, label = 'lädt...', small} = this.props;
     return (
       <div style={loadingStyles.table}>
         <div style={loadingStyles.cell}>
           <CircularProgress
+            color='secondary'
             mode='indeterminate'
             style={small ? loadingStyles.indicatorSmall : loadingStyles.indicator}/>
           {
             noLabel
             ? undefined
-            : <Typography color='primary'>loading</Typography>
+            : <Typography color='primary'>{label}</Typography>
           }
         </div>
       </div>

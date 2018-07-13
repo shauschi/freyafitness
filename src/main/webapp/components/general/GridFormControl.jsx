@@ -199,14 +199,14 @@ export class GridButtonControl extends Component {
         onClick={onClick}>
         {label}
         {icon}
-        {
-          pending
-            ? <div style={{position: 'absolute'}}>
-              <LoadingIndicator noLabel small/>
-            </div>
-            : undefined
-        }
       </Button>
+      {
+        pending
+          ? <div style={{position: 'absolute', width: '100%', height: '100%'}}>
+            <LoadingIndicator noLabel small/>
+          </div>
+          : undefined
+      }
     </GridFormControl>;
   }
 }

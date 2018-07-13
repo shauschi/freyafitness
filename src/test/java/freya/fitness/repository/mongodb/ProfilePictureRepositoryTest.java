@@ -1,7 +1,9 @@
 package freya.fitness.repository.mongodb;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
+import freya.fitness.utils.Size;
 import org.bson.types.ObjectId;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 import static freya.fitness.TestUtils.TEST_FILE_BYTES;
 import static freya.fitness.TestUtils.gridFSFile;
@@ -32,7 +35,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ProfilePictureRepositoryTest {
 
-  private final String ANY_VALID_OBJECT_ID = "000011110000111100001111";
+  private final UUID ANY_VALID_UUID = UUID.randomUUID();
 
   @InjectMocks
   private ProfilePictureRepository testee;
@@ -42,7 +45,7 @@ public class ProfilePictureRepositoryTest {
 
   @Test
   public void test_getById_returnsNullIfIdIsNull() throws IOException {
-    byte[] result = testee.getById(null);
+    byte[] result = testee.getByUserIdAndSize(null, null);
 
     assertThat(result, nullValue());
     verify(gridFsTemplate, never()).findOne(any());
@@ -53,7 +56,7 @@ public class ProfilePictureRepositoryTest {
   public void test_getById_noPictureFoundForId() throws IOException {
     when(gridFsTemplate.findOne(any())).thenReturn(null);
 
-    byte[] result = testee.getById(ANY_VALID_OBJECT_ID);
+    byte[] result = testee.getByUserIdAndSize(ANY_VALID_UUID, Size.ORIGINAL);
 
     assertThat(result, nullValue());
     verify(gridFsTemplate).findOne(any());
@@ -68,7 +71,7 @@ public class ProfilePictureRepositoryTest {
     when(gridFsTemplate.findOne(any())).thenReturn(file);
     when(gridFsTemplate.getResource(location)).thenReturn(gridFsResource);
 
-    byte[] result = testee.getById(ANY_VALID_OBJECT_ID);
+    byte[] result = testee.getByUserIdAndSize(ANY_VALID_UUID, Size.ORIGINAL);
 
     assertThat(result, notNullValue());
     for (int i = 0; i < result.length; i++) {
@@ -87,21 +90,7 @@ public class ProfilePictureRepositoryTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void test_save_throwsExceptionOnNullInput() throws IOException {
-    testee.save(null);
-  }
-
-  @Test()
-  public void test_save_returnsTheObjectIdOfTheSavedFile() throws IOException {
-    final MultipartFile multipartFile =
-        new MockMultipartFile("test.file", "filename",
-            "image/*", new byte[]{1, 0});
-    when(gridFsTemplate.store(any(), anyString()))
-        .thenReturn(new ObjectId(ANY_VALID_OBJECT_ID));
-
-    final String result = testee.save(multipartFile);
-
-    assertThat(result, equalTo(ANY_VALID_OBJECT_ID));
-    verify(gridFsTemplate).store(any(ByteArrayInputStream.class), eq("filename"));
+    testee.save(null, null);
   }
 
   @Test
@@ -113,7 +102,7 @@ public class ProfilePictureRepositoryTest {
 
   @Test
   public void test_delete_callsGridFsTemplateDelete() {
-    testee.delete(ANY_VALID_OBJECT_ID);
+    testee.delete(ANY_VALID_UUID);
 
     verify(gridFsTemplate).delete(any());
   }

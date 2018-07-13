@@ -57,7 +57,7 @@ class ProfileSite extends Component {
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
             <Grid item xs={12} sm={8} style={{padding: '0px'}}>
               <div style={{position: 'relative', width: '100%', paddingTop: '75%'}}>
-                <div style={{position: 'absolute', top: '0px', width: '100%', zIndex: -20}}>
+                <div style={{position: 'absolute', top: '0px', height: '100%', width: '100%', zIndex: -20}}>
                   <ProfilePicture user={profile.user} size='LG' style={{width: '100%'}}/>
                 </div>
                 <div style={{position: 'absolute', bottom: '0px', right: '24px'}}>
