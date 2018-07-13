@@ -186,9 +186,6 @@ class ProfilePictureDialog extends Component {
             </Grid>
 
             <Grid item xs={12} style={{padding: '24px', width: '100%'}}>
-              <Typography>{scale}</Typography>
-              <Typography>{zoom}</Typography>
-              <Typography>{zoom * scale}</Typography>
               <Typography>Wähle einen Bildausschnitt für Dein neues Profilbild
                 und klicke anschließend auf Speichern.
                 Mit dem Speichern bestätigst Du, dass Du die Rechte an diesem Bild besitzt
