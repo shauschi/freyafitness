@@ -65,8 +65,9 @@ class ProfilePictureDialog extends Component {
       return;
     }
 
-    const canvasScaled = this.editor.getImageScaledToCanvas();
-    canvasScaled.toBlob(blob => {
+    // Upload the original image, transformation is done on the server to all required sizes
+    const canvas = this.editor.getImage();
+    canvas.toBlob(blob => {
       const formData = new FormData();
       formData.append('image', blob, file.name);
       this.props.onSave(formData);
@@ -128,17 +129,21 @@ class ProfilePictureDialog extends Component {
         <DialogContent style={{padding: '0px'}}>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
             <Grid item xs={12} sm={10} md={8} style={{position: 'relative', padding: '0px'}}>
+              <Hammer options={options} onPinchIn={this.zoomIn} onPinchOut={this.zoomOut}>
+                <div>
                   <AvatarEditor
                     ref={this.setAvatarEditorRef}
                     image={temp.dataUrl}
-                    width={1280}
-                    height={1280}
-                    border={[600, 300]}
+                    width={300}
+                    height={300}
+                    border={[150, 75]}
                     color={[100, 100, 100, 0.75]}
                     scale={zoom}
                     rotate={rotate}
                     style={{width: '100%', height: '100%'}}
                   />
+                </div>
+              </Hammer>
               {
                 temp.dataUrl
                   ? undefined
