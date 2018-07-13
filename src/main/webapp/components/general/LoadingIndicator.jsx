@@ -28,7 +28,7 @@ class LoadingIndicator extends Component {
 
   render()
   {
-    const {noLabel, small} = this.props;
+    const {noLabel, label = 'lädt...', small} = this.props;
     return (
       <div style={loadingStyles.table}>
         <div style={loadingStyles.cell}>
@@ -39,7 +39,7 @@ class LoadingIndicator extends Component {
           {
             noLabel
             ? undefined
-            : <Typography color='primary'>loading</Typography>
+            : <Typography color='primary'>{label}</Typography>
           }
         </div>
       </div>

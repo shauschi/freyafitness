@@ -13,13 +13,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import AvatarEditor from 'react-avatar-editor';
 import {setPath} from '../../utils/RamdaUtils';
 import {IconRotateLeft, IconRotateRight, IconZoomIn, IconZoomOut} from '../../utils/Icons';
-import {Dialog} from './../general';
+import {Dialog, LoadingIndicator} from './../general';
 
 class ProfilePictureDialog extends Component {
 
   state = {
     rotate: 0,
-    zoom: 1,
+    zoom: 1.5,
     acceptAGB: false
   };
 
@@ -63,13 +63,12 @@ class ProfilePictureDialog extends Component {
       const formData = new FormData();
       formData.append('image', blob, file.name);
       this.props.onSave(formData);
-      this.resetState();
     });
   };
 
   handleRequestClose = () => {
-    this.resetState();
     this.props.onClose();
+    this.resetState();
   };
 
   setAvatarEditorRef = (editor) => {
@@ -112,7 +111,7 @@ class ProfilePictureDialog extends Component {
 
   render() {
     const {acceptAGB, rotate, zoom, errorText} = this.state;
-    const {show, temp} = this.props;
+    const {show, temp, pending} = this.props;
 
     return (
       <Dialog
@@ -127,7 +126,7 @@ class ProfilePictureDialog extends Component {
                 image={temp.dataUrl}
                 width={1280}
                 height={1280}
-                border={216}
+                border={[600, 300]}
                 color={[100, 100, 100, 0.75]}
                 scale={zoom}
                 rotate={rotate}
@@ -186,10 +185,17 @@ class ProfilePictureDialog extends Component {
             </Grid>
           </Grid>
         </DialogContent>
+        {
+          pending
+            ? <div style={{position: 'absolute', width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.75)'}}>
+                <LoadingIndicator label='speichern...'/>
+              </div>
+            : undefined
+        }
 
         <DialogActions>
-          <Button onClick={this.handleRequestSave} color="primary">Speichern</Button>
-          <Button onClick={this.handleRequestClose}>Abbrechen</Button>
+          <Button onClick={this.handleRequestSave} color="primary" disabled={pending}>Speichern</Button>
+          <Button onClick={this.handleRequestClose} disabled={pending}>Abbrechen</Button>
         </DialogActions>
       </Dialog>
     );
