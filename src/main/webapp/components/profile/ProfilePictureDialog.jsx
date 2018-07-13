@@ -108,10 +108,6 @@ class ProfilePictureDialog extends Component {
     this.setState(setPath(['scale'], e.scale, this.state));
   };
 
-  pinchEnd = e => {
-    this.setState(setPath(['zoom'], this.state.zoom * e.scale, this.state));
-  };
-
   onCheckboxChange = event => {
     this.setState({acceptAGB: event.target.checked, errorText: undefined});
   };
@@ -138,7 +134,7 @@ class ProfilePictureDialog extends Component {
         <DialogContent style={{padding: '0px'}}>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
             <Grid item xs={12} sm={10} md={8} style={{position: 'relative', padding: '0px'}}>
-              <Hammer options={options} onPinch={this.pinch} onPinchEnd={this.pinchEnd}>
+              <Hammer options={options} onPinch={this.pinch}>
                 <div>
                   <AvatarEditor
                     ref={this.setAvatarEditorRef}
