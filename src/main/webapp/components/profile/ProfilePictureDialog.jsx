@@ -128,21 +128,17 @@ class ProfilePictureDialog extends Component {
         <DialogContent style={{padding: '0px'}}>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
             <Grid item xs={12} sm={10} md={8} style={{position: 'relative', padding: '0px'}}>
-              <Hammer options={options} onPinchIn={this.zoomIn} onPinchOut={this.zoomOut}>
-                <div>
-                <AvatarEditor
-                  ref={this.setAvatarEditorRef}
-                  image={temp.dataUrl}
-                  width={1280}
-                  height={1280}
-                  border={[600, 300]}
-                  color={[100, 100, 100, 0.75]}
-                  scale={zoom}
-                  rotate={rotate}
-                  style={{width: '100%', height: '100%'}}
-                />
-                </div>
-              </Hammer>
+                  <AvatarEditor
+                    ref={this.setAvatarEditorRef}
+                    image={temp.dataUrl}
+                    width={1280}
+                    height={1280}
+                    border={[600, 300]}
+                    color={[100, 100, 100, 0.75]}
+                    scale={zoom}
+                    rotate={rotate}
+                    style={{width: '100%', height: '100%'}}
+                  />
               {
                 temp.dataUrl
                   ? undefined
