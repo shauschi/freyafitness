@@ -109,7 +109,7 @@ class ProfilePictureDialog extends Component {
   };
 
   pinchEnd = e => {
-    this.setState(setPath(['zoom']), this.state.zoom * e.scale, this.state));
+    this.setState(setPath(['zoom'], this.state.zoom * e.scale, this.state));
   };
 
   onCheckboxChange = event => {
