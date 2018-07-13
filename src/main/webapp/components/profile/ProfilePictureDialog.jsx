@@ -26,6 +26,7 @@ class ProfilePictureDialog extends Component {
 
   state = {
     rotate: 0,
+    scale: 1,
     zoom: 1.5,
     acceptAGB: false
   };
@@ -105,7 +106,11 @@ class ProfilePictureDialog extends Component {
 
   pinch = e => {
     this.setState(setPath(['scale'], e.scale, this.state));
-  }
+  };
+
+  pinchEnd = e => {
+    this.setState(setPath(['zoom']), this.state.zoom * e.scale, this.state));
+  };
 
   onCheckboxChange = event => {
     this.setState({acceptAGB: event.target.checked, errorText: undefined});
@@ -142,7 +147,7 @@ class ProfilePictureDialog extends Component {
                     height={300}
                     border={[150, 75]}
                     color={[100, 100, 100, 0.75]}
-                    scale={zoom}
+                    scale={zoom * scale}
                     rotate={rotate}
                     style={{width: '100%', height: '100%'}}
                   />
@@ -181,6 +186,8 @@ class ProfilePictureDialog extends Component {
 
             <Grid item xs={12} style={{padding: '24px', width: '100%'}}>
               <Typography>{scale}</Typography>
+              <Typography>{zoom}</Typography>
+              <Typography>{zoom * scale}</Typography>
               <Typography>Wähle einen Bildausschnitt für Dein neues Profilbild
                 und klicke anschließend auf Speichern.
                 Mit dem Speichern bestätigst Du, dass Du die Rechte an diesem Bild besitzt
