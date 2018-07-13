@@ -32,7 +32,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class ProfilePictureRepositoryTest {
 
@@ -92,19 +91,6 @@ public class ProfilePictureRepositoryTest {
   @Test(expected = IllegalArgumentException.class)
   public void test_save_throwsExceptionOnNullInput() throws IOException {
     testee.save(null, null);
-  }
-
-  @Test()
-  public void test_save_returnsTheObjectIdOfTheSavedFile() throws IOException {
-    final MultipartFile multipartFile =
-        new MockMultipartFile("test.file", "filename",
-            "image/*", new byte[]{1, 0});
-    when(gridFsTemplate.store(any(), anyString()))
-        .thenReturn(new ObjectId("ANY_VALID_UUID"));
-
-    testee.save(multipartFile, ANY_VALID_UUID);
-
-    verify(gridFsTemplate).store(any(ByteArrayInputStream.class), eq("filename"));
   }
 
   @Test

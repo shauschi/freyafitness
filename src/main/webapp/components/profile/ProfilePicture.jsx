@@ -5,6 +5,20 @@ import {LoadingIndicator} from '../general';
 import {assignPath} from '../../utils/RamdaUtils';
 import {getProfilePicture} from '../../service/profile';
 
+const profileStyles = {
+  table: {
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    display: 'table'
+  },
+  cell: {
+    display: 'table-cell',
+    verticalAlign: 'middle'
+  }
+};
+
 class ProfilePicture extends Component {
 
   constructor(props) {
@@ -29,27 +43,51 @@ class ProfilePicture extends Component {
     }
   }
 
+  getIcon = () => {
+    const {size} = this.props;
+    const {loading, picture} = this.state;
+    if (picture) {
+      return <img
+        src={picture}
+        style={{width: '100%'}}/>
+    } else {
+      const {user} = this.props;
+      if (user && user.firstname && user.lastname && !loading) {
+        return <span>{user.firstname.charAt(0) + user.lastname.charAt(0)}</span>;
+      } else {
+        return <IconUser size={size === 'LG' ? 100 : undefined}/>;
+      }
+    }
+  };
+
   render() {
-    const {user} = this.props;
+    const {user, size = 'MINI'} = this.props;
+    const {loading} = this.state;
     if (user) {
       this.updatePicture();
     }
-    const {loading, picture} = this.state;
-    if (loading) {
-      return <LoadingIndicator noLabel style={{marginTop: '4px'}}/>;
-    }
-    if (!picture) {
-      if (user && user.firstname && user.lastname) {
-        return <span>{user.firstname.charAt(0) + user.lastname.charAt(0)}</span>;
-      } else {
-        return <IconUser/>;
-      }
-    }
+    const stylesMiniLoading = size === 'MINI' ? {paddingTop: '3px'} : undefined;
     return (
-      <div style={{height: '100%'}}>
-        <img
-          src={picture}
-          style={{width: '100%'}}/>
+      <div style={{position: 'relative', width: '100%', height: '100%'}}>
+        <div style={profileStyles.table}>
+          <div style={profileStyles.cell}>
+            {this.getIcon()}
+          </div>
+        </div>
+        {
+          loading
+            ? <div style={{
+                position: 'absolute',
+                left: '0px',
+                top: '0px',
+                width: '100%',
+                height: '100%',
+                ...stylesMiniLoading
+            }}>
+              <LoadingIndicator noLabel/>
+            </div>
+            : undefined
+        }
       </div>
     );
   }

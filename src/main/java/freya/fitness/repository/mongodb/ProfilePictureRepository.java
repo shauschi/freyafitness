@@ -119,7 +119,9 @@ public class ProfilePictureRepository {
   }
 
   public void delete(final UUID userId) {
-    gridFsTemplate.delete(whereUser(userId));
+    if (userId != null) {
+      gridFsTemplate.delete(whereUser(userId));
+    }
   }
 
   private Query whereId(final String id) {

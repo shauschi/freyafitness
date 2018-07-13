@@ -13,3 +13,5 @@ databaseChangeLog:
         path: db/changelog/003__testdata/
     - includeAll:
         path: db/changelog/004__course_type/
+    - includeAll:
+        path: db/changelog/005__remove_profile_picture_id/

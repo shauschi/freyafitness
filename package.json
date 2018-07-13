@@ -46,6 +46,7 @@
     "react-avatar-editor": "^10.3.0",
     "react-cookies": "^0.1.0",
     "react-dom": "^16.0.0",
+    "react-hammerjs": "^1.0.1",
     "react-icons": "^2.2.7",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
