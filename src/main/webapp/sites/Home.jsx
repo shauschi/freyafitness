@@ -198,14 +198,14 @@ class Home extends Component {
         so: 'FUN.TEAM'
       },
       {
-        time: '18:30-19:30',
+        time: '19:30-20:30',
         mo: 'FUN.BASE',
         di: 'FUN.BASE',
         mi: 'FUN.TEAM',
         do: 'MÄNNER ABEND',
       },
       {
-        time: '18:30-19:30',
+        time: '20:30-21:30',
         mo: 'FUN.POWER',
         di: 'FUN.POWER',
         mi: 'FUN.POWER',
