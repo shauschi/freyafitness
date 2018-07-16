@@ -1,6 +1,7 @@
 import {createActions, handleActions} from 'redux-actions';
 import {sendContact as sendContactApiCall} from '../../service/contact';
 import {assignPath, setPath} from '../../utils/RamdaUtils';
+import {showNotification} from "../notification";
 
 const initialState = {
   pending: false,
@@ -30,7 +31,10 @@ export const sendContact = contactData => {
   return dispatch => {
     dispatch(actions.contact.send.pending());
     return sendContactApiCall(contactData)
-      .then(message => dispatch(actions.contact.send.success(message)))
+      .then(answer => {
+        dispatch(actions.contact.send.success())
+        dispatch(showNotification(answer.message, "success"));
+      })
       .catch(error => dispatch(actions.contact.send.error(error)))
   }
 };
@@ -41,7 +45,7 @@ export const loginDataChanged = (id, value) =>
 export default handleActions({
   [actions.contact.send.pending]: state => setPath(['pending'], true, state),
   [actions.contact.send.success]: state =>
-    assignPath([], {pending: false, errorMessage: ''}, state),
+    assignPath([], {pending: false, errorMessage: '', data: initialState.data}, state),
   [actions.contact.send.error]: (state, {payload}) =>
     assignPath([], {pending: false, errorMessage: payload.message}, state),
 

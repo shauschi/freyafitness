@@ -18,13 +18,9 @@ public class ContactDto {
   @NotEmpty
   private String lastname;
 
-  @NotNull
-  @NotEmpty
   @ValidEmail
   private String email;
 
-  @NotNull
-  @NotEmpty
   @ValidTelephone
   private String telephone;
 

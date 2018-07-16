@@ -1,5 +1,7 @@
 package freya.fitness.utils.validator;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
@@ -16,7 +18,7 @@ public class TelephoneValidator
 
   @Override
   public boolean isValid(final String telephone, final ConstraintValidatorContext context){
-    return validateTelephone(telephone);
+    return StringUtils.isBlank(telephone) || validateTelephone(telephone);
   }
 
   private boolean validateTelephone(final String telephone) {

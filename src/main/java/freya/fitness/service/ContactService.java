@@ -48,7 +48,10 @@ public class ContactService {
       params.put("lastname", contactDto.getLastname());
       params.put("email", contactDto.getEmail());
       params.put("telephone", contactDto.getTelephone());
-      params.put("message", contactDto.getMessage());
+
+      final String message = contactDto.getMessage();
+      final String replacedMessage = message.replaceAll("\n", "<br/>");
+      params.put("message", replacedMessage);
 
       return resourceService.replacePlaceholder(template, params);
     } catch (final ResourceLoadingException e) {
