@@ -32,8 +32,9 @@ const GridWrapper = ({children, xs = 12, sm, md, style}) =>
 export class GridTextControl extends Component {
 
   render() {
-    const {text, error = false} = this.props;
+    const {text, error = false, xs, sm, md} = this.props;
     return <GridWrapper
+      xs={xs} sm={sm} md={md}
       style={{paddingLeft: '0px', paddingRight: '0px', paddingTop: '16px', paddingBottom: '16px'}}>
       <Typography style={{color: error ? red.A200 : undefined}}>
         {text}
@@ -53,13 +54,17 @@ export class GridInputControl extends ValidationControl {
 
   render() {
     const {valid, errors} = this.state;
-    const {id, label, value, readonly, type, endAdornment, onChange, xs, sm, md} = this.props;
+    const {id, label, value, readonly,
+      multiline,
+      type, endAdornment, onChange, xs, sm, md} = this.props;
     return <GridFormControl error={!valid} xs={xs} sm={sm} md={md}>
       <InputLabel htmlFor={id} shrink>{label}</InputLabel>
       <Input
         id={id}
         value={value}
         type={type}
+        multiline={multiline}
+        rows={multiline ? 5 : undefined}
         disabled={readonly}
         onChange={event => onChange(id, event.target.value)}
         endAdornment={endAdornment}/>

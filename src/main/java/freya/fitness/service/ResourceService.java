@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -75,5 +76,20 @@ public class ResourceService {
       LOGGER.error("Could not read file {}", filename, cause);
       throw new ResourceLoadingException(filename, cause);
     }
+  }
+
+  /**
+   * Replace all occurences of ${KEY} in template with the values in params map.
+   *
+   * @param template given String
+   * @param params map pf key - value pairs
+   * @return new String with replaced keys
+   */
+  public String replacePlaceholder(final String template, final Map<String, String> params) {
+    String result = template;
+    for (Map.Entry<String, String> entry : params.entrySet()) {
+      result = result.replaceAll("\\$\\{" + entry.getKey() + "}", entry.getValue());
+    }
+    return result;
   }
 }

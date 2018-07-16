@@ -36,6 +36,14 @@ import {MenuLink} from '../components/general';
 import {showNotification} from "../model/notification";
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
+import {ValidationGroup, Validators} from "../components/general/validation";
+import {ContactCard} from "../components/contact/";
+import {
+  GridTextControl,
+  GridInputControl,
+  GridPasswordControl,
+  GridButtonControl
+} from './../components/general';
 
 class SimpleDialog extends Component {
 
@@ -284,7 +292,7 @@ class Home extends Component {
     if (this.props.user) {
       return undefined;
     }
-    return <Grid item xs={12} sm={8} md={6}>
+    return <Grid item xs={12} sm={8} md={5}>
       <LoginAndRegistrationCard/>
     </Grid>;
   };
@@ -326,6 +334,8 @@ class Home extends Component {
           {this.getUserDetails()}
           {/* Der Kursplan */}
           {this.getCoursePlan()}
+          {/* Kontaktaufnahme */}
+          <ContactCard/>
           {/* Nur bei nicht angemeldeten Benutzern*/}
           {this.getLoginCard()}
         </Grid>

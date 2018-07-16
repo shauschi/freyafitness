@@ -38,5 +38,7 @@ export {
   MdRotateLeft as IconRotateLeft,
   MdRotateRight as IconRotateRight,
   MdZoomIn as IconZoomIn,
-  MdZoomOut as IconZoomOut
+  MdZoomOut as IconZoomOut,
+  MdExpandMore as IconExpandMore,
+  MdExpandLess as IconExpandLess
 } from 'react-icons/lib/md';

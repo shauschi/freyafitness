@@ -50,12 +50,14 @@ class RegistrationForm extends Component {
           <GridInputControl
             id='firstname'
             label='Vorname'
+            xs={6}
             value={formData.firstname}
             validators={[Validators.notEmpty('Bitte gib deinen Vornamen an.')]}
             onChange={formDataChanged}/>
           <GridInputControl
             id='lastname'
             label='Nachname'
+            xs={6}
             value={formData.lastname}
             validators={[Validators.notEmpty('Bitte gib deinen Nachnamen an.')]}
             onChange={formDataChanged}/>
