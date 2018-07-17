@@ -2,14 +2,23 @@ import reducer, {actions} from '../';
 
 describe('contact reducer', () => {
 
+  const initialState = {
+    pending: false,
+    errorMessage: '',
+    data: {
+      email: '',
+      firstname: '',
+      lastname: '',
+      message: '',
+      subject: '',
+      telephone: ''
+    }
+  };
+
   let state;
 
   beforeEach(() => {
-    state = {
-      pending: false,
-      errorMessage: '',
-      data: {}
-    }
+    state = initialState;
   });
 
   describe('with PENDING action', () => {
@@ -29,7 +38,7 @@ describe('contact reducer', () => {
       const expected = {message: 'success'};
       const nextState = reducer(state, actions.contact.send.success(expected));
 
-      const expectedState = Object.assign({}, state, {pending: false, data: {}});
+      const expectedState = Object.assign({}, state, {pending: false, data: initialState.data});
 
       expect(nextState).toEqual(expectedState);
     });

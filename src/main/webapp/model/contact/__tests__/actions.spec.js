@@ -23,7 +23,7 @@ describe('contact actions', () => {
     it('should dispatch SUCCESS action when fetch is successful', async () => {
       await sendContact()(dispatchMock, getMockState);
 
-      expect(dispatchMock.mock.calls[1][0]).toEqual(actions.contact.send.success({message: 'success'}));
+      expect(dispatchMock.mock.calls[1][0]).toEqual(actions.contact.send.success());
     });
 
     it('should dispatch ERROR action when fetch is not successful', async () => {
