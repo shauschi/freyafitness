@@ -53,3 +53,5 @@ mail:
     message:
     validity:
       hours: 24
+  contact:
+    receiver: freyraum@freya.fitness

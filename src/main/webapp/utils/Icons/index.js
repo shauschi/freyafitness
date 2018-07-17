@@ -12,6 +12,8 @@ export {
   IconDocument,
   IconEye,
   IconEyeSlash,
+  IconExpandMore,
+  IconExpandLess,
   IconHome,
   IconInfo,
   IconLineChart,

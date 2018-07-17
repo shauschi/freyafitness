@@ -60,6 +60,7 @@ public class AppConfig {
             "/favicon.ico",
             "/profile/create",
             "/news/previews",
+            "/contact/",
             "/courses/from/**",
             "/coursetypes/",
             "/password/forgot",
