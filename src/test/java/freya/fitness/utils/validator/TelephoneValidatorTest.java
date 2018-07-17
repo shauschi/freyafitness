@@ -16,7 +16,6 @@ public class TelephoneValidatorTest {
 
   @Test
   public void testTelephone() {
-    assertThat(testee.isValid("", null), is(false));
     assertThat(testee.isValid("0123abc", null), is(false));
 
     assertThat(testee.isValid("0123 12345678", null), is(true));
