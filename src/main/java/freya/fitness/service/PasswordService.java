@@ -39,6 +39,7 @@ public class PasswordService {
   private final EmailService emailService;
 
   private final PasswordResetTokenService passwordResetTokenService;
+
   private final ResourceService resourceService;
 
   @Autowired
@@ -78,15 +79,13 @@ public class PasswordService {
     final String filename = "reset_password.html";
     final User user = resetToken.getUser();
     try {
-      String template = resourceService.getResourceAsString("reset_password.html");
+      final String template = resourceService.getResourceAsString("reset_password.html");
       final Map<String, String> params = new HashMap<>();
       params.put("firstname", user.getFirstName());
       params.put("lastname", user.getFamilyName());
       params.put("resetUrl", resetUrl);
-      for (Map.Entry<String, String> entry : params.entrySet()) {
-        template = template.replaceAll("\\$\\{" + entry.getKey() + "}", entry.getValue());
-      }
-      return template;
+
+      return resourceService.replacePlaceholder(template, params);
     } catch (final ResourceLoadingException e) {
       LOGGER.error("Could not read reset password file");
       throw new MailTemplateNotFoundException(filename);

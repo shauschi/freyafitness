@@ -1,5 +1,7 @@
 package freya.fitness.utils.validator;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
@@ -17,7 +19,7 @@ public class EmailValidator
 
   @Override
   public boolean isValid(final String email, final ConstraintValidatorContext context){
-    return (validateEmail(email));
+    return StringUtils.isBlank(email) || validateEmail(email);
   }
 
   private boolean validateEmail(final String email) {
