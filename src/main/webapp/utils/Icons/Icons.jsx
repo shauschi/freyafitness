@@ -40,5 +40,6 @@ export {
   MdZoomIn as IconZoomIn,
   MdZoomOut as IconZoomOut,
   MdExpandMore as IconExpandMore,
-  MdExpandLess as IconExpandLess
+  MdExpandLess as IconExpandLess,
+  MdDeleteForever as IconDeleteForever
 } from 'react-icons/lib/md';

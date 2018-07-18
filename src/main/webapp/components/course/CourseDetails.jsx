@@ -21,12 +21,13 @@ import * as Format from '../../utils/Format';
 import {ProfilePicture} from './../profile';
 import {showNotification} from './../../model/notification';
 import {MODE, NEW_COURSE} from './../../model/courses';
-import {TITLE_BG, SECONDARY} from '../../utils/Style';
-import {IconDelete, IconPencil, IconUser, IconUserAdd} from '../../utils/Icons';
+import {SECONDARY, TITLE_BG} from '../../utils/Style';
+import {IconDelete, IconDeleteForever, IconPencil, IconUser, IconUserAdd} from '../../utils/Icons';
 import {findById, setPath, viewPath} from '../../utils/RamdaUtils';
-import {LoadingIndicator} from '../general';
+import {ConfirmButton, LoadingIndicator} from '../general';
 import {
   addUserToCourse,
+  deleteCourse,
   fetchCourses,
   hideCourseDetails,
   onCourseDetailsChange,
@@ -207,6 +208,7 @@ class CourseDetails extends Component {
       pending,
       currentUser = {},
       courseTypes,
+      courseDelete,
       actions} = this.props;
     const {
       show,
@@ -215,9 +217,11 @@ class CourseDetails extends Component {
     } = courseDetails;
     const {
       toggleEditCourse,
-      onCourseDetailsChange
+      onCourseDetailsChange,
+      deleteCourse
     } = actions;
 
+    const courseId = viewPath(['courseDetails', 'course', 'id'], this.props);
     const {title, readonly} = mode;
     const {start, courseTypeId, minutes, attendees = [],
       instructor = {}, maxParticipants, signedIn} = course;
@@ -324,6 +328,26 @@ class CourseDetails extends Component {
               {trainerOrAdmin ? this.getAddUserMenu() : undefined}
             </ValidationGroup>
           </Grid>
+
+          {
+            (roles.ADMIN || roles.TRAINER)
+            ? <Grid container spacing={8} style={{width: '100%', margin: '0px', padding: '16px'}}>
+                <Grid item xs={12} sm={8}>
+                  <ConfirmButton
+                    question='Möchtest du den Kurs wirklich löschen?'
+                    onClick={() => {deleteCourse(courseId); this.handleRequestClose();}}
+                    variant='raised'
+                    color='secondary'
+                    fullWidth
+                    pending={courseDelete.pending}
+                  >
+                    Kurs löschen<IconDeleteForever style={{marginLeft: '8px'}} size={16}/>
+                  </ConfirmButton>
+                  {courseDelete.errorMessage ? <GridTextControl text={courseDelete.errorMessage} error={true}/> : undefined}
+                </Grid>
+              </Grid>
+            : undefined
+          }
         </DialogContent>
 
         <DialogActions>
@@ -355,7 +379,8 @@ const mapStateToProps = state => ({
   currentUser: state.profile.user,
   courseTypes: state.courseTypes,
   courseDetails: state.courses.courseDetails,
-  users: state.profile.users
+  users: state.profile.users,
+  courseDelete: state.courses.delete
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -372,7 +397,8 @@ const mapDispatchToProps = dispatch => ({
     signIn: signIn,
     signOut: signOut,
     addUserToCourse: addUserToCourse,
-    removeUserFromCourse: removeUserFromCourse
+    removeUserFromCourse: removeUserFromCourse,
+    deleteCourse: deleteCourse
   }, dispatch),
   dispatch
 });

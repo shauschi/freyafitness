@@ -9,6 +9,7 @@ export {
   IconClock,
   IconClose,
   IconDelete,
+  IconDeleteForever,
   IconDocument,
   IconEye,
   IconEyeSlash,

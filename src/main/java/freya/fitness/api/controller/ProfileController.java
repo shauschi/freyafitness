@@ -14,6 +14,7 @@ import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,7 +75,11 @@ public class ProfileController {
       @PathVariable final UUID userId,
       @PathVariable final Size size) throws IOException {
     final byte[] bytes = profilePictureService.getProfilePictureData(userId, size);
-    return ResponseEntity.ok().body(new ByteArrayResource(bytes));
+    if (bytes != null) {
+      return ResponseEntity.ok().body(new ByteArrayResource(bytes));
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
   }
 
   @PreAuthorize("hasAuthority('USER')")
