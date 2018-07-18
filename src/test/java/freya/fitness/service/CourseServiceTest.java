@@ -6,7 +6,9 @@ import freya.fitness.domain.jpa.User;
 import freya.fitness.api.dto.CourseDto;
 import freya.fitness.repository.jpa.CourseRepository;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,6 +33,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -47,6 +50,9 @@ public class CourseServiceTest {
 
   @Mock
   private CourseDtoToCourseMapper courseDtoToCourseMapper;
+
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   @Before
   public void setUp() {
@@ -211,5 +217,32 @@ public class CourseServiceTest {
     assertThat(start, notNullValue());
     assertThat(start.getMinute(), equalTo(0));
     assertThat(result.isCanceled(), equalTo(false));
+  }
+
+  @Test
+  public void shouldCallRepositoryDeleteOnDelete() {
+    // given
+    UUID courseId = UUID.randomUUID();
+
+    // when
+    testee.delete(courseId);
+
+    // then
+    verify(courseRepository).deleteById(courseId);
+  }
+
+
+  @Test
+  public void shouldThrowIllegalArgumentExceptionWhenDeletingInvalidCourseId() {
+    // expected excpetion
+    expectedException.expect(IllegalArgumentException.class);
+
+    // given
+    doThrow(new IllegalArgumentException()).when(courseRepository).deleteById(any());
+
+    // when
+    testee.delete(UUID.randomUUID());
+
+    // then see expected excpetion
   }
 }

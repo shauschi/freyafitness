@@ -1,6 +1,7 @@
 package freya.fitness.api.controller;
 
 import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.MessageDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.service.CourseService;
@@ -9,6 +10,7 @@ import freya.fitness.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +54,13 @@ public class CourseController {
     final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.update(id, courseDto);
     return new CourseDto(user, updatedCourse);
+  }
+
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
+  @DeleteMapping("/{id}")
+  public MessageDto deleteCourse(@PathVariable("id") final UUID id) {
+    courseService.delete(id);
+    return new MessageDto("Kurs erfolgreich gelöscht");
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
