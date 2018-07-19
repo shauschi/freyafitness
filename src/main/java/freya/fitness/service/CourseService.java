@@ -61,6 +61,10 @@ public class CourseService {
     return save(course);
   }
 
+  public void delete(final UUID courseId) {
+    courseRepository.deleteById(courseId);
+  }
+
   public Course create(final CourseDto courseDto) {
     final Course course = courseDtoToCourseMapper.apply(courseDto, null);
     return save(course);

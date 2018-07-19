@@ -1,5 +1,5 @@
 'use strict';
-import {GET, POST, PUT} from '../HttpUtils';
+import {GET, POST, PUT, DELETE} from '../HttpUtils';
 import moment from 'moment';
 import * as Format from '../../utils/Format';
 const baseURL = __API__;
@@ -13,6 +13,8 @@ export const createNewCourse = () => GET(`${baseURL}/courses/create`);
 export const saveNewCourse = course => POST(`${baseURL}/courses/create`, course);
 
 export const saveCourse = course => POST(`${baseURL}/courses/${course.id}`, course);
+
+export const deleteCourse = id => DELETE(`${baseURL}/courses/${id}`);
 
 export const signIn = id => PUT(`${baseURL}/courses/${id}/signin`);
 
