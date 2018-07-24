@@ -129,33 +129,10 @@ class Home extends Component {
     </Grid>
   };
 
-  getMyCourses = () => {
-    const {showCourseDetails, signIn, signOut} = this.props.actions;
-    const {data = {}} = this.props.courses;
-    const myCourses = data.filter(course => course.signedIn);
-    return (
-      <div>
-        <Subheader label='Meine Kurse'/>
-        {myCourses.length === 0
-          ? <MenuLink
-              to='/courses/all' label='Melde dich hier zu Kursen an'
-              icon={<IconCalendar/>}/>
-          : myCourses.map(
-            (course, idx) => (
-              <Course
-                key={idx}
-                course={course}
-                showCourseDetails={showCourseDetails}
-                signIn={signIn}
-                signOut={signOut}
-                showDate/>)
-            )
-        }
-      </div>
-    );
-  };
-
   getCoursePlan = () => {
+    if (this.props.user) {
+      return undefined;
+    }
 
     const data = [
       {
@@ -302,21 +279,33 @@ class Home extends Component {
     if (!signedIn) {
       return undefined;
     }
-    return <Grid item xs={12} md={8} style={{padding: '0px'}}>
-      <List style={{padding: '0'}}>
-        {this.getMyCourses()}
-        <Subheader label={"Status"}/>
-        <ListItem button
-            onClick={this.handleClickOpen}>
-          <ListItemIcon>
-            <IconBatteryLow color={red.A200}/>
-          </ListItemIcon>
-          <ListItemText
-            inset
-            primary={"Zehnerkarte"}
-            secondary={"(zukünftig kannst du hier deine Karten verwalten)"}/>
-        </ListItem>
-      </List>
+
+    const {showCourseDetails, signIn, signOut} = this.props.actions;
+    const {data = {}} = this.props.courses;
+    const myCourses = data.filter(course => course.signedIn);
+
+    return <Grid item xs={12} md={8}>
+      <Card>
+        <List style={{padding: '0'}}>
+          <Subheader label='Meine Kurse'/>
+          {
+            myCourses.length === 0
+              ? <MenuLink
+                to='/courses/all' label='Melde dich hier zu Kursen an'
+                icon={<IconCalendar/>}/>
+              : myCourses.map(
+              (course, idx) => (
+                <Course
+                  key={idx}
+                  course={course}
+                  showCourseDetails={showCourseDetails}
+                  signIn={signIn}
+                  signOut={signOut}
+                  showDate/>)
+              )
+          }
+        </List>
+      </Card>
     </Grid>;
   };
 

@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: uuid
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: course_id
+              type: uuid
+              constraints:
+               nullable: false
+          - column:
+              name: membership_id
+              type: uuid
+              constraints:
+                nullable: false
+          - column:
+              name: sign_in_time
+              type: timestamp
+          schemaName: public
+          tableName: participation
+      - addForeignKeyConstraint:
+          baseColumnNames: course_id
+          baseTableName: participation
+          constraintName: fk_participation_course
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: course
+      - addForeignKeyConstraint:
+          baseColumnNames: membership_id
+          baseTableName: participation
+          constraintName: fk_participation_membership
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: membership

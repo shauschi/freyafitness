@@ -32,8 +32,20 @@ const styles = theme => ({
 class ContactCard extends Component {
 
   state = {
+    autoFilled: false,
     expanded: false
   };
+
+  constructor(props) {
+    super(props);
+    if (props.user && !this.state.autoFilled) {
+      const {loginDataChanged} = props.actions;
+
+      loginDataChanged('firstname', props.user.firstname);
+      loginDataChanged('lastname', props.user.lastname);
+      loginDataChanged('email', props.user.email);
+    }
+  }
 
   handleExpandClick = () => {
     this.setState(state => ({expanded: !state.expanded}));
@@ -156,6 +168,7 @@ class ContactCard extends Component {
 }
 
 const mapStateToProps = state => ({
+  user: state.profile.user,
   contact: state.contact
 });
 

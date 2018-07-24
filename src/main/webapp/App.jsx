@@ -12,10 +12,12 @@ import {Footer, MyAppBar, MyDrawer} from './container';
 import {CustomizedSnackbar, LoadingIndicator} from './components/general';
 import {AboutCourses, AboutFreya, AboutFreyRaum, Agb, Courses, Home, Impressum, ProfileSite} from './sites';
 import {CourseDetails} from './components/course';
+import {CreateMembership} from './components/membership';
 import * as Style from './utils/Style';
 import {toggleDrawer} from './model/drawer';
 import {hideNotification} from './model/notification';
 import {createCourse} from './model/courses';
+import {showCreateMembership} from './model/membership';
 import {login, logout, scrollToLogin} from './model/profile';
 import init from './model/init.js';
 
@@ -43,12 +45,14 @@ class App extends Component {
             classes={classes}
             toggleDrawer={actions.toggleDrawer}
             createCourse={actions.createCourse}
+            createMembership={actions.showCreateMembership}
             scrollToLogin={actions.scrollToLogin}
             currentUser={currentUser}
             {...this.props}/>
           <div style={{position: 'absolute'}}>
             {/* All Dialogs */}
             <CourseDetails/>
+            <CreateMembership/>
           </div>
           <MyDrawer
             classes={classes}
@@ -109,7 +113,9 @@ const mapDispatchToProps = dispatch => ({
     login: login,
     logout: logout,
     toggleDrawer: toggleDrawer,
-    hideNotification: hideNotification
+    hideNotification: hideNotification,
+    // membership
+    showCreateMembership: showCreateMembership
   }, dispatch),
   dispatch
 });

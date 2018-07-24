@@ -1,7 +1,7 @@
 package freya.fitness.service;
 
 import freya.fitness.domain.jpa.News;
-import freya.fitness.domain.jpa.NewsDtoToNewsMapper;
+import freya.fitness.api.mapping.NewsDtoToNewsMapper;
 import freya.fitness.domain.jpa.Validity;
 import freya.fitness.api.dto.NewsDto;
 import freya.fitness.repository.jpa.NewsRepository;
@@ -36,7 +36,7 @@ public class NewsService {
   public News createEmptyNews() {
     final News news = new News();
     news.setTitle("Neuer Titel");
-    news.setValidity(Validity.starTomorrow());
+    news.setValidity(Validity.startTomorrow());
     return news;
   }
 

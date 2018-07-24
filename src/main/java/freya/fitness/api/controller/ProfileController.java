@@ -4,13 +4,14 @@ import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.api.dto.MessageDto;
 import freya.fitness.api.dto.ProfileDto;
 import freya.fitness.api.dto.UserDto;
+import freya.fitness.api.mapping.UserMapper;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.service.ProfilePictureService;
 import freya.fitness.service.UserService;
-import freya.fitness.utils.RoleNotFoundException;
+import freya.fitness.utils.exception.RoleNotFoundException;
 import freya.fitness.utils.Size;
-import freya.fitness.utils.UserAllreadyExistsException;
-import freya.fitness.utils.UserNotFoundException;
+import freya.fitness.utils.exception.UserAllreadyExistsException;
+import freya.fitness.utils.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -37,13 +38,16 @@ import java.util.stream.Collectors;
 public class ProfileController {
 
   private final UserService userService;
-
   private final ProfilePictureService profilePictureService;
+  private final UserMapper userMapper;
 
   @Autowired
-  public ProfileController(final UserService userService, final ProfilePictureService profilePictureService) {
+  public ProfileController(final UserService userService,
+                           final ProfilePictureService profilePictureService,
+                           final UserMapper userMapper) {
     this.userService = userService;
     this.profilePictureService = profilePictureService;
+    this.userMapper = userMapper;
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
@@ -66,7 +70,7 @@ public class ProfileController {
   @GetMapping("/own")
   public UserDto getOwnProfil() {
     final User user = userService.getCurrentUser();
-    return user != null ? new UserDto(user) : null;
+    return userMapper.map(user);
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")

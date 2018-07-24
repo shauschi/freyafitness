@@ -3,7 +3,7 @@ package freya.fitness.api.controller;
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.service.PasswordResetTokenService;
-import freya.fitness.utils.InvalidResetTokenException;
+import freya.fitness.utils.exception.InvalidResetTokenException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

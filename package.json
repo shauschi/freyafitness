@@ -58,7 +58,6 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
-    "slick-carousel": "^1.8.1",
     "style-loader": "^0.19.1",
     "typeface-roboto": "0.0.29",
     "url-loader": "^0.6.2"

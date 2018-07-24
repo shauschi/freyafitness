@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: uuid
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: user_id
+              type: uuid
+              constraints:
+               nullable: false
+          - column:
+              name: membership_type_id
+              type: uuid
+              constraints:
+                nullable: false
+          - column:
+              name: validity_from
+              type: timestamp
+          - column:
+              name: validity_to
+              type: timestamp
+          schemaName: public
+          tableName: membership
+      - addForeignKeyConstraint:
+          baseColumnNames: user_id
+          baseTableName: membership
+          constraintName: fk_membership_user
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: user
+      - addForeignKeyConstraint:
+          baseColumnNames: membership_type_id
+          baseTableName: membership
+          constraintName: fk_membership_membership_type
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: membership_type

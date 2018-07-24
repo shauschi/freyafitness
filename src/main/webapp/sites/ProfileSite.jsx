@@ -16,7 +16,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import {ProfilePicture, ProfilePictureDialog} from './../components/profile';
 import {ChangePasswordDialog} from '../components/account';
-import {LoadingIndicator} from '../components/general';
+import {LoadingIndicator, Subheader} from '../components/general';
 import {
   changeTempProfilePicture,
   closeProfilePictureChangeDialog,
@@ -28,9 +28,28 @@ import {
 import {changePassword, onCancelPasswordChange, onOpenPasswordChange, onPasswordChange} from './../model/password';
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
+import {viewPath} from "../utils/RamdaUtils";
 import {red} from "@material-ui/core/colors/index";
+import Membership from './../components/membership';
 
 class ProfileSite extends Component {
+
+  renderMemberships = () => {
+    const memberships = viewPath(['profile', 'user', 'memberships'], this.props) || [];
+    return (
+      <Grid item xs={12} sm={8}>
+        <Card>
+          <List style={{padding: '0'}}>
+            <Subheader label='Deine Mitgliedschaft'/>
+            {
+              memberships.map((value, idx) => <Membership membership={value} key={idx}/>)
+            }
+          </List>
+        </Card>
+      </Grid>
+    );
+  };
+
   render() {
     const {
       profile,
@@ -49,7 +68,9 @@ class ProfileSite extends Component {
         dayOfBirth,
         email,
         mobil,
-        adress = {}
+        adress = {},
+        roles,
+        memberships
       } = user;
 
       return (
@@ -86,15 +107,11 @@ class ProfileSite extends Component {
               </Card>
             </Grid>
 
+            {this.renderMemberships()}
+
             <Grid item xs={12} sm={8}>
               <Card>
                 <List style={{padding: '0'}}>
-                  <ListItem button>
-                    <ListItemIcon>
-                      <IconBatteryLow color={red.A200}/>
-                    </ListItemIcon>
-                    <ListItemText primary={"10-er Karte (folgt)"} secondary={"2 von 10 frei"}/>
-                  </ListItem>
                   <ListItem button>
                     <ListItemIcon>
                       <IconLineChart/>

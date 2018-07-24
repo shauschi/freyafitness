@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {IconEye, IconEyeSlash} from './../../utils/Icons';
 import {setPath, togglePath} from './../../utils/RamdaUtils';
 import {ValidationControl} from './validation';
-import {DateTimePicker} from 'material-ui-pickers';
+import {DatePicker, DateTimePicker} from 'material-ui-pickers';
 import * as Format from './../../utils/Format';
 import {view} from '../../utils/RamdaUtils';
 import {LoadingIndicator} from '../general';
@@ -127,9 +127,18 @@ export class GridPasswordControl extends ValidationControl {
   }
 }
 
-export class GridItemSelectControl extends Component {
+export class GridItemSelectControl extends ValidationControl {
+
+  getValue = v => {
+    const {valueProp = 'value'} = this.props;
+    if (typeof valueProp === 'function') {
+      return valueProp(v)
+    }
+    return view(valueProp, v);
+  }
 
   render() {
+    const {valid, errors} = this.state;
     const {
       id,
       value = '',
@@ -143,7 +152,7 @@ export class GridItemSelectControl extends Component {
       sm,
       md
     } = this.props;
-    return <GridFormControl xs={xs} sm={sm} md={md}>
+    return <GridFormControl xs={xs} sm={sm} md={md} error={!valid}>
       <InputLabel htmlFor={id} shrink>{label}</InputLabel>
       <Select
         value={value}
@@ -152,20 +161,45 @@ export class GridItemSelectControl extends Component {
         disabled={readonly}>
         {values.map((v, idx) =>
           <MenuItem key={idx} value={view(keyProp, v)}>
-            {view(valueProp, v)}
+            {this.getValue(v)}
           </MenuItem>
         )}
       </Select>
+      <FormHelperText>{errors}</FormHelperText>
     </GridFormControl>
   }
 
 }
 
+export class GridDateControl extends ValidationControl {
+
+  render() {
+    const {valid, errors} = this.state;
+    const {value, label, readonly, onChange, xs, md} = this.props;
+    return <GridFormControl xs={xs} md={md} error={!valid}>
+      <DatePicker
+        value={value}
+        onChange={onChange}
+        label={label}
+        format={Format.DATE_FORMAT_WITH_DAY}
+        okLabel={'OK'}
+        cancelLabel={'ABBRECHEN'}
+        todayLabel={'HEUTE'}
+        showTodayButton
+        disableOpenOnEnter={readonly}
+        InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
+      />
+      <FormHelperText>{errors}</FormHelperText>
+    </GridFormControl>;
+  }
+}
+
 export class GridDateTimeControl extends ValidationControl {
 
   render() {
+    const {valid, errors} = this.state;
     const {value, label, readonly, onChange, xs, md} = this.props;
-    return <GridFormControl xs={xs} md={md}>
+    return <GridFormControl xs={xs} md={md} error={!valid}>
       <DateTimePicker
         value={value}
         onChange={onChange}
@@ -179,6 +213,7 @@ export class GridDateTimeControl extends ValidationControl {
         disableOpenOnEnter={readonly}
         InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
       />
+      <FormHelperText>{errors}</FormHelperText>
     </GridFormControl>;
   }
 }

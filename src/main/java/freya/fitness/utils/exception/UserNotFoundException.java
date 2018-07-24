@@ -1,8 +1,8 @@
-package freya.fitness.utils;
+package freya.fitness.utils.exception;
 
 import java.util.UUID;
 
-public class UserNotFoundException extends Exception {
+public class UserNotFoundException extends EntityNotFoundException {
 
   private UserNotFoundException(final String message) {
     super(message);

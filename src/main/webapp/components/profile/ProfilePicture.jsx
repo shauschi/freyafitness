@@ -38,7 +38,7 @@ class ProfilePicture extends Component {
             {picture: objectURL, loading: false}, this.state));
         })
         .catch(() => {
-          this.setState(assignPath([], {loading: false}, this.state));
+          this.setState(assignPath([], {picture: null, loading: false}, this.state));
         });
     }
   }
