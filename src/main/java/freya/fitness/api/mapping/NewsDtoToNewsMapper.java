@@ -1,6 +1,7 @@
-package freya.fitness.domain.jpa;
+package freya.fitness.api.mapping;
 
 import freya.fitness.api.dto.NewsDto;
+import freya.fitness.domain.jpa.News;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

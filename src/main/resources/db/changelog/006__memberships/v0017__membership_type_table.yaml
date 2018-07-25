@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: uuid
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: key
+              type: varchar(255)
+          - column:
+              name: name
+              type: varchar(255)
+          - column:
+              name: max_participations
+              type: int
+          - column:
+              name: validity_days
+              type: int
+          - column:
+              name: description
+              type: varchar(10000)
+          - column:
+              name: validity_from
+              type: timestamp
+          - column:
+              name: validity_to
+              type: timestamp
+          schemaName: public
+          tableName: membership_type

@@ -1,7 +1,9 @@
-package freya.fitness.domain.jpa;
+package freya.fitness.api.mapping;
 
 import freya.fitness.api.dto.CourseDto;
 import freya.fitness.api.dto.ProfileDto;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.jpa.CourseTypeRepository;
 import freya.fitness.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +46,6 @@ public class CourseDtoToCourseMapper implements BiFunction<CourseDto, Course, Co
     course.setInstructor(instructor);
     course.setMaxParticipants(courseDto.getMaxParticipants());
     course.setCanceled(courseDto.isCanceled());
-    // TODO am DTO nur die IDs speichern
-    final List<User> attendees = courseDto.getAttendees().stream()
-        .map(ProfileDto::getId)
-        .map(userRepository::findById)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(Collectors.toList());
-    course.setAttendees(attendees);
 
     return course;
   }

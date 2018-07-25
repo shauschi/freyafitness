@@ -1,5 +1,7 @@
 'use strict';
 export {
+  DATE_FORMAT,
+  DATE_FORMAT_WITH_DAY,
   DAY_OF_WEEK_DATE_FORMAT,
   HOUR_MINUTE,
   ISO_DATE_FORMAT,

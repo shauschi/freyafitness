@@ -8,7 +8,8 @@ import {
   signIn as signInApiCall,
   signOut as signOutApiCall,
   addUserToCourse as addUserToCourseApiCall,
-  removeUserFromCourse as removeUserFromCourseApiCall
+  removeUserFromCourse as removeUserFromCourseApiCall,
+  deleteCourse as deleteCourseApiCall
 } from '../../service/courses';
 import {
   showNotification
@@ -33,7 +34,11 @@ export const MODE = {
 const initialState = {
   pending: false,
   data: [],
-  courseDetails: {show: false, edit: false}
+  courseDetails: {show: false, edit: false},
+  delete: {
+    pending: false,
+    errorMessage: ''
+  }
 };
 
 export const actions = createActions({
@@ -46,6 +51,11 @@ export const actions = createActions({
     CREATE: {
       PENDING: undefined,
       SUCCESS: course => course,
+      ERROR: error => error
+    },
+    DELETE: {
+      PENDING: undefined,
+      SUCCESS: courseId => courseId,
       ERROR: error => error
     },
     SAVE: {
@@ -115,6 +125,18 @@ export const showCourseDetails = id => {
   };
 };
 
+export const deleteCourse = id => {
+  return dispatch => {
+    dispatch(actions.courses.delete.pending());
+    return deleteCourseApiCall(id)
+      .then(answer => {
+        dispatch(actions.courses.delete.success(id));
+        dispatch(showNotification(answer.message, 'success'));
+      })
+      .catch(error => dispatch(actions.courses.delete.error(error)));
+  };
+};
+
 export const hideCourseDetails = () => {
   return dispatch => {
     dispatch(actions.courses.courseDetails.hide());
@@ -152,8 +174,8 @@ export const signIn = courseId => {
         dispatch(showNotification('angemeldet', 'success'));
       })
       .catch(error => {
-        dispatch(actions.courses.signIn.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(actions.courses.signOut.error(error));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };
@@ -168,7 +190,7 @@ export const signOut = courseId => {
       })
       .catch(error => {
         dispatch(actions.courses.signOut.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };
@@ -181,8 +203,8 @@ export const addUserToCourse = (courseId, userId) => {
         dispatch(actions.courses.addUser.success(course));
       })
       .catch(error => {
-        dispatch(actions.course.addUser.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(actions.courses.addUser.error(error));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };
@@ -196,8 +218,8 @@ export const removeUserFromCourse = (courseId, userId) => {
         dispatch(showNotification('Teilnehmer entfernt', 'success'));
       })
       .catch(error => {
-        dispatch(actions.course.removeUser.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(actions.courses.removeUser.error(error));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };
@@ -214,6 +236,17 @@ const updateCourse = (state, course) => {
   return state;
 };
 
+const deleteCourseFromList = (state, courseId) => {
+  const courses = Object.assign([], state.data);
+  for (const idx in courses) {
+    if (courses[idx].id === courseId) {
+      courses.splice(idx, 1);
+      return setPath(['data'], courses, state);
+    }
+  }
+  return state;
+};
+
 export default handleActions({
   [actions.courses.load.pending]: state => setPath(['pending'], true, state),
   [actions.courses.load.success]: (state, {payload}) =>
@@ -223,10 +256,18 @@ export default handleActions({
 
   [actions.courses.create.pending]: state => setPath(['courseDetails', 'pending'], true, state),
   [actions.courses.create.success]: (state, {payload}) =>
-    assignPath(['courseDetails'],
-      {pending: false, mode: MODE.CREATE, course: payload}, state),
+    assignPath(['courseDetails'], {pending: false, mode: MODE.CREATE, course: payload}, state),
   [actions.courses.create.error]: (state, {payload}) =>
     assignPath(['courseDetails'], {pending: false, errorMessage: payload.message}, state),
+
+  // DELETE
+  [actions.courses.delete.pending]: state => setPath(['delete', 'pending'], true, state),
+  [actions.courses.delete.success]: (state, {payload}) => {
+    const changedState = deleteCourseFromList(state, payload);
+    return assignPath(['delete'], {pending: false, errorMessage: null}, changedState);
+  },
+  [actions.courses.delete.error]: (state, {payload}) =>
+    assignPath(['delete'], {pending: false, errorMessage: payload.message}, state),
 
   [actions.courses.courseDetails.show]: state =>
     assignPath(['courseDetails'], {show: true, mode: MODE.VIEW}, state),

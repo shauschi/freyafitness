@@ -2,7 +2,7 @@ package freya.fitness.service;
 
 import freya.fitness.repository.mongodb.ProfilePictureRepository;
 import freya.fitness.utils.Size;
-import freya.fitness.utils.UserNotFoundException;
+import freya.fitness.utils.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

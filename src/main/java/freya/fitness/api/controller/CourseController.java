@@ -1,14 +1,25 @@
 package freya.fitness.api.controller;
 
 import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.MessageDto;
 import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.service.CourseService;
+import freya.fitness.service.MembershipService;
+import freya.fitness.service.ParticipationService;
 import freya.fitness.service.UserService;
-import freya.fitness.utils.UserNotFoundException;
+import freya.fitness.utils.exception.CourseNotFoundException;
+import freya.fitness.utils.exception.MembershipException;
+import freya.fitness.utils.exception.UserNotFoundException;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,41 +28,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/courses")
 public class CourseController {
 
   private final CourseService courseService;
-
   private final UserService userService;
+  private final ParticipationService participationService;
+  private final MembershipService membershipService;
 
   @Autowired
-  public CourseController(final CourseService courseService, final UserService userService) {
+  public CourseController(
+      final CourseService courseService,
+      final UserService userService,
+      final ParticipationService participationService,
+      final MembershipService membershipService) {
     this.courseService = courseService;
     this.userService = userService;
+    this.participationService = participationService;
+    this.membershipService = membershipService;
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/{id}")
-  public CourseDto getCourseDetails(@PathVariable("id") final UUID id) {
+  public CourseDto getCourseDetails(@PathVariable("id") final UUID id) throws CourseNotFoundException {
     final User user = userService.getCurrentUser();
-    return courseService.getCourse(id)
-        .map(course -> new CourseDto(user, course))
-        .orElse(null);
+    final Course course = courseService.getCourse(id);
+    return new CourseDto(user, course);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @PostMapping("/{id}")
-  public CourseDto saveCourse(@PathVariable("id") final UUID id,
-                              @RequestBody final CourseDto courseDto) {
+  public CourseDto saveCourse(
+      @PathVariable("id") final UUID id,
+      @RequestBody final CourseDto courseDto) throws CourseNotFoundException {
     final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.update(id, courseDto);
     return new CourseDto(user, updatedCourse);
+  }
+
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
+  @DeleteMapping("/{id}")
+  public MessageDto deleteCourse(@PathVariable("id") final UUID id) {
+    courseService.delete(id);
+    return new MessageDto("Kurs erfolgreich gelöscht");
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
@@ -72,9 +92,14 @@ public class CourseController {
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/from/{from}")
-  public List<CourseDto> getCourses(@PathVariable("from") final String from) {
+  public List<CourseDto> getCourses(@PathVariable("from") final String fromAsString) {
     final User user = userService.getCurrentUser();
-    return toDtos(user, courseService.getCoursesFrom(LocalDate.parse(from)));
+    final LocalDate from = LocalDate.parse(fromAsString);
+    final List<Course> courses = courseService.getCoursesFrom(from);
+    if (courses.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return toDtos(user, courses);
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
@@ -89,46 +114,42 @@ public class CourseController {
 
   @PreAuthorize("hasAuthority('USER')")
   @PutMapping("{courseId}/signin")
-  public ResponseEntity<CourseDto> signIn(@PathVariable("courseId") final UUID courseId) {
+  public CourseDto signIn(@PathVariable("courseId") final UUID courseId)
+      throws CourseNotFoundException, MembershipException, UserNotFoundException {
     final User user = userService.getCurrentUser();
-    final Course changedCourse = courseService.addUserToCourse(user, courseId);
-    return createResponseWithCourseAndUser(changedCourse, user);
+    final Membership membership = membershipService.getCurrentMembershipForUser(user.getId());
+    final Course course = participationService.addUserToCourse(membership, courseId);
+    return new CourseDto(user, course);
   }
 
   @PreAuthorize("hasAuthority('USER')")
   @PutMapping("{courseId}/signout")
-  public ResponseEntity<CourseDto> signOut(@PathVariable("courseId") final UUID courseId) {
+  public CourseDto signOut(@PathVariable("courseId") final UUID courseId) {
     final User user = userService.getCurrentUser();
-    final Course changedCourse = courseService.removeUserFromCourse(user, courseId);
-    return createResponseWithCourseAndUser(changedCourse, user);
+    final Course course = participationService.removeUserFromCourse(user.getId(), courseId);
+    return new CourseDto(user, course);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @PutMapping("{courseId}/adduser/{userId}")
-  public ResponseEntity<CourseDto> addUserToCourse(
+  public CourseDto addUserToCourse(
       @PathVariable("courseId") final UUID courseId,
-      @PathVariable("userId") final UUID userId) throws UserNotFoundException {
-    final User userToAdd = userService.getUser(userId);
-    final Course changedCourse = courseService.addUserToCourse(userToAdd, courseId);
-    return createResponseWithCourseAndUser(changedCourse, userService.getCurrentUser());
+      @PathVariable("userId") final UUID userId)
+      throws UserNotFoundException, CourseNotFoundException, MembershipException {
+    final User user = userService.getUser(userId);
+    final Membership membership = membershipService.getCurrentMembershipForUser(userId);
+    final Course course = participationService.addUserToCourse(membership, courseId);
+    return new CourseDto(user, course);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @PutMapping("{courseId}/removeuser/{userId}")
-  public ResponseEntity<CourseDto> removeUserFromCourse(
+  public CourseDto removeUserFromCourse(
       @PathVariable("courseId") final UUID courseId,
-      @PathVariable("userId") final UUID userId) throws UserNotFoundException {
-    final User userToAdd = userService.getUser(userId);
-    final Course changedCourse = courseService.removeUserFromCourse(userToAdd, courseId);
-    return createResponseWithCourseAndUser(changedCourse, userService.getCurrentUser());
-  }
-
-  private ResponseEntity<CourseDto> createResponseWithCourseAndUser(
-      final Course course, final User user) {
-    if (course != null) {
-      return ResponseEntity.accepted().body(new CourseDto(user, course));
-    }
-    return ResponseEntity.badRequest().build();
+      @PathVariable("userId") final UUID userId) {
+    final User user = userService.getUser(userId);
+    final Course course = participationService.removeUserFromCourse(userId, courseId);
+    return new CourseDto(user, course);
   }
 
   private List<CourseDto> toDtos(User user, List<Course> courses) {

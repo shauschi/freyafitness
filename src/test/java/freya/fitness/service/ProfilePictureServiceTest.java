@@ -3,7 +3,7 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.mongodb.ProfilePictureRepository;
 import freya.fitness.utils.Size;
-import freya.fitness.utils.UserNotFoundException;
+import freya.fitness.utils.exception.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

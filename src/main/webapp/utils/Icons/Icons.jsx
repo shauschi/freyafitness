@@ -12,6 +12,8 @@ export {
   TiTimes as IconClose,
   TiDocumentText as IconDocument,
   TiCog as IconPreferences,
+  TiGift as IconGift,
+  TiHeartFullOutline as IconHeart,
   TiHome as IconHome,
   TiInfoLarge as IconInfo,
   TiChartLine as IconLineChart,
@@ -40,5 +42,6 @@ export {
   MdZoomIn as IconZoomIn,
   MdZoomOut as IconZoomOut,
   MdExpandMore as IconExpandMore,
-  MdExpandLess as IconExpandLess
+  MdExpandLess as IconExpandLess,
+  MdDeleteForever as IconDeleteForever
 } from 'react-icons/lib/md';

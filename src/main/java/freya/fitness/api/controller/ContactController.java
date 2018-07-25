@@ -3,7 +3,7 @@ package freya.fitness.api.controller;
 import freya.fitness.api.dto.ContactDto;
 import freya.fitness.api.dto.MessageDto;
 import freya.fitness.service.ContactService;
-import freya.fitness.utils.MailTemplateNotFoundException;
+import freya.fitness.utils.exception.MailTemplateNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

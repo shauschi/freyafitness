@@ -6,7 +6,7 @@ const initialState = {
   show: false,
   variant: 'info',
   message: '',
-  autoHideDuration: 1500
+  autoHideDuration: 5500
 };
 
 export const actions = createActions({

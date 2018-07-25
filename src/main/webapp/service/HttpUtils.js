@@ -148,6 +148,18 @@ export const POST = (url, data) => fetchWithToken(url,
   })
   .then(response => response.json());
 
+export const DELETE = url => fetchWithToken(url,
+  {
+    method: 'DELETE',
+    headers: {
+      ...acceptJsonHeaders,
+      ...securityHeaders,
+      ...getAccessTokenHeader()
+    },
+    credentials: 'include'
+  })
+  .then(response => response.json());
+
 export const GET_IMAGE = url => fetchWithToken(url,
   {
     method: 'GET',

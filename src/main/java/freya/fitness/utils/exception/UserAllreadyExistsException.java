@@ -1,4 +1,4 @@
-package freya.fitness.utils;
+package freya.fitness.utils.exception;
 
 public class UserAllreadyExistsException extends Exception {
 
