@@ -10,86 +10,28 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import {Slider, Subheader} from './../components/general';
 import {NewsItem} from './../components/news';
-import Course, {CourseList} from './../components/course';
+import Course from './../components/course';
 import {showCourseDetails, signIn, signOut} from '../model/courses';
-import {IconBatteryLow, IconCalendar} from '../utils/Icons';
-import {red} from '@material-ui/core/colors';
+import {IconCalendar} from '../utils/Icons';
 import {LoginAndRegistrationCard} from '../components/account';
 import {MenuLink} from '../components/general';
 import {showNotification} from "../model/notification";
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
-import {ValidationGroup, Validators} from "../components/general/validation";
 import {ContactCard} from "../components/contact/";
-import {
-  GridTextControl,
-  GridInputControl,
-  GridPasswordControl,
-  GridButtonControl
-} from './../components/general';
-
-class SimpleDialog extends Component {
-
-  handleRequestClose = () => {
-    this.props.onClose(this.props.selectedValue);
-  };
-
-  render() {
-    const {...other} = this.props;
-
-    return (
-      <Dialog onClose={this.handleRequestClose} {...other}>
-        <DialogTitle><IconBatteryLow color={red.A200} style={{marginRight: '12px'}}/>10er-Karte</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Achtung, Deine 10er-Karte ist bald voll. Denke daran, Dir eine neue zu kaufen :-)
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleRequestClose} color="primary">
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-}
 
 class Home extends Component {
 
-  state = {
-    open: false
-  };
-
-  handleClickOpen = () => {
-    this.setState({
-      open: true,
-    });
-  };
-
-  handleRequestClose = () => {
-    this.setState({open: false });
-  };
-
   getWelcomeGreetings = () => {
-    const {user, classes, width} = this.props;
+    const {user, width} = this.props;
     if (user) {
       return undefined;
     }
@@ -105,8 +47,8 @@ class Home extends Component {
           <CardContent>
             <Typography variant='title' style={{marginBottom: '8px'}}>Willkommen im FreyRaum</Typography>
             <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
-            <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept. Ein Raum indem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches Trainingsprogramm wartet.
-              Jedes Mal anders, jedes Mal Neu!</Typography>
+            <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept. Ein Raum, in dem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches Trainingsprogramm wartet.
+              Jedes Mal anders, jedes Mal neu!</Typography>
             <Typography>Neben dem breiten Kursprogramm, können Mitglieder auch zum eigenständigen bzw. freien Training vorbei kommen.</Typography>
           </CardContent>
         </Card>
@@ -313,9 +255,6 @@ class Home extends Component {
     return (
       <div className={this.props.classes.root}>
         <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-          <SimpleDialog
-            open={this.state.open}
-            onClose={this.handleRequestClose}/>
           {/* Nur bei nicht angemeldeten Benutzern*/}
           {this.getWelcomeGreetings()}
           {this.getNews()}
