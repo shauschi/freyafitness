@@ -2,7 +2,7 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.repository.jpa.PasswordResetTokenRepository;
-import freya.fitness.utils.InvalidResetTokenException;
+import freya.fitness.utils.exception.InvalidResetTokenException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

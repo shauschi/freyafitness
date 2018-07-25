@@ -16,6 +16,7 @@ export {
   GridInputControl,
   GridButtonControl,
   GridPasswordControl,
+  GridDateControl,
   GridDateTimeControl,
   GridItemSelectControl,
   GridCheckboxControl

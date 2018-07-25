@@ -2,11 +2,11 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
-import freya.fitness.utils.InvalidPasswordException;
-import freya.fitness.utils.InvalidResetTokenException;
-import freya.fitness.utils.MailTemplateNotFoundException;
-import freya.fitness.utils.ResourceLoadingException;
-import freya.fitness.utils.UserNotFoundException;
+import freya.fitness.utils.exception.InvalidPasswordException;
+import freya.fitness.utils.exception.InvalidResetTokenException;
+import freya.fitness.utils.exception.MailTemplateNotFoundException;
+import freya.fitness.utils.exception.ResourceLoadingException;
+import freya.fitness.utils.exception.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

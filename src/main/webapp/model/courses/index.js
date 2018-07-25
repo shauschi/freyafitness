@@ -174,8 +174,8 @@ export const signIn = courseId => {
         dispatch(showNotification('angemeldet', 'success'));
       })
       .catch(error => {
-        dispatch(actions.courses.signIn.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(actions.courses.signOut.error(error));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };
@@ -190,7 +190,7 @@ export const signOut = courseId => {
       })
       .catch(error => {
         dispatch(actions.courses.signOut.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };
@@ -203,8 +203,8 @@ export const addUserToCourse = (courseId, userId) => {
         dispatch(actions.courses.addUser.success(course));
       })
       .catch(error => {
-        dispatch(actions.course.addUser.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(actions.courses.addUser.error(error));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };
@@ -218,8 +218,8 @@ export const removeUserFromCourse = (courseId, userId) => {
         dispatch(showNotification('Teilnehmer entfernt', 'success'));
       })
       .catch(error => {
-        dispatch(actions.course.removeUser.error(error));
-        dispatch(showNotification('uppps, versuch es nochmal', 'error'));
+        dispatch(actions.courses.removeUser.error(error));
+        dispatch(showNotification(error.message, 'error'));
       });
   }
 };

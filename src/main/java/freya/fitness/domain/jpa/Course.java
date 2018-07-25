@@ -1,23 +1,27 @@
 package freya.fitness.domain.jpa;
 
-import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Set;
+import java.util.UUID;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Data
+@EqualsAndHashCode(exclude = "participantions")
 @Entity
-@Table(name = "course", schema="public")
+@Table(name = "course", schema = "public")
 public class Course {
 
   @Id
@@ -40,15 +44,12 @@ public class Course {
   @JoinColumn(name = "instructor_id")
   private User instructor;
 
-  private Integer maxParticipants;
+  private int maxParticipants;
 
   private boolean canceled;
 
-  @ManyToMany
-  @JoinTable(
-      name="course_user",
-      joinColumns=@JoinColumn(name="course_id", referencedColumnName="id"),
-      inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id"))
-  private List<User> attendees;
+  @Setter(AccessLevel.NONE)
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
+  private Set<Participation> participantions = Collections.emptySet();
 
 }

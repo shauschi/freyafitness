@@ -65,8 +65,23 @@ class MyAppBar extends Component {
     this.setState({anchor: null});
   };
 
+  getMenu = () => {
+    const {anchor} = this.state;
+    const {createCourse, createMembership} = this.props;
+    return <Menu
+      open={!!anchor}
+      anchorEl={anchor}
+      onClose={this.closeMenu}
+    >
+      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
+      <MenuItem onClick={() => {this.closeMenu(); createMembership()}}>Mitgliedschaft anlegen</MenuItem>
+      <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
+      <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
+    </Menu>
+  };
+
   render() {
-    const {classes, toggleDrawer} = this.props;
+    const {toggleDrawer} = this.props;
 
     return (
       <AppBar color='primary'>
@@ -93,21 +108,7 @@ class MyAppBar extends Component {
         </Toolbar>
         {this.getMenu()}
       </AppBar>
-  );
-  };
-
-  getMenu = () => {
-    const {anchor} = this.state;
-    const {createCourse} = this.props;
-    return <Menu
-      open={!!anchor}
-      anchorEl={anchor}
-      onClose={this.closeMenu}
-      >
-      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
-      <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
-      <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
-    </Menu>
+    );
   };
 }
 

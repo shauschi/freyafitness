@@ -12,6 +12,8 @@ export {
   TiTimes as IconClose,
   TiDocumentText as IconDocument,
   TiCog as IconPreferences,
+  TiGift as IconGift,
+  TiHeartFullOutline as IconHeart,
   TiHome as IconHome,
   TiInfoLarge as IconInfo,
   TiChartLine as IconLineChart,

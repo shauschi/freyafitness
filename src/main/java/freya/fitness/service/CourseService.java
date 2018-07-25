@@ -1,21 +1,22 @@
 package freya.fitness.service;
 
-import freya.fitness.domain.jpa.Course;
-import freya.fitness.domain.jpa.CourseDtoToCourseMapper;
-import freya.fitness.domain.jpa.User;
 import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.mapping.CourseDtoToCourseMapper;
+import freya.fitness.domain.jpa.Course;
+import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.jpa.CourseRepository;
+import freya.fitness.utils.exception.CourseNotFoundException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static freya.fitness.utils.TimeUtils.nextFullHour;
+
 
 @Service
 public class CourseService {
@@ -27,17 +28,19 @@ public class CourseService {
   private int maxParticipants;
 
   private final CourseRepository courseRepository;
-
-  private CourseDtoToCourseMapper courseDtoToCourseMapper;
+  private final CourseDtoToCourseMapper courseDtoToCourseMapper;
 
   @Autowired
-  public CourseService(final CourseRepository courseRepository, final CourseDtoToCourseMapper courseDtoToCourseMapper) {
+  public CourseService(
+      final CourseRepository courseRepository,
+      final CourseDtoToCourseMapper courseDtoToCourseMapper) {
     this.courseRepository = courseRepository;
     this.courseDtoToCourseMapper = courseDtoToCourseMapper;
   }
 
-  public Optional<Course> getCourse(final UUID id) {
-    return courseRepository.findById(id);
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public Course getCourse(final UUID id) throws CourseNotFoundException {
+    return courseRepository.findById(id).orElseThrow(() -> CourseNotFoundException.withId(id));
   }
 
   public List<Course> getCoursesFrom(final LocalDate from) {
@@ -48,15 +51,15 @@ public class CourseService {
     return courseRepository.findByStartBetween(from.atStartOfDay(), to.atTime(23, 59, 59));
   }
 
-  private Course save(Course course) {
+  public Course save(Course course) {
     if (course == null) {
       return null;
     }
     return courseRepository.save(course);
   }
 
-  public Course update(final UUID courseId, final CourseDto courseDto) {
-    final Course existingCourse = getCourse(courseId).orElse(null);
+  public Course update(final UUID courseId, final CourseDto courseDto) throws CourseNotFoundException {
+    final Course existingCourse = courseId == null ? null : getCourse(courseId);
     final Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
     return save(course);
   }
@@ -70,33 +73,12 @@ public class CourseService {
     return save(course);
   }
 
-  public Course addUserToCourse(final User user, final UUID courseId) {
-    final Optional<Course> courseOpt = getCourse(courseId);
-    if (courseOpt.isPresent()) {
-      final Course course = courseOpt.get();
-      course.getAttendees().add(user);
-      return save(course);
-    }
-    return null;
-  }
-
-  public Course removeUserFromCourse(final User user, final UUID courseId) {
-    final Optional<Course> courseOpt = getCourse(courseId);
-    if (courseOpt.isPresent()) {
-      final Course course = courseOpt.get();
-      course.getAttendees().remove(user);
-      return save(course);
-    }
-    return null;
-  }
-
   public Course createEmptyCourse(final User user) {
     final Course course = new Course();
     course.setInstructor(user);
     course.setMinutes(minutes);
     course.setStart(nextFullHour());
     course.setMaxParticipants(maxParticipants);
-    course.setAttendees(new ArrayList<>());
     course.setCanceled(false);
     return course;
   }

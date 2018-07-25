@@ -1,13 +1,19 @@
 package freya.fitness.service;
 
+import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
-import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.repository.jpa.RoleRepository;
 import freya.fitness.repository.jpa.UserRepository;
-import freya.fitness.utils.RoleNotFoundException;
-import freya.fitness.utils.UserAllreadyExistsException;
-import freya.fitness.utils.UserNotFoundException;
+import freya.fitness.utils.exception.RoleNotFoundException;
+import freya.fitness.utils.exception.UserAllreadyExistsException;
+import freya.fitness.utils.exception.UserNotFoundException;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,18 +23,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 @Service("userService")
 public class UserService implements UserDetailsService {
 
-  private UserRepository userRepository;
-  private PasswordEncoder passwordEncoder;
-  private RoleRepository roleRepository;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final RoleRepository roleRepository;
 
   @Autowired
   public UserService(
@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
     final User user = userRepository.findByEmailIgnoreCase(email)
         .orElseThrow(() -> new UsernameNotFoundException(
             "Kein User zu E-Mail: '" + email + "' gefunden."));
-    final List<Role> userRoles = user.getRoles();
+    final Set<Role> userRoles = user.getRoles();
     if (userRoles.isEmpty()) {
       throw new UsernameNotFoundException(
           "Keine Rollen zu Benutzer: " + user + " gefunden.");
@@ -97,6 +97,7 @@ public class UserService implements UserDetailsService {
     if (existingUser.isPresent()) {
       throw new UserAllreadyExistsException(email);
     }
+
     final User newUser = new User();
     newUser.setEmail(email);
     newUser.setFirstName(createAccountDto.getFirstname());
@@ -108,7 +109,7 @@ public class UserService implements UserDetailsService {
 
     final Role role = roleRepository.findByAuthority("USER")
         .orElseThrow(() -> new RoleNotFoundException("USER"));
-    newUser.setRoles(Collections.singletonList(role));
+    newUser.setRoles(Collections.singleton(role));
 
     return userRepository.save(newUser);
   }

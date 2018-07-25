@@ -1,13 +1,17 @@
 package freya.fitness.service;
 
+import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
-import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.repository.jpa.RoleRepository;
 import freya.fitness.repository.jpa.UserRepository;
-import freya.fitness.utils.RoleNotFoundException;
-import freya.fitness.utils.UserAllreadyExistsException;
-import freya.fitness.utils.UserNotFoundException;
+import freya.fitness.utils.exception.RoleNotFoundException;
+import freya.fitness.utils.exception.UserAllreadyExistsException;
+import freya.fitness.utils.exception.UserNotFoundException;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,11 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -149,9 +148,9 @@ public class UserServiceTest {
     assertThat(result.getFamilyName(), equalTo(newUser.getFamilyName()));
     assertThat(result.getEmail(), equalTo(newUser.getEmail()));
     assertThat(result.getPassword(), equalTo(newUser.getPassword()));
-    List<Role> roles = result.getRoles();
+    Set<Role> roles = result.getRoles();
     assertThat(roles, hasSize(1));
-    assertThat(roles.get(0), equalTo(roleUser));
+    assertThat(roles.contains(roleUser), equalTo(true));
 
     // Beim Speichern wurde die Rolle ergänzt
     newUser.setRoles(roles);
@@ -184,7 +183,7 @@ public class UserServiceTest {
     final User user = new User();
     user.setEmail(username);
     user.setPassword("test_password");
-    user.setRoles(Collections.singletonList(new Role()));
+    user.setRoles(Collections.singleton(new Role()));
     when(userRepository.findByEmailIgnoreCase(username)).thenReturn(Optional.of(user));
 
     UserDetails result = testee.loadUserByUsername(username);

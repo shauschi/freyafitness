@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -24,6 +25,14 @@ public abstract class BusinessObject {
       @AttributeOverride(name = "to", column = @Column(name = "validity_to"))
   })
   protected Validity validity;
+
+  public boolean isValid() {
+    return validity.isValid(LocalDateTime.now());
+  }
+
+  public boolean isValid(final LocalDateTime dateTime) {
+    return validity.isValid(dateTime);
+  }
 
 }
 

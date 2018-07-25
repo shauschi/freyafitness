@@ -1,8 +1,8 @@
 package freya.fitness.service;
 
 import freya.fitness.api.dto.ContactDto;
-import freya.fitness.utils.MailTemplateNotFoundException;
-import freya.fitness.utils.ResourceLoadingException;
+import freya.fitness.utils.exception.MailTemplateNotFoundException;
+import freya.fitness.utils.exception.ResourceLoadingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ public class ContactService {
   private String emailTo;
 
   private final EmailService emailService;
-
   private final ResourceService resourceService;
 
   @Autowired
@@ -41,23 +40,25 @@ public class ContactService {
   private String getEmailText(final ContactDto contactDto)
       throws MailTemplateNotFoundException {
     final String filename = "contact.html";
+    final String template;
     try {
-      final String template = resourceService.getResourceAsString(filename);
-      final Map<String, String> params = new HashMap<>();
-      params.put("firstname", contactDto.getFirstname());
-      params.put("lastname", contactDto.getLastname());
-      params.put("email", contactDto.getEmail());
-      params.put("telephone", contactDto.getTelephone());
-
-      final String message = contactDto.getMessage();
-      final String replacedMessage = message.replaceAll("\n", "<br/>");
-      params.put("message", replacedMessage);
-
-      return resourceService.replacePlaceholder(template, params);
+      template = resourceService.getResourceAsString(filename);
     } catch (final ResourceLoadingException e) {
       LOGGER.error("Could not read reset password file");
       throw new MailTemplateNotFoundException(filename);
     }
+
+    final Map<String, String> params = new HashMap<>();
+    params.put("firstname", contactDto.getFirstname());
+    params.put("lastname", contactDto.getLastname());
+    params.put("email", contactDto.getEmail());
+    params.put("telephone", contactDto.getTelephone());
+
+    final String message = contactDto.getMessage();
+    final String replacedMessage = message.replaceAll("\n", "<br/>");
+    params.put("message", replacedMessage);
+
+    return resourceService.replacePlaceholder(template, params);
   }
 
 }
