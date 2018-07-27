@@ -27,6 +27,7 @@ import {showNotification} from "../model/notification";
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
 import {ContactCard} from "../components/contact/";
+import FacebookProvider, {Page} from 'react-facebook';
 
 class Home extends Component {
 
@@ -216,6 +217,29 @@ class Home extends Component {
     </Grid>;
   };
 
+  getFacebookEventCard = () => (
+    <Grid item xs={12} sm={8} md={5}>
+      <Card>
+        <CardHeader title='FreyRaum auf facebook'/>
+        <CardContent>
+          <Typography style={{paddingBottom: '16px'}}>
+            Hier siehst du bevorstehende Veranstaltungen auf facebook. Gerne darfst du die Seite auch mit deinen Freunden teilen.
+          </Typography>
+          <FacebookProvider
+            appId="1801602199870336"
+            language='de_DE'>
+            <div style={{textAlign: 'center'}}>
+              <Page
+                href="https://www.facebook.com/freyraum.fitness/"
+                adaptContainerWidth
+                tabs="events"/>
+            </div>
+          </FacebookProvider>
+        </CardContent>
+      </Card>
+    </Grid>
+  );
+
   getUserDetails = () => {
     const signedIn = !!this.props.user;
     if (!signedIn) {
@@ -226,7 +250,7 @@ class Home extends Component {
     const {data = {}} = this.props.courses;
     const myCourses = data.filter(course => course.signedIn);
 
-    return <Grid item xs={12} md={8}>
+    return <Grid item xs={12} sm={8} md={8}>
       <Card>
         <List style={{padding: '0'}}>
           <Subheader label='Meine Kurse'/>
@@ -264,8 +288,10 @@ class Home extends Component {
           {this.getCoursePlan()}
           {/* Kontaktaufnahme */}
           <ContactCard/>
-          {/* Nur bei nicht angemeldeten Benutzern*/}
+          {/* Nur bei nicht angemeldeten Benutzern */}
           {this.getLoginCard()}
+          {/* Bevorstehende Veranstaltungen */}
+          {this.getFacebookEventCard()}
         </Grid>
       </div>
     );
