@@ -72,6 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     config.setAllowedMethods(Arrays.asList(
         HttpMethod.HEAD.name(),
         HttpMethod.OPTIONS.name(),
+        HttpMethod.DELETE.name(),
         HttpMethod.GET.name(),
         HttpMethod.PUT.name(),
         HttpMethod.POST.name()));
