@@ -15,7 +15,7 @@ class ValidationGroup extends Component {
   validate() {
     const errors = [];
     for (const child of this.children) {
-      if (child.validate) {
+      if (!!child && child.validate) {
         const result = child.validate();
         if (!result.valid) {
           errors.push(result.error);
