@@ -102,8 +102,8 @@ class CourseDetails extends Component {
         <ProfilePicture user={user}/>
       </Avatar>
       <span style={{marginLeft: '8px'}}>
-          {user.firstname + ' ' + user.lastname}
-        </span>
+        {user.firstname + ' ' + user.lastname}
+      </span>
     </MenuItem>
   };
 
