@@ -108,7 +108,7 @@ class MyAppBar extends Component {
           {
             'development' === process.env.NODE_ENV
               ? <div style={{position: 'absolute', textAlign: 'center', left: '0px', width: '100%', transform: 'rotate(-10deg)'}}>
-                  <Typography color='secondary' variant='display1ea'>
+                  <Typography color='secondary' variant='display1'>
                     Testumgebung
                   </Typography>
                 </div>
