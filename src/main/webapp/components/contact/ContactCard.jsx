@@ -94,7 +94,7 @@ class ContactCard extends Component {
             <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
               <GridTextControl
                 xs={10}
-                text={'Du hast Lust auf ein Probetraining oder möchtest Freya eine Nachricht schrieben? Dann los:'}/>
+                text={'Du hast Lust auf ein Probetraining oder möchtest Freya eine Nachricht schreiben? Dann los:'}/>
               <Grid item xs={2}>
                 <IconButton
                   className={classnames(classes.expand, {
