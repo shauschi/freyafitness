@@ -40,7 +40,7 @@ class Courses extends Component {
       const formattedMonth = moment(course.start).format(Format.MONTH_FORMAT);
       if (lastMonth !== formattedMonth && lastMonth !== undefined) {
         elements.push(
-          <Grid item xs={12} sm={10} md={6} lg={4}>
+          <Grid item xs={12} sm={10} md={6} lg={4} key={lastMonth}>
             <Card>
               <CardHeader title={lastMonth}/>
               <CardContent style={{padding: '0px'}}>
