@@ -7,7 +7,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const middleware = [
   thunk,
-  logger
+  process.env.NODE_ENV === 'development' && logger
 ].filter(Boolean);
 
 export default createStore(
