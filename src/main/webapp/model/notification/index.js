@@ -19,8 +19,8 @@ export const actions = createActions({
 export const showStickyNotification = (message, variant) =>
   dispatch => dispatch(actions.notification.show({message: message, variant: variant, autoHideDuration: undefined}));
 
-export const showNotification = (message, variant) =>
-  dispatch => dispatch(actions.notification.show({message: message, variant: variant, autoHideDuration: 1500}));
+export const showNotification = (message, variant, autoHideDuration = initialState.autoHideDuration) =>
+  dispatch => dispatch(actions.notification.show({message: message, variant: variant, autoHideDuration: autoHideDuration}));
 
 export const hideNotification = () =>
   dispatch => dispatch(actions.notification.hide());

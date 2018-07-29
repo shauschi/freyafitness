@@ -1,20 +1,18 @@
 import {createActions, handleActions} from 'redux-actions';
 import {
-  getCourses,
-  getCourseDetails,
-  saveCourse,
+  addUserToCourse as addUserToCourseApiCall,
   createNewCourse,
+  deleteCourse as deleteCourseApiCall,
+  getCourseDetails,
+  getCourses,
+  removeUserFromCourse as removeUserFromCourseApiCall,
+  saveCourse,
   saveNewCourse,
   signIn as signInApiCall,
-  signOut as signOutApiCall,
-  addUserToCourse as addUserToCourseApiCall,
-  removeUserFromCourse as removeUserFromCourseApiCall,
-  deleteCourse as deleteCourseApiCall
+  signOut as signOutApiCall
 } from '../../service/courses';
-import {
-  showNotification
-} from './../notification';
-import {viewPath, setPath, assignPath, togglePath} from '../../utils/RamdaUtils';
+import {showNotification} from './../notification';
+import {assignPath, setPath, viewPath} from '../../utils/RamdaUtils';
 
 export const MODE = {
   CREATE: {
