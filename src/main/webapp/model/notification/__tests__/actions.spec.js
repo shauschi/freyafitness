@@ -16,7 +16,7 @@ describe('notification actions', () => {
       showNotification('Test message')(dispatchMock, getMockState);
 
       expect(dispatchMock.mock.calls[0][0]).toEqual(
-        actions.notification.show({message: 'Test message', type: undefined, autoHideDuration: 1500}));
+        actions.notification.show({message: 'Test message', type: undefined, autoHideDuration: 5500}));
     });
 
     it('should dispatch HIDE action', async () => {
