@@ -9,10 +9,12 @@ import freya.fitness.service.CourseService;
 import freya.fitness.service.MembershipService;
 import freya.fitness.service.ParticipationService;
 import freya.fitness.service.UserService;
+import freya.fitness.utils.exception.ActionNotAllowedException;
 import freya.fitness.utils.exception.CourseNotFoundException;
 import freya.fitness.utils.exception.MembershipException;
 import freya.fitness.utils.exception.UserNotFoundException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -126,10 +128,15 @@ public class CourseController {
 
   @PreAuthorize("hasAuthority('USER')")
   @PutMapping("{courseId}/signout")
-  public CourseDto signOut(@PathVariable("courseId") final UUID courseId) {
+  public CourseDto signOut(@PathVariable("courseId") final UUID courseId) throws ActionNotAllowedException {
     final User user = userService.getCurrentUser();
-    final Course course = participationService.removeUserFromCourse(user.getId(), courseId);
-    return new CourseDto(user, course);
+    final Course course = courseService.getCourse(courseId);
+    if (course.getStart().isBefore(LocalDateTime.now().plusHours(3))) {
+      throw new ActionNotAllowedException(
+          "Abmeldungen sind nur bis 3 Stunden vor Kursstart erlaubt.");
+    }
+    final Course updatedCourse = participationService.removeUserFromCourse(user.getId(), courseId);
+    return new CourseDto(user, updatedCourse);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")

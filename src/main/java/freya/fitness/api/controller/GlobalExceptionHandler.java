@@ -1,6 +1,7 @@
 package freya.fitness.api.controller;
 
 import freya.fitness.api.dto.MessageDto;
+import freya.fitness.utils.exception.ActionNotAllowedException;
 import freya.fitness.utils.exception.EntityNotFoundException;
 import freya.fitness.utils.exception.InvalidResetTokenException;
 import javax.mail.MessagingException;
@@ -47,6 +48,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler  {
   @ExceptionHandler(value = MessagingException.class)
   public ResponseEntity<MessageDto> catchMessagingException(
       final MessagingException exception) {
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body(new MessageDto(exception.getMessage()));
+  }
+
+  /**
+   * Global exception handling for {@link ActionNotAllowedException}.
+   * @param exception exception that should be handled
+   * @return bad request with error message
+   */
+  @ExceptionHandler(value = ActionNotAllowedException.class)
+  public ResponseEntity<MessageDto> catchActionNotAllowedException(
+      final ActionNotAllowedException exception) {
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
         .body(new MessageDto(exception.getMessage()));
