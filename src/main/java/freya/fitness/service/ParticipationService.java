@@ -33,7 +33,12 @@ public class ParticipationService {
   }
 
   public boolean hasFreeCapacityOnMembership(final Membership membership) {
-    if (membership == null || !membership.isValid() || membership.getType() == null) {
+    return this.hasFreeCapacityOnMembership(membership, LocalDateTime.now());
+  }
+
+  public boolean hasFreeCapacityOnMembership(
+      final Membership membership, final LocalDateTime dateTime) {
+    if (membership == null || !membership.isValid(dateTime) || membership.getType() == null) {
       return false;
     }
     int max = membership.getType().getMaxParticipations();
