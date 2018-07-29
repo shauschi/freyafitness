@@ -81,6 +81,7 @@ class MyAppBar extends Component {
   };
 
   render() {
+    console.warn("ENV", process.env.NODE_ENV);
     const {toggleDrawer} = this.props;
 
     return (
@@ -104,6 +105,16 @@ class MyAppBar extends Component {
               fontWeight: 'bold'
             }}>RAUM</span>
           </Typography>
+          {
+            'development' === process.env.NODE_ENV
+              ? <div style={{position: 'absolute', textAlign: 'center', left: '0px', width: '100%', transform: 'rotate(-10deg)'}}>
+                  <Typography color='secondary' variant='display1ea'>
+                    Testumgebung
+                  </Typography>
+                </div>
+              : undefined
+          }
+
           {this.getAdditionalAction()}
         </Toolbar>
         {this.getMenu()}

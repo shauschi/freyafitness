@@ -74,7 +74,10 @@ module.exports = {
   plugins: [
     HtmlWebpackPluginConfig,
     new webpack.DefinePlugin({
-      __API__: "'https://127.0.0.1:9443'"
+      __API__: "'https://127.0.0.1:9443'",
+      'process.env': {
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      }
     })
   ],
 };
