@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +33,7 @@ public class TestUtils {
 
   public static Membership givenMembership(boolean isValid, int maxParticipations) {
     final Membership membership = mock(Membership.class);
-    when(membership.isValid()).thenReturn(isValid);
+    when(membership.isValid(any())).thenReturn(isValid);
     final MembershipType type = mock(MembershipType.class);
     when(membership.getType()).thenReturn(type);
     when(type.getMaxParticipations()).thenReturn(maxParticipations);

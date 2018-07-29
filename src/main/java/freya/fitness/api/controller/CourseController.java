@@ -117,9 +117,11 @@ public class CourseController {
   public CourseDto signIn(@PathVariable("courseId") final UUID courseId)
       throws CourseNotFoundException, MembershipException, UserNotFoundException {
     final User user = userService.getCurrentUser();
-    final Membership membership = membershipService.getCurrentMembershipForUser(user.getId());
-    final Course course = participationService.addUserToCourse(membership, courseId);
-    return new CourseDto(user, course);
+    final Course course = courseService.getCourse(courseId);
+    final Membership membership =
+        membershipService.getCurrentMembershipForUser(user.getId(), course.getStart());
+    final Course updatedCourse = participationService.addUserToCourse(membership, courseId);
+    return new CourseDto(user, updatedCourse);
   }
 
   @PreAuthorize("hasAuthority('USER')")
@@ -137,9 +139,11 @@ public class CourseController {
       @PathVariable("userId") final UUID userId)
       throws UserNotFoundException, CourseNotFoundException, MembershipException {
     final User user = userService.getUser(userId);
-    final Membership membership = membershipService.getCurrentMembershipForUser(userId);
-    final Course course = participationService.addUserToCourse(membership, courseId);
-    return new CourseDto(user, course);
+    final Course course = courseService.getCourse(courseId);
+    final Membership membership =
+        membershipService.getCurrentMembershipForUser(userId, course.getStart());
+    final Course updatedCourse = participationService.addUserToCourse(membership, courseId);
+    return new CourseDto(user, updatedCourse);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")

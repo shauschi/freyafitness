@@ -1,10 +1,10 @@
 package freya.fitness.service;
 
 import freya.fitness.domain.jpa.Membership;
-import freya.fitness.domain.jpa.MembershipType;
 import freya.fitness.repository.jpa.MembershipRepository;
 import freya.fitness.utils.exception.MembershipException;
 import freya.fitness.utils.exception.MembershipNotFoundException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,8 +23,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -101,7 +100,7 @@ public class MembershipServiceTest {
     when(membershipRepository.findByUserId(id)).thenReturn(Collections.emptyList());
 
     // when
-    testee.getCurrentMembershipForUser(id);
+    testee.getCurrentMembershipForUser(id, LocalDateTime.now());
 
     // then
     // see expected exception
@@ -119,7 +118,7 @@ public class MembershipServiceTest {
     when(membershipRepository.findByUserId(id)).thenReturn(Collections.singletonList(membership));
 
     // when
-    testee.getCurrentMembershipForUser(id);
+    testee.getCurrentMembershipForUser(id, LocalDateTime.now());
 
     // then
     // see expected exception
@@ -137,7 +136,7 @@ public class MembershipServiceTest {
     when(membershipRepository.findByUserId(id)).thenReturn(Collections.singletonList(membership));
 
     // when
-    testee.getCurrentMembershipForUser(id);
+    testee.getCurrentMembershipForUser(id, LocalDateTime.now());
 
     // then
     // see expected exception
@@ -151,12 +150,12 @@ public class MembershipServiceTest {
     final Membership membership2 = givenMembership(true, -1);
     final Membership membership3 = givenMembership(true, 1);
     when(membershipRepository.findByUserId(id)).thenReturn(Arrays.asList(membership1, membership2, membership3));
-    when(participationService.hasFreeCapacityOnMembership(membership1)).thenReturn(true);
-    when(participationService.hasFreeCapacityOnMembership(membership2)).thenReturn(true);
-    when(participationService.hasFreeCapacityOnMembership(membership3)).thenReturn(true);
+    when(participationService.hasFreeCapacityOnMembership(eq(membership1), any())).thenReturn(true);
+    when(participationService.hasFreeCapacityOnMembership(eq(membership2), any())).thenReturn(true);
+    when(participationService.hasFreeCapacityOnMembership(eq(membership3), any())).thenReturn(true);
 
     // when
-    final Membership result = testee.getCurrentMembershipForUser(id);
+    final Membership result = testee.getCurrentMembershipForUser(id, LocalDateTime.now());
 
     // then
     assertThat(result, is(membership2));
