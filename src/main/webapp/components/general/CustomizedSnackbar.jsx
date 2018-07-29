@@ -21,6 +21,9 @@ const variantIcon = {
 };
 
 const styles1 = theme => ({
+  content: {
+    flexWrap: 'nowrap',
+  },
   success: {
     backgroundColor: green[600],
   },
@@ -52,7 +55,7 @@ function MySnackbarContent(props) {
 
   return (
     <SnackbarContent
-      className={classNames(classes[variant], className)}
+      className={classNames(classes[variant], classes.content, className)}
       aria-describedby="client-snackbar"
       message={
         <span id="client-snackbar" className={classes.message}>
@@ -86,13 +89,7 @@ MySnackbarContent.propTypes = {
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
-const styles2 = theme => ({
-  margin: {
-    margin: theme.spacing.unit,
-  },
-});
-
-class CustomizedSnackbars extends React.Component {
+class CustomizedSnackbar extends React.Component {
 
   render() {
     const {open, variant = 'info', message, onClose, autoHideDuration} = this.props;
@@ -117,11 +114,11 @@ class CustomizedSnackbars extends React.Component {
   }
 }
 
-CustomizedSnackbars.propTypes = {
+CustomizedSnackbar.propTypes = {
   open: PropTypes.bool.isRequired,
   variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']),
   message: PropTypes.node,
   onClose: PropTypes.func
 };
 
-export default withStyles(styles2)(CustomizedSnackbars);
+export default CustomizedSnackbar;
