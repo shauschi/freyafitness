@@ -81,7 +81,7 @@ public class ParticipationServiceTest {
   public void shouldNotHaveFreeCapacityForMembershipWithoutType() {
     // given
     final Membership membership = mock(Membership.class);
-    when(membership.isValid()).thenReturn(true);
+    when(membership.isValid(any())).thenReturn(true);
 
     // when
     boolean result = testee.hasFreeCapacityOnMembership(membership);
