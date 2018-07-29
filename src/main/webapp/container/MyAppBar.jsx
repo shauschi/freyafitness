@@ -81,7 +81,6 @@ class MyAppBar extends Component {
   };
 
   render() {
-    console.warn("ENV", process.env.NODE_ENV);
     const {toggleDrawer} = this.props;
 
     return (
