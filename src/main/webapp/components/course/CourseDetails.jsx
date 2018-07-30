@@ -331,7 +331,7 @@ class CourseDetails extends Component {
 
           {
             (roles.ADMIN || roles.TRAINER)
-            ? <Grid container spacing={8} style={{width: '100%', margin: '0px', padding: '16px'}}>
+            ? <Grid container spacing={8} justify='center' style={{width: '100%', margin: '0px', padding: '16px'}}>
                 <Grid item xs={12} sm={8}>
                   <ConfirmButton
                     question='Möchtest du den Kurs wirklich löschen?'
