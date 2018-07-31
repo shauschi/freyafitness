@@ -2,6 +2,7 @@ package freya.fitness.api.mapping;
 
 import freya.fitness.api.dto.MembershipDto;
 import freya.fitness.api.dto.UserDto;
+import freya.fitness.api.dto.UserPreferenceDto;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
@@ -18,12 +19,15 @@ public class UserMapper {
 
   private final MembershipService membershipService;
   private final MembershipMapper membershipMapper;
+  private final UserPreferencesMapper userPreferencesMapper;
 
   @Autowired
   public UserMapper(final MembershipService membershipService,
-                    final MembershipMapper membershipMapper) {
+                    final MembershipMapper membershipMapper,
+                    final UserPreferencesMapper userPreferencesMapper) {
     this.membershipService = membershipService;
     this.membershipMapper = membershipMapper;
+    this.userPreferencesMapper = userPreferencesMapper;
   }
 
   public UserDto map(final User user) {
@@ -52,8 +56,13 @@ public class UserMapper {
         .collect(Collectors.toList());
     dto.setMemberships(membershipDtos);
 
+    // preferences
+    final List<UserPreferenceDto> preferences = user.getPreferences().stream()
+        .map(userPreferencesMapper::map)
+        .collect(Collectors.toList());
+    dto.setPreferences(preferences);
+
     return dto;
   }
-
 
 }
