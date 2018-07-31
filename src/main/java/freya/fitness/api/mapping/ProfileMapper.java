@@ -3,10 +3,6 @@ package freya.fitness.api.mapping;
 import freya.fitness.api.dto.ProfileDto;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.domain.jpa.UserPreference;
-import java.util.UUID;
-import java.util.function.Predicate;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,11 +31,11 @@ public class ProfileMapper {
   }
 
   private boolean userWantsPrivacy(final User user) {
-    return user.getPreferences().stream()
+    return !user.getPreferences().stream()
         .filter(userPreference -> UserPreference.VIEW_PARTICIPATION.equals(userPreference.getKey()))
         .findFirst()
         .map(UserPreference::getValue)
-        .filter("false"::equalsIgnoreCase)
+        .filter("true"::equalsIgnoreCase)
         .isPresent();
   }
 

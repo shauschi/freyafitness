@@ -1,19 +1,21 @@
 package freya.fitness.service;
 
 import freya.fitness.domain.jpa.User;
+import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.mongodb.ProfilePictureRepository;
 import freya.fitness.utils.Size;
 import freya.fitness.utils.exception.UserNotFoundException;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.UUID;
 
 import static freya.fitness.TestUtils.testUser;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,6 +43,14 @@ public class ProfilePictureServiceTest {
   public void test_getProfilePictureData() throws IOException {
     when(profilePictureRepository.getByUserIdAndSize(userId, Size.ORIGINAL))
         .thenReturn(new byte[]{1, 0, 1, 1});
+    User user = new User();
+    user.setRoles(Collections.emptySet());
+    UserPreference preference = new UserPreference();
+    preference.setKey(UserPreference.VIEW_PROFILE_PICTURE);
+    preference.setValue("true");
+    user.setPreferences(Sets.newSet(preference));
+    when(userService.getCurrentUser()).thenReturn(user);
+    when(userService.getUser(any())).thenReturn(user);
 
     byte[] result = testee.getProfilePictureData(userId, Size.ORIGINAL);
 

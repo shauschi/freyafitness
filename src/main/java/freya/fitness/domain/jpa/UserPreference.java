@@ -25,6 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class UserPreference {
 
   public static final String VIEW_PARTICIPATION = "VIEW_PARTICIPATION";
+  public static final String VIEW_PROFILE_PICTURE = "VIEW_PROFILE_PICTURE";
 
   @Id
   @GeneratedValue(generator = "UUID")
