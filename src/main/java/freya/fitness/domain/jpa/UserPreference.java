@@ -10,17 +10,21 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
 @EqualsAndHashCode(exclude = "user")
+@ToString(exclude = "user")
 @Table(
     name = "user_preference",
     schema = "public",
     uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "key"})
 )
 public class UserPreference {
+
+  public static final String VIEW_PARTICIPATION = "VIEW_PARTICIPATION";
 
   @Id
   @GeneratedValue(generator = "UUID")

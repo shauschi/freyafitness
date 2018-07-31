@@ -1,7 +1,7 @@
 package freya.fitness.service;
 
 import freya.fitness.api.dto.CourseDto;
-import freya.fitness.api.mapping.CourseDtoToCourseMapper;
+import freya.fitness.api.mapping.CourseMapper;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.jpa.CourseRepository;
@@ -28,12 +28,12 @@ public class CourseService {
   private int maxParticipants;
 
   private final CourseRepository courseRepository;
-  private final CourseDtoToCourseMapper courseDtoToCourseMapper;
+  private final CourseMapper courseDtoToCourseMapper;
 
   @Autowired
   public CourseService(
       final CourseRepository courseRepository,
-      final CourseDtoToCourseMapper courseDtoToCourseMapper) {
+      final CourseMapper courseDtoToCourseMapper) {
     this.courseRepository = courseRepository;
     this.courseDtoToCourseMapper = courseDtoToCourseMapper;
   }
@@ -60,7 +60,7 @@ public class CourseService {
 
   public Course update(final UUID courseId, final CourseDto courseDto) throws CourseNotFoundException {
     final Course existingCourse = courseId == null ? null : getCourse(courseId);
-    final Course course = courseDtoToCourseMapper.apply(courseDto, existingCourse);
+    final Course course = courseDtoToCourseMapper.map(courseDto, existingCourse);
     return save(course);
   }
 
@@ -69,7 +69,7 @@ public class CourseService {
   }
 
   public Course create(final CourseDto courseDto) {
-    final Course course = courseDtoToCourseMapper.apply(courseDto, null);
+    final Course course = courseDtoToCourseMapper.map(courseDto, null);
     return save(course);
   }
 

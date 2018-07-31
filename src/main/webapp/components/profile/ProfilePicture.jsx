@@ -29,7 +29,7 @@ class ProfilePicture extends Component {
   updatePicture() {
     const {user = {}, size = 'MINI'} = this.props;
     const {id} = user;
-    if (this.state.userId !== id) {
+    if (!!id && this.state.userId !== id) {
       this.setState(assignPath([], {loading: true, userId: id}, this.state));
       getProfilePicture(id, size)
         .then(pictureData => {

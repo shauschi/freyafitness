@@ -38,6 +38,7 @@ import {
   toggleEditCourse
 } from '../../model/courses';
 import {updateUsers} from '../../model/profile';
+import {comparingMod} from "../../utils/Comparator";
 
 class CourseDetails extends Component {
 
@@ -323,7 +324,7 @@ class CourseDetails extends Component {
               />
               <GridTextControl text={'Teilnehmer'}/>
               {trainerOrAdmin ? this.getUserMenu() : undefined}
-              {trainerOrAdmin ? this.getAttendeeList(attendees) : undefined}
+              {this.getAttendeeList(attendees)}
               {trainerOrAdmin ? this.getAddUserButton() : undefined}
               {trainerOrAdmin ? this.getAddUserMenu() : undefined}
             </ValidationGroup>

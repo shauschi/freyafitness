@@ -2,7 +2,7 @@ package freya.fitness.service;
 
 import freya.fitness.api.dto.CourseDto;
 import freya.fitness.domain.jpa.Course;
-import freya.fitness.api.mapping.CourseDtoToCourseMapper;
+import freya.fitness.api.mapping.CourseMapper;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.jpa.CourseRepository;
 import java.time.LocalDate;
@@ -44,7 +44,7 @@ public class CourseServiceTest {
   private CourseRepository courseRepository;
 
   @Mock
-  private CourseDtoToCourseMapper courseDtoToCourseMapper;
+  private CourseMapper courseDtoToCourseMapper;
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -111,7 +111,7 @@ public class CourseServiceTest {
     Course course = new Course();
     course.setId(uuid);
     when(courseRepository.save(any())).thenReturn(course);
-    when(courseDtoToCourseMapper.apply(any(), any())).thenReturn(course);
+    when(courseDtoToCourseMapper.map(any(), any())).thenReturn(course);
 
     // when
     Course result = testee.update(null, courseDto);
@@ -120,21 +120,21 @@ public class CourseServiceTest {
     assertThat(result, notNullValue());
     assertThat(result.getId(), equalTo(uuid));
     verify(courseRepository, never()).findById(any());
-    verify(courseDtoToCourseMapper).apply(courseDto, null);
+    verify(courseDtoToCourseMapper).map(courseDto, null);
     verify(courseRepository).save(any());
   }
 
   @Test
   public void test_create_null() {
     // given
-    when(courseDtoToCourseMapper.apply(isNull(), any())).thenReturn(null);
+    when(courseDtoToCourseMapper.map(isNull(), any())).thenReturn(null);
 
     // when
     Course result = testee.create(null);
 
     // then
     assertThat(result, nullValue());
-    verify(courseDtoToCourseMapper).apply(isNull(), any());
+    verify(courseDtoToCourseMapper).map(isNull(), any());
   }
 
   @Test
@@ -142,7 +142,7 @@ public class CourseServiceTest {
     // given
     CourseDto dto = new CourseDto();
     Course expectedResult = new Course();
-    when(courseDtoToCourseMapper.apply(eq(dto), isNull())).thenReturn(expectedResult);
+    when(courseDtoToCourseMapper.map(eq(dto), isNull())).thenReturn(expectedResult);
     when(courseRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
     // when
@@ -151,7 +151,7 @@ public class CourseServiceTest {
     // then
     assertThat(result, notNullValue());
     assertThat(result, equalTo(expectedResult));
-    verify(courseDtoToCourseMapper).apply(eq(dto), isNull());
+    verify(courseDtoToCourseMapper).map(eq(dto), isNull());
   }
 
   @Test
