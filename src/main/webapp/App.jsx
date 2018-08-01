@@ -10,7 +10,18 @@ import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsPr
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import {Footer, MyAppBar, MyDrawer} from './container';
 import {CustomizedSnackbar, LoadingIndicator} from './components/general';
-import {AboutCourses, AboutFreya, AboutFreyRaum, Agb, Courses, Home, Impressum, ProfileSite} from './sites';
+import {
+  AboutCourses,
+  AboutFreya,
+  AboutFreyRaum,
+  Agb,
+  Courses,
+  Home,
+  Impressum,
+  ProfileSite,
+  Preferences,
+  Statistics
+} from './sites';
 import {CourseDetails} from './components/course';
 import {CreateMembership} from './components/membership';
 import * as Style from './utils/Style';
@@ -72,8 +83,10 @@ class App extends Component {
                 <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
                 <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
                 <Route exact path='/' component={Home}/>
+                <Route exact path='/statistics' component={Statistics}/>
                 <Route exact path='/courses/all' component={Courses}/>
                 <Route exact path='/profile' component={ProfileSite}/>
+                <Route exact path='/preferences' component={Preferences}/>
               </Switch>
           }
           {

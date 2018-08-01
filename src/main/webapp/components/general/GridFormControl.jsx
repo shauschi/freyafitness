@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -89,7 +90,28 @@ export class GridCheckboxControl extends ValidationControl {
         }
         label={label}
       />
-      <FormHelperText>{errors}</FormHelperText>
+      {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
+    </GridFormControl>;
+  }
+}
+
+export class GridSwitchControl extends ValidationControl {
+
+  render() {
+    const {valid, errors} = this.state;
+    const {id, value, onChange, label, xs, sm, md} = this.props;
+    return <GridFormControl error={!valid} xs={xs} sm={sm} md={md}>
+      <FormControlLabel
+        control={
+          <Switch
+            id={id}
+            checked={value} // has to be value, because of ValidationControl
+            onChange={event => onChange(id, event.target.checked)}
+          />
+        }
+        label={label}
+      />
+      {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
     </GridFormControl>;
   }
 }
@@ -122,7 +144,7 @@ export class GridPasswordControl extends ValidationControl {
             </IconButton>
           </InputAdornment>
       }/>
-      <FormHelperText>{errors}</FormHelperText>
+      {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
     </GridFormControl>;
   }
 }
@@ -165,7 +187,7 @@ export class GridItemSelectControl extends ValidationControl {
           </MenuItem>
         )}
       </Select>
-      <FormHelperText>{errors}</FormHelperText>
+      {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
     </GridFormControl>
   }
 
@@ -189,7 +211,7 @@ export class GridDateControl extends ValidationControl {
         disableOpenOnEnter={readonly}
         InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
       />
-      <FormHelperText>{errors}</FormHelperText>
+      {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
     </GridFormControl>;
   }
 }
@@ -213,7 +235,7 @@ export class GridDateTimeControl extends ValidationControl {
         disableOpenOnEnter={readonly}
         InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
       />
-      <FormHelperText>{errors}</FormHelperText>
+      {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
     </GridFormControl>;
   }
 }

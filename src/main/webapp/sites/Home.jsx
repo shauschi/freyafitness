@@ -28,6 +28,10 @@ import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
 import {ContactCard} from "../components/contact/";
 import FacebookProvider, {Page} from 'react-facebook';
+import moment from "moment/moment";
+import {comparingMod} from "../utils/Comparator";
+
+const compareCourseByStartDate = comparingMod('start', moment);
 
 class Home extends Component {
 
@@ -249,6 +253,7 @@ class Home extends Component {
     const {showCourseDetails, signIn, signOut} = this.props.actions;
     const {data = {}} = this.props.courses;
     const myCourses = data.filter(course => course.signedIn);
+    myCourses.sort(compareCourseByStartDate);
 
     return <Grid item xs={12} sm={8} md={8}>
       <Card>

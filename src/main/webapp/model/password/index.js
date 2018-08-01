@@ -8,15 +8,17 @@ import {
   showNotification
 } from './../notification';
 
-const initialState = {
+export  const initialState = {
   open: false,
   pending: false,
   message: undefined,
   show: false,
   errorMessage: undefined,
-  oldPassword: '',
-  newPassword: '',
-  newPasswordConfirm: ''
+  data: {
+    oldPassword: '',
+    password: '',
+    matchingPassword: ''
+  }
 };
 
 export const actions = createActions({
@@ -58,21 +60,15 @@ export const onCancelPasswordChange = () => {
 export default handleActions({
   [actions.password.change.pending]: state => setPath(['pending'], true, state),
   [actions.password.change.success]: state =>
-    assignPath([], {pending: false, open: false, errorMessage: null}, state),
+    assignPath([], {pending: false, open: false, data: initialState.data, errorMessage: undefined}, state),
   [actions.password.error]: (state, {payload}) =>
     assignPath([], {pending: false, errorMessage: payload.message}, state),
   [actions.password.open]: state =>
     setPath(['open'], true, state)
   ,
   [actions.password.cancel]: state =>
-    assignPath([],
-      {
-        open: false,
-        oldPassword: '',
-        newPassword: '',
-        newPasswordConfirm: ''
-      }, state)
+    assignPath([], {open: false, data: initialState.data}, state)
   ,
   [actions.password.changing]: (state, {payload}) =>
-    setPath([...payload.path], payload.value, state),
+    setPath(['data', ...payload.path], payload.value, state),
 }, initialState);

@@ -38,6 +38,7 @@ import {
   toggleEditCourse
 } from '../../model/courses';
 import {updateUsers} from '../../model/profile';
+import {comparingMod} from "../../utils/Comparator";
 
 class CourseDetails extends Component {
 
@@ -323,7 +324,7 @@ class CourseDetails extends Component {
               />
               <GridTextControl text={'Teilnehmer'}/>
               {trainerOrAdmin ? this.getUserMenu() : undefined}
-              {trainerOrAdmin ? this.getAttendeeList(attendees) : undefined}
+              {this.getAttendeeList(attendees)}
               {trainerOrAdmin ? this.getAddUserButton() : undefined}
               {trainerOrAdmin ? this.getAddUserMenu() : undefined}
             </ValidationGroup>
@@ -331,7 +332,7 @@ class CourseDetails extends Component {
 
           {
             (roles.ADMIN || roles.TRAINER)
-            ? <Grid container spacing={8} style={{width: '100%', margin: '0px', padding: '16px'}}>
+            ? <Grid container spacing={8} justify='center' style={{width: '100%', margin: '0px', padding: '16px'}}>
                 <Grid item xs={12} sm={8}>
                   <ConfirmButton
                     question='Möchtest du den Kurs wirklich löschen?'

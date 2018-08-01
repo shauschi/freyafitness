@@ -10,10 +10,11 @@ import {
   passwordForgotten as passwordForgottenApiCall,
   resetPassword as resetPasswordApiCall,
 } from '../../service/profile';
+import {updatePreference as updatePreferenceApiCall} from '../../service/preferences';
 import {
   actions as drawerActions
 } from './../drawer';
-import {setPath, assignPath} from '../../utils/RamdaUtils';
+import {setPath, assignPath, viewPath} from '../../utils/RamdaUtils';
 import init from './../init.js';
 import {showNotification} from "../notification";
 
@@ -69,6 +70,10 @@ const initialState = {
       matchingPassword: "",
       acceptAgb: false
     }
+  },
+  updatePreference: {
+    pending: false,
+    error: undefined
   }
 };
 
@@ -135,6 +140,13 @@ export const actions = createActions({
     SUCCESS: profile => profile,
     ERROR: error => error,
     DATA_CHANGED: (id, value) => ({id: id, value: value}),
+  },
+  UPDATE_PREFERENCE: {
+    SAVE: {
+      PENDING: undefined,
+      SUCCESS: answer => answer,
+      ERROR: error => error
+    }
   }
 });
 
@@ -290,6 +302,28 @@ export const saveProfilePicture = file => {
   }
 };
 
+export const updatePreference = data =>
+  dispatch => {
+    dispatch(actions.updatePreference.save.pending());
+    return updatePreferenceApiCall(data)
+      .then(() => {
+        dispatch(actions.updatePreference.save.success(data));
+      })
+      .catch(error => dispatch(actions.updatePreference.save.error(error.message)));
+  };
+
+const updateUserPreferences = (state, preference) => {
+  const preferences = viewPath(['user', 'preferences'], state);
+  for (const idx in preferences) {
+    if (preferences[idx].key === preference.key) {
+      preferences[idx] = preference;
+      return setPath(['user', 'preferences'], preferences, state);
+    }
+  }
+  preferences.push(preference);
+  return setPath(['user', 'preferences'], preferences, state);
+};
+
 export default handleActions({
   [actions.showLogin]: state => setPath(['showLogin'], true, state),
   [actions.showRegistration]: state => setPath(['showLogin'], false, state),
@@ -379,4 +413,15 @@ export default handleActions({
     assignPath(['users'], {pending: false, data: payload, error: undefined}, state),
   [actions.users.error]: state =>
     assignPath(['users'], {pending: false, error: error}, state),
+
+  // save preferences
+  [actions.updatePreference.save.pending]: state =>
+    assignPath(['updatePreference'], {pending: true, error: undefined}, state),
+  [actions.updatePreference.save.success]: (state, {payload}) => {
+    const updatedState = assignPath(['updatePreference'], {pending: false, error: undefined}, state);
+    return updateUserPreferences(state, payload);
+  },
+  [actions.updatePreference.save.error]: state =>
+    assignPath(['updatePreference'], {pending: false, error: error}, state),
+
 }, initialState);

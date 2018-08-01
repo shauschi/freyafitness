@@ -6,16 +6,12 @@ import {connect} from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import {IconBatteryLow, IconCamera, IconLineChart, IconLockClosed} from './../utils/Icons';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import List from '@material-ui/core/List';
+import {IconCamera} from './../utils/Icons';
 import Typography from '@material-ui/core/Typography';
 import {ProfilePicture, ProfilePictureDialog} from './../components/profile';
-import {ChangePasswordDialog} from '../components/account';
 import {LoadingIndicator, Subheader} from '../components/general';
 import {
   changeTempProfilePicture,
@@ -29,7 +25,6 @@ import {changePassword, onCancelPasswordChange, onOpenPasswordChange, onPassword
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
 import {viewPath} from "../utils/RamdaUtils";
-import {red} from "@material-ui/core/colors/index";
 import Membership from './../components/membership';
 
 class ProfileSite extends Component {
@@ -108,25 +103,6 @@ class ProfileSite extends Component {
             </Grid>
 
             {this.renderMemberships()}
-
-            <Grid item xs={12} sm={8}>
-              <Card>
-                <List style={{padding: '0'}}>
-                  <ListItem button>
-                    <ListItemIcon>
-                      <IconLineChart/>
-                    </ListItemIcon>
-                    <ListItemText primary={"Statistiken (folgt)"}/>
-                  </ListItem>
-                  <ListItem button onClick={() => actions.onOpenPasswordChange()}>
-                    <ListItemIcon>
-                      <IconLockClosed/>
-                    </ListItemIcon>
-                    <ListItemText primary={"Passwort ändern"}/>
-                  </ListItem>
-                </List>
-              </Card>
-            </Grid>
           </Grid>
 
           <ProfilePictureDialog
@@ -137,15 +113,6 @@ class ProfileSite extends Component {
             changeTempProfilePicture={actions.changeTempProfilePicture}
             onSave={actions.saveProfilePicture}
             onClose={actions.closeProfilePictureChangeDialog}
-          />
-          <ChangePasswordDialog
-            formData={password}
-            pending={password.pending}
-            open={password.open}
-            errorMessage={password.errorMessage}
-            onClose={actions.onCancelPasswordChange}
-            onPasswordChange={actions.onPasswordChange}
-            onSave={actions.changePassword}
           />
         </div>
       );
