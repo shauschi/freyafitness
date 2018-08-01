@@ -10,7 +10,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import {LoadingIndicator} from '.';
 
-const EnhancedSwipeableViews = autoPlay(SwipeableViews);
+const EnhancedSwipeableViews = SwipeableViews;//autoPlay(SwipeableViews);
 
 const sliderStyles = () => ({
   container: {
@@ -23,9 +23,9 @@ const sliderStyles = () => ({
     padding: '0'
   },
   stepperContainer: {
-    position: 'absolute',
-    bottom: '0',
-    width: '100%'
+    //position: 'absolute',
+    //bottom: '0',
+    //width: '100%'
   }
 });
 

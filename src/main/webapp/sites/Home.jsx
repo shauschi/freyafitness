@@ -29,9 +29,10 @@ import * as Style from "../utils/Style";
 import {ContactCard} from "../components/contact/";
 import FacebookProvider, {Page} from 'react-facebook';
 import moment from "moment/moment";
-import {comparingMod} from "../utils/Comparator";
+import {comparingMod, comparingModFunc, DESC} from "../utils/Comparator";
 
 const compareCourseByStartDate = comparingMod('start', moment);
+const compareNewsByValidityFromDate = comparingModFunc(news => news.validity.from, moment, DESC);
 
 class Home extends Component {
 
@@ -63,16 +64,21 @@ class Home extends Component {
 
   getNews = () => {
     const newsData = this.props.news.data || [];
+    newsData.sort(compareNewsByValidityFromDate);
     return <Grid item xs={12} md={8}>
-      <Slider loading={this.props.news.pending}>
-        {newsData.map((newsItem, idx) => (
-          <NewsItem
-            key={idx}
-            title={newsItem.title}
-            text={newsItem.teaser}
-            img={__API__ + '/test' + newsItem.pictureId + '.jpg'}/>
-        ))}
-      </Slider>
+      <Card>
+        <Slider loading={this.props.news.pending}>
+          {newsData.map((newsItem, idx) => (
+            <NewsItem
+              key={idx}
+              title={newsItem.title}
+              teaser={newsItem.teaser}
+              text={newsItem.text}
+              validity={newsItem.validity}
+              img={__API__ + '/test' + newsItem.pictureId + '.jpg'}/>
+          ))}
+        </Slider>
+      </Card>
     </Grid>
   };
 
