@@ -1,4 +1,5 @@
 export {default as Home} from './Home.jsx';
+export {default as Statistics} from './Statistics.jsx';
 export {default as Courses} from './Courses.jsx';
 export {default as ProfileSite} from './ProfileSite.jsx';
 export {default as Preferences} from './Preferences.jsx';

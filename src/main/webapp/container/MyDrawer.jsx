@@ -7,7 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import {MenuLink} from '../components/general';
 
-import {IconCalendar, IconDocument, IconHome, IconInfo, IconSignIn, IconSignOut, IconUser} from '../utils/Icons';
+import {IconCalendar, IconDocument, IconHome, IconInfo, IconSignIn, IconSignOut, IconUser, IconLineChart, IconPreferences} from '../utils/Icons';
 
 class MyDrawer extends Component {
 
@@ -29,7 +29,12 @@ class MyDrawer extends Component {
           <Divider/>
           <div style={{overflowY: 'auto', height: '100vh'}}>
             <List>
-              <MenuLink to='/' label='Home' icon={<IconHome/>} onClick={toggleDrawer}/>
+              <MenuLink color='primary' to='/' label='Home' icon={<IconHome/>} onClick={toggleDrawer}/>
+              {
+                currentUser
+                  ? <MenuLink to='/statistics' label='Statistiken und PR' icon={<IconLineChart/>} onClick={toggleDrawer}/>
+                  : undefined
+              }
               {
                 currentUser
                   ? <MenuLink to='/courses/all' label='Alle Kurse' icon={<IconCalendar/>} onClick={toggleDrawer}/>
@@ -37,7 +42,12 @@ class MyDrawer extends Component {
               }
               {
                 currentUser
-                  ? <MenuLink to='/profile' label='Profile' icon={<IconUser/>} onClick={toggleDrawer}/>
+                  ? <MenuLink to='/profile' label='Profil' icon={<IconUser/>} onClick={toggleDrawer}/>
+                  : undefined
+              }
+              {
+                currentUser
+                  ? <MenuLink to='/preferences' label='Einstellungen' icon={<IconPreferences/>} onClick={toggleDrawer}/>
                   : undefined
               }
             </List>
