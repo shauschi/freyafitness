@@ -16,5 +16,6 @@ public class UserDto {
   private String email;
   private Map<String, Boolean> roles;
   private List<MembershipDto> memberships;
+  private List<UserPreferenceDto> preferences;
 
 }

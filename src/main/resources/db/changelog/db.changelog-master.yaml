@@ -17,3 +17,5 @@ databaseChangeLog:
         path: db/changelog/005__remove_profile_picture_id/
     - includeAll:
         path: db/changelog/006__memberships/
+    - includeAll:
+        path: db/changelog/007__user_preferences/

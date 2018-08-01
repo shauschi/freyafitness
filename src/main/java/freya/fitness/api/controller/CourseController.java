@@ -2,6 +2,7 @@ package freya.fitness.api.controller;
 
 import freya.fitness.api.dto.CourseDto;
 import freya.fitness.api.dto.MessageDto;
+import freya.fitness.api.mapping.CourseMapper;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.User;
@@ -38,25 +39,27 @@ public class CourseController {
   private final UserService userService;
   private final ParticipationService participationService;
   private final MembershipService membershipService;
+  private final CourseMapper courseMapper;
 
   @Autowired
   public CourseController(
       final CourseService courseService,
       final UserService userService,
       final ParticipationService participationService,
-      final MembershipService membershipService) {
+      final MembershipService membershipService,
+      final CourseMapper courseMapper) {
     this.courseService = courseService;
     this.userService = userService;
     this.participationService = participationService;
     this.membershipService = membershipService;
+    this.courseMapper = courseMapper;
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/{id}")
   public CourseDto getCourseDetails(@PathVariable("id") final UUID id) throws CourseNotFoundException {
-    final User user = userService.getCurrentUser();
     final Course course = courseService.getCourse(id);
-    return new CourseDto(user, course);
+    return courseMapper.map(course);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
@@ -64,9 +67,8 @@ public class CourseController {
   public CourseDto saveCourse(
       @PathVariable("id") final UUID id,
       @RequestBody final CourseDto courseDto) throws CourseNotFoundException {
-    final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.update(id, courseDto);
-    return new CourseDto(user, updatedCourse);
+    return courseMapper.map(updatedCourse);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
@@ -81,7 +83,7 @@ public class CourseController {
   public CourseDto createNewCourse() {
     final User user = userService.getCurrentUser();
     final Course course = courseService.createEmptyCourse(user);
-    return new CourseDto(user, course);
+    return courseMapper.map(course);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
@@ -89,19 +91,18 @@ public class CourseController {
   public CourseDto saveNewCourse(@RequestBody final CourseDto courseDto) {
     final User user = userService.getCurrentUser();
     final Course updatedCourse = courseService.create(courseDto);
-    return new CourseDto(user, updatedCourse);
+    return courseMapper.map(updatedCourse);
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/from/{from}")
   public List<CourseDto> getCourses(@PathVariable("from") final String fromAsString) {
-    final User user = userService.getCurrentUser();
     final LocalDate from = LocalDate.parse(fromAsString);
     final List<Course> courses = courseService.getCoursesFrom(from);
     if (courses.isEmpty()) {
       return Collections.emptyList();
     }
-    return toDtos(user, courses);
+    return toDtos(courses);
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
@@ -109,9 +110,8 @@ public class CourseController {
   public List<CourseDto> getCourses(
       @PathVariable("from") final String from,
       @PathVariable("to") final String to) {
-    final User user = userService.getCurrentUser();
     final List<Course> courses = courseService.getCourses(LocalDate.parse(from), LocalDate.parse(to));
-    return toDtos(user, courses);
+    return toDtos(courses);
   }
 
   @PreAuthorize("hasAuthority('USER')")
@@ -123,7 +123,7 @@ public class CourseController {
     final Membership membership =
         membershipService.getCurrentMembershipForUser(user.getId(), course.getStart());
     final Course updatedCourse = participationService.addUserToCourse(membership, courseId);
-    return new CourseDto(user, updatedCourse);
+    return courseMapper.map(updatedCourse);
   }
 
   @PreAuthorize("hasAuthority('USER')")
@@ -136,7 +136,7 @@ public class CourseController {
           "Abmeldungen sind nur bis 3 Stunden vor Kursstart erlaubt.");
     }
     final Course updatedCourse = participationService.removeUserFromCourse(user.getId(), courseId);
-    return new CourseDto(user, updatedCourse);
+    return courseMapper.map(updatedCourse);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
@@ -150,7 +150,7 @@ public class CourseController {
     final Membership membership =
         membershipService.getCurrentMembershipForUser(userId, course.getStart());
     final Course updatedCourse = participationService.addUserToCourse(membership, courseId);
-    return new CourseDto(user, updatedCourse);
+    return courseMapper.map(updatedCourse);
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
@@ -160,12 +160,12 @@ public class CourseController {
       @PathVariable("userId") final UUID userId) {
     final User user = userService.getUser(userId);
     final Course course = participationService.removeUserFromCourse(userId, courseId);
-    return new CourseDto(user, course);
+    return courseMapper.map(course);
   }
 
-  private List<CourseDto> toDtos(User user, List<Course> courses) {
+  private List<CourseDto> toDtos(final List<Course> courses) {
     return courses.stream()
-        .map(course -> new CourseDto(user, course))
+        .map(courseMapper::map)
         .collect(Collectors.toList());
   }
 

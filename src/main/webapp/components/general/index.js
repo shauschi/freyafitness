@@ -19,5 +19,6 @@ export {
   GridDateControl,
   GridDateTimeControl,
   GridItemSelectControl,
-  GridCheckboxControl
+  GridCheckboxControl,
+  GridSwitchControl
 } from './GridFormControl.jsx';

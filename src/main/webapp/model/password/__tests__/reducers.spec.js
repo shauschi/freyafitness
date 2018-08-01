@@ -1,15 +1,11 @@
-import reducer, {actions} from '../';
+import reducer, {actions, initialState} from '../';
 
 describe('password reducer', () => {
 
   let state;
 
   beforeEach(() => {
-    state = {
-      pending: false,
-      errorMessage: null,
-      open: false
-    }
+    state = initialState
   });
 
   describe('with PENDING action', () => {
