@@ -71,7 +71,7 @@ class Preferences extends Component {
 
   render() {
     const {profile} = this.props;
-    if (profile.pending) {
+    if (profile.pending || !this.props.user) {
       return (<LoadingIndicator/>);
     } else {
       const {expanded} = this.state;
@@ -104,25 +104,25 @@ class Preferences extends Component {
                     {
                       this.getSwitch({
                         key: 'VIEW_PARTICIPATION',
-                        label: 'Andere Benutzer dürfen sehen, wenn du an Kursen teilnimmst',
+                        label: 'Andere Benutzer dürfen sehen, wenn du an Kursen teilnimmst'
                       })
                     }
                     {
                       this.getSwitch({
                         key: 'VIEW_PROFILE_PICTURE',
-                        label: 'Andere Benutzer dürfen dein Profilbild sehen',
+                        label: 'Andere Benutzer dürfen dein Profilbild sehen'
                       })
                     }
                     {
                       this.getSwitch({
                         key: 'VIEW_PROFILE',
-                        label: 'Andere Benutzer dürfen dein Profil sehen',
+                        label: 'Andere Benutzer dürfen dein Profil sehen'
                       })
                     }
                     {
                       this.getSwitch({
                         key: 'VIEW_STATISTICS',
-                        label: 'Andere Benutzer dürfen deine Statistiken (PR) ansehen',
+                        label: 'Andere Benutzer dürfen deine Statistiken (PR) ansehen'
                       })
                     }
                   </Grid>
@@ -141,13 +141,13 @@ class Preferences extends Component {
                     {
                       this.getSwitch({
                         key: 'NOTIFICATION_NEW_COURSES',
-                        label: 'Wir informieren dich wöchentlich über neue Kurse',
+                        label: 'Wir informieren dich wöchentlich über neue Kurse'
                       })
                     }
                     {
                       this.getSwitch({
                         key: 'NOTIFICATION_CANCELLATION',
-                        label: 'Wir informieren dich, wenn ein Kurs abgesagt wird, dem du zugesagt hast',
+                        label: 'Wir informieren dich, wenn ein Kurs abgesagt wird, dem du zugesagt hast'
                       })
                     }
                   </Grid>
