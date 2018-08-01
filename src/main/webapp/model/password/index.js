@@ -8,7 +8,7 @@ import {
   showNotification
 } from './../notification';
 
-const initialState = {
+export  const initialState = {
   open: false,
   pending: false,
   message: undefined,
@@ -60,7 +60,7 @@ export const onCancelPasswordChange = () => {
 export default handleActions({
   [actions.password.change.pending]: state => setPath(['pending'], true, state),
   [actions.password.change.success]: state =>
-    assignPath([], {pending: false, open: false, data: initialState.data, errorMessage: null}, state),
+    assignPath([], {pending: false, open: false, data: initialState.data, errorMessage: undefined}, state),
   [actions.password.error]: (state, {payload}) =>
     assignPath([], {pending: false, errorMessage: payload.message}, state),
   [actions.password.open]: state =>
