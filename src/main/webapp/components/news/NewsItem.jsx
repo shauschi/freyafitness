@@ -56,13 +56,18 @@ class NewsItem extends Component {
           image={img}
           title={title}
         />
-        <CardHeader title={title} subheader={'Beitrag vom: ' + moment(validity.from).format(Format.DATE_FORMAT)}/>
         <CardContent>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
             <Grid item xs={10}>
-            <Typography>
-              {teaser}
-            </Typography>
+              <Typography variant='title'>
+                {title}
+              </Typography>
+              <Typography variant='caption' gutterBottom>
+                {'Beitrag vom: ' + moment(validity.from).format(Format.DATE_FORMAT)}
+              </Typography>
+              <Typography>
+                {teaser}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
               <IconButton

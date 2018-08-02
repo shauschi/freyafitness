@@ -10,7 +10,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import {LoadingIndicator} from '.';
 
-const EnhancedSwipeableViews = SwipeableViews;//autoPlay(SwipeableViews);
+const EnhancedSwipeableViews = autoPlay(SwipeableViews);
 
 const sliderStyles = () => ({
   container: {
@@ -59,7 +59,7 @@ class Slider extends Component {
     const current = this.state.index;
     const {children = []} = this.props;
     let next = current - 1;
-    if (next <= 0) {
+    if (next < 0) {
       next = children.length - 1;
     }
     this.setState({index: next});
