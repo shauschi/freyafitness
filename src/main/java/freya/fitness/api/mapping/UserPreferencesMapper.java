@@ -24,8 +24,8 @@ public class UserPreferencesMapper {
       return null;
     }
     final UserPreference userPreference = Optional.of(dto)
-        .map(UserPreferenceDto::getKey)
-        .map(userPreferencesRepository::findByKey)
+        .map(preferencesDto -> userPreferencesRepository.findByKeyAndUserId(
+            preferencesDto.getKey(), preferencesDto.getUserId()))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .orElseGet(UserPreference::new);
