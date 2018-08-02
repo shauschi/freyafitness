@@ -2,63 +2,99 @@
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import {withStyles} from '@material-ui/core/styles';
+import classnames from 'classnames';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import CardActions from '@material-ui/core/CardActions';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import {IconExpandMore} from '../../utils/Icons';
+import moment from 'moment';
+import * as Format from '../../utils/Format';
 
-const itemStyles = () => ({
-  container: {
-    height: '300px',
-    backgroundColor: 'white',
-    backgroundSize: 'cover'
+const styles = theme => ({
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+    marginLeft: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      marginRight: -8,
+    },
   },
-  description: {
-    color: 'white',
-    position: 'absolute',
-    bottom: '0',
-    width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.65)'
+  expandOpen: {
+    transform: 'rotate(180deg)',
   },
-  descriptionText: {
-    padding: '16px'
-  },
-  stepperPlaceholder: {
-    height: '22px'
-  }
 });
 
 class NewsItem extends Component {
+
+  state = {
+    expanded: false
+  };
+
+  handleExpandClick = () => {
+    this.setState(state => ({ expanded: !state.expanded }));
+  };
+
   render() {
-    const {classes, title, text, img} = this.props;
+    const {classes, title, teaser, text, validity, img} = this.props;
     return (
-      <div className={classes.container} style={{backgroundImage: img ? 'url(' + img + ')' : undefined}}>
-        <div className={classes.description}>
-          <List style={{padding: '0'}}>
-            <ListItem button>
-                <div style={{width: '100%'}}>
-                  <Typography style={{color: 'rgba(255, 255, 255, 0.87)'}} type='headline'>
-                    {title}
-                    </Typography>
-                  <Typography style={{color: 'rgba(255, 255, 255, 0.87)'}}>
-                    {text}
-                  </Typography>
-                </div>
-                <ListItemSecondaryAction style={{marginTop: 'auto', top: 'auto', bottom: '6px'}}>
-                  <Button color='primary'>
-                    mehr
-                  </Button>
-                </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-          <div className={classes.stepperPlaceholder}/>
-        </div>
+      <div>
+        <CardMedia
+          component={'img'}
+          image={img}
+          title={title}
+        />
+        <CardContent>
+          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+            <Grid item xs={10}>
+              <Typography variant='title'>
+                {title}
+              </Typography>
+              <Typography variant='caption' gutterBottom>
+                {'Beitrag vom: ' + moment(validity.from).format(Format.DATE_FORMAT)}
+              </Typography>
+              <Typography>
+                {teaser}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <IconButton
+                className={classnames(classes.expand, {
+                  [classes.expandOpen]: this.state.expanded,
+                })}
+                onClick={this.handleExpandClick}
+                aria-expanded={this.state.expanded}
+                aria-label="Show more"
+              >
+                <IconExpandMore/>
+              </IconButton>
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography>
+              {text}
+            </Typography>
+          </CardContent>
+        </Collapse>
       </div>
     );
   };
 }
 
 export default compose(
-  withStyles(itemStyles)
+  withStyles(styles)
 )(NewsItem);
