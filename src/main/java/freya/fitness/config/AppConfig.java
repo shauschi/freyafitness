@@ -59,7 +59,7 @@ public class AppConfig {
             "/bundle.min.js",
             "/favicon.ico",
             "/profile/create",
-            "/news/previews",
+            "/news/",
             "/contact/",
             "/courses/from/**",
             "/coursetypes/",
