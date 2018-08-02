@@ -1,9 +1,10 @@
 package freya.fitness.api.controller;
 
-import freya.fitness.domain.jpa.News;
 import freya.fitness.api.dto.NewsDto;
-import freya.fitness.api.dto.NewsPreviewDto;
+import freya.fitness.domain.jpa.News;
 import freya.fitness.service.NewsService;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/news")
@@ -26,10 +24,10 @@ public class NewsController {
     this.newsService = newsService;
   }
 
-  @GetMapping("/previews")
-  public List<NewsPreviewDto> getNewsPreviews() {
+  @GetMapping("/")
+  public List<NewsDto> getNews() {
     return newsService.getCurrentNews().stream()
-        .map(NewsPreviewDto::new)
+        .map(NewsDto::new)
         .collect(Collectors.toList());
   }
 

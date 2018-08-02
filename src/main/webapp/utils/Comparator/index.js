@@ -3,5 +3,6 @@ export {
   ASC,
   DESC,
   comparing,
-  comparingMod
+  comparingMod,
+  comparingModFunc
 } from './Comparator.jsx';

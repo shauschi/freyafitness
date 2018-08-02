@@ -23,9 +23,9 @@ const sliderStyles = () => ({
     padding: '0'
   },
   stepperContainer: {
-    position: 'absolute',
-    bottom: '0',
-    width: '100%'
+    //position: 'absolute',
+    //bottom: '0',
+    //width: '100%'
   }
 });
 
@@ -59,7 +59,7 @@ class Slider extends Component {
     const current = this.state.index;
     const {children = []} = this.props;
     let next = current - 1;
-    if (next <= 0) {
+    if (next < 0) {
       next = children.length - 1;
     }
     this.setState({index: next});
