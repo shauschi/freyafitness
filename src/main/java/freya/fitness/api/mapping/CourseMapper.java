@@ -8,8 +8,8 @@ import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.Participation;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.jpa.CourseTypeRepository;
-import freya.fitness.repository.jpa.UserRepository;
 import freya.fitness.service.UserService;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +87,7 @@ public class CourseMapper {
 
   private List<ProfileDto> mapAttendees(final Course course) {
     final User currentUser = userService.getCurrentUser();
+    final UUID currentUserId = currentUser.getId();
     boolean showAll = currentUser.getRoles().stream()
         .map(Role::getAuthority)
         .anyMatch(auth -> "TRAINER".equals(auth) || "ADMIN".equals(auth));
@@ -94,8 +95,24 @@ public class CourseMapper {
     return course.getParticipantions().stream()
         .map(Participation::getMembership)
         .map(Membership::getUser)
-        .map(user -> profileMapper.map(user, showAll))
+        .map(user -> mapAttendee(user, currentUserId, showAll))
         .collect(Collectors.toList());
+  }
+
+  private ProfileDto mapAttendee(final User user, final UUID currentUserId, boolean showAll) {
+    if (showAll || currentUserId.equals(user.getId()) || !userWantsPrivacy(user)) {
+      return profileMapper.map(user);
+    }
+    return ProfileDto.Anonymous();
+  }
+
+  private boolean userWantsPrivacy(final User user) {
+    return !user.getPreferences().stream()
+        .filter(userPreference -> UserPreference.VIEW_PARTICIPATION.equals(userPreference.getKey()))
+        .findFirst()
+        .map(UserPreference::getValue)
+        .filter("true"::equalsIgnoreCase)
+        .isPresent();
   }
 
 }
