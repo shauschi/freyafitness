@@ -67,7 +67,7 @@ class ContactCard extends Component {
     const {data, pending, errorMessage} = contact;
 
     return (
-      <Grid item xs={12} sm={8} md={5}>
+      <Grid item xs={12} sm={8} md={12}>
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<IconExpandMore/>}>
             <div>
