@@ -6,12 +6,11 @@ import freya.fitness.domain.jpa.Participation;
 import freya.fitness.repository.jpa.ParticipationRepository;
 import freya.fitness.utils.exception.CourseNotFoundException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ParticipationService {
@@ -26,6 +25,11 @@ public class ParticipationService {
                               final ParticipationRepository participationRepository) {
     this.courseService = courseService;
     this.participationRepository = participationRepository;
+  }
+
+  public List<Participation> getParticipationsSince(final UUID userId, final LocalDateTime since) {
+    return participationRepository
+        .findByMembershipUserIdAndCourseStartGreaterThanEqual(userId, since);
   }
 
   public Long getParticipationCount(final Membership membership) {

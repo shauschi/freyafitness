@@ -26,6 +26,7 @@ public class UserPreference {
 
   public static final String VIEW_PARTICIPATION = "VIEW_PARTICIPATION";
   public static final String VIEW_PROFILE_PICTURE = "VIEW_PROFILE_PICTURE";
+  public static final String VIEW_STATISTICS = "VIEW_STATISTICS";
 
   @Id
   @GeneratedValue(generator = "UUID")
