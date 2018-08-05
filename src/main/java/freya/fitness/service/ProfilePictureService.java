@@ -23,6 +23,9 @@ public class ProfilePictureService {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private UserPreferencesService userPreferencesService;
+
   public byte[] getProfilePictureData(final UUID userId, final Size size) throws IOException {
     final User currentUser = userService.getCurrentUser();
     boolean showAll = currentUser.getRoles().stream()
@@ -44,11 +47,9 @@ public class ProfilePictureService {
   }
 
   private boolean userWantsPrivacy(final User user) {
-    return !user.getPreferences().stream()
-        .filter(userPreference -> UserPreference.VIEW_PROFILE_PICTURE.equals(userPreference.getKey()))
-        .findFirst()
-        .map(UserPreference::getValue)
-        .filter("true"::equalsIgnoreCase)
-        .isPresent();
+    return !userPreferencesService.checkUserPreferences(
+        user,
+        UserPreference.VIEW_PROFILE_PICTURE,
+        "true");
   }
 }
