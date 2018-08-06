@@ -52,8 +52,9 @@ public class StatisticsService {
       throw new AccessDeniedException("You are not allowed to see this");
     }
 
+    final LocalDateTime start = getStartForLastSixMonths();
     final List<Participation> participations =
-        participationService.getParticipationsSince(userId, getStartForLastSixMonths());
+        participationService.getParticipationsBetween(userId, start, LocalDateTime.now());
 
     final StatisticDto stats = new StatisticDto();
     stats.setUserId(userId);
@@ -65,6 +66,12 @@ public class StatisticsService {
     }
 
     final Map<LocalDate, Long> participationsPerMonth = getParticipationsPerMonth(participations);
+    for (int i = 0; i < 5; i++) {
+      final LocalDate localDate = start.plusMonths(i).toLocalDate();
+      if (!participationsPerMonth.containsKey(localDate)) {
+        participationsPerMonth.put(localDate, 0L);
+      }
+    }
     stats.setParticipationsPerMonth(participationsPerMonth);
 
     return stats;

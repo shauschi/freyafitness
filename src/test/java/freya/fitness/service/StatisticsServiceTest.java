@@ -157,7 +157,7 @@ public class StatisticsServiceTest {
         givenParticipation(LocalDate.of(2018, 7, 27), EASY)
 
     );
-    when(participationService.getParticipationsSince(eq(USER_ID), any()))
+    when(participationService.getParticipationsBetween(eq(USER_ID), any(), any()))
         .thenReturn(participations);
 
     // when

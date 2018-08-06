@@ -27,9 +27,10 @@ public class ParticipationService {
     this.participationRepository = participationRepository;
   }
 
-  public List<Participation> getParticipationsSince(final UUID userId, final LocalDateTime since) {
+  public List<Participation> getParticipationsBetween(
+      final UUID userId, final LocalDateTime from, final LocalDateTime to) {
     return participationRepository
-        .findByMembershipUserIdAndCourseStartGreaterThanEqual(userId, since);
+        .findByMembershipUserIdAndCourseStartBetween(userId, from, to);
   }
 
   public Long getParticipationCount(final Membership membership) {
