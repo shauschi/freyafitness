@@ -8,6 +8,7 @@ describe('statistics reducer', () => {
     state = {
       pending: false,
       error: null,
+      lastUpdate: null,
       data: {
         userId: null,
         favouriteCourseTypeId: null,
@@ -36,7 +37,9 @@ describe('statistics reducer', () => {
 
       const expectedState = Object.assign({}, state, {pending: false, data: expected});
 
-      expect(nextState).toEqual(expectedState);
+      expect(nextState.pending).toEqual(false);
+      expect(nextState.data).toEqual(expected);
+      expect(nextState.lastUpdate).not.toBeNull();
     });
   });
 

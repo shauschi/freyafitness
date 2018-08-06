@@ -9,7 +9,7 @@ describe('statistics actions', () => {
 
   beforeEach(() => {
     dispatchMock = jest.fn();
-    getMockState = () => {};
+    getMockState = () => ({statistics: {}});
   });
 
   describe('fetchStatistics', () => {
