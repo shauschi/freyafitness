@@ -9,6 +9,7 @@ import membership from './membership';
 import membershipTypes from './membershiptypes';
 import password from './password';
 import profile from './profile';
+import statistics from './statistics';
 
 export default combineReducers({
   contact,
@@ -20,5 +21,6 @@ export default combineReducers({
   membership,
   membershipTypes,
   password,
-  profile
+  profile,
+  statistics
 })

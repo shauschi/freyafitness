@@ -97,7 +97,7 @@ const agbs = <ol className='intended'>
     </ol>
   </li>
 
-  <li><Typography variant='headline'>AGeltungsbereich</Typography>
+  <li><Typography variant='headline'>Geltungsbereich</Typography>
     <ol>
       <li><Typography>Die AGB gelten für sämtliche Vertragsbeziehungen zwischen Freya Heine und dem
         Teilnehmer in der zum Zeitpunkt des Vertragsschlusses aktuellen Fassung. Jeder Teilnehmer,

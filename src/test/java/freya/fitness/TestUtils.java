@@ -5,14 +5,12 @@ import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.MembershipType;
 import freya.fitness.domain.jpa.User;
+import java.io.ByteArrayInputStream;
+import java.util.Date;
+import java.util.Optional;
 import org.bson.BsonObjectId;
 import org.mockito.stubbing.Answer;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
-
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;

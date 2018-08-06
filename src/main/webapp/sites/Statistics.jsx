@@ -8,115 +8,98 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
-import {GridSwitchControl, LoadingIndicator} from '../components/general';
+import {LoadingIndicator} from '../components/general';
 import {
-  changeTempProfilePicture,
-  closeProfilePictureChangeDialog,
-  fetchOwnProfile,
-  onProfileDetailsChange,
-  openProfilePictureChangeDialog,
-  saveProfilePicture,
-  updatePreference
-} from './../model/profile';
-import {changePassword, onCancelPasswordChange, onOpenPasswordChange, onPasswordChange} from './../model/password';
+  fetchStatistics
+} from './../model/statistics';
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "./../utils/Style";
-import {findBy} from './../utils/RamdaUtils';
+import {comparingModFunc} from "./../utils/Comparator";
+import {findById} from './../utils/RamdaUtils';
+import {TypeMapper} from "../components/course";
+import moment from 'moment';
+import {Bar} from 'react-chartjs';
 
 class Statistics extends Component {
 
-  state = {
-    expanded: null,
-  };
-
-  handleChange = panel => (event, expanded) => {
-    this.setState({
-      expanded: expanded ? panel : false,
-    });
-  };
-
-  validateForm = () => {
-    const result = this.validationGroup.validate();
-    return result.valid;
-  };
-
-  setValidation = ref => {
-    this.validationGroup = ref;
-  };
-
-  doChangePassword = () => {
-    if (this.validateForm()) {
-      const {password, actions} = this.props;
-      const {changePassword} = actions;
-      return changePassword(password.data);
-    }
-  };
-
-  getSwitch = ({key, label, labelNotChecked = label}) => {
-    const {user, actions} = this.props;
-    const {updatePreference} = actions;
-    const {preferences} = user;
-    const preference = findBy('key', preferences, key) || {};
-    const checked = preference.value === 'true' || preference.value === true;
-    return (<GridSwitchControl
-      value={checked}
-      onChange={(id, value) => updatePreference({userId: user.id, key: key, value: value})}
-      label={checked ? label : labelNotChecked}/>
-    );
-  }
-
   render() {
-    const {profile} = this.props;
-    if (profile.pending) {
+    const {profile, user, statistics, courseTypes, actions} = this.props;
+    const {fetchStatistics} = actions;
+    if (profile.pending || statistics.pending || !user) {
       return (<LoadingIndicator/>);
-    } else {
-
-      return (
-        <div className={this.props.classes.root}>
-          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-            <Grid item xs={12} sm={8}>
-              <Card>
-                <CardHeader title='Statistiken und PR'/>
-                <CardContent>
-                  <Typography>
-                    Hier sollen zukünftig deine Statistiken aufgeführt werden. Zum Beispiel, wie oft du im letzten Monat an Kursen teilgenommen hast.
-                  </Typography>
-                  <Typography>
-                    PR steht für Personal Record, also deine ganz eigenen Bestleistungen. Diese sollst du hier zukünftig verwalten und auch mit anderen vergleichen können.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-
-          </Grid>
-        </div>
-      );
     }
+
+    if (user.id) {
+      fetchStatistics(user.id);
+    }
+
+    const {name = "", color} = findById(courseTypes.data, statistics.data.favouriteCourseTypeId) || TypeMapper.UNKNOWN;
+    const participationsPerMonth = statistics.data.participationsPerMonth;
+    const sorted = Object.keys(participationsPerMonth)
+      .sort(comparingModFunc(value => value, moment))
+    return (
+      <div className={this.props.classes.root}>
+        <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+          <Grid item xs={12} sm={8}>
+            <Card>
+              <CardHeader title='Dein Lieblingskurs'/>
+              <CardContent>
+                <Typography>
+                  {name}
+                </Typography>
+                <Typography variant='caption'>
+                  {'Du hast an diesem Kurs bereits ' + statistics.data.favouriteCourseParticipations + ' mal teilgenommen.'}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={8}>
+            <Card>
+              <CardHeader title='Statistiken'/>
+              <CardContent>
+                <Typography>
+                  Hier siehst du, wie oft du in den letzten Wochen und Monaten an Kursen teilgenommen hast.
+                </Typography>
+                <div style={{paddingTop: '16px', width: '100%'}}>
+                  <Bar
+                    options={{
+                      responsive: true,
+                      scaleShowVerticalLines: false
+                    }}
+                    data={{
+                      labels: sorted
+                        .map(key => moment(key).format('MMMM')),
+                      datasets: [{
+                        label: 'Teilnahmen',
+                        fillColor: Style.PRIMARY,
+                        data: sorted
+                          .map(key => participationsPerMonth[key])
+                    }]
+                  }}/>
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+
+        </Grid>
+      </div>
+    );
+
   }
 }
 
 const mapStateToProps = state => ({
   profile: state.profile,
   user: state.profile.user,
-  password: state.password
+  statistics: state.statistics,
+  courseTypes: state.courseTypes
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
-    // profile
-    fetchOwnProfile: fetchOwnProfile,
-    onProfileDetailsChange: onProfileDetailsChange,
-    openProfilePictureChangeDialog: openProfilePictureChangeDialog,
-    closeProfilePictureChangeDialog: closeProfilePictureChangeDialog,
-    saveProfilePicture: saveProfilePicture,
-    changeTempProfilePicture: changeTempProfilePicture,
-    updatePreference: updatePreference,
-
-    // password
-    onPasswordChange: onPasswordChange,
-    onOpenPasswordChange: onOpenPasswordChange,
-    onCancelPasswordChange: onCancelPasswordChange,
-    changePassword: changePassword
+    // statistics
+    fetchStatistics: fetchStatistics,
   }, dispatch),
   dispatch
 });

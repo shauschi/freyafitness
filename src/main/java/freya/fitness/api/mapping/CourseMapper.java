@@ -10,6 +10,7 @@ import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.jpa.CourseTypeRepository;
+import freya.fitness.service.UserPreferencesService;
 import freya.fitness.service.UserService;
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +26,17 @@ public class CourseMapper {
   private final UserService userService;
   private final CourseTypeRepository courseTypeRepository;
   private final ProfileMapper profileMapper;
+  private final UserPreferencesService userPreferencesService;
 
   @Autowired
   public CourseMapper(final UserService userService,
                       final CourseTypeRepository courseTypeRepository,
-                      final ProfileMapper profileMapper) {
+                      final ProfileMapper profileMapper,
+                      final UserPreferencesService userPreferencesService) {
     this.userService = userService;
     this.courseTypeRepository = courseTypeRepository;
     this.profileMapper = profileMapper;
+    this.userPreferencesService = userPreferencesService;
   }
 
   public Course map(final CourseDto courseDto, final Course existingCourse) {
@@ -107,12 +111,10 @@ public class CourseMapper {
   }
 
   private boolean userWantsPrivacy(final User user) {
-    return !user.getPreferences().stream()
-        .filter(userPreference -> UserPreference.VIEW_PARTICIPATION.equals(userPreference.getKey()))
-        .findFirst()
-        .map(UserPreference::getValue)
-        .filter("true"::equalsIgnoreCase)
-        .isPresent();
+    return !userPreferencesService.checkUserPreferences(
+        user,
+        UserPreference.VIEW_PARTICIPATION,
+        "true");
   }
 
 }

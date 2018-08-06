@@ -16,6 +16,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
 
   Optional<Participation> findByMembershipUserIdAndCourseId(final UUID userId, final UUID courseId);
 
-  List<Participation> findByMembershipUserIdAndCourseStartGreaterThanEqual(
-      final UUID id, final LocalDateTime from);
+  List<Participation> findByMembershipUserIdAndCourseStartBetween(
+      final UUID id, final LocalDateTime from, final LocalDateTime to);
 }
