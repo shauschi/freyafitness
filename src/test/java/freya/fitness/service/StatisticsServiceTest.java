@@ -171,7 +171,7 @@ public class StatisticsServiceTest {
 
     final Map<LocalDate, Long> participationsPerMonth = result.getParticipationsPerMonth();
     assertThat(participationsPerMonth, notNullValue());
-    assertThat(participationsPerMonth.size(), is(4));
+    assertThat(participationsPerMonth.size(), is(5));
     assertThat(
         participationsPerMonth.get(LocalDate.of(2018, 3, 1)), is(3L));
     assertThat(
@@ -179,7 +179,7 @@ public class StatisticsServiceTest {
     assertThat(
         participationsPerMonth.get(LocalDate.of(2018, 5, 1)), is(2L));
     assertThat(
-        participationsPerMonth.containsKey(LocalDate.of(2018, 6, 1)), is(false));
+        participationsPerMonth.get(LocalDate.of(2018, 6, 1)), is(0L));
     assertThat(
         participationsPerMonth.get(LocalDate.of(2018, 7, 1)), is(4L));
   }

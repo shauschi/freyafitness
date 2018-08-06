@@ -6,25 +6,31 @@ import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.mongodb.ProfilePictureRepository;
 import freya.fitness.utils.Size;
 import freya.fitness.utils.exception.UserNotFoundException;
+import java.io.IOException;
+import java.util.UUID;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.UUID;
-
 @Service
 public class ProfilePictureService {
 
-  @Autowired
-  private ProfilePictureRepository profilePictureRepository;
+  private final ProfilePictureRepository profilePictureRepository;
+
+  private final UserService userService;
+
+  private final UserPreferencesService userPreferencesService;
 
   @Autowired
-  private UserService userService;
-
-  @Autowired
-  private UserPreferencesService userPreferencesService;
+  public ProfilePictureService(
+      final ProfilePictureRepository profilePictureRepository,
+      final UserService userService,
+      final UserPreferencesService userPreferencesService) {
+    this.profilePictureRepository = profilePictureRepository;
+    this.userService = userService;
+    this.userPreferencesService = userPreferencesService;
+  }
 
   public byte[] getProfilePictureData(final UUID userId, final Size size) throws IOException {
     final User currentUser = userService.getCurrentUser();

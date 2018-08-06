@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
@@ -36,6 +37,9 @@ public class ProfilePictureServiceTest {
 
   @Mock
   private UserService userService;
+
+  @Spy
+  private UserPreferencesService userPreferencesService;
 
   private static final UUID userId = UUID.randomUUID();
 
