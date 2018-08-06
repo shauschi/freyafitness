@@ -112,7 +112,7 @@ class Home extends Component {
         di: 'FUN.POWER',
         mi: 'TRX FIT MOMS',
         fr: 'TRX FIT MOMS',
-        sa: <span><Typography variant='caption' style={{color: 'lightgrey'}}>11:00-12:00</Typography>FUN.TEAM</span>,
+        so: <span><Typography variant='caption' style={{color: 'lightgrey'}}>11:00-12:00</Typography>FUN.TEAM</span>,
       },
       {
         time: '16:30-17:30',
