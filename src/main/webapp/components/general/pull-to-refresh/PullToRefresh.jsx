@@ -1,39 +1,47 @@
 'use strict';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ReactPullToRefresh from 'react-pull-to-refresh';
+import ReactPullToRefresh from 'rmc-pull-to-refresh';
 import Typography from '@material-ui/core/Typography';
-import './style.css';
 import {LoadingIndicator} from './../';
 
 class PullToRefresh extends Component {
 
   static contextTypes = {
-    onRefresh: PropTypes.func.isRequired
+    onRefresh: PropTypes.func.isRequired,
+    pending: PropTypes.bool.isRequired,
+  };
+
+  onRefresh = () => {
+    this.props.onRefresh();
+    return new Promise(resolve => resolve());
   };
 
   render() {
-    const {onRefresh, style} = this.props;
+    const {pending, style} = this.props;
     return (
-      <ReactPullToRefresh
-        id='test'
-        style={{position: 'relative', ...style}}
-        icon={<div className='refresh-hint'>
-          <div className='step-1'>
-            <Typography variant='caption'>zum Aktualisieren ziehen...</Typography>
-          </div>
-          <div className='step-2'>
-            <Typography variant='caption'>...jetzt loslassen</Typography>
-          </div>
-        </div>}
-        loading={
-          <div className='loading'>
-            <LoadingIndicator noLabel/>
-          </div>
-        }
-        onRefresh={onRefresh}>
-        {this.props.children}
-      </ReactPullToRefresh>
+      <div style={{marginTop: '-16px', ...style}}>
+        <ReactPullToRefresh
+          style={{ height: 'calc(100vh - 96px)', overflow: 'auto' }}
+          indicator={{
+            deactivate:
+              <Typography variant='caption' style={{textAlign: 'center'}}>
+                zum Aktualisieren herunterziehen
+              </Typography>,
+            activate:
+              <Typography variant='caption' style={{textAlign: 'center'}}>
+                jetzt loslassen
+              </Typography>,
+            release: <LoadingIndicator noLabel/>,
+            finish: 'done'
+          }}
+          distanceToRefresh={48}
+          refreshing={pending}
+          onRefresh={this.onRefresh}
+        >
+          {this.props.children}
+        </ReactPullToRefresh>
+      </div>
     )
   }
 }

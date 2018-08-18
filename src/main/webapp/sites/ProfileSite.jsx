@@ -12,7 +12,7 @@ import List from '@material-ui/core/List';
 import {IconCamera} from './../utils/Icons';
 import Typography from '@material-ui/core/Typography';
 import {ProfilePicture, ProfilePictureDialog} from './../components/profile';
-import {LoadingIndicator, Subheader} from '../components/general';
+import {LoadingIndicator, PullToRefresh, Subheader} from '../components/general';
 import {
   changeTempProfilePicture,
   closeProfilePictureChangeDialog,
@@ -70,6 +70,9 @@ class ProfileSite extends Component {
 
       return (
         <div className={this.props.classes.root}>
+          <PullToRefresh
+            pending={profile.pending}
+            onRefresh={this.props.actions.fetchOwnProfile}>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
             <Grid item xs={12} sm={8} style={{padding: '0px'}}>
               <div style={{position: 'relative', width: '100%', paddingTop: '75%'}}>
@@ -114,6 +117,7 @@ class ProfileSite extends Component {
             onSave={actions.saveProfilePicture}
             onClose={actions.closeProfilePictureChangeDialog}
           />
+          </PullToRefresh>
         </div>
       );
     }

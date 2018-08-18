@@ -16,10 +16,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import List from '@material-ui/core/List';
-import {Slider, Subheader} from './../components/general';
+import {PullToRefresh, Slider, Subheader} from './../components/general';
 import {NewsItem} from './../components/news';
 import Course from './../components/course';
-import {showCourseDetails, signIn, signOut} from '../model/courses';
+import {showCourseDetails, fetchCourses, signIn, signOut} from '../model/courses';
+import {fetchNews} from '../model/news';
 import {IconCalendar} from '../utils/Icons';
 import {LoginAndRegistrationCard} from '../components/account';
 import {MenuLink} from '../components/general';
@@ -53,9 +54,12 @@ class Home extends Component {
           <CardContent>
             <Typography variant='title' style={{marginBottom: '8px'}}>Willkommen im FreyRaum</Typography>
             <Typography>Funktionelles Training in familiärer Atmosphäre.</Typography>
-            <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept. Ein Raum, in dem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches Trainingsprogramm wartet.
+            <Typography>Mit der Gründung von FreyRaum entsteht in Toppenstedt ein für die Gegend einzigartiges Konzept.
+              Ein Raum, in dem vor allem der Spaß an Bewegung an erster Stelle steht und ein abwechslungsreiches
+              Trainingsprogramm wartet.
               Jedes Mal anders, jedes Mal neu!</Typography>
-            <Typography>Neben dem breiten Kursprogramm, können Mitglieder auch zum eigenständigen bzw. freien Training vorbei kommen.</Typography>
+            <Typography>Neben dem breiten Kursprogramm, können Mitglieder auch zum eigenständigen bzw. freien Training
+              vorbei kommen.</Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -87,7 +91,7 @@ class Home extends Component {
       return undefined;
     }
 
-      const data = [
+    const data = [
       {
         time: '07:00-07:45',
         mo: 'KRAFT & TECHNIK',
@@ -154,7 +158,7 @@ class Home extends Component {
     const Cell = ({children, numeric}) => <TableCell
       numeric={numeric}
       className={classes.courseCell}
-      >
+    >
       {children}
     </TableCell>;
 
@@ -163,40 +167,41 @@ class Home extends Component {
         <Card>
           <CardHeader title={'Kursplan'}/>
           <CardContent>
-            <Typography>Hier findest du den allgemeinen Kursplan. Für Details zu den Kursen und freien Plätzen, melde dich einfach an.</Typography>
+            <Typography>Hier findest du den allgemeinen Kursplan. Für Details zu den Kursen und freien Plätzen, melde
+              dich einfach an.</Typography>
             <div style={{overflowX: 'auto'}}>
               <Table>
-              <TableHead>
-                <TableRow>
-                  <Cell>Zeit</Cell>
-                  <Cell numeric>Montag</Cell>
-                  <Cell numeric>Dienstag</Cell>
-                  <Cell numeric>Mittwoch</Cell>
-                  <Cell numeric>Donnerstag</Cell>
-                  <Cell numeric>Freitag</Cell>
-                  <Cell numeric>Samstag</Cell>
-                  <Cell numeric>Sonntag</Cell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.map((n, idx) => {
-                  return (
-                    <TableRow key={idx}>
-                      <Cell component="th" scope="row">
-                        {n.time}
-                      </Cell>
-                      <Cell numeric>{n.mo}</Cell>
-                      <Cell numeric>{n.di}</Cell>
-                      <Cell numeric>{n.mi}</Cell>
-                      <Cell numeric>{n.do}</Cell>
-                      <Cell numeric>{n.fr}</Cell>
-                      <Cell numeric>{n.sa}</Cell>
-                      <Cell numeric>{n.so}</Cell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                <TableHead>
+                  <TableRow>
+                    <Cell>Zeit</Cell>
+                    <Cell numeric>Montag</Cell>
+                    <Cell numeric>Dienstag</Cell>
+                    <Cell numeric>Mittwoch</Cell>
+                    <Cell numeric>Donnerstag</Cell>
+                    <Cell numeric>Freitag</Cell>
+                    <Cell numeric>Samstag</Cell>
+                    <Cell numeric>Sonntag</Cell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.map((n, idx) => {
+                    return (
+                      <TableRow key={idx}>
+                        <Cell component="th" scope="row">
+                          {n.time}
+                        </Cell>
+                        <Cell numeric>{n.mo}</Cell>
+                        <Cell numeric>{n.di}</Cell>
+                        <Cell numeric>{n.mi}</Cell>
+                        <Cell numeric>{n.do}</Cell>
+                        <Cell numeric>{n.fr}</Cell>
+                        <Cell numeric>{n.sa}</Cell>
+                        <Cell numeric>{n.so}</Cell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
             </div>
             <Typography variant='subheading' style={{marginTop: '8px'}}>FUN.BASE</Typography>
             <Typography>Der Einstieg. Die Grundlage des funktionalen Trainings</Typography>
@@ -207,7 +212,8 @@ class Home extends Component {
             <Typography variant='subheading' style={{marginTop: '8px'}}>KRAFT & TECHNIK</Typography>
             <Typography>Man lernt nie aus. Techniktraining und Gewichte steigern.</Typography>
             <Typography variant='subheading' style={{marginTop: '8px'}}>FIT MOMS</Typography>
-            <Typography>Mutter & Kind Zeit. Nach der Rückbildungsgymnastik mit dem Kind gemeinsam fit werden.</Typography>
+            <Typography>Mutter & Kind Zeit. Nach der Rückbildungsgymnastik mit dem Kind gemeinsam fit
+              werden.</Typography>
             <Typography variant='subheading' style={{marginTop: '8px'}}>MÄNNER ABEND</Typography>
             <Typography>Krafttraining. Technik erlernen und gemeinsam Gewichte bewegen.</Typography>
             <Typography variant='subheading' style={{marginTop: '8px'}}>BEST AGERS(65+)</Typography>
@@ -233,7 +239,8 @@ class Home extends Component {
         <CardHeader title='FreyRaum auf facebook'/>
         <CardContent>
           <Typography style={{paddingBottom: '16px'}}>
-            Hier siehst du bevorstehende Veranstaltungen auf facebook. Gerne darfst du die Seite auch mit deinen Freunden teilen.
+            Hier siehst du bevorstehende Veranstaltungen auf facebook. Gerne darfst du die Seite auch mit deinen
+            Freunden teilen.
           </Typography>
           <FacebookProvider
             appId="1801602199870336"
@@ -286,30 +293,45 @@ class Home extends Component {
     </Grid>;
   };
 
+  isPending = () => {
+    return this.props.news.pending
+      || this.props.courses.pending;
+  };
+
+  onRefresh = () => {
+    const {fetchNews, fetchCourses} = this.props.actions;
+    fetchNews();
+    fetchCourses();
+  };
+
   render() {
     return (
       <div className={this.props.classes.root}>
-        <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-          {/* Nur bei nicht angemeldeten Benutzern*/}
-          {this.getWelcomeGreetings()}
-          {this.getNews()}
-          {/* weitere Informationen bei angemeldeten Benutzern */}
-          {this.getUserDetails()}
-          {/* Der Kursplan */}
-          {this.getCoursePlan()}
-        </Grid>
-        <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-          <Grid item xs={12} md={6} lg={4} style={{padding: '0px'}}>
-            <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-              {/* Kontaktaufnahme */}
-              <ContactCard/>
-              {/* Nur bei nicht angemeldeten Benutzern */}
-              {this.getLoginCard()}
-            </Grid>
+        <PullToRefresh
+          pending={this.isPending()}
+          onRefresh={this.onRefresh}>
+          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+            {/* Nur bei nicht angemeldeten Benutzern*/}
+            {this.getWelcomeGreetings()}
+            {this.getNews()}
+            {/* weitere Informationen bei angemeldeten Benutzern */}
+            {this.getUserDetails()}
+            {/* Der Kursplan */}
+            {this.getCoursePlan()}
           </Grid>
-          {/* Bevorstehende Veranstaltungen */}
-          {this.getFacebookEventCard()}
-        </Grid>
+          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+            <Grid item xs={12} md={6} lg={4} style={{padding: '0px'}}>
+              <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+                {/* Kontaktaufnahme */}
+                <ContactCard/>
+                {/* Nur bei nicht angemeldeten Benutzern */}
+                {this.getLoginCard()}
+              </Grid>
+            </Grid>
+            {/* Bevorstehende Veranstaltungen */}
+            {this.getFacebookEventCard()}
+          </Grid>
+        </PullToRefresh>
       </div>
     );
   }
@@ -325,8 +347,11 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     // courses
     showCourseDetails: showCourseDetails,
+    fetchCourses: fetchCourses,
     signIn: signIn,
     signOut: signOut,
+    // news
+    fetchNews: fetchNews,
     // notification
     showNotification: showNotification
   }, dispatch),
