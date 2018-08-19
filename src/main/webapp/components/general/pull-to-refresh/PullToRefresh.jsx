@@ -1,11 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ReactPullToRefresh from 'rmc-pull-to-refresh';
 import JsPullToRefresh from 'pulltorefreshjs';
-import Typography from '@material-ui/core/Typography';
 import {LoadingIndicator} from './../';
-import moment from 'moment';
 import './styles.css'
 
 class PullToRefresh extends Component {
