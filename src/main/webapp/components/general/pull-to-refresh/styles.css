@@ -1,0 +1,10 @@
+
+.ptr--ptr {
+    box-shadow: none !important;
+}
+
+.ptr--text {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+}

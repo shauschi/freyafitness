@@ -25,9 +25,9 @@ export const actions = createActions({
   }
 });
 
-export const fetchStatistics = userId =>
+export const fetchStatistics = (userId, force = false) =>
   (dispatch, getState) => {
-    if (getState().statistics.lastUpdate) {
+    if (getState().statistics.lastUpdate && !force) {
       return; // TODO update every other call/day
     }
     dispatch(actions.statistics.load.pending());
