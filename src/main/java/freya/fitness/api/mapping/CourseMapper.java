@@ -12,6 +12,7 @@ import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.jpa.CourseTypeRepository;
 import freya.fitness.service.UserPreferencesService;
 import freya.fitness.service.UserService;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -97,6 +98,7 @@ public class CourseMapper {
         .anyMatch(auth -> "TRAINER".equals(auth) || "ADMIN".equals(auth));
 
     return course.getParticipantions().stream()
+        .sorted(Comparator.comparing(Participation::getSignInTime))
         .map(Participation::getMembership)
         .map(Membership::getUser)
         .map(user -> mapAttendee(user, currentUserId, showAll))
