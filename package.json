@@ -28,6 +28,7 @@
     "material-ui-pickers": "1.0.0-rc.11",
     "moment": "^2.19.1",
     "prop-types": "^15.6.0",
+    "pulltorefreshjs": "^0.1.14",
     "ramda": "^0.25.0",
     "react": "^16.0.0",
     "react-avatar-editor": "^10.3.0",

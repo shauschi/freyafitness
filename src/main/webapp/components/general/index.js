@@ -10,6 +10,7 @@ export {default as Subheader} from './Subheader.jsx';
 export {default as Slider} from './Slider.jsx';
 export {default as LoadingIndicator} from './LoadingIndicator.jsx';
 export {default as CustomizedSnackbar} from './CustomizedSnackbar.jsx';
+export {default as PullToRefresh} from './pull-to-refresh/PullToRefresh.jsx';
 
 export {
   GridTextControl,

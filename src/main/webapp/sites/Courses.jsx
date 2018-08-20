@@ -9,7 +9,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Grid from '@material-ui/core/Grid';
 import Course, {CourseDetails} from './../components/course';
-import {showCourseDetails, signIn, signOut} from './../model/courses';
+import {showCourseDetails, fetchCourses, signIn, signOut} from './../model/courses';
 import {withStyles} from '@material-ui/core/styles/index';
 import * as Style from './../utils/Style';
 import {IconExpandMore} from './../utils/Icons';
@@ -18,6 +18,7 @@ import {Subheader} from './../components/general';
 import List from '@material-ui/core/List';
 import {comparingMod} from './../utils/Comparator';
 import * as Format from './../utils/Format';
+import {PullToRefresh} from './../components/general';
 
 const compareCourseByStartDate = comparingMod('start', moment);
 
@@ -89,8 +90,12 @@ class Courses extends Component {
   render() {
     return (
       <div className={this.props.classes.root}>
-        <CourseDetails/>
-        {this.getCourses()}
+        <PullToRefresh
+          pending={this.props.courses.pending}
+          onRefresh={this.props.actions.fetchCourses}>
+          <CourseDetails/>
+          {this.getCourses()}
+        </PullToRefresh>
       </div>
     );
   }
@@ -104,6 +109,7 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators({
     // courses
     showCourseDetails: showCourseDetails,
+    fetchCourses: fetchCourses,
     signIn: signIn,
     signOut: signOut
   }, dispatch),
