@@ -16,6 +16,7 @@ import {
   AboutFreyRaum,
   Agb,
   Courses,
+  Memberships,
   Home,
   Impressum,
   ProfileSite,
@@ -23,12 +24,12 @@ import {
   Statistics
 } from './sites';
 import {CourseDetails} from './components/course';
-import {CreateMembership} from './components/membership';
+import {CreateMembership, MembershipDetails} from './components/membership';
 import * as Style from './utils/Style';
 import {toggleDrawer} from './model/drawer';
 import {hideNotification} from './model/notification';
 import {createCourse} from './model/courses';
-import {showCreateMembership} from './model/membership';
+import {showCreateMembership} from './model/memberships';
 import {login, logout, scrollToLogin} from './model/profile';
 import init from './model/init.js';
 
@@ -61,8 +62,7 @@ class App extends Component {
             currentUser={currentUser}
             {...this.props}/>
           <div style={{position: 'absolute'}}>
-            {/* All Dialogs */}
-            <CourseDetails/>
+            {/* All Dialogs ... TODO remove all dialogs */}
             <CreateMembership/>
           </div>
           <MyDrawer
@@ -75,19 +75,26 @@ class App extends Component {
             profile.pending
               ? <LoadingIndicator/>
               : <Switch>
-                <Redirect from='/index' to='/'/>
-                <Redirect from='/home' to='/'/>
+                <Redirect from='/index' to='/home'/>
+                <Redirect exact from='/' to='/home'/>
                 <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
                 <Route exact path='/about/freyraum' render={() => <AboutFreyRaum {...this.props}/>}/>
                 <Route exact path='/about/courses' render={() => <AboutCourses {...this.props}/>}/>
                 <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
                 <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                <Route exact path='/' component={Home}/>
+                <Route path='/home' component={Home}/>
                 <Route exact path='/statistics' component={Statistics}/>
-                <Route exact path='/courses/all' component={Courses}/>
+                <Route path='/courses' component={Courses}/>
+                <Route path='/memberships' component={Memberships}/>
                 <Route exact path='/profile' component={ProfileSite}/>
                 <Route exact path='/preferences' component={Preferences}/>
               </Switch>
+          }
+          {
+            <Switch>
+              <Route exact path='/**/membership/:id' component={MembershipDetails}/>
+              <Route exact path='/**/course/:id' component={CourseDetails}/>
+            </Switch>
           }
           {
             currentUser

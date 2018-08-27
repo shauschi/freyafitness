@@ -11,6 +11,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import {findById} from './../../utils/RamdaUtils';
 import {IconMoreVert} from './../../utils/Icons';
+import {withRouter} from 'react-router-dom';
 
 import {red} from '@material-ui/core/colors';
 import {setPath, viewPath} from "../../utils/RamdaUtils";
@@ -51,6 +52,11 @@ class Course extends Component {
     this.setState(setPath(['course'], {anchor: null, course: null}, this.state));
   };
 
+  showCourseDetails = id => {
+    const {history, location} = this.props;
+    history.push(location.pathname + '/course/' + id);
+  };
+
   getCourseMenu = () => {
     const {anchor, course} = this.state.course;
     const {signIn, signOut, showCourseDetails} = this.props;
@@ -75,7 +81,7 @@ class Course extends Component {
               <span style={{marginLeft: '8px'}}>Teilnehmen</span>
             </MenuItem>
       }
-      <MenuItem onClick={() => {this.closeMenu(); showCourseDetails(courseId);}}>
+      <MenuItem onClick={() => {this.closeMenu(); this.showCourseDetails(courseId);}}>
         <span style={{marginLeft: '8px'}}>Details anzeigen</span>
       </MenuItem>
     </Menu>
@@ -119,7 +125,7 @@ class Course extends Component {
     return (
       <ListItem
         button
-        onClick={() => showCourseDetails(id)}
+        onClick={() => this.showCourseDetails(id)}
         style={{backgroundColor: backgroundColor, position: 'relative'}}>
         <div style={{
           position: 'relative',
@@ -173,5 +179,6 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
+  withRouter,
   connect(mapStateToProps)
 )(Course);

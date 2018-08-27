@@ -5,7 +5,7 @@ import courseTypes from './coursetypes';
 import drawer from './drawer';
 import news from './news';
 import notification from './notification';
-import membership from './membership';
+import memberships from './memberships';
 import membershipTypes from './membershiptypes';
 import password from './password';
 import profile from './profile';
@@ -18,7 +18,7 @@ export default combineReducers({
   drawer,
   news,
   notification,
-  membership,
+  memberships,
   membershipTypes,
   password,
   profile,

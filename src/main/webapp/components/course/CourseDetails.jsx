@@ -23,13 +23,14 @@ import {showNotification} from './../../model/notification';
 import {MODE, NEW_COURSE} from './../../model/courses';
 import {SECONDARY, TITLE_BG} from '../../utils/Style';
 import {IconDelete, IconDeleteForever, IconPencil, IconUser, IconUserAdd} from '../../utils/Icons';
-import {findById, setPath, viewPath} from '../../utils/RamdaUtils';
+import {findById, setPath, togglePath, viewPath} from '../../utils/RamdaUtils';
 import {ConfirmButton, LoadingIndicator} from '../general';
 import {
   addUserToCourse,
   deleteCourse,
   fetchCourses,
-  hideCourseDetails,
+  createCourse,
+  showCourseDetails,
   onCourseDetailsChange,
   removeUserFromCourse,
   saveCourseDetails,
@@ -38,18 +39,33 @@ import {
   toggleEditCourse
 } from '../../model/courses';
 import {updateUsers} from '../../model/profile';
-import {comparingMod} from "../../utils/Comparator";
+import {withRouter} from 'react-router-dom';
 
 class CourseDetails extends Component {
 
   state = {
+    mode: null,
     user: {
       anchor: null,
       user: null
     },
     addUser: {
       anchor: null
+    },
+  };
+
+  componentWillMount = () => {
+    const {match, actions} = this.props;
+    const {showCourseDetails, createCourse, updateUsers} = actions;
+    const id = match.params.id;
+    if ('new' === id) {
+      this.state.mode = MODE.CREATE;
+      createCourse();
+    } else {
+      this.state.mode = MODE.VIEW;
+      showCourseDetails(id);
     }
+    updateUsers();
   };
 
   openMenu = (event, user) => {
@@ -184,11 +200,12 @@ class CourseDetails extends Component {
   };
 
   handleRequestClose = () => {
-    this.props.actions.hideCourseDetails();
+    this.props.history.goBack();
   };
 
   handleRequestSave = () => {
-    this.props.actions.saveCourseDetails(this.props.courseDetails.course);
+    const {history} = this.props;
+    this.props.actions.saveCourseDetails(this.props.courseDetails.course, history.goBack);
   };
 
   signInOut = () => {
@@ -203,6 +220,11 @@ class CourseDetails extends Component {
     }
   };
 
+  toggleMode = () => {
+    const nextMode = this.state.mode === MODE.VIEW ? MODE.MODIFY : MODE.VIEW;
+    this.setState(setPath(['mode'], nextMode, this.state));
+  };
+
   render() {
     const {
       courseDetails = {},
@@ -210,10 +232,11 @@ class CourseDetails extends Component {
       currentUser = {},
       courseTypes,
       courseDelete,
+      match,
       actions} = this.props;
     const {
       show,
-      mode = MODE.CREATE,
+
       course = {}
     } = courseDetails;
     const {
@@ -221,6 +244,7 @@ class CourseDetails extends Component {
       onCourseDetailsChange,
       deleteCourse
     } = actions;
+    const {mode} = this.state;
 
     const courseId = viewPath(['courseDetails', 'course', 'id'], this.props);
     const {title, readonly} = mode;
@@ -241,12 +265,12 @@ class CourseDetails extends Component {
         onClose={this.handleRequestClose}
         secondAction={
           (mode === MODE.VIEW && (roles.ADMIN || roles.TRAINER))
-            ? <IconButton color='default' onClick={toggleEditCourse}>
+            ? <IconButton color='default' onClick={this.toggleMode}>
                 <IconPencil/>
               </IconButton>
             : undefined
         }
-        open={show}>
+        open={true}>
         <DialogContent style={{padding: '0', paddingTop: '12px'}}>
           <Grid container spacing={8} style={{width: '100%', margin: '0px', padding: '16px'}}>
             <ValidationGroup ref={this.setValidation}>
@@ -366,7 +390,7 @@ class CourseDetails extends Component {
               ? <Button key='course-details-button-2-a' onClick={this.handleRequestClose}>
                 {'Schließen'}
               </Button>
-              : <Button key='course-details-button-2-b' onClick={mode === MODE.MODIFY ? toggleEditCourse : this.handleRequestClose}>
+              : <Button key='course-details-button-2-b' onClick={mode === MODE.MODIFY ? this.toggleMode : this.handleRequestClose}>
                 {'Abbrechen'}
               </Button>
           }
@@ -391,7 +415,8 @@ const mapDispatchToProps = dispatch => ({
     updateUsers: updateUsers,
     // courses
     fetchCourses: fetchCourses,
-    hideCourseDetails: hideCourseDetails,
+    createCourse: createCourse,
+    showCourseDetails: showCourseDetails,
     saveCourseDetails: saveCourseDetails,
     toggleEditCourse: toggleEditCourse,
     onCourseDetailsChange: onCourseDetailsChange,
@@ -406,5 +431,6 @@ const mapDispatchToProps = dispatch => ({
 
 
 export default compose(
+  withRouter,
   connect(mapStateToProps, mapDispatchToProps)
 )(CourseDetails);

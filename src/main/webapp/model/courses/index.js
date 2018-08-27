@@ -16,7 +16,7 @@ import {assignPath, setPath, viewPath} from '../../utils/RamdaUtils';
 
 export const MODE = {
   CREATE: {
-    title: 'neuer Kurs',
+    title: 'Neuen Kurs anlegen',
     readonly: false,
   },
   VIEW: {
@@ -24,7 +24,7 @@ export const MODE = {
     readonly: true,
   },
   MODIFY: {
-    title: 'bearbeiten',
+    title: 'Kurs bearbeiten',
     readonly: false,
   }
 };
@@ -32,7 +32,7 @@ export const MODE = {
 const initialState = {
   pending: false,
   data: [],
-  courseDetails: {show: false, edit: false},
+  courseDetails: {edit: false},
   delete: {
     pending: false,
     errorMessage: ''
@@ -62,8 +62,6 @@ export const actions = createActions({
       ERROR: error => error
     },
     COURSE_DETAILS: {
-      SHOW: undefined,
-      HIDE: undefined,
       TOGGLE_ATTENDEE_LIST: undefined,
       TOGGLE_EDIT_COURSE: undefined,
       ON_COURSE_DETAILS_CHANGE: (id, value) => ({id: id, value: value}),
@@ -106,7 +104,6 @@ export const fetchCourses = filterOptions => {
 export const createCourse = filterOptions => {
   return dispatch => {
     dispatch(actions.courses.create.pending());
-    dispatch(actions.courses.courseDetails.show());
     return createNewCourse(filterOptions)
       .then(course => dispatch(actions.courses.create.success(course)))
       .catch(error => dispatch(actions.courses.create.error(error)));
@@ -116,7 +113,6 @@ export const createCourse = filterOptions => {
 export const showCourseDetails = id => {
   return dispatch => {
     dispatch(actions.courses.courseDetails.pending());
-    dispatch(actions.courses.courseDetails.show());
     return getCourseDetails(id)
       .then(details => dispatch(actions.courses.courseDetails.success(details)))
       .catch(error => dispatch(actions.courses.courseDetails.error(error)));
@@ -135,20 +131,14 @@ export const deleteCourse = id => {
   };
 };
 
-export const hideCourseDetails = () => {
-  return dispatch => {
-    dispatch(actions.courses.courseDetails.hide());
-  }
-};
-
-export const saveCourseDetails = course => {
+export const saveCourseDetails = (course, onSuccess) => {
   return dispatch => {
     dispatch(actions.courses.save.pending());
     const func = !!course.id ? saveCourse : saveNewCourse;
     return func(course)
       .then(updatedCourse => {
         dispatch(actions.courses.save.success(updatedCourse));
-        dispatch(actions.courses.courseDetails.hide());
+        onSuccess();
         dispatch(showNotification('Kurs gespeichert', 'success'));
       })
       .catch(error=> dispatch(actions.courses.save.error(error)));
@@ -267,10 +257,6 @@ export default handleActions({
   [actions.courses.delete.error]: (state, {payload}) =>
     assignPath(['delete'], {pending: false, errorMessage: payload.message}, state),
 
-  [actions.courses.courseDetails.show]: state =>
-    assignPath(['courseDetails'], {show: true, mode: MODE.VIEW}, state),
-  [actions.courses.courseDetails.hide]: state =>
-    setPath(['courseDetails', 'show'], false, state),
   [actions.courses.courseDetails.pending]: state =>
     setPath(['courseDetails'], {pending: true, course: {}}, state),
   [actions.courses.courseDetails.success]: (state, {payload}) =>

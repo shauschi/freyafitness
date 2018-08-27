@@ -93,7 +93,6 @@ class Courses extends Component {
         <PullToRefresh
           pending={this.props.courses.pending}
           onRefresh={this.props.actions.fetchCourses}>
-          <CourseDetails/>
           {this.getCourses()}
         </PullToRefresh>
       </div>

@@ -67,13 +67,13 @@ class MyAppBar extends Component {
 
   getMenu = () => {
     const {anchor} = this.state;
-    const {createCourse, createMembership} = this.props;
+    const {createCourse, createMembership, history, location} = this.props;
     return <Menu
       open={!!anchor}
       anchorEl={anchor}
       onClose={this.closeMenu}
     >
-      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
+      <MenuItem onClick={() => {this.closeMenu(); history.push(location.pathname + '/course/new')}}>Kurs anlegen</MenuItem>
       <MenuItem onClick={() => {this.closeMenu(); createMembership()}}>Mitgliedschaft anlegen</MenuItem>
       <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
       <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
