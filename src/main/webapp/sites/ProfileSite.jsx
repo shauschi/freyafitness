@@ -25,7 +25,7 @@ import {changePassword, onCancelPasswordChange, onOpenPasswordChange, onPassword
 import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "../utils/Style";
 import {viewPath} from "../utils/RamdaUtils";
-import Membership from './../components/membership';
+import {MyMembership} from './../components/membership';
 
 class ProfileSite extends Component {
 
@@ -37,7 +37,7 @@ class ProfileSite extends Component {
           <List style={{padding: '0'}}>
             <Subheader label='Deine Mitgliedschaft'/>
             {
-              memberships.map((value, idx) => <Membership membership={value} key={idx}/>)
+              memberships.map((value, idx) => <MyMembership membership={value} key={idx}/>)
             }
           </List>
         </Card>

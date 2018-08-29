@@ -197,7 +197,7 @@ export class GridDateControl extends ValidationControl {
 
   render() {
     const {valid, errors} = this.state;
-    const {value, label, readonly, onChange, xs, md} = this.props;
+    const {value, label, readonly, onChange, clearable, xs, md} = this.props;
     return <GridFormControl xs={xs} md={md} error={!valid}>
       <DatePicker
         value={value}
@@ -207,8 +207,11 @@ export class GridDateControl extends ValidationControl {
         okLabel={'OK'}
         cancelLabel={'ABBRECHEN'}
         todayLabel={'HEUTE'}
-        showTodayButton
-        disableOpenOnEnter={readonly}
+        clearLabel={'LÖSCHEN'}
+        showTodayButton={!clearable}
+        allowKeyboardControl={false}
+        disableOpenOnEnter={true}
+        clearable={clearable}
         InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
       />
       {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}

@@ -12,6 +12,7 @@ import freya.fitness.utils.exception.RoleNotFoundException;
 import freya.fitness.utils.Size;
 import freya.fitness.utils.exception.UserAllreadyExistsException;
 import freya.fitness.utils.exception.UserNotFoundException;
+import java.util.Comparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -55,6 +56,7 @@ public class ProfileController {
   public List<ProfileDto> getAllUsers() {
     return userService.getAllUsers().stream()
         .map(ProfileDto::new)
+        .sorted(Comparator.comparing(ProfileDto::getFirstname))
         .collect(Collectors.toList());
   }
 

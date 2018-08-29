@@ -10,16 +10,16 @@ import {IconCalendar, IconHome, IconUser, IconPreferences, IconLineChart} from '
 class Footer extends Component {
 
   handleChange = (event, value) => {
-    const {history} = this.context.router;
+    const {history} = this.props;
     switch (value) {
       case 0:
-        history.push('/');
+        history.push('/home');
         break;
       case 1:
         history.push('/statistics');
         break;
       case 2:
-        history.push('/courses/all');
+        history.push('/courses');
         break;
       case 3:
         history.push('/profile');
@@ -33,13 +33,13 @@ class Footer extends Component {
   };
 
   fromRoute() {
-    const {location} = this.context.router.history;
+    const {location} = this.props;
     switch (location.pathname) {
-      case '/':
+      case '/home':
         return 0;
       case '/statistics':
         return 1;
-      case '/courses/all':
+      case '/courses':
         return 2;
       case '/profile':
         return 3;

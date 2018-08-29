@@ -9,3 +9,13 @@ export const createMembership = (param) => {
     }
   })
 };
+
+export const fetchMemberships = (param) => {
+  return new Promise((resolve, reject) => {
+    if(param instanceof Error) {
+      reject(param)
+    } else {
+      resolve([{id: '1'}, {id: '2'}]);
+    }
+  })
+};

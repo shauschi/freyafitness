@@ -19,79 +19,88 @@ import {
 import {green, red, yellow} from '@material-ui/core/colors';
 import {PRIMARY, SECONDARY} from './../../utils/Style';
 import moment from 'moment';
-
-export const getMembershipIcon = key => getIcon(100, 0, key);
-
-const getIcon = (maxParticipations, participations, key) => {
-  if (key === undefined || key === null) {
-    return key;
-  }
-
-  const style = {marginRight: '0px'}
-  if (key === 'TRIAL') {
-    return <IconGift size={24} color={SECONDARY} style={style}/>;
-  } else if (key === 'SUBSCRIPTION') {
-    return <IconHeart size={24} color={PRIMARY} style={style}/>;
-  }
-
-  const p = participations / maxParticipations;
-  if (p > 0.75) {
-    return <IconBatteryLow size={24} color={red.A200} style={style}/>
-  } else if (p > 0.5) {
-    return <IconBatteryMid size={24} color={yellow.A200} style={style}/>
-  } else if (p > 0.25) {
-    return <IconBatteryHigh size={24} color={green.A200} style={style}/>
-  } else {
-    return <IconBatteryFull size={24} color={green.A200} style={style}/>
-  }
-};
-
-const geParticipationtText = (maxParticipations, participations, key) => {
-  if (key === 'SUBSCRIPTION') {
-    return "Du hast dich bisher für " + participations + " Kurse angemeldet";
-  }
-  return maxParticipations - participations + " von " + maxParticipations + " frei";
-};
-
-const getValidityText = validity => {
-  const from = moment(validity.from).format(DATE_FORMAT);
-  const to = validity.to ? moment(validity.to).format(DATE_FORMAT) : "unbestimmt";
-  return "Gültigkeit: " + from + " - " + to;
-};
+import {bindActionCreators} from "redux";
+import {fetchMemberships} from "../../model/memberships";
+import {withStyles} from "@material-ui/core/styles";
+import * as Style from "../../utils/Style";
+import Avatar from "@material-ui/core/Avatar";
+import {ProfilePicture} from "../profile";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import {IconMoreVert} from "../../utils/Icons";
+import {setPath, viewPath} from "../../utils/RamdaUtils";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Grid from "@material-ui/core/Grid";
 
 class Membership extends Component {
 
+  getValidityText = () => {
+    const {membership} = this.props;
+    const {validity} = membership;
+    const now = moment();
+    const from = moment(validity.from);
+    const to = moment(validity.to);
+    if (!!to && now.isAfter(to)) {
+      return 'abgelaufen seit ' + to.format(DATE_FORMAT);
+    }
+    if (now.isBefore(from)) {
+      return 'gültig ab ' + from.format(DATE_FORMAT);
+    }
+    if (!!to) {
+      return 'gültig bis ' + from.format(DATE_FORMAT);
+    }
+    return 'ungebstimmt gültig';
+  };
+
   render() {
-    const {membership, membershipTypes} = this.props;
-    const {participations, validity, membershipTypeid} = membership;
+    const {membership, membershipTypes, actions} = this.props;
+    const {user, validity} = membership;
     const {
       key,
       name,
       description,
       maxParticipations
     } = findById(membershipTypes.data, membership.membershipTypeId) || {};
-
+    const {showMembershipDetails} = actions;
     return (
       <ListItem
         button
-        onClick={() => {}}>
+        onClick={() => showMembershipDetails(id)}>
         <ListItemIcon>
-          {getIcon(maxParticipations, participations, key)}
+          <Avatar>
+            <ProfilePicture user={user}/>
+          </Avatar>
         </ListItemIcon>
-        <div style={{flex: '1 1 auto', padding: '0 16px', minWidth: '0'}}>
-          <Typography variant='subheading'>{name}</Typography>
-          <Typography variant='caption'>{geParticipationtText(maxParticipations, participations, key)}</Typography>
-          <Typography variant='caption'>{getValidityText(validity)}</Typography>
-        </div>
+        <ListItemText>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Typography>{user.firstname + ' ' + user.lastname}</Typography>
+          <Typography variant='caption'>{name}</Typography>
+          </div>
+          <Typography variant='caption'>{this.getValidityText()}</Typography>
+        </ListItemText>
       </ListItem>
     );
-  };
+  }
 }
 
 const mapStateToProps = state => ({
   membershipTypes: state.membershipTypes,
 });
 
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({
+    // memberships
+    fetchMemberships: fetchMemberships
+  }, dispatch),
+  dispatch
+});
+
 export default compose(
-  connect(mapStateToProps)
+  withStyles(Style.APP_STYLES, {withTheme: true}),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(Membership);
