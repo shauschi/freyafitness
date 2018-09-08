@@ -1,6 +1,7 @@
 'use strict';
 import React, {Component} from 'react';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import {Dialog, GridTextControl} from '.';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -23,12 +24,18 @@ class ConfirmButton extends Component {
 
   render() {
     const {show} = this.state;
-    const {onClick, title, question, pending, children, fullScreen = false, ...props} = this.props;
+    const {onClick, title, question, pending, children, fullScreen = false, iconButton = false, ...props} = this.props;
 
-    return <div>
-      <Button onClick={this.showDialog} {...props}>
-        {children}
-      </Button>
+    return <div style={{display: 'inline-block'}}>
+      {
+        iconButton
+          ? <IconButton onClick={this.showDialog} {...props}>
+            {children}
+          </IconButton>
+          : <Button onClick={this.showDialog} {...props}>
+            {children}
+          </Button>
+      }
 
       <Dialog
         title={!!title ? title : 'Bist du sicher?'}

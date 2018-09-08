@@ -27,22 +27,22 @@ export const getIcon = (maxParticipations, participations, key) => {
     return key;
   }
 
-  const style = {marginRight: '0px'}
+  const style = {marginRight: '0px'};
   if (key === 'TRIAL') {
-    return <IconGift size={24} color={SECONDARY} style={style}/>;
+    return <IconGift size={24} style={{color: SECONDARY, ...style}}/>;
   } else if (key === 'SUBSCRIPTION') {
-    return <IconHeart size={24} color={PRIMARY} style={style}/>;
+    return <IconHeart size={24} style={{color: PRIMARY, ...style}}/>;
   }
 
   const p = participations / maxParticipations;
   if (p > 0.75) {
-    return <IconBatteryLow size={24} color={red.A200} style={style}/>
+    return <IconBatteryLow size={24} style={{color: red.A200, ...style}}/>
   } else if (p > 0.5) {
-    return <IconBatteryMid size={24} color={yellow.A200} style={style}/>
+    return <IconBatteryMid size={24} style={{color: yellow.A200, ...style}}/>
   } else if (p > 0.25) {
-    return <IconBatteryHigh size={24} color={green.A200} style={style}/>
+    return <IconBatteryHigh size={24} style={{color: green.A200, ...style}}/>
   } else {
-    return <IconBatteryFull size={24} color={green.A200} style={style}/>
+    return <IconBatteryFull size={24} style={{color: green.A200, ...style}}/>
   }
 };
 

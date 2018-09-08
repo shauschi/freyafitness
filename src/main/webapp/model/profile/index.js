@@ -152,10 +152,9 @@ export const actions = createActions({
 
 export const setLoginRef = (ref) => {
   return (dispatch, getState) => {
-    dispatch(actions.setLoginRef(ref));
+     dispatch(actions.setLoginRef(ref));
     if (getState().profile.shouldScrollToLogin) {
-      const loginRef = getState().profile.loginRef;
-      loginRef.scrollIntoView({behaviour: 'smooth', block: 'start'});
+      ref.scrollIntoView({behaviour: 'smooth', block: 'start'});
       dispatch(actions.shouldScrollToLogin(false));
     }
   }
@@ -164,7 +163,7 @@ export const setLoginRef = (ref) => {
 export const scrollToLogin = router => {
   return (dispatch, getState) => {
     const loginRef = getState().profile.loginRef;
-    if (router.history.location.pathname === '/' && !!loginRef) {
+    if (router.history.location.pathname === '/home' && !!loginRef) {
       loginRef.scrollIntoView({behaviour: 'smooth', block: 'start'});
     } else {
       dispatch(actions.shouldScrollToLogin(true));

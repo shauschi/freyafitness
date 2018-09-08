@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import compose from 'recompose/compose';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import withWidth from '@material-ui/core/withWidth';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -49,7 +50,8 @@ class ProfileSite extends Component {
     const {
       profile,
       password,
-      actions
+      actions,
+      width,
     } = this.props;
 
     if (profile.pending) {
@@ -77,7 +79,7 @@ class ProfileSite extends Component {
             <Grid item xs={12} sm={8} style={{padding: '0px'}}>
               <div style={{position: 'relative', width: '100%', paddingTop: '75%'}}>
                 <div style={{position: 'absolute', top: '0px', height: '100%', width: '100%', zIndex: -20}}>
-                  <ProfilePicture user={profile.user} size='LG' style={{width: '100%'}}/>
+                  <ProfilePicture user={profile.user} size={width.toUpperCase()} style={{width: '100%'}}/>
                 </div>
                 <div style={{position: 'absolute', bottom: '0px', right: '24px'}}>
                   <Button
@@ -149,6 +151,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
+  withWidth(),
   withStyles(Style.APP_STYLES, {withTheme: true}),
   connect(
     mapStateToProps,

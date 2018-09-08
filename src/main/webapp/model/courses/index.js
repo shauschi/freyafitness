@@ -32,7 +32,9 @@ export const MODE = {
 const initialState = {
   pending: false,
   data: [],
-  courseDetails: {edit: false},
+  courseDetails: {
+    edit: false
+  },
   delete: {
     pending: false,
     errorMessage: ''
@@ -51,6 +53,7 @@ export const actions = createActions({
       SUCCESS: course => course,
       ERROR: error => error
     },
+    DUPLICATE: undefined,
     DELETE: {
       PENDING: undefined,
       SUCCESS: courseId => courseId,
@@ -62,9 +65,8 @@ export const actions = createActions({
       ERROR: error => error
     },
     COURSE_DETAILS: {
-      TOGGLE_ATTENDEE_LIST: undefined,
-      TOGGLE_EDIT_COURSE: undefined,
       ON_COURSE_DETAILS_CHANGE: (id, value) => ({id: id, value: value}),
+      RESET_DETAILS: undefined,
       PENDING: undefined,
       SUCCESS: details => details,
       ERROR: error => error
@@ -110,6 +112,12 @@ export const createCourse = filterOptions => {
   };
 };
 
+export const duplicateCourse = filterOptions =>
+  dispatch => {
+    dispatch(actions.courses.duplicate());
+    dispatch(showNotification('Kurs dupliziert', 'success'));
+  };
+
 export const showCourseDetails = id => {
   return dispatch => {
     dispatch(actions.courses.courseDetails.pending());
@@ -131,27 +139,24 @@ export const deleteCourse = id => {
   };
 };
 
-export const saveCourseDetails = (course, onSuccess) => {
+export const saveCourseDetails = course => {
   return dispatch => {
     dispatch(actions.courses.save.pending());
     const func = !!course.id ? saveCourse : saveNewCourse;
     return func(course)
       .then(updatedCourse => {
         dispatch(actions.courses.save.success(updatedCourse));
-        onSuccess();
         dispatch(showNotification('Kurs gespeichert', 'success'));
       })
       .catch(error=> dispatch(actions.courses.save.error(error)));
   };
 };
 
-export const toggleEditCourse = () => {
-  return dispatch => dispatch(actions.courses.courseDetails.toggleEditCourse());
-};
+export const onCourseDetailsChange = (id, value) =>
+  dispatch => dispatch(actions.courses.courseDetails.onCourseDetailsChange(id, value));
 
-export const onCourseDetailsChange = (id, value) => {
-  return dispatch => dispatch(actions.courses.courseDetails.onCourseDetailsChange(id, value));
-};
+export const resetCourseDetails = () =>
+  dispatch => dispatch(actions.courses.courseDetails.resetDetails());
 
 export const signIn = courseId => {
   return dispatch => {
@@ -214,14 +219,23 @@ export const removeUserFromCourse = (courseId, userId) => {
 
 const updateCourse = (state, course) => {
   const courses = Object.assign([], state.data);
+  let updatedState = state;
+  let found = false;
   for (const idx in courses) {
     if (courses[idx].id === course.id) {
       courses[idx] = course;
-      const updatedState = setPath(['data'], courses, state);
-      return setPath(['courseDetails', 'course'], course, updatedState);
+      updatedState = setPath(['data'], courses, updatedState);
+      found = true;
+      break;
     }
   }
-  return state;
+  // if course is new
+  if (!found) {
+    courses.push(course);
+    updatedState = setPath(['data'], courses, updatedState);
+  }
+  updatedState =  setPath(['courseDetails', 'course'], course, updatedState);
+  return setPath(['courseDetails', 'originalCourse'], course, updatedState);
 };
 
 const deleteCourseFromList = (state, courseId) => {
@@ -244,9 +258,16 @@ export default handleActions({
 
   [actions.courses.create.pending]: state => setPath(['courseDetails', 'pending'], true, state),
   [actions.courses.create.success]: (state, {payload}) =>
-    assignPath(['courseDetails'], {pending: false, mode: MODE.CREATE, course: payload}, state),
+    assignPath(['courseDetails'], {pending: false, course: payload, originalCourse: {}}, state),
   [actions.courses.create.error]: (state, {payload}) =>
     assignPath(['courseDetails'], {pending: false, errorMessage: payload.message}, state),
+
+  // DUPLICATE
+  [actions.courses.duplicate]: state => {
+    const course = Object.assign({}, state.courseDetails.course);
+    course.id = undefined;
+    return assignPath(['courseDetails'], {pending: false, course: course, originalCourse: {}}, state);
+  },
 
   // DELETE
   [actions.courses.delete.pending]: state => setPath(['delete', 'pending'], true, state),
@@ -258,19 +279,15 @@ export default handleActions({
     assignPath(['delete'], {pending: false, errorMessage: payload.message}, state),
 
   [actions.courses.courseDetails.pending]: state =>
-    setPath(['courseDetails'], {pending: true, course: {}}, state),
+    setPath(['courseDetails'], {pending: true, course: {}, originalCourse: {}}, state),
   [actions.courses.courseDetails.success]: (state, {payload}) =>
-    assignPath(['courseDetails'], {pending: false, course: payload}, state),
+    assignPath(['courseDetails'], {pending: false, course: payload, originalCourse: payload}, state),
   [actions.courses.courseDetails.error]: (state, {payload}) =>
     assignPath(['courseDetails'], {pending: false, errorMessage: payload.message}, state),
-  [actions.courses.courseDetails.toggleEditCourse]: state => {
-    const nextMode = viewPath(['courseDetails', 'mode'], state) === MODE.VIEW
-      ? MODE.MODIFY
-      : MODE.VIEW;
-    return setPath(['courseDetails', 'mode'], nextMode, state)
-  },
   [actions.courses.courseDetails.onCourseDetailsChange]: (state, {payload}) =>
     setPath(['courseDetails', 'course', payload.id], payload.value, state),
+  [actions.courses.courseDetails.resetDetails]: state =>
+    setPath(['courseDetails', 'course'], state.courseDetails.originalCourse, state),
   [actions.courses.signIn.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.signOut.success]: (state, {payload}) => updateCourse(state, payload),
   [actions.courses.save.success]: (state, {payload}) => updateCourse(state, payload),

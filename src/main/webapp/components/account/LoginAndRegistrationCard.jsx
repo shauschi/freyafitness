@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import {LoginForm, RegistrationForm, PasswordForgottenDialog, ResetPasswordDialog} from '.';
-import {setPath, viewPath} from '../../utils/RamdaUtils';
+import {viewPath} from '../../utils/RamdaUtils';
 import {
   showLogin,
   showRegistration,
@@ -33,7 +33,6 @@ class LoginAndRegistrationCard extends Component {
   };
 
   onTabChange = (event, value) => {
-    console.warn("tab change", value);
     if (value === 0) {
       this.props.actions.showLogin();
     } else {
