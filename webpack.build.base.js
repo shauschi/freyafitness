@@ -1,5 +1,6 @@
 'use strict';
 const _ = require("lodash");
+const autoprefixer = require('autoprefixer');
 const env = process.env.NODE_ENV || "development";
 const debug = ["development", "test"].indexOf(env) !== -1;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
