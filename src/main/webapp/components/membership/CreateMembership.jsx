@@ -59,9 +59,7 @@ class CreateMembership extends Component {
     }
     const {
       key,
-      name,
       description,
-      maxParticipations
     } = findById(membershipTypes.data, membershipTypeId) || {};
     const user = findById(users.data, userId) || {};
 

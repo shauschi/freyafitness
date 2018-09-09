@@ -2,12 +2,7 @@
 import React, {Component} from 'react';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import {IconClose} from '../../utils/Icons';
-import {blueGrey} from '@material-ui/core/colors/index';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import {ValidationGroup, Validators} from './../general/validation';
 import {GridInputControl, GridTextControl} from './../general';

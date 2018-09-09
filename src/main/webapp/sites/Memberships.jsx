@@ -74,7 +74,7 @@ class Memberships extends Component {
           pending={pending}
           onRefresh={() => fetchMemberships(true)}>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} md={10}>
               <Card>
                 <CardHeader title='Mitgliedschaften'/>
                 <CardContent>

@@ -6,5 +6,6 @@ export {
   assignPath,
   togglePath,
   findBy,
-  findById
+  findById,
+  deepEqual
 } from './RamdaUtils.jsx';

@@ -1,0 +1,32 @@
+
+.view-container{
+    padding-top: 64px;
+}
+
+.modal-container {
+    position: fixed;
+    transition: all 4500ms cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+    top: -9000px;
+    right: 0;
+    bottom: 0;
+    left: -9000px;
+    height: 0;
+    width: 0;
+    background: white;
+    z-index: 1200;
+
+    &:empty{
+        display:none;
+    }
+
+    &.modal-enter-active2 {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        overflow: auto;
+    }
+}

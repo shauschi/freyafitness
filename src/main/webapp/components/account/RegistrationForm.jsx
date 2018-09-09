@@ -62,17 +62,17 @@ class RegistrationForm extends Component {
             validators={[Validators.notEmpty('Bitte gib deinen Nachnamen an.')]}
             onChange={formDataChanged}/>
           <GridInputControl
-            id='email'
+            id='registration_email'
             label='E-Mail'
             value={formData.email}
             validators={[Validators.email()]}
-            onChange={formDataChanged}/>
+            onChange={(id, value) => formDataChanged('email', value)}/>
           <GridPasswordControl
-            id='password'
+            id='registration_password'
             label='Password'
             value={formData.password}
             validators={[Validators.minLength(8)]}
-            onChange={formDataChanged}/>
+            onChange={(id, value) => formDataChanged('password', value)}/>
           <GridPasswordControl
             id='matchingPassword'
             label='Password wiederholen'

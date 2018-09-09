@@ -8,8 +8,9 @@ import {default as MaterialDialog} from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Slide from '@material-ui/core/Slide';
+import '../../utils/Style/style.less';
 
-import {IconClose} from '../../utils/Icons';
+import {IconBack} from '../../utils/Icons';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
@@ -41,14 +42,16 @@ class Dialog extends Component {
       fullScreen,
       open,
       children,
-      secondAction
+      secondAction,
+      style,
     } = this.props;
 
     return (
       <MaterialDialog
         onClose={this.handleRequestClose}
-        fullScreen={fullScreen}
-        TransitionComponent={Transition}
+        fullScreen={!!fullScreen}
+        className='modal-dialog'
+        style={style}
         open={open}>
         <DialogTitle style={{marginBottom: '12px'}}>
           {
@@ -60,7 +63,7 @@ class Dialog extends Component {
                     aria-label='Close'
                     style={{position: 'absolute', left: '8px', zIndex: 20}}
                     onClick={this.handleRequestClose}>
-                    <IconClose/>
+                    <IconBack/>
                   </IconButton>
                   <Typography
                     type='title'

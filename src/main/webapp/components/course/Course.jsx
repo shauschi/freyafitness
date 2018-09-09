@@ -37,6 +37,8 @@ const getAvailability = (participants, maxParticipants, textDecoration) => {
 
 class Course extends Component {
 
+  elements = {};
+
   state = {
     course: {
       anchor: null,
@@ -52,14 +54,32 @@ class Course extends Component {
     this.setState(setPath(['course'], {anchor: null, course: null}, this.state));
   };
 
-  showCourseDetails = id => {
-    const {history, location} = this.props;
-    history.push(location.pathname + '/course/' + id);
+  styleFromElement = e => {
+    const {top, right, bottom, left, width, height} = e.getBoundingClientRect();
+    return {top, right, bottom, left, width, height};
+  };
+
+  showCourseDetails = () => {
+    const {course, history, location} = this.props;
+    const from = this.styleFromElement(this.elements.item);
+    const title = this.styleFromElement(this.elements.title);
+
+    from.backgroundColor = 'rgba(255,255,255,0.0)';
+
+    history.push({
+      pathname: location.pathname + '/course/' + course.id,
+      state: {
+        to: 'modal',
+        data: course,
+        from: from,
+        title: {top: title.top-from.top, left: title.left-from.left},
+      }
+    });
   };
 
   getCourseMenu = () => {
     const {anchor, course} = this.state.course;
-    const {signIn, signOut, showCourseDetails} = this.props;
+    const {signIn, signOut} = this.props;
     const courseId = viewPath(['course', 'id'], this.props);
     const signedIn = viewPath(['course', 'signedIn'], this.props);
     return <Menu
@@ -69,26 +89,29 @@ class Course extends Component {
       {
         signedIn
           ? <MenuItem onClick={() => {
-              this.closeMenu();
-              signOut(courseId);
-            }}>
-              <span style={{marginLeft: '8px'}}>Abmelden</span>
-            </MenuItem>
+            this.closeMenu();
+            signOut(courseId);
+          }}>
+            <span style={{marginLeft: '8px'}}>Abmelden</span>
+          </MenuItem>
           : <MenuItem onClick={() => {
-              this.closeMenu();
-              signIn(courseId);
-            }}>
-              <span style={{marginLeft: '8px'}}>Teilnehmen</span>
-            </MenuItem>
+            this.closeMenu();
+            signIn(courseId);
+          }}>
+            <span style={{marginLeft: '8px'}}>Teilnehmen</span>
+          </MenuItem>
       }
-      <MenuItem onClick={() => {this.closeMenu(); this.showCourseDetails(courseId);}}>
+      <MenuItem onClick={() => {
+        this.closeMenu();
+        this.showCourseDetails();
+      }}>
         <span style={{marginLeft: '8px'}}>Details anzeigen</span>
       </MenuItem>
     </Menu>
   };
 
   render() {
-    const {course, courseTypes, showCourseDetails, showDate} = this.props;
+    const {course, courseTypes, showDate} = this.props;
     const {
       id,
       courseTypeId,
@@ -105,12 +128,21 @@ class Course extends Component {
     const textDecoration = canceled ? 'line-through' : undefined;
 
     const title = (<div>
-      <Typography type={'title'} style={{display: 'inline-block', textDecoration: textDecoration}}>{name}</Typography>
+      <span ref={e => this.elements.title = e}>
+        <Typography type={'title'} style={{display: 'inline-block', textDecoration: textDecoration}}>
+          {name}
+        </Typography>
+      </span>
       <Typography
-        style={{display: 'inline-block', float: 'right', textDecoration: textDecoration}}>{'mit ' + instructor.firstname}</Typography>
+        style={{
+          display: 'inline-block',
+          float: 'right',
+          textDecoration: textDecoration
+        }}>{'mit ' + instructor.firstname}</Typography>
     </div>);
     const additional = (<div>
-      {signedIn ? <Typography style={{display: 'inline-block', color: 'green'}}>Du bist angemeldet</Typography> : undefined}
+      {signedIn ?
+        <Typography style={{display: 'inline-block', color: 'green'}}>Du bist angemeldet</Typography> : undefined}
       {getAvailability(attendees, maxParticipants, textDecoration)}
     </div>);
     const infos = canceled ? (<div>
@@ -125,7 +157,8 @@ class Course extends Component {
     return (
       <ListItem
         button
-        onClick={() => this.showCourseDetails(id)}
+        onClick={this.showCourseDetails}
+        ContainerProps={{ref: e => this.elements.item = e}}
         style={{backgroundColor: backgroundColor, position: 'relative'}}>
         <div style={{
           position: 'relative',
@@ -165,7 +198,7 @@ class Course extends Component {
         />
         <ListItemSecondaryAction>
           <IconButton aria-label='more' onClick={event => this.openMenu(event, course)}>
-            <IconMoreVert />
+            <IconMoreVert/>
           </IconButton>
           {this.getCourseMenu()}
         </ListItemSecondaryAction>

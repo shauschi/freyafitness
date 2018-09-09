@@ -1,7 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import withWidth from '@material-ui/core/withWidth';
 import {withRouter} from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -128,5 +127,4 @@ MyAppBar.contextTypes = {
 
 export default compose(
   withRouter,
-  withWidth()
 )(MyAppBar);

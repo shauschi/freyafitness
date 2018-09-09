@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.apache.tomcat.jni.Local;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -140,21 +141,24 @@ public class StatisticsServiceTest {
 
   @Test
   public void shouldMapStatistics() {
+    final LocalDateTime now = LocalDateTime.now();
+    final int year = now.getYear();
+    final int month = now.getMonth().getValue() -1;
     // given
     List<Participation> participations = Arrays.asList(
-        givenParticipation(LocalDate.of(2018, 3, 10), EASY),
-        givenParticipation(LocalDate.of(2018, 3, 12), MED),
-        givenParticipation(LocalDate.of(2018, 3, 15), EASY),
+        givenParticipation(LocalDate.of(year, month, 10).minusMonths(4), EASY),
+        givenParticipation(LocalDate.of(year, month, 12).minusMonths(4), MED),
+        givenParticipation(LocalDate.of(year, month, 15).minusMonths(4), EASY),
 
-        givenParticipation(LocalDate.of(2018, 4, 15), EASY),
+        givenParticipation(LocalDate.of(year, month, 15).minusMonths(3), EASY),
 
-        givenParticipation(LocalDate.of(2018, 5, 17), MED),
-        givenParticipation(LocalDate.of(2018, 5, 20), MED),
+        givenParticipation(LocalDate.of(year, month, 17).minusMonths(2), MED),
+        givenParticipation(LocalDate.of(year, month, 20).minusMonths(2), MED),
 
-        givenParticipation(LocalDate.of(2018, 7, 20), MED),
-        givenParticipation(LocalDate.of(2018, 7, 21), MED),
-        givenParticipation(LocalDate.of(2018, 7, 22), EASY),
-        givenParticipation(LocalDate.of(2018, 7, 27), EASY)
+        givenParticipation(LocalDate.of(year, month, 20), MED),
+        givenParticipation(LocalDate.of(year, month, 21), MED),
+        givenParticipation(LocalDate.of(year, month, 22), EASY),
+        givenParticipation(LocalDate.of(year, month, 27), EASY)
 
     );
     when(participationService.getParticipationsBetween(eq(USER_ID), any(), any()))
@@ -172,16 +176,17 @@ public class StatisticsServiceTest {
     final Map<LocalDate, Long> participationsPerMonth = result.getParticipationsPerMonth();
     assertThat(participationsPerMonth, notNullValue());
     assertThat(participationsPerMonth.size(), is(5));
+    final LocalDate begOfMonth = LocalDate.of(year, month, 1);
     assertThat(
-        participationsPerMonth.get(LocalDate.of(2018, 3, 1)), is(3L));
+        participationsPerMonth.get(begOfMonth.minusMonths(4)), is(3L));
     assertThat(
-        participationsPerMonth.get(LocalDate.of(2018, 4, 1)), is(1L));
+        participationsPerMonth.get(begOfMonth.minusMonths(3)), is(1L));
     assertThat(
-        participationsPerMonth.get(LocalDate.of(2018, 5, 1)), is(2L));
+        participationsPerMonth.get(begOfMonth.minusMonths(2)), is(2L));
     assertThat(
-        participationsPerMonth.get(LocalDate.of(2018, 6, 1)), is(0L));
+        participationsPerMonth.get(begOfMonth.minusMonths(1)), is(0L));
     assertThat(
-        participationsPerMonth.get(LocalDate.of(2018, 7, 1)), is(4L));
+        participationsPerMonth.get(begOfMonth), is(4L));
   }
 
   private Participation givenParticipation(final LocalDate courseStart, final String courseType) {

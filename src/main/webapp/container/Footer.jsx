@@ -52,16 +52,17 @@ class Footer extends Component {
 
   render() {
     const value = this.fromRoute();
+    const navStyle = {minWidth: 0};
     return (
       <BottomNavigation
         value={value}
         onChange={this.handleChange}
         style={{position: 'fixed', bottom: '0px', width: '100%', zIndex: 1000}}>
-        <BottomNavigationAction label="Home" icon={<IconHome size={24}/>}/>
-        <BottomNavigationAction label="Stats" icon={<IconLineChart size={24}/>}/>
-        <BottomNavigationAction label="Kurse" icon={<IconCalendar size={24}/>}/>
-        <BottomNavigationAction label="Profil" icon={<IconUser size={24}/>}/>
-        <BottomNavigationAction label="Settings" icon={<IconPreferences size={24}/>}/>
+        <BottomNavigationAction style={navStyle} label="Home" icon={<IconHome size={24}/>}/>
+        <BottomNavigationAction style={navStyle} label="Stats" icon={<IconLineChart size={24}/>}/>
+        <BottomNavigationAction style={navStyle} label="Kurse" icon={<IconCalendar size={24}/>}/>
+        <BottomNavigationAction style={navStyle} label="Profil" icon={<IconUser size={24}/>}/>
+        <BottomNavigationAction style={navStyle} label="Settings" icon={<IconPreferences size={24}/>}/>
       </BottomNavigation>
     );
   };
