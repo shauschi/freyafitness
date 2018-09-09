@@ -1,13 +1,12 @@
 'use strict';
 import React, {Component} from 'react';
 import ListItem from "@material-ui/core/ListItem";
-import Dialog from "../general/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
-import {GridInputControl} from "../general";
+import {Dialog, GridInputControl} from "../general";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import {togglePath, setPath} from "../../utils/RamdaUtils";
+import {setPath} from "../../utils/RamdaUtils";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
