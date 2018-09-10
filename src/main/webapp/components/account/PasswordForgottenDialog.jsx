@@ -47,6 +47,7 @@ class PasswordForgottenDialog extends Component {
               <GridInputControl
                 id='email'
                 label='E-Mail'
+                type='email'
                 value={formData.email}
                 validators={[Validators.email()]}
                 onChange={formDataChanged}/>
