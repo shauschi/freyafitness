@@ -129,6 +129,7 @@ class Memberships extends Component {
     search: '',
     filter: {
       card10: false,
+      card10full: false,
       abo: false,
       trial: false,
       extended: false,
@@ -166,6 +167,13 @@ class Memberships extends Component {
       card10: data => {
         const card10 = findBy('key', membershipTypes.data, 'CARD_10') || {};
         return data.filter(m => m.membershipTypeId === card10.id);
+      },
+      cardfull: data => {
+        return data.filter(m => {
+          const membershipType = findById(membershipTypes.data, m.membershipTypeId) || {};
+          const r = m.participationCount / membershipType.maxParticipations;
+          return r > 0.7;
+        });
       },
       abo: data => {
         const abo = findBy('key', membershipTypes.data, 'SUBSCRIPTION') || {};
@@ -242,6 +250,14 @@ class Memberships extends Component {
                         selected={filter.card10}
                         onClick={() => this.toggleFilter('card10')}
                         badgeContent={possibleData.card10.length}/>
+                    </Grid>
+                    <Grid item>
+                      <BatchedButton
+                        id='cardfull'
+                        label='(fast) voll'
+                        selected={filter.cardfull}
+                        onClick={() => this.toggleFilter('cardfull')}
+                        badgeContent={possibleData.cardfull.length}/>
                     </Grid>
                     <Grid item>
                       <BatchedButton
