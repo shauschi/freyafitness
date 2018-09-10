@@ -24,6 +24,7 @@ import {DATE_FORMAT} from "../utils/Format";
 import {withRouter} from 'react-router-dom';
 import {getIcon} from './../components/membership';
 import Fuse from 'fuse.js';
+import {comparingModFunc} from "../utils/Comparator";
 
 const infinity = '\u221E';
 
@@ -206,6 +207,7 @@ class Memberships extends Component {
         filtered = dataFilter[f](filtered);
       }
     }
+    filtered.sort(comparingModFunc(m => m.user.firstname, m => m));
 
     const possibleData = {};
     for (const f in dataFilter) {
@@ -214,8 +216,6 @@ class Memberships extends Component {
         possibleData[f] = dataFilter[f](filtered);
       }
     }
-
-
 
     return (
       <div className={this.props.classes.root}>
