@@ -24,6 +24,7 @@ import {DATE_FORMAT} from "../utils/Format";
 import {withRouter} from 'react-router-dom';
 import {getIcon} from './../components/membership';
 import Fuse from 'fuse.js';
+import {comparingModFunc} from "../utils/Comparator";
 
 const infinity = '\u221E';
 
@@ -128,10 +129,12 @@ class Memberships extends Component {
     search: '',
     filter: {
       card10: false,
+      card10full: false,
       abo: false,
       trial: false,
       extended: false,
       valid: true,
+      search: true,
     },
     showInvalid: false,
   };
@@ -151,7 +154,7 @@ class Memberships extends Component {
   };
 
   render() {
-    const {search, showInvalid, filter} = this.state;
+    const {search, filter} = this.state;
     const {memberships, membershipTypes, actions} = this.props;
     const {pending, data} = memberships;
     const {fetchMemberships} = actions;
@@ -164,6 +167,13 @@ class Memberships extends Component {
       card10: data => {
         const card10 = findBy('key', membershipTypes.data, 'CARD_10') || {};
         return data.filter(m => m.membershipTypeId === card10.id);
+      },
+      cardfull: data => {
+        return data.filter(m => {
+          const membershipType = findById(membershipTypes.data, m.membershipTypeId) || {};
+          const r = m.participationCount / membershipType.maxParticipations;
+          return r > 0.7;
+        });
       },
       abo: data => {
         const abo = findBy('key', membershipTypes.data, 'SUBSCRIPTION') || {};
@@ -183,9 +193,12 @@ class Memberships extends Component {
           && (!m.validity.to || moment(m.validity.to) >= now));
       },
       search: data => {
+        if (search === '') {
+          return data;
+        }
         const options = {
           shouldSort: true,
-          threshold: 0.6,
+          threshold: 0.4,
           location: 0,
           distance: 100,
           maxPatternLength: 32,
@@ -206,6 +219,7 @@ class Memberships extends Component {
         filtered = dataFilter[f](filtered);
       }
     }
+    filtered.sort(comparingModFunc(m => m.user.firstname, m => m));
 
     const possibleData = {};
     for (const f in dataFilter) {
@@ -214,8 +228,6 @@ class Memberships extends Component {
         possibleData[f] = dataFilter[f](filtered);
       }
     }
-
-
 
     return (
       <div className={this.props.classes.root}>
@@ -238,6 +250,14 @@ class Memberships extends Component {
                         selected={filter.card10}
                         onClick={() => this.toggleFilter('card10')}
                         badgeContent={possibleData.card10.length}/>
+                    </Grid>
+                    <Grid item>
+                      <BatchedButton
+                        id='cardfull'
+                        label='(fast) voll'
+                        selected={filter.cardfull}
+                        onClick={() => this.toggleFilter('cardfull')}
+                        badgeContent={possibleData.cardfull.length}/>
                     </Grid>
                     <Grid item>
                       <BatchedButton
