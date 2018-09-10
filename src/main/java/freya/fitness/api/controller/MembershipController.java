@@ -1,7 +1,9 @@
 package freya.fitness.api.controller;
 
 import freya.fitness.api.dto.CreateMembershipDto;
+import freya.fitness.api.dto.MembershipDetailsDto;
 import freya.fitness.api.dto.MembershipDto;
+import freya.fitness.api.dto.MessageDto;
 import freya.fitness.api.mapping.MembershipMapper;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.service.MembershipService;
@@ -10,6 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,11 +35,11 @@ public class MembershipController {
   }
 
   /**
-   * Get all {@link Membership}s. Only for admins.
+   * Get all {@link Membership}s.
    *
    * @return list of all memberships
    */
-  @PreAuthorize("hasAnyAuthority('ADMIN')")
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
   @GetMapping("/")
   public List<MembershipDto> getAllMemberships() {
     return membershipService.getAllMemberships().stream()
@@ -66,9 +69,41 @@ public class MembershipController {
    */
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
   @GetMapping("/{id}")
-  public MembershipDto getMembership(@PathVariable("id") final UUID id) {
-    return membershipMapper.map(membershipService.getMembership(id));
+  public MembershipDetailsDto getMembership(@PathVariable("id") final UUID id) {
+    return membershipMapper.mapDetails(membershipService.getMembership(id));
   }
 
+  /**
+   * Updates an existing membership.
+   *
+   * @param membershipDetailsDto membership that shpuld be updated
+   * @return existing membership
+   */
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
+  @PostMapping("/{id}")
+  public MembershipDetailsDto saveMembership(
+      @PathVariable("id") final UUID id,
+      @RequestBody final MembershipDetailsDto membershipDetailsDto) {
+    if (!id.equals(membershipDetailsDto.getId())) {
+      throw new IllegalArgumentException("Membership id does not match path variable");
+    }
+    final Membership membership = membershipMapper.map(membershipDetailsDto);
+    final Membership updated = membershipService.saveMembership(membership);
+    return membershipMapper.mapDetails(updated);
+  }
+
+
+  /**
+   * Returns all information of an existing membership.
+   *
+   * @param id ID of the membership
+   * @return existing membership
+   */
+  @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
+  @DeleteMapping("/{id}")
+  public MessageDto deleteMembership(@PathVariable("id") final UUID id) {
+    membershipService.deleteMembership(id);
+    return new MessageDto("Mitgliedschaft erfolgreich gelöscht");
+  }
 
 }

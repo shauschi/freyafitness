@@ -1,47 +1,38 @@
 'use strict';
 
-export {
-  TiUserAdd as IconUserAdd,
-  TiBatteryLow as IconBatteryLow,
-  TiBatteryMid as IconBatteryMid,
-  TiBatteryHigh as IconBatteryHigh,
-  TiBatteryFull as IconBatteryFull,
-  TiCalendar as IconCalendar,
-  TiCamera as IconCamera,
-  TiTime as IconClock,
-  TiTimes as IconClose,
-  TiDocumentText as IconDocument,
-  TiCog as IconPreferences,
-  TiGift as IconGift,
-  TiHeartFullOutline as IconHeart,
-  TiHome as IconHome,
-  TiInfoLarge as IconInfo,
-  TiChartLine as IconLineChart,
-  TiLocation as IconLocation,
-  TiLockClosed as IconLockClosed,
-  TiThMenu as IconMenu,
-  TiPencil as IconPencil,
-  TiPlus as IconPlus,
-  TiGroup as IconUserGroup,
-  TiUser as IconUser,
-  TiDelete as IconDelete
-} from 'react-icons/lib/ti';
-
-export {
-  FaSignIn as IconSignIn,
-  FaSignOut as IconSignOut,
-  FaPaperPlane as IconPaperPlane,
-  FaEye as IconEye,
-  FaEyeSlash as IconEyeSlash
-} from 'react-icons/lib/fa';
-
-export {
-  MdMoreVert as IconMoreVert,
-  MdRotateLeft as IconRotateLeft,
-  MdRotateRight as IconRotateRight,
-  MdZoomIn as IconZoomIn,
-  MdZoomOut as IconZoomOut,
-  MdExpandMore as IconExpandMore,
-  MdExpandLess as IconExpandLess,
-  MdDeleteForever as IconDeleteForever
-} from 'react-icons/lib/md';
+export {default as IconDocument} from '@material-ui/icons/Assignment';
+export {default as IconSignIn} from '@material-ui/icons/LockOpen';
+export {default as IconSignOut} from '@material-ui/icons/ExitToApp';
+export {default as IconDelete} from '@material-ui/icons/Remove';
+export {default as IconPaperPlane} from '@material-ui/icons/Send';
+export {default as IconInfo} from '@material-ui/icons/Info';
+export {default as IconPencil} from '@material-ui/icons/Edit';
+export {default as IconEye} from '@material-ui/icons/Visibility';
+export {default as IconEyeSlash} from '@material-ui/icons/VisibilityOff';
+export {default as IconLineChart} from '@material-ui/icons/ShowChart';
+export {default as IconHeart} from '@material-ui/icons/Favorite';
+export {default as IconGift} from '@material-ui/icons/CardGiftcard';
+export {default as IconPreferences} from '@material-ui/icons/Settings';
+export {default as IconMenu} from '@material-ui/icons/Menu';
+export {default as IconUser} from '@material-ui/icons/Person';
+export {default as IconUserAdd} from '@material-ui/icons/PersonAdd';
+export {default as IconUserGroup} from '@material-ui/icons/Group';
+export {default as IconBatteryLow} from '@material-ui/icons/Battery20';
+export {default as IconBatteryMid} from '@material-ui/icons/Battery50';
+export {default as IconBatteryHigh} from '@material-ui/icons/Battery90';
+export {default as IconBatteryFull} from '@material-ui/icons/BatteryFull';
+export {default as IconHome} from '@material-ui/icons/Home';
+export {default as IconCamera} from '@material-ui/icons/CameraAlt';
+export {default as IconBack} from '@material-ui/icons/ArrowBack';
+export {default as IconDeleteForever} from '@material-ui/icons/Delete';
+export {default as IconCalendar} from '@material-ui/icons/DateRange';
+export {default as IconClock} from '@material-ui/icons/AccessTime';
+export {default as IconCopy} from '@material-ui/icons/ContentCopy';
+export {default as IconMoreVert} from '@material-ui/icons/MoreVert';
+export {default as IconRotateLeft} from '@material-ui/icons/RotateLeft';
+export {default as IconRotateRight} from '@material-ui/icons/RotateRight';
+export {default as IconZoomIn} from '@material-ui/icons/ZoomIn';
+export {default as IconZoomOut} from '@material-ui/icons/ZoomOut';
+export {default as IconExpandMore} from '@material-ui/icons/ExpandMore';
+export {default as IconExpandLess} from '@material-ui/icons/ExpandLess';
+export {default as IconLocation} from '@material-ui/icons/LocationOn';

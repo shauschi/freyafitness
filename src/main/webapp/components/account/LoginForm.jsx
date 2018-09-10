@@ -43,16 +43,17 @@ class LoginForm extends Component {
           <GridTextControl
             text={'Du bist bereits registriert? Dann melde dich gleich an und sieh, was es neues gibt:'}/>
           <GridInputControl
-            id='email'
+            id='login_email'
             label='E-Mail'
+            type='email'
             value={formData.email}
             validators={[Validators.email()]}
-            onChange={formDataChanged}/>
+            onChange={(id, value) => formDataChanged('email', value)}/>
           <GridPasswordControl
-            id='password'
+            id='login_password'
             label='Password'
             value={formData.password}
-            onChange={formDataChanged}/>
+            onChange={(id, value) => formDataChanged('password', value)}/>
           {error ? <GridTextControl text={error} error={true}/> : undefined}
           <GridButtonControl
             pending={pending}

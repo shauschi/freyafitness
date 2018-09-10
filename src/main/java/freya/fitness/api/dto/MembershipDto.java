@@ -4,9 +4,12 @@ import java.util.UUID;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 public class MembershipDto {
+
+  private UUID id;
 
   @NotNull
   @NotEmpty
@@ -16,6 +19,8 @@ public class MembershipDto {
   @NotEmpty
   private ValidityDto validity;
 
-  private long participations;
+  private ProfileDto user;
+
+  private long participationCount;
 
 }

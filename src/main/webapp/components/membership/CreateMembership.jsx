@@ -12,7 +12,7 @@ import {Dialog, GridDateControl, GridItemSelectControl, GridTextControl} from '.
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import {ValidationGroup} from './../general/validation';
-import {hideCreateMembership, onCreateMembershipDataChanged, createMembership} from '../../model/membership';
+import {hideCreateMembership, onCreateMembershipDataChanged, createMembership} from '../../model/memberships';
 import moment from 'moment/moment';
 import * as Format from '../../utils/Format';
 import {showNotification} from '../../model/notification';
@@ -21,7 +21,7 @@ import {TITLE_BG} from "../../utils/Style";
 import {Validators} from "../general/validation";
 import {getMembershipIcon} from '.';
 
-class Membership extends Component {
+class CreateMembership extends Component {
 
   handleRequestClose = () => {
     this.props.actions.hideCreateMembership();
@@ -29,7 +29,7 @@ class Membership extends Component {
 
   handleRequestSave = () => {
     if (this.validateForm()) {
-      const data = viewPath(['membership', 'create', 'data'], this.props);
+      const data = viewPath(['memberships', 'create', 'data'], this.props);
       this.props.actions.createMembership(data);
     }
   };
@@ -46,7 +46,7 @@ class Membership extends Component {
   render() {
     const {users, membershipTypes} = this.props;
     const {onCreateMembershipDataChanged, updateUsers} = this.props.actions;
-    const {create} = this.props.membership;
+    const {create} = this.props.memberships;
     const {
       show,
       pending,
@@ -59,9 +59,7 @@ class Membership extends Component {
     }
     const {
       key,
-      name,
       description,
-      maxParticipations
     } = findById(membershipTypes.data, membershipTypeId) || {};
     const user = findById(users.data, userId) || {};
 
@@ -158,7 +156,7 @@ class Membership extends Component {
 const mapStateToProps = state => ({
   membershipTypes: state.membershipTypes,
   users: state.profile.users,
-  membership: state.membership
+  memberships: state.memberships
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -176,4 +174,4 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps)
-)(Membership);
+)(CreateMembership);

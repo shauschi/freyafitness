@@ -79,3 +79,8 @@ export const findBy = (prop, data, id) => {
  * Durchsucht ein Array nach einem Element mit einer bestimmten ID
  */
 export const findById = (data, id) => findBy('id', data, id);
+
+/*
+ * Vergleicht zwei Strukturen auf Gleichheit
+ */
+export const deepEqual = (obj1, obj2) => ramda.equals(obj1, obj2);

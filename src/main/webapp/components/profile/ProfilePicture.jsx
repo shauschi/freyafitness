@@ -4,6 +4,7 @@ import {IconUser} from '../../utils/Icons';
 import {LoadingIndicator} from '../general';
 import {assignPath} from '../../utils/RamdaUtils';
 import {getProfilePicture} from '../../service/profile';
+import Typography from '@material-ui/core/Typography';
 
 const profileStyles = {
   table: {
@@ -53,7 +54,7 @@ class ProfilePicture extends Component {
     } else {
       const {user} = this.props;
       if (user && user.firstname && user.lastname && !loading) {
-        return <span>{user.firstname.charAt(0) + user.lastname.charAt(0)}</span>;
+        return <Typography>{user.firstname.charAt(0) + user.lastname.charAt(0)}</Typography>;
       } else {
         return <IconUser size={size === 'LG' ? 100 : undefined}/>;
       }

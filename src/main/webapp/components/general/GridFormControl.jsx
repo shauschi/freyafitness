@@ -44,8 +44,8 @@ export class GridTextControl extends Component {
   }
 }
 
-const GridFormControl = ({error, children, xs, sm, md}) =>
-  <GridWrapper xs={xs} sm={sm} md={md}>
+const GridFormControl = ({error, children, style, xs, sm, md}) =>
+  <GridWrapper style={style} xs={xs} sm={sm} md={md}>
     <FormControl fullWidth error={error} margin='dense'>
       {children}
     </FormControl>
@@ -56,7 +56,7 @@ export class GridInputControl extends ValidationControl {
   render() {
     const {valid, errors} = this.state;
     const {id, label, value, readonly,
-      multiline,
+      multiline, disableUnderline,
       type, endAdornment, onChange, xs, sm, md} = this.props;
     return <GridFormControl error={!valid} xs={xs} sm={sm} md={md}>
       <InputLabel htmlFor={id} shrink>{label}</InputLabel>
@@ -65,8 +65,9 @@ export class GridInputControl extends ValidationControl {
         value={value}
         type={type}
         multiline={multiline}
+        disableUnderline={disableUnderline}
         rows={multiline ? 5 : undefined}
-        disabled={readonly}
+        readOnly={readonly}
         onChange={event => onChange(id, event.target.value)}
         endAdornment={endAdornment}/>
       {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
@@ -197,7 +198,7 @@ export class GridDateControl extends ValidationControl {
 
   render() {
     const {valid, errors} = this.state;
-    const {value, label, readonly, onChange, xs, md} = this.props;
+    const {value, label, readonly, onChange, clearable, xs, md} = this.props;
     return <GridFormControl xs={xs} md={md} error={!valid}>
       <DatePicker
         value={value}
@@ -207,8 +208,11 @@ export class GridDateControl extends ValidationControl {
         okLabel={'OK'}
         cancelLabel={'ABBRECHEN'}
         todayLabel={'HEUTE'}
-        showTodayButton
-        disableOpenOnEnter={readonly}
+        clearLabel={'LÖSCHEN'}
+        showTodayButton={!clearable}
+        allowKeyboardControl={false}
+        disableOpenOnEnter={true}
+        clearable={clearable}
         InputProps={{disabled: readonly, style: {marginTop: '13px'}}}
       />
       {!valid ? <FormHelperText>{errors}</FormHelperText> : undefined}
@@ -220,9 +224,10 @@ export class GridDateTimeControl extends ValidationControl {
 
   render() {
     const {valid, errors} = this.state;
-    const {value, label, readonly, onChange, xs, md} = this.props;
-    return <GridFormControl xs={xs} md={md} error={!valid}>
+    const {value, label, readonly, onChange, ctrlRef, style, xs, md} = this.props;
+    return <GridFormControl xs={xs} md={md} error={!valid} style={style}>
       <DateTimePicker
+        ref={ctrlRef}
         value={value}
         onChange={onChange}
         label={label}

@@ -8,6 +8,7 @@ import {MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
+import { TransitionGroup, CSSTransition as OriginalCSSTransition } from 'react-transition-group';
 import {Footer, MyAppBar, MyDrawer} from './container';
 import {CustomizedSnackbar, LoadingIndicator} from './components/general';
 import {
@@ -16,21 +17,28 @@ import {
   AboutFreyRaum,
   Agb,
   Courses,
+  Memberships,
   Home,
   Impressum,
   ProfileSite,
   Preferences,
   Statistics
 } from './sites';
-import {CourseDetails} from './components/course';
-import {CreateMembership} from './components/membership';
+import {CourseDetails, CreateCourse} from './components/course';
+import {CreateMembership, MembershipDetails} from './components/membership';
 import * as Style from './utils/Style';
 import {toggleDrawer} from './model/drawer';
 import {hideNotification} from './model/notification';
 import {createCourse} from './model/courses';
-import {showCreateMembership} from './model/membership';
+import {showCreateMembership} from './model/memberships';
 import {login, logout, scrollToLogin} from './model/profile';
 import init from './model/init.js';
+
+class CSSTransition extends OriginalCSSTransition {
+  onEntered = () => {
+    // Do not remove enter classes when active
+  }
+}
 
 class App extends Component {
 
@@ -43,9 +51,22 @@ class App extends Component {
     init(dispatch);
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.previousView = this.props.location;
+  }
+
   render() {
-    const {classes, drawer, actions, profile, notification} = this.props;
+    const {classes, drawer, actions, profile, notification, location} = this.props;
     const currentUser = profile.user;
+
+    const modal = location.state && location.state.to === 'modal';
+
+    let pos = {};
+    let title = {};
+    if (modal){
+      pos = location.state.from;
+      title = location.state.title;
+    }
 
     return (
       <MuiThemeProvider theme={Style.APP_THEME}>
@@ -61,8 +82,7 @@ class App extends Component {
             currentUser={currentUser}
             {...this.props}/>
           <div style={{position: 'absolute'}}>
-            {/* All Dialogs */}
-            <CourseDetails/>
+            {/* All Dialogs ... TODO remove all dialogs */}
             <CreateMembership/>
           </div>
           <MyDrawer
@@ -75,19 +95,37 @@ class App extends Component {
             profile.pending
               ? <LoadingIndicator/>
               : <Switch>
-                <Redirect from='/index' to='/'/>
-                <Redirect from='/home' to='/'/>
-                <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
-                <Route exact path='/about/freyraum' render={() => <AboutFreyRaum {...this.props}/>}/>
-                <Route exact path='/about/courses' render={() => <AboutCourses {...this.props}/>}/>
-                <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
-                <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
-                <Route exact path='/' component={Home}/>
-                <Route exact path='/statistics' component={Statistics}/>
-                <Route exact path='/courses/all' component={Courses}/>
-                <Route exact path='/profile' component={ProfileSite}/>
-                <Route exact path='/preferences' component={Preferences}/>
-              </Switch>
+                  <Redirect from='/index' to='/home'/>
+                  <Redirect exact from='/' to='/home'/>
+                  <Route exact path='/about/freya' render={() => <AboutFreya {...this.props}/>}/>
+                  <Route exact path='/about/freyraum' render={() => <AboutFreyRaum {...this.props}/>}/>
+                  <Route exact path='/about/courses' render={() => <AboutCourses {...this.props}/>}/>
+                  <Route exact path='/agb' render={() => <Agb {...this.props}/>}/>
+                  <Route exact path='/impressum' render={() => <Impressum{...this.props}/>}/>
+                  <Route path='/home' component={Home}/>
+                  <Route exact path='/statistics' component={Statistics}/>
+                  <Route path='/courses' component={Courses}/>
+                  <Route path='/memberships' component={Memberships}/>
+                  <Route exact path='/profile' component={ProfileSite}/>
+                  <Route exact path='/preferences' component={Preferences}/>
+                </Switch>
+          }
+          {
+            <TransitionGroup>
+              <CSSTransition
+                timeout={800}
+                classNames="modal"
+                key={location.pathname}
+                mountOnEnter
+                unmountOnExit
+                appear
+              >
+                <Switch location={location}>
+                  <Route exact path='/**/membership/:id' component={MembershipDetails}/>
+                  <Route exact path='/**/course/:id' render={props => <CourseDetails style={pos} titleElement={title} {...props}/>}/>
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
           }
           {
             currentUser

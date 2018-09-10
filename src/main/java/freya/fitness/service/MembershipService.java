@@ -1,5 +1,6 @@
 package freya.fitness.service;
 
+import freya.fitness.api.dto.MembershipDetailsDto;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.repository.jpa.MembershipRepository;
 import freya.fitness.utils.exception.MembershipException;
@@ -66,6 +67,10 @@ public class MembershipService {
         .min(Comparator.comparingInt(m -> m.getType().getMaxParticipations()))
         .orElseThrow(() -> new MembershipException(
             String.format("Karte%s voll", memberships.size() == 1 ? "" : "n")));
+  }
+
+  public void deleteMembership(final UUID id) {
+    membershipRepository.deleteById(id);
   }
 
 }

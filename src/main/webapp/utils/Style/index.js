@@ -6,5 +6,7 @@ export {
   APP_THEME,
   APP_STYLES,
   DRAWER_WIDTH,
-  TITLE_BG
+  TITLE_BG,
+
+  getTextColorForBg
 } from './Style.jsx';

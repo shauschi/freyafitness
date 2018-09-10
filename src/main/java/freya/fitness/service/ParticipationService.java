@@ -86,4 +86,11 @@ public class ParticipationService {
     return course;
   }
 
+  public List<Participation> getParticipations(final UUID membershipId) {
+    return participationRepository.findByMembershipId(membershipId);
+  }
+
+  public void deleteParticipation(final UUID id) {
+    participationRepository.deleteById(id);
+  }
 }

@@ -1,7 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
 import compose from 'recompose/compose';
-import withWidth from '@material-ui/core/withWidth';
 import {withRouter} from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -67,13 +66,13 @@ class MyAppBar extends Component {
 
   getMenu = () => {
     const {anchor} = this.state;
-    const {createCourse, createMembership} = this.props;
+    const {createCourse, createMembership, history, location} = this.props;
     return <Menu
       open={!!anchor}
       anchorEl={anchor}
       onClose={this.closeMenu}
     >
-      <MenuItem onClick={() => {this.closeMenu(); createCourse()}}>Kurs anlegen</MenuItem>
+      <MenuItem onClick={() => {this.closeMenu(); history.push(location.pathname + '/course/new')}}>Kurs anlegen</MenuItem>
       <MenuItem onClick={() => {this.closeMenu(); createMembership()}}>Mitgliedschaft anlegen</MenuItem>
       <MenuItem onClick={this.closeMenu}>News anlegen (folgt)</MenuItem>
       <MenuItem onClick={this.closeMenu}>Admin (folgt)</MenuItem>
@@ -128,5 +127,4 @@ MyAppBar.contextTypes = {
 
 export default compose(
   withRouter,
-  withWidth()
 )(MyAppBar);
