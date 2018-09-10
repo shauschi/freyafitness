@@ -133,6 +133,7 @@ class Memberships extends Component {
       trial: false,
       extended: false,
       valid: true,
+      search: true,
     },
     showInvalid: false,
   };
@@ -152,7 +153,7 @@ class Memberships extends Component {
   };
 
   render() {
-    const {search, showInvalid, filter} = this.state;
+    const {search, filter} = this.state;
     const {memberships, membershipTypes, actions} = this.props;
     const {pending, data} = memberships;
     const {fetchMemberships} = actions;
@@ -184,9 +185,12 @@ class Memberships extends Component {
           && (!m.validity.to || moment(m.validity.to) >= now));
       },
       search: data => {
+        if (search === '') {
+          return data;
+        }
         const options = {
           shouldSort: true,
-          threshold: 0.6,
+          threshold: 0.4,
           location: 0,
           distance: 100,
           maxPatternLength: 32,
