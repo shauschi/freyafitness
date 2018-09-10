@@ -49,7 +49,7 @@ class _MembershipItem extends Component {
   };
 
   render() {
-    const {membership, membershipTypes, key} = this.props;
+    const {membership, membershipTypes} = this.props;
     const {key, maxParticipations} = findById(membershipTypes.data, membership.membershipTypeId) || {};
     let max = maxParticipations;
     if (max === -1) {
