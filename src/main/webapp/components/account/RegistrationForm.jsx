@@ -64,6 +64,7 @@ class RegistrationForm extends Component {
           <GridInputControl
             id='registration_email'
             label='E-Mail'
+            type='email'
             value={formData.email}
             validators={[Validators.email()]}
             onChange={(id, value) => formDataChanged('email', value)}/>

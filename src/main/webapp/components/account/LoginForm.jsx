@@ -45,6 +45,7 @@ class LoginForm extends Component {
           <GridInputControl
             id='login_email'
             label='E-Mail'
+            type='email'
             value={formData.email}
             validators={[Validators.email()]}
             onChange={(id, value) => formDataChanged('email', value)}/>
