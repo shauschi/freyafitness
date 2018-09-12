@@ -3,15 +3,14 @@ package freya.fitness.service;
 import freya.fitness.api.dto.ContactDto;
 import freya.fitness.utils.exception.MailTemplateNotFoundException;
 import freya.fitness.utils.exception.ResourceLoadingException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.mail.MessagingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class ContactService {
