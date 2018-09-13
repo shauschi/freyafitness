@@ -5,7 +5,7 @@ import java.util.Optional;
 public enum Size {
 
   ORIGINAL(0),
-  MINI(40),
+  MINI(48),
   XS(600),
   SM(960),
   MD(1280),
