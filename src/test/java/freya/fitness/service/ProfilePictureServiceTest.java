@@ -1,12 +1,16 @@
 package freya.fitness.service;
 
+import freya.fitness.domain.jpa.ProfilePicture;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.domain.jpa.UserPreference;
-import freya.fitness.repository.mongodb.ProfilePictureRepository;
+import freya.fitness.repository.jpa.PictureRepository;
 import freya.fitness.utils.Size;
 import freya.fitness.utils.exception.UserNotFoundException;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +38,7 @@ public class ProfilePictureServiceTest {
   private ProfilePictureService testee;
 
   @Mock
-  private ProfilePictureRepository profilePictureRepository;
+  private PictureRepository pictureRepository;
 
   @Mock
   private UserService userService;
@@ -45,8 +50,10 @@ public class ProfilePictureServiceTest {
 
   @Test
   public void test_getProfilePictureData() throws IOException {
-    when(profilePictureRepository.getByUserIdAndSize(userId, Size.ORIGINAL))
-        .thenReturn(new byte[]{1, 0, 1, 1});
+    final ProfilePicture profilePicture = new ProfilePicture();
+    profilePicture.setData(getTestFileBytes());
+    when(pictureRepository.findByUserIdAndSize(userId, Size.ORIGINAL))
+        .thenReturn(Optional.of(profilePicture));
     User user = new User();
     user.setRoles(Collections.emptySet());
     UserPreference preference = new UserPreference();
@@ -58,7 +65,7 @@ public class ProfilePictureServiceTest {
 
     byte[] result = testee.getProfilePictureData(userId, Size.ORIGINAL);
 
-    verify(profilePictureRepository).getByUserIdAndSize(userId, Size.ORIGINAL);
+    verify(pictureRepository).findByUserIdAndSize(userId, Size.ORIGINAL);
     assertThat(result, equalTo(result));
   }
 
@@ -66,11 +73,13 @@ public class ProfilePictureServiceTest {
   public void test_changeProfilePicture_userNotFoundThrowsException()
       throws IOException, UserNotFoundException {
     final UUID uuid = UUID.randomUUID();
+    final User user = testUser();
+    user.setId(uuid);
     doThrow(UserNotFoundException.withId(uuid)).when(userService).assertUserExists(uuid);
 
-    MultipartFile multipartFile = new MockMultipartFile("test.file", new byte[]{1, 0});
+    final MultipartFile multipartFile = getTestFile();
 
-    testee.changeProfilePicture(uuid, multipartFile);
+    testee.changeProfilePicture(user, multipartFile);
   }
 
   @Test
@@ -79,24 +88,38 @@ public class ProfilePictureServiceTest {
     final UUID uuid = UUID.randomUUID();
     final User user = testUser();
     user.setId(uuid);
-    MultipartFile multipartFile = new MockMultipartFile("test.file", new byte[]{1, 0});
+    final MultipartFile multipartFile = getTestFile();
 
-    testee.changeProfilePicture(uuid, multipartFile);
+    testee.changeProfilePicture(user, multipartFile);
 
-    verify(profilePictureRepository).delete(any());
-    verify(profilePictureRepository).save(multipartFile, uuid);
+    verify(pictureRepository).deleteByUserId(any());
+    verify(pictureRepository, times(Size.values().length)).save(any());
   }
 
   @Test
   public void test_changeProfilePicture_deleteCurrentPictureFromDbIfExists()
       throws IOException, UserNotFoundException {
     final UUID uuid = UUID.randomUUID();
-    final MultipartFile multipartFile =
-        new MockMultipartFile("test.file", new byte[]{1, 0});
+    final User user = testUser();
+    user.setId(uuid);
+    final MultipartFile multipartFile = getTestFile();
 
-    testee.changeProfilePicture(uuid, multipartFile);
+    testee.changeProfilePicture(user, multipartFile);
 
-    verify(profilePictureRepository).delete(uuid);
-    verify(profilePictureRepository).save(multipartFile, uuid);
+    verify(pictureRepository).deleteByUserId(uuid);
+    verify(pictureRepository, times(Size.values().length)).save(any());
+  }
+
+  private MultipartFile getTestFile() throws IOException {
+    final byte[] data = getTestFileBytes();
+    return new MockMultipartFile("logo.png", data);
+  }
+
+  private byte[] getTestFileBytes() throws IOException {
+    final InputStream inputStream =
+        getClass().getClassLoader().getResourceAsStream("logo.png");
+    final byte[] data = new byte[(int) inputStream.available()];
+    inputStream.read(data);
+    return data;
   }
 }

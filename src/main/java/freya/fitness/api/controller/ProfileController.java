@@ -93,7 +93,7 @@ public class ProfileController {
   public MessageDto changeProfilePicture(
       @RequestParam("image") final MultipartFile image) throws IOException, UserNotFoundException {
     final User user = userService.getCurrentUser();
-    profilePictureService.changeProfilePicture(user.getId(), image);
+    profilePictureService.changeProfilePicture(user, image);
     return new MessageDto("Profilbild aktualisiert");
   }
 

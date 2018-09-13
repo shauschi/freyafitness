@@ -19,3 +19,5 @@ databaseChangeLog:
         path: db/changelog/006__memberships/
     - includeAll:
         path: db/changelog/007__user_preferences/
+    - includeAll:
+        path: db/changelog/008__pictures/

@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 22
+      author: hauschildt
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: uuid
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: user_id
+              type: uuid
+          - column:
+              name: size
+              type: varchar(255)
+          - column:
+              name: data
+              type: bytea
+          schemaName: public
+          tableName: profile_picture
+      - addForeignKeyConstraint:
+          baseColumnNames: user_id
+          baseTableName: profile_picture
+          constraintName: fk_profile_picture_user
+          deferrable: true
+          initiallyDeferred: true
+          referencedColumnNames: id
+          referencedTableName: user
+      - addUniqueConstraint:
+          columnNames: user_id, size
+          constraintName: unique_profile_picture_user_id_size
+          schemaName: public
+          tableName: profile_picture
