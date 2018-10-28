@@ -2,9 +2,11 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.proxy.EmailProxy;
 import freya.fitness.utils.exception.InvalidResetTokenException;
-import freya.fitness.utils.exception.MailTemplateNotFoundException;
 import freya.fitness.utils.exception.UserNotFoundException;
+import java.time.LocalDateTime;
+import javax.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,21 +15,12 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,13 +38,10 @@ public class PasswordServiceTest {
   private PasswordEncoder passwordEncoder;
 
   @Mock
-  private EmailService emailService;
+  private EmailProxy emailProxy;
 
   @Mock
   private PasswordResetTokenService passwordResetTokenService;
-
-  @Spy
-  private ResourceService resourceService;
 
   @Rule
   public ExpectedException expectedExeption = ExpectedException.none();
@@ -60,13 +50,10 @@ public class PasswordServiceTest {
   public void setUp() {
     ReflectionTestUtils.setField(testee, "subject", "testing password service");
     ReflectionTestUtils.setField(testee, "validityHours", 3);
-    ResourceLoader resourceLoader = new DefaultResourceLoader();
-    ReflectionTestUtils.setField(resourceService, "resourceLoader", resourceLoader);
   }
 
   @Test
-  public void test_processForgotPassword_userNotFound()
-      throws UserNotFoundException, MailTemplateNotFoundException, MessagingException {
+  public void test_processForgotPassword_userNotFound() throws UserNotFoundException {
     HttpServletRequest mockRequest = mock(HttpServletRequest.class);
     expectedExeption.expect(UserNotFoundException.class);
     when(userService.getUserByEmail(any())).thenThrow(UserNotFoundException.withEmail(""));
@@ -75,8 +62,7 @@ public class PasswordServiceTest {
   }
 
   @Test
-  public void test_processForgotPassword()
-      throws UserNotFoundException, MailTemplateNotFoundException, MessagingException {
+  public void test_processForgotPassword() throws UserNotFoundException {
     HttpServletRequest mockRequest = mock(HttpServletRequest.class);
     when(mockRequest.getScheme()).thenReturn("http");
     when(mockRequest.getServerName()).thenReturn("test.server");
@@ -86,17 +72,16 @@ public class PasswordServiceTest {
     user.setFamilyName("007");
     when(userService.getUserByEmail(user.getEmail())).thenReturn(user);
 
+    // when
     testee.processForgotPassword(user.getEmail(), mockRequest);
 
+    // then
     ArgumentMatcher<PasswordResetToken> expectedToken = token ->
       "Testuser".equals(token.getUser().getFirstName())
-          && token.getExpiryTime().isBefore(LocalDateTime.now().plusHours(3));
+          && token.getExpiryTime().isAfter(LocalDateTime.now());
     verify(passwordResetTokenService).save(argThat(expectedToken));
 
-    verify(emailService).sendMail(
-        eq("user@test.mail"),
-        eq("testing password service"),
-        contains("der Link ist 24 Stunden gültig"));
+    verify(emailProxy).createEmailEvent(any());
   }
 
   @Test

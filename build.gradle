@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    springBootVersion = '2.0.0.RELEASE'
+    springBootVersion = '2.0.6.RELEASE'
   }
   repositories {
     mavenCentral()
@@ -34,6 +34,9 @@ repositories {
   maven { url = 'https://repo.spring.io/milestone' }
 }
 
+ext {
+  springCloudVersion = 'Finchley.SR2'
+}
 
 dependencies {
   compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
@@ -47,6 +50,7 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'
+  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
   compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.0.0.RELEASE'
   compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.0.RELEASE'
   compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.0'
@@ -54,4 +58,10 @@ dependencies {
   runtime group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+}
+
+dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
 }
