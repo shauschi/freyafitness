@@ -58,6 +58,44 @@ import {withRouter} from 'react-router-dom';
 import './style.less';
 import {ListItemWithDialog} from './';
 
+class Attendee extends Component {
+
+  render() {
+    const {idx, user, onWaitlist, onClick} = this.props;
+    return (
+      <Grid
+        item xs={3}
+        className='attendee'
+        style={{
+          transition: 'all 650ms cubic-bezier(0.23, 1, 0.32, 1)' + (500 + idx * 50) + 'ms'
+        }}
+        onClick={onClick}>
+        <Avatar style={{backgroundColor: TITLE_BG, margin: '0 auto'}}>
+          <ProfilePicture user={user}/>
+        </Avatar>
+        <Typography
+          variant='caption'
+          gutterBottom
+          align='center'>
+          {user.firstname + ' ' + user.lastname}
+        </Typography>
+        {
+          onWaitlist
+            ? <Typography
+              variant='caption'
+              style={{color: 'rgba(255, 0, 0, 0.65'}}
+              gutterBottom
+              align='center'>
+              (auf Warteliste)
+            </Typography>
+            : undefined
+        }
+      </Grid>
+    );
+  }
+
+}
+
 class CourseDetails extends Component {
 
   state = {
@@ -235,36 +273,12 @@ class CourseDetails extends Component {
     const maxParticipants = viewPath(['courseDetails', 'course', 'maxParticipants'], this.props) || 0;
     return attendees.map((user, idx) => {
       const onWaitlist = idx >= maxParticipants;
-
-      return (<Grid
-          item xs={3} key={idx}
-          className='attendee'
-          style={{
-            transition: 'all 650ms cubic-bezier(0.23, 1, 0.32, 1)' + (500 + idx * 50) + 'ms'
-          }}
-          onClick={actionAllowed ? event => this.openMenu(event, user) : undefined}>
-          <Avatar style={{backgroundColor: TITLE_BG, margin: '0 auto'}}>
-            <ProfilePicture user={user}/>
-          </Avatar>
-          <Typography
-            variant='caption'
-            gutterBottom
-            align='center'>
-            {user.firstname + ' ' + user.lastname}
-          </Typography>
-          {
-            onWaitlist
-              ? <Typography
-                variant='caption'
-                style={{color: 'rgba(255, 0, 0, 0.65'}}
-                gutterBottom
-                align='center'>
-                (auf Warteliste)
-              </Typography>
-              : undefined
-          }
-        </Grid>
-      );
+      return <Attendee
+        key={idx}
+        idx={idx}
+        user={user}
+        onWaitlist={onWaitlist}
+        onClick={actionAllowed ? event => this.openMenu(event, user) : undefined}/>;
     });
   };
 
