@@ -38,7 +38,7 @@ class MyDrawer extends Component {
         <div style={{height: '100%'}}>
           <div className={classes.drawerHeader}/>
           <Divider/>
-          <div style={{overflowY: 'auto', height: '100vh'}}>
+          <div>
             <List>
               <MenuLink color='primary' to='/home' label='Home' icon={<IconHome/>} onClick={toggleDrawer}/>
               {
@@ -83,6 +83,8 @@ class MyDrawer extends Component {
                   : <MenuLink to='/login' label='Login' icon={<IconSignIn/>}/>
               }
             </List>
+            {/* space to enable login/logout link on small devices (bug on ios) */}
+            <div style={{height: '62px'}}/>
           </div>
         </div>
       </Drawer>
