@@ -70,7 +70,7 @@ class Attendee extends Component {
           transition: 'all 650ms cubic-bezier(0.23, 1, 0.32, 1)' + (500 + idx * 50) + 'ms'
         }}
         onClick={onClick}>
-        <Avatar style={{backgroundColor: TITLE_BG, margin: '0 auto'}}>
+        <Avatar className='attendee_avatar' style={{backgroundColor: TITLE_BG}}>
           <ProfilePicture user={user}/>
         </Avatar>
         <Typography
@@ -273,8 +273,9 @@ class CourseDetails extends Component {
     const maxParticipants = viewPath(['courseDetails', 'course', 'maxParticipants'], this.props) || 0;
     return attendees.map((user, idx) => {
       const onWaitlist = idx >= maxParticipants;
+      const {id = ''} = user;
       return <Attendee
-        key={idx}
+        key={idx + '_' + id}
         idx={idx}
         user={user}
         onWaitlist={onWaitlist}
