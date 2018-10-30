@@ -24,13 +24,19 @@ class ProfilePicture extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {loading: false, picture: undefined}
+    this.state = {loading: false, picture: null}
   }
 
   updatePicture() {
     const {user = {}, size = 'MINI'} = this.props;
     const {id} = user;
-    if (!!id && this.state.userId !== id) {
+    if (this.state.userId === id) {
+      return;
+    }
+
+    if (!id) {
+      this.setState(assignPath([], {picture: null, loading: false}, this.state));
+    } else {
       this.setState(assignPath([], {loading: true, userId: id}, this.state));
       getProfilePicture(id, size)
         .then(pictureData => {
