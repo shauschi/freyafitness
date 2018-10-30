@@ -56,7 +56,7 @@ class ProfilePicture extends Component {
     if (picture) {
       return <img
         src={picture}
-        style={{width: '100%'}}/>
+        style={{width: '100%', borderRadius: '50%'}}/>
     } else {
       const {user} = this.props;
       if (user && user.firstname && user.lastname && !loading) {
