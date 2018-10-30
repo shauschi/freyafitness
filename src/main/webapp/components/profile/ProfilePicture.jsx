@@ -24,14 +24,20 @@ class ProfilePicture extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {loading: false, picture: undefined}
+    this.state = {loading: false, userId: null, picture: null}
   }
 
   updatePicture() {
     const {user = {}, size = 'MINI'} = this.props;
     const {id} = user;
-    if (!!id && this.state.userId !== id) {
-      this.setState(assignPath([], {loading: true, userId: id}, this.state));
+    if (this.state.userId === id) {
+      return;
+    }
+
+    if (!id) {
+      this.setState(assignPath([], {picture: null, userId: null, loading: false}, this.state));
+    } else {
+      this.setState(assignPath([], {picture: null, userId: id, loading: true}, this.state));
       getProfilePicture(id, size)
         .then(pictureData => {
           const objectURL = URL.createObjectURL(pictureData);
@@ -62,11 +68,9 @@ class ProfilePicture extends Component {
   };
 
   render() {
-    const {user, size = 'MINI'} = this.props;
+    const {size = 'MINI'} = this.props;
     const {loading} = this.state;
-    if (user) {
-      this.updatePicture();
-    }
+    this.updatePicture();
     const stylesMiniLoading = size === 'MINI' ? {paddingTop: '3px'} : undefined;
     return (
       <div style={{position: 'relative', width: '100%', height: '100%'}}>
