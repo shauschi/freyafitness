@@ -8,7 +8,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
-import {LoadingIndicator, PullToRefresh} from '../components/general';
+import {PullToRefresh} from '../components/general';
 import {
   fetchStatistics
 } from './../model/statistics';
@@ -16,7 +16,6 @@ import {withStyles} from "@material-ui/core/styles/index";
 import * as Style from "./../utils/Style";
 import {comparingModFunc} from "./../utils/Comparator";
 import {findById} from './../utils/RamdaUtils';
-import {TypeMapper} from "../components/course";
 import moment from 'moment';
 import {Bar} from 'react-chartjs';
 
@@ -30,20 +29,18 @@ class Statistics extends Component {
   };
 
   render() {
-    const {profile, user, statistics, courseTypes, actions} = this.props;
+    const {user, statistics, courseTypes, actions} = this.props;
     const {fetchStatistics} = actions;
-    //if (profile.pending || statistics.pending || !user) {
-     // return (<LoadingIndicator/>);
-    //}
 
     if (user.id && !statistics.pending) {
       fetchStatistics(user.id);
     }
 
-    const {name = "", color} = findById(courseTypes.data, statistics.data.favouriteCourseTypeId) || {};
+    const {name = ""} = findById(courseTypes.data, statistics.data.favouriteCourseTypeId) || {};
     const participationsPerMonth = statistics.data.participationsPerMonth;
     const sorted = Object.keys(participationsPerMonth)
-      .sort(comparingModFunc(value => value, moment))
+      .sort(comparingModFunc(value => value, moment));
+
     return (
       <div className={this.props.classes.root}>
         <PullToRefresh
@@ -75,7 +72,8 @@ class Statistics extends Component {
                     <Bar
                       options={{
                         responsive: true,
-                        scaleShowVerticalLines: false
+                        scaleShowVerticalLines: false,
+                        tooltipTemplate: "<%=value%> Teilnahme<%if (value > 1){%>n<%}%>",
                       }}
                       data={{
                         labels: sorted
