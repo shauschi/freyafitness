@@ -37,7 +37,7 @@ class ProfilePicture extends Component {
     // if next id is falsely AND current user id in state is truly
     if (!id && !!this.state.userId) {
       this.setState(assignPath([], {picture: null, userId: null, loading: false}, this.state));
-    } else {
+    } else if (!!id) {
       this.setState(assignPath([], {picture: null, userId: id, loading: true}, this.state));
       getProfilePicture(id, size)
         .then(pictureData => {
