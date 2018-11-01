@@ -34,7 +34,8 @@ class ProfilePicture extends Component {
       return;
     }
 
-    if (!id) {
+    // if next id is falsely AND current user id in state is truly
+    if (!id && !!this.state.userId) {
       this.setState(assignPath([], {picture: null, userId: null, loading: false}, this.state));
     } else {
       this.setState(assignPath([], {picture: null, userId: id, loading: true}, this.state));
@@ -51,12 +52,12 @@ class ProfilePicture extends Component {
   }
 
   getIcon = () => {
-    const {size} = this.props;
+    const {size, asAvatar} = this.props;
     const {loading, picture} = this.state;
     if (picture) {
       return <img
         src={picture}
-        style={{width: '100%', borderRadius: '50%'}}/>
+        style={{width: '100%', borderRadius: asAvatar ? '50%' : undefined}}/>
     } else {
       const {user} = this.props;
       if (user && user.firstname && user.lastname && !loading) {

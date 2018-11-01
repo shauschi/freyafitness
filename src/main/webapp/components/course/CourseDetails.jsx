@@ -71,7 +71,7 @@ class Attendee extends Component {
         }}
         onClick={onClick}>
         <Avatar className='attendee_avatar' style={{backgroundColor: TITLE_BG}}>
-          <ProfilePicture user={user}/>
+          <ProfilePicture user={user} asAvatar/>
         </Avatar>
         <Typography
           variant='caption'
@@ -196,11 +196,11 @@ class CourseDetails extends Component {
     }
 
     return <MenuItem key={idx} onClick={() => {
-      this.closeAddUserMenu();
-      addUserToCourse(courseId, user.id)
-    }}>
+        this.closeAddUserMenu();
+        addUserToCourse(courseId, user.id)
+      }}>
       <Avatar>
-        <ProfilePicture user={user}/>
+        <ProfilePicture user={user} asAvatar/>
       </Avatar>
       <span style={{marginLeft: '8px'}}>
         {user.firstname + ' ' + user.lastname}
