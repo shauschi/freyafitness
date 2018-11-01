@@ -44,6 +44,7 @@ class CreateMembership extends Component {
   };
 
   render() {
+    console.warn("render...");
     const {users, membershipTypes} = this.props;
     const {onCreateMembershipDataChanged, updateUsers} = this.props.actions;
     const {create} = this.props.memberships;
@@ -54,7 +55,8 @@ class CreateMembership extends Component {
       data
     } = create;
     const {userId, membershipTypeId, validity} = data;
-    if (show) {
+    if (show && !pending && !users.pending) {
+      console.warn("update users...");
       updateUsers();
     }
     const {
@@ -76,7 +78,7 @@ class CreateMembership extends Component {
 
               <Grid item xs={2} sm={1} style={{margin: 'auto'}}>
                 <Avatar style={{backgroundColor: TITLE_BG}}>
-                  <ProfilePicture user={user} />
+                  <ProfilePicture user={user} asAvatar/>
                 </Avatar>
               </Grid>
               <GridItemSelectControl

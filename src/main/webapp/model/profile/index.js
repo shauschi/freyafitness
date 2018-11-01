@@ -17,6 +17,7 @@ import {
 import {setPath, assignPath, viewPath} from '../../utils/RamdaUtils';
 import init from './../init.js';
 import {showNotification} from "../notification";
+import moment from 'moment';
 
 const initialState = {
   pending: false,
@@ -103,7 +104,6 @@ export const actions = createActions({
   },
   USERS: {
     PENDING: undefined,
-    UPDATED: timestamp => timestamp,
     ERROR: error => error,
     SUCCESS: users => users
   },
@@ -251,12 +251,12 @@ export const logout = () => {
 
 export const updateUsers = () => {
   return (dispatch, getState) => {
-    if (getState().profile.users.lastUpdate) {
+    console.warn(getState().profile.users)
+    if (getState().profile.users.lastUpdate || getState().profile.users.pending) {
       return; // TODO update every other call/day
     }
-    dispatch(actions.users.updated('foo'));
     dispatch(actions.users.pending());
-    getAllUsersApiCall()
+    return getAllUsersApiCall()
       .then(users => dispatch(actions.users.success(users)))
       .catch(error => dispatch(actions.users.error(error)));
   };
@@ -406,12 +406,10 @@ export default handleActions({
   // load users
   [actions.users.pending]: state =>
     assignPath(['users'], {pending: true, error: undefined}, state),
-  [actions.users.updated]: (state, {payload}) =>
-    assignPath(['users'], {lastUpdate: payload}, state),
   [actions.users.success]: (state, {payload}) =>
-    assignPath(['users'], {pending: false, data: payload, error: undefined}, state),
-  [actions.users.error]: state =>
-    assignPath(['users'], {pending: false, error: error}, state),
+    assignPath(['users'], {pending: false, data: payload, error: undefined, lastUpdate: moment()}, state),
+  [actions.users.error]: (state, {payload}) =>
+    assignPath(['users'], {pending: false, error: payload}, state),
 
   // save preferences
   [actions.updatePreference.save.pending]: state =>

@@ -70,7 +70,7 @@ class Membership extends Component {
         onClick={() => showMembershipDetails(id)}>
         <ListItemIcon>
           <Avatar>
-            <ProfilePicture user={user}/>
+            <ProfilePicture user={user} asAvatar/>
           </Avatar>
         </ListItemIcon>
         <ListItemText>
