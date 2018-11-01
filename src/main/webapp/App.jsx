@@ -76,7 +76,6 @@ class App extends Component {
             pending={profile.pending}
             classes={classes}
             toggleDrawer={actions.toggleDrawer}
-            createCourse={actions.createCourse}
             createMembership={actions.showCreateMembership}
             scrollToLogin={actions.scrollToLogin}
             currentUser={currentUser}

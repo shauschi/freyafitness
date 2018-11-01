@@ -50,6 +50,7 @@ class Dialog extends Component {
       <MaterialDialog
         onClose={this.handleRequestClose}
         fullScreen={!!fullScreen}
+        TransitionComponent={Transition}
         className='modal-dialog'
         style={style}
         open={open}>

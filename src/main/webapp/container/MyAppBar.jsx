@@ -66,7 +66,7 @@ class MyAppBar extends Component {
 
   getMenu = () => {
     const {anchor} = this.state;
-    const {createCourse, createMembership, history, location} = this.props;
+    const {createMembership, history, location} = this.props;
     return <Menu
       open={!!anchor}
       anchorEl={anchor}
