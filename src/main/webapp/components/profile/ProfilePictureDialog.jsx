@@ -72,7 +72,7 @@ class ProfilePictureDialog extends Component {
       const formData = new FormData();
       formData.append('image', blob, file.name);
       this.props.onSave(formData);
-    });
+    }, 'image/jpeg', 0.9);
   };
 
   handleRequestClose = () => {
