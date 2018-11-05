@@ -63,6 +63,7 @@ public class ProfilePictureService {
     userService.assertUserExists(user.getId());
     // delete all pictures for that id
     pictureRepository.deleteByUserId(user.getId());
+    pictureRepository.flush();
     save(multipartFile, user);
   }
 
@@ -82,6 +83,7 @@ public class ProfilePictureService {
     for (Size size : Size.values()) {
       final BufferedImage resizedImage = getResizedImage(image, size);
       final byte[] data = getImageAsBytes(resizedImage);
+
       final ProfilePicture picture = new ProfilePicture();
       picture.setUser(user);
       picture.setSize(size);
