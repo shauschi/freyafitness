@@ -44,7 +44,6 @@ class CreateMembership extends Component {
   };
 
   render() {
-    console.warn("render...");
     const {users, membershipTypes} = this.props;
     const {onCreateMembershipDataChanged, updateUsers} = this.props.actions;
     const {create} = this.props.memberships;
@@ -56,7 +55,6 @@ class CreateMembership extends Component {
     } = create;
     const {userId, membershipTypeId, validity} = data;
     if (show && !pending && !users.pending) {
-      console.warn("update users...");
       updateUsers();
     }
     const {
