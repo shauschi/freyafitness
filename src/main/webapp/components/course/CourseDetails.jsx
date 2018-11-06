@@ -58,6 +58,44 @@ import {withRouter} from 'react-router-dom';
 import './style.less';
 import {ListItemWithDialog} from './';
 
+class Attendee extends Component {
+
+  render() {
+    const {idx, user, onWaitlist, onClick} = this.props;
+    return (
+      <Grid
+        item xs={3}
+        className='attendee'
+        style={{
+          transition: 'all 650ms cubic-bezier(0.23, 1, 0.32, 1)' + (500 + idx * 50) + 'ms'
+        }}
+        onClick={onClick}>
+        <Avatar className='attendee_avatar' style={{backgroundColor: TITLE_BG}}>
+          <ProfilePicture user={user} asAvatar/>
+        </Avatar>
+        <Typography
+          variant='caption'
+          gutterBottom
+          align='center'>
+          {user.firstname + ' ' + user.lastname}
+        </Typography>
+        {
+          onWaitlist
+            ? <Typography
+              variant='caption'
+              style={{color: 'rgba(255, 0, 0, 0.65'}}
+              gutterBottom
+              align='center'>
+              (auf Warteliste)
+            </Typography>
+            : undefined
+        }
+      </Grid>
+    );
+  }
+
+}
+
 class CourseDetails extends Component {
 
   state = {
@@ -158,11 +196,11 @@ class CourseDetails extends Component {
     }
 
     return <MenuItem key={idx} onClick={() => {
-      this.closeAddUserMenu();
-      addUserToCourse(courseId, user.id)
-    }}>
+        this.closeAddUserMenu();
+        addUserToCourse(courseId, user.id)
+      }}>
       <Avatar>
-        <ProfilePicture user={user}/>
+        <ProfilePicture user={user} asAvatar/>
       </Avatar>
       <span style={{marginLeft: '8px'}}>
         {user.firstname + ' ' + user.lastname}
@@ -235,36 +273,13 @@ class CourseDetails extends Component {
     const maxParticipants = viewPath(['courseDetails', 'course', 'maxParticipants'], this.props) || 0;
     return attendees.map((user, idx) => {
       const onWaitlist = idx >= maxParticipants;
-
-      return (<Grid
-          item xs={3} key={idx}
-          className='attendee'
-          style={{
-            transition: 'all 650ms cubic-bezier(0.23, 1, 0.32, 1)' + (500 + idx * 50) + 'ms'
-          }}
-          onClick={actionAllowed ? event => this.openMenu(event, user) : undefined}>
-          <Avatar style={{backgroundColor: TITLE_BG, margin: '0 auto'}}>
-            <ProfilePicture user={user}/>
-          </Avatar>
-          <Typography
-            variant='caption'
-            gutterBottom
-            align='center'>
-            {user.firstname + ' ' + user.lastname}
-          </Typography>
-          {
-            onWaitlist
-              ? <Typography
-                variant='caption'
-                style={{color: 'rgba(255, 0, 0, 0.65'}}
-                gutterBottom
-                align='center'>
-                (auf Warteliste)
-              </Typography>
-              : undefined
-          }
-        </Grid>
-      );
+      const {id = ''} = user;
+      return <Attendee
+        key={idx + '_' + id}
+        idx={idx}
+        user={user}
+        onWaitlist={onWaitlist}
+        onClick={actionAllowed ? event => this.openMenu(event, user) : undefined}/>;
     });
   };
 

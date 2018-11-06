@@ -54,7 +54,7 @@ class CreateMembership extends Component {
       data
     } = create;
     const {userId, membershipTypeId, validity} = data;
-    if (show) {
+    if (show && !pending && !users.pending) {
       updateUsers();
     }
     const {
@@ -76,7 +76,7 @@ class CreateMembership extends Component {
 
               <Grid item xs={2} sm={1} style={{margin: 'auto'}}>
                 <Avatar style={{backgroundColor: TITLE_BG}}>
-                  <ProfilePicture user={user} />
+                  <ProfilePicture user={user} asAvatar/>
                 </Avatar>
               </Grid>
               <GridItemSelectControl

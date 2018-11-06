@@ -44,7 +44,7 @@ class Home extends Component {
     }
     const suffix = isWidthDown('sm', width) ? 'xs' : 'md';
     return (
-      <Grid item xs={12} sm={10} md={6} lg={5}>
+      <Grid item xs={12}>
         <Card>
           <CardMedia
             component={'img'}
@@ -64,26 +64,6 @@ class Home extends Component {
         </Card>
       </Grid>
     )
-  };
-
-  getNews = () => {
-    const newsData = this.props.news.data || [];
-    newsData.sort(compareNewsByValidityFromDate);
-    return <Grid item xs={12} sm={10} md={6} lg={3}>
-      <Card>
-        <Slider loading={this.props.news.pending}>
-          {newsData.map((newsItem, idx) => (
-            <NewsItem
-              key={idx}
-              title={newsItem.title}
-              teaser={newsItem.teaser}
-              text={newsItem.text}
-              validity={newsItem.validity}
-              img={__API__ + '/test' + newsItem.pictureId + '.jpg'}/>
-          ))}
-        </Slider>
-      </Card>
-    </Grid>
   };
 
   getCoursePlan = () => {
@@ -163,7 +143,7 @@ class Home extends Component {
     </TableCell>;
 
     return (
-      <Grid item xs={12} lg={8}>
+      <Grid item xs={12}>
         <Card>
           <CardHeader title={'Kursplan'}/>
           <CardContent>
@@ -234,7 +214,7 @@ class Home extends Component {
   };
 
   getFacebookEventCard = () => (
-    <Grid item xs={12} sm={8} md={6} lg={4}>
+    <Grid item xs={12} sm={8} md={6}>
       <Card>
         <CardHeader title='FreyRaum auf facebook'/>
         <CardContent>
@@ -268,7 +248,7 @@ class Home extends Component {
     const myCourses = data.filter(course => course.signedIn);
     myCourses.sort(compareCourseByStartDate);
 
-    return <Grid item xs={12} sm={8} md={6} lg={5}>
+    return <Grid item xs={12} md={8}>
       <Card>
         <List style={{padding: '0'}}>
           <Subheader label='Meine Kurse'/>
@@ -304,31 +284,60 @@ class Home extends Component {
   };
 
   render() {
+    const newsData = this.props.news.data || [];
+    newsData.sort(compareNewsByValidityFromDate);
+
     return (
       <div className={this.props.classes.root}>
         <PullToRefresh
           pending={this.isPending()}
           onRefresh={this.onRefresh}>
           <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-            {/* Nur bei nicht angemeldeten Benutzern*/}
-            {this.getWelcomeGreetings()}
-            {this.getNews()}
-            {/* weitere Informationen bei angemeldeten Benutzern */}
-            {this.getUserDetails()}
-            {/* Der Kursplan */}
-            {this.getCoursePlan()}
-          </Grid>
-          <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-            <Grid item xs={12} md={6} lg={4} style={{padding: '0px'}}>
+            <Grid item xs={12} sm={10} md={8}>
               <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
-                {/* Kontaktaufnahme */}
-                <ContactCard/>
-                {/* Nur bei nicht angemeldeten Benutzern */}
-                {this.getLoginCard()}
+                {/* Nur bei nicht angemeldeten Benutzern*/}
+                {this.getWelcomeGreetings()}
               </Grid>
             </Grid>
-            {/* Bevorstehende Veranstaltungen */}
-            {this.getFacebookEventCard()}
+            <Grid item xs={12}>
+              <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+                {
+                  newsData.map((newsItem, idx) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                      <Card>
+                        <NewsItem
+                          key={idx}
+                          title={newsItem.title}
+                          teaser={newsItem.teaser}
+                          text={newsItem.text}
+                          validity={newsItem.validity}
+                          img={__API__ + '/test' + newsItem.pictureId + '.jpg'}/>
+                      </Card>
+                    </Grid>
+                  ))
+                }
+              </Grid>
+            </Grid>
+            <Grid item xs={12} sm={10} md={8}>
+              <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+                {/* weitere Informationen bei angemeldeten Benutzern */}
+                {this.getUserDetails()}
+                {/* Der Kursplan */}
+                {this.getCoursePlan()}
+              </Grid>
+              <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+                <Grid item xs={12} md={6} style={{padding: '0px'}}>
+                  <Grid container spacing={16} justify="center" style={{width: '100%', margin: '0px'}}>
+                    {/* Kontaktaufnahme */}
+                    <ContactCard/>
+                    {/* Nur bei nicht angemeldeten Benutzern */}
+                    {this.getLoginCard()}
+                  </Grid>
+                </Grid>
+                {/* Bevorstehende Veranstaltungen */}
+                {this.getFacebookEventCard()}
+              </Grid>
+            </Grid>
           </Grid>
         </PullToRefresh>
       </div>

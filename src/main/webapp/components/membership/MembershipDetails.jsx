@@ -206,7 +206,7 @@ class MembershipDetails extends Component {
             <ValidationGroup ref={this.setValidation}>
               <Grid item xs={2} sm={1} style={{margin: 'auto'}}>
                 <Avatar style={{backgroundColor: TITLE_BG}}>
-                  <ProfilePicture user={user} />
+                  <ProfilePicture user={user} asAvatar/>
                 </Avatar>
               </Grid>
               <GridItemSelectControl
