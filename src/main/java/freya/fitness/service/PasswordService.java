@@ -2,7 +2,7 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
-import freya.fitness.proxy.CreateEmailEvent;
+import freya.fitness.proxy.CreateEmail;
 import freya.fitness.proxy.EmailProxy;
 import freya.fitness.utils.exception.InvalidPasswordException;
 import freya.fitness.utils.exception.InvalidResetTokenException;
@@ -54,7 +54,7 @@ public class PasswordService {
   public void processForgotPassword(
       final String userEmail, final HttpServletRequest request) throws UserNotFoundException {
     final User user = userService.getUserByEmail(userEmail);
-    final CreateEmailEvent event = new CreateEmailEvent("RESET_PASSWORD");
+    final CreateEmail event = new CreateEmail("RESET_PASSWORD");
     event.setTo(Collections.singletonList(user.getEmail()));
 
     final Map<String, String> params = new HashMap<>();
@@ -64,7 +64,7 @@ public class PasswordService {
     params.put("resetUrl", resetUrl);
     event.setParameters(params);
 
-    emailProxy.createEmailEvent(event);
+    emailProxy.createEmail(event);
   }
 
   private String getResetUrl(

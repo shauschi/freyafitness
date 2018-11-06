@@ -1,7 +1,7 @@
 package freya.fitness.service;
 
 import freya.fitness.api.dto.ContactDto;
-import freya.fitness.proxy.CreateEmailEvent;
+import freya.fitness.proxy.CreateEmail;
 import freya.fitness.proxy.EmailProxy;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class ContactService {
 
   public void sendContactRequest(final ContactDto contactDto) {
     LOGGER.info("Handle contact request from {} {}", contactDto.getFirstname(), contactDto.getLastname());
-    final CreateEmailEvent event = new CreateEmailEvent("CONTACT");
+    final CreateEmail event = new CreateEmail("CONTACT");
     event.setTo(Collections.singletonList(emailTo));
 
     final Map<String, String> params = new HashMap<>();
@@ -44,7 +44,7 @@ public class ContactService {
 
     event.setParameters(params);
 
-    emailProxy.createEmailEvent(event);
+    emailProxy.createEmail(event);
   }
 
 }

@@ -2,9 +2,6 @@ package freya.fitness.service;
 
 import freya.fitness.api.dto.ContactDto;
 import freya.fitness.proxy.EmailProxy;
-import freya.fitness.utils.exception.MailTemplateNotFoundException;
-import freya.fitness.utils.exception.ResourceLoadingException;
-import javax.mail.MessagingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,10 +13,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ContactServiceTest {
@@ -53,7 +48,7 @@ public class ContactServiceTest {
     testee.sendContactRequest(contactRequest);
 
     // then
-    verify(emailProxy).createEmailEvent(any());
+    verify(emailProxy).createEmail(any());
   }
 
 }

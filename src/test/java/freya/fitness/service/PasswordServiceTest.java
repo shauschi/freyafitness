@@ -81,7 +81,7 @@ public class PasswordServiceTest {
           && token.getExpiryTime().isAfter(LocalDateTime.now());
     verify(passwordResetTokenService).save(argThat(expectedToken));
 
-    verify(emailProxy).createEmailEvent(any());
+    verify(emailProxy).createEmail(any());
   }
 
   @Test

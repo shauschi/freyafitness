@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(name = "Email", url = "http://localhost:7700")
 public interface EmailProxy {
 
-  @RequestMapping("/emails/create-email-event")
-  MessageDto createEmailEvent(@RequestBody final CreateEmailEvent createEmailEvent);
+  @RequestMapping("/emails")
+  MessageDto createEmail(@RequestBody final CreateEmail createEmail);
 
 }

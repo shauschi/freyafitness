@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CreateEmailEvent {
+public class CreateEmail {
 
   private String templateId;
   private Map<String, String> parameters;
@@ -16,7 +16,7 @@ public class CreateEmailEvent {
   private List<String> cc;
   private List<String> bcc;
 
-  public CreateEmailEvent(final String templateId) {
+  public CreateEmail(final String templateId) {
     this.templateId = templateId;
   }
 
