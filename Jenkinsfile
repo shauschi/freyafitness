@@ -53,9 +53,9 @@ def mapBranchToPortHttps(branch) {
 
 def mapBranchToMailUrl(branch) {
   if (branch == 'master') {
-    return http://freya.fitness:7700
+    return 'http://freya.fitness:7700'
   }
-  return return http://freya.fitness:9700
+  return 'http://freya.fitness:9700'
 }
 
 pipeline {
