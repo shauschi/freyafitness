@@ -51,6 +51,13 @@ def mapBranchToPortHttps(branch) {
   return 7443
 }
 
+def mapBranchToMailUrl(branch) {
+  if (branch == 'master') {
+    return http://freya.fitness:7700
+  }
+  return return http://freya.fitness:9700
+}
+
 pipeline {
   agent none
   options {
@@ -67,9 +74,7 @@ pipeline {
     MONGO_HOST = '93.90.205.170'
     MONGO_PORT = 27017
 
-    MAIL       = credentials('mail')
-    MAIL_HOST  = "smtp.1und1.de"
-    MAIL_PORT  = 587
+    MAIL_URL   = mapBranchToMailUrl("${BRANCH_NAME}")
     APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
     APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
   }
@@ -169,10 +174,7 @@ pipeline {
             -e MONGO_HOST=${MONGO_HOST} \
             -e MONGO_PORT=${MONGO_PORT} \
             -e BRANCH=${BRANCH} \
-            -e MAIL_HOST=${MAIL_HOST} \
-            -e MAIL_PORT=${MAIL_PORT} \
-            -e MAIL_USR=${MAIL_USR} \
-            -e MAIL_PSW=${MAIL_PSW} \
+            -e MAIL_URL=${MAIL_URL} \
             -p ${APP_PORT}:9000 \
             -p ${APP_PORT_S}:${APP_PORT_S} \
             --name ${APP_NAME} \

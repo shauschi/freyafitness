@@ -43,7 +43,7 @@ course:
     minutes: 60
     maxParticipants: 12
 mail:
-  url: http://freya.fitness:7700
+  url: ${MAIL_URL}
   sender: FreyRaum <admin@freya.fitness>
   develop:
     receiver: develop@freya.fitness
