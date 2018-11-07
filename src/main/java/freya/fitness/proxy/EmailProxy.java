@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "Email", url = "http://localhost:7700")
+@FeignClient(name = "Email", url = "${mail.url}")
 public interface EmailProxy {
 
   @RequestMapping(
