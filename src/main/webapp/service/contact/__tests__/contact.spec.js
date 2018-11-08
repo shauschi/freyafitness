@@ -14,7 +14,7 @@ describe('contact service', () => {
 
     it('should extract response body', async () => {
       const result = await sendContact({firstname: 'testee', subject: 'subject', message: 'some long message'});
-      expect(apiCall).toHaveBeenCalledWith(__API__ + '/contact/',
+      expect(apiCall).toHaveBeenCalledWith(__API__ + '/contact',
         {
           "method": "POST",
           "credentials": "include",

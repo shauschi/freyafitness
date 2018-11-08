@@ -7,8 +7,9 @@ import freya.fitness.api.dto.ResetPasswordDto;
 import freya.fitness.service.PasswordService;
 import freya.fitness.utils.exception.InvalidPasswordException;
 import freya.fitness.utils.exception.InvalidResetTokenException;
-import freya.fitness.utils.exception.MailTemplateNotFoundException;
 import freya.fitness.utils.exception.UserNotFoundException;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/password")
@@ -41,7 +38,7 @@ public class PasswordController {
   @PostMapping("/forgot")
   public MessageDto forgotPassword(
       @RequestBody @Valid final EmailDto email, final HttpServletRequest request)
-      throws UserNotFoundException, MailTemplateNotFoundException, MessagingException {
+      throws UserNotFoundException {
     final String value = email.getEmail();
     passwordService.processForgotPassword(value, request);
     return MessageDto.formatted(successMessage, value);

@@ -43,6 +43,7 @@ course:
     minutes: 60
     maxParticipants: 12
 mail:
+  url: ${MAIL_URL}
   sender: FreyRaum <admin@freya.fitness>
   develop:
     receiver: develop@freya.fitness
