@@ -51,6 +51,17 @@ def mapBranchToPortHttps(branch) {
   return 7443
 }
 
+def mapBranchToDockerImage(branch) {
+  def appName = 'freyafitness'
+  if (branch == 'master') {
+    return appName + ':latest'
+  }
+  if (branch == 'develop') {
+    return appName + ':next'
+  }
+  return appName + ':snapshot'
+}
+
 def mapBranchToMailUrl(branch) {
   if (branch == 'master') {
     return 'http://freya.fitness:7700'
@@ -66,6 +77,7 @@ pipeline {
   environment{
     ENV_NAME = mapBranchToEnvironment("${BRANCH_NAME}")
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
+    DOCKER_IMAGE = mapBranchToDockerImage("${BRANCH_NAME}")
     NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
     BRANCH = "${BRANCH_NAME}"
     DB = credentials('db')
@@ -151,6 +163,8 @@ pipeline {
       agent any
       steps {
         sh 'docker build . -f Dockerfile -t ${APP_NAME}'
+        sh 'docker tag ${APP_NAME} localhost:5000/${DOCKER_IMAGE}'
+        sh 'docker push localhost:5000/${DOCKER_IMAGE}'
       }
     }
 
