@@ -191,6 +191,7 @@ pipeline {
             -e MAIL_URL=${MAIL_URL} \
             -p ${APP_PORT}:9000 \
             -p ${APP_PORT_S}:${APP_PORT_S} \
+            --restart=always \
             --name ${APP_NAME} \
             ${APP_NAME}:latest
           '''
