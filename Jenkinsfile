@@ -51,6 +51,24 @@ def mapBranchToPortHttps(branch) {
   return 7443
 }
 
+def mapBranchToDockerImage(branch) {
+  def appName = 'freyafitness'
+  if (branch == 'master') {
+    return appName + ':latest'
+  }
+  if (branch == 'develop') {
+    return appName + ':next'
+  }
+  return appName + ':snapshot'
+}
+
+def mapBranchToMailUrl(branch) {
+  if (branch == 'master') {
+    return 'http://freya.fitness:7700'
+  }
+  return 'http://freya.fitness:9700'
+}
+
 pipeline {
   agent none
   options {
@@ -59,6 +77,7 @@ pipeline {
   environment{
     ENV_NAME = mapBranchToEnvironment("${BRANCH_NAME}")
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
+    DOCKER_IMAGE = mapBranchToDockerImage("${BRANCH_NAME}")
     NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
     BRANCH = "${BRANCH_NAME}"
     DB = credentials('db')
@@ -67,9 +86,7 @@ pipeline {
     MONGO_HOST = '93.90.205.170'
     MONGO_PORT = 27017
 
-    MAIL       = credentials('mail')
-    MAIL_HOST  = "smtp.1und1.de"
-    MAIL_PORT  = 587
+    MAIL_URL   = mapBranchToMailUrl("${BRANCH_NAME}")
     APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
     APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
   }
@@ -146,6 +163,8 @@ pipeline {
       agent any
       steps {
         sh 'docker build . -f Dockerfile -t ${APP_NAME}'
+        sh 'docker tag ${APP_NAME} localhost:5000/${DOCKER_IMAGE}'
+        sh 'docker push localhost:5000/${DOCKER_IMAGE}'
       }
     }
 
@@ -169,12 +188,10 @@ pipeline {
             -e MONGO_HOST=${MONGO_HOST} \
             -e MONGO_PORT=${MONGO_PORT} \
             -e BRANCH=${BRANCH} \
-            -e MAIL_HOST=${MAIL_HOST} \
-            -e MAIL_PORT=${MAIL_PORT} \
-            -e MAIL_USR=${MAIL_USR} \
-            -e MAIL_PSW=${MAIL_PSW} \
+            -e MAIL_URL=${MAIL_URL} \
             -p ${APP_PORT}:9000 \
             -p ${APP_PORT_S}:${APP_PORT_S} \
+            --restart=always \
             --name ${APP_NAME} \
             ${APP_NAME}:latest
           '''
