@@ -16,6 +16,7 @@ import freya.fitness.utils.exception.MembershipException;
 import freya.fitness.utils.exception.UserNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -131,7 +132,7 @@ public class CourseController {
   public CourseDto signOut(@PathVariable("courseId") final UUID courseId) throws ActionNotAllowedException {
     final User user = userService.getCurrentUser();
     final Course course = courseService.getCourse(courseId);
-    if (course.getStart().isBefore(LocalDateTime.now().plusHours(3))) {
+    if (course.getStart().isBefore(LocalDateTime.now(ZoneId.of("Europe/Paris")).plusHours(3))) {
       throw new ActionNotAllowedException(
           "Abmeldungen sind nur bis 3 Stunden vor Kursstart erlaubt.");
     }
