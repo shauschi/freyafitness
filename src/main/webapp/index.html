@@ -24,6 +24,17 @@
             #app {
                 height: 100%;
             }
+
+            #noscript {
+                position: absolute;
+                top: 30vh;
+                margin: 32px;
+                font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            }
+
+            #noscript .footer {
+                color: #A9A9A9;
+            }
         </style>
         <script th:inline="javascript">
           /*<![CDATA[*/
@@ -36,5 +47,16 @@
     <body>
         <div id="app">
         </div>
+        <noscript id="noscript">
+            <h2>Willkommen im FreyRaum</h2>
+            <p>Es wird JavaScript benötigt, damit die Seite funktioniert.</p>
+            <p>Viele Grüße,</p>
+            <p>Dein FreyRaum-Team</p>
+            <div class="footer">
+                Freya Constanze Heine<br/>
+                Tangendorfer Straße 2a<br/>
+                21442 Toppenstedt<br/>
+            </div>
+        </noscript>
     </body>
 </html>
