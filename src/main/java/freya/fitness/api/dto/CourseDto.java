@@ -17,7 +17,7 @@ public class CourseDto {
   private UUID id;
   @NotNull
   @NotEmpty
-  private UUID courseTypeId;
+  private CourseTypeDto courseType;
   @NotNull
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime start;

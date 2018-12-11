@@ -1,6 +1,7 @@
 package freya.fitness.api.mapping;
 
 import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.CourseTypeDto;
 import freya.fitness.api.dto.ProfileDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.CourseType;
@@ -47,11 +48,10 @@ public class CourseMapper {
     final Course course = Optional.ofNullable(existingCourse).orElseGet(Course::new);
 
     course.setType(
-        courseTypeRepository.findById(courseDto.getCourseTypeId())
+        courseTypeRepository.findById(courseDto.getCourseType().getId())
         .orElse(null));
     course.setStart(courseDto.getStart());
     course.setMinutes(courseDto.getMinutes());
-    // TODO am DTO nur die ID speichern
     final User instructor = userService.getUser(courseDto.getInstructor().getId());
     course.setInstructor(instructor);
     course.setMaxParticipants(courseDto.getMaxParticipants());
@@ -68,7 +68,7 @@ public class CourseMapper {
     final CourseDto dto = new CourseDto();
     dto.setId(course.getId());
     final CourseType type = course.getType();
-    dto.setCourseTypeId(type != null ? type.getId() : null);
+    dto.setCourseType(type != null ? new CourseTypeDto(type) : new CourseTypeDto());
     dto.setStart(course.getStart());
     dto.setMinutes(course.getMinutes());
     final User instructor = course.getInstructor();

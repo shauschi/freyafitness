@@ -47,7 +47,7 @@ public class MembershipMapper {
       return null;
     }
     final Membership membership = new Membership();
-    final User user = userService.getUser(dto.getUserId());
+    final User user = userService.getUser(dto.getUser().getId());
     membership.setUser(user);
     final MembershipType type = membershipTypeService.getMembershipType(dto.getMembershipTypeId());
     membership.setType(type);

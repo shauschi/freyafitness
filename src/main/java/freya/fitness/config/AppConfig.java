@@ -66,6 +66,7 @@ public class AppConfig {
             "/coursetypes/",
             "/password/forgot",
             "/password/reset",
+            "/*.js",
             "/*.svg",
             "/*.png",
             "/*.jpg")

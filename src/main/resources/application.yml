@@ -8,6 +8,25 @@ server:
   session:
     cookie:
       name: UISESSION
+zuul:
+  ignoredPatterns:
+    - /oauth/**
+    - /contact/**
+    - /courses/**
+    - /coursetypes/**
+    - /memberships/**
+    - /membershiptypes/**
+    - /news/**
+    - /participations/**
+    - /password/**
+    - /preferences/**
+    - /profile/**
+    - /statistics/**
+  routes:
+    frontend:
+      sensitiveHeaders:
+      path: /**
+      url: http://localhost:3333/
 spring:
   data:
     rest:

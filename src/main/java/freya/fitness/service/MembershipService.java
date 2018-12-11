@@ -1,19 +1,16 @@
 package freya.fitness.service;
 
-import freya.fitness.api.dto.MembershipDetailsDto;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.repository.jpa.MembershipRepository;
 import freya.fitness.utils.exception.MembershipException;
 import freya.fitness.utils.exception.MembershipNotFoundException;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
