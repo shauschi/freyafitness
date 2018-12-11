@@ -26,7 +26,7 @@ zuul:
     frontend:
       sensitiveHeaders:
       path: /**
-      url: http://freya.fitness:3333/
+      url: ${FRONTEND_URL}
 spring:
   data:
     rest:

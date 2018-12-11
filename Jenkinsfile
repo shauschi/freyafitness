@@ -59,6 +59,16 @@ def mapBranchToMailUrl(branch) {
   return 'http://freya.fitness:9700'
 }
 
+def mapBranchToFrontendUrl(branch) {
+  if (branch == 'master') {
+    return 'http://freya.fitness:3333'
+  }
+  if (branch == 'develop') {
+    return 'http://freya.fitness:3334'
+  }
+  return 'http://freya.fitness:3335'
+}
+
 pipeline {
   agent none
   options {
@@ -76,6 +86,7 @@ pipeline {
     MONGO_PORT = 27017
 
     MAIL_URL   = mapBranchToMailUrl("${BRANCH_NAME}")
+    FRONTEND_URL = apBranchToFrontendUrl("${BRANCH_NAME}")
     APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
     APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
   }
@@ -151,6 +162,7 @@ pipeline {
             -e MONGO_PORT=${MONGO_PORT} \
             -e BRANCH=${BRANCH} \
             -e MAIL_URL=${MAIL_URL} \
+            -e FRONTEND_URL=${FRONTEND_URL} \
             -p ${APP_PORT}:9000 \
             -p ${APP_PORT_S}:${APP_PORT_S} \
             --restart=always \
