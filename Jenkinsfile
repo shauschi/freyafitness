@@ -86,7 +86,7 @@ pipeline {
     MONGO_PORT = 27017
 
     MAIL_URL   = mapBranchToMailUrl("${BRANCH_NAME}")
-    FRONTEND_URL = apBranchToFrontendUrl("${BRANCH_NAME}")
+    FRONTEND_URL = mapBranchToFrontendUrl("${BRANCH_NAME}")
     APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
     APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
   }
