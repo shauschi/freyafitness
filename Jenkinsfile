@@ -21,16 +21,6 @@ def mapBranchToAppName(branch) {
   return appName + '_tst'
 }
 
-def mapBranchToNpm(branch) {
-  if (branch == 'master') {
-    return 'build_production'
-  }
-  if (branch == 'develop') {
-    return 'build_int'
-  }
-  return 'build_tst'
-}
-
 def mapBranchToPort(branch) {
   if (branch == 'master') {
     return 80
@@ -78,7 +68,6 @@ pipeline {
     ENV_NAME = mapBranchToEnvironment("${BRANCH_NAME}")
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
     DOCKER_IMAGE = mapBranchToDockerImage("${BRANCH_NAME}")
-    NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
     BRANCH = "${BRANCH_NAME}"
     DB = credentials('db')
     DB_URL = "jdbc:postgresql://93.90.205.170/${APP_NAME}"
@@ -95,33 +84,6 @@ pipeline {
       agent any
       steps {
         checkout scm
-      }
-    }
-
-    stage('npm install') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
-      steps {
-        sh 'npm install'
-      }
-    }
-
-    stage('npm test') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
-      steps {
-        sh 'npm test'
-      }
-    }
-
-    stage('npm build production') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
-      steps {
-        sh 'npm run ${NPM_CMD}'
       }
     }
 
