@@ -1,16 +1,11 @@
 package freya.fitness;
 
-import com.mongodb.client.gridfs.model.GridFSFile;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.MembershipType;
 import freya.fitness.domain.jpa.User;
-import java.io.ByteArrayInputStream;
-import java.util.Date;
 import java.util.Optional;
-import org.bson.BsonObjectId;
 import org.mockito.stubbing.Answer;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -44,14 +39,4 @@ public class TestUtils {
     return user;
   }
 
-  public static GridFSFile gridFSFile(final String filename) {
-    return new GridFSFile(new BsonObjectId(), filename,
-        1_000L, 10, new Date(),
-        "md5String", null);
-  }
-
-  public static GridFsResource gridFsResource(final GridFSFile file) {
-    final ByteArrayInputStream is = new ByteArrayInputStream(TEST_FILE_BYTES);
-    return new GridFsResource(file, is);
-  }
 }

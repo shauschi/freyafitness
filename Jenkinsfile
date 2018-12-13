@@ -81,9 +81,6 @@ pipeline {
     BRANCH = "${BRANCH_NAME}"
     DB = credentials('db')
     DB_URL = "jdbc:postgresql://93.90.205.170/${APP_NAME}"
-    MONGO      = credentials('mongo')
-    MONGO_HOST = '93.90.205.170'
-    MONGO_PORT = 27017
 
     MAIL_URL   = mapBranchToMailUrl("${BRANCH_NAME}")
     FRONTEND_URL = mapBranchToFrontendUrl("${BRANCH_NAME}")
@@ -155,11 +152,6 @@ pipeline {
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \
             -e DB_PSW=${DB_PSW} \
-            -e MONGO_DB_NAME=${APP_NAME} \
-            -e MONGO_USR=${MONGO_USR} \
-            -e MONGO_PSW=${MONGO_PSW} \
-            -e MONGO_HOST=${MONGO_HOST} \
-            -e MONGO_PORT=${MONGO_PORT} \
             -e BRANCH=${BRANCH} \
             -e MAIL_URL=${MAIL_URL} \
             -e FRONTEND_URL=${FRONTEND_URL} \

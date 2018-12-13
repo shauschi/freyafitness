@@ -1,6 +1,7 @@
 package freya.fitness.service;
 
 import freya.fitness.api.dto.ContactDto;
+import freya.fitness.proxy.CreateEmail;
 import freya.fitness.proxy.EmailProxy;
 import org.junit.Before;
 import org.junit.Rule;
@@ -48,7 +49,7 @@ public class ContactServiceTest {
     testee.sendContactRequest(contactRequest);
 
     // then
-    verify(emailProxy).createEmail(any());
+    verify(emailProxy).createEmail(any(CreateEmail.class));
   }
 
 }

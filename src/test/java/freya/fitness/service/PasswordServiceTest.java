@@ -2,6 +2,7 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.proxy.CreateEmail;
 import freya.fitness.proxy.EmailProxy;
 import freya.fitness.utils.exception.InvalidResetTokenException;
 import freya.fitness.utils.exception.UserNotFoundException;
@@ -81,7 +82,7 @@ public class PasswordServiceTest {
           && token.getExpiryTime().isAfter(LocalDateTime.now());
     verify(passwordResetTokenService).save(argThat(expectedToken));
 
-    verify(emailProxy).createEmail(any());
+    verify(emailProxy).createEmail(any(CreateEmail.class));
   }
 
   @Test

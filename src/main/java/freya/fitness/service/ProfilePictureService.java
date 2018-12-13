@@ -5,7 +5,6 @@ import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.jpa.PictureRepository;
-import freya.fitness.repository.mongodb.ProfilePictureRepository;
 import freya.fitness.utils.Size;
 import freya.fitness.utils.exception.UserNotFoundException;
 import java.awt.*;
@@ -23,8 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ProfilePictureService {
 
-  private final ProfilePictureRepository profilePictureRepository;
-
   private final UserService userService;
 
   private final UserPreferencesService userPreferencesService;
@@ -33,11 +30,9 @@ public class ProfilePictureService {
 
   @Autowired
   public ProfilePictureService(
-      final ProfilePictureRepository profilePictureRepository,
       final UserService userService,
       final UserPreferencesService userPreferencesService,
       final PictureRepository pictureRepository) {
-    this.profilePictureRepository = profilePictureRepository;
     this.userService = userService;
     this.userPreferencesService = userPreferencesService;
     this.pictureRepository = pictureRepository;
