@@ -63,6 +63,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         "https://freya.fitness",
         "https://www.freya.fitness",
+        "https://freya.fitness:9443",
+        "https://www.freya.fitness:9443",
+        "https://freya.fitness:7443",
+        "https://www.freya.fitness:7443",
+        // frontend
+        "https://freya.fitness:3333",
+        "https://www.freya.fitness:3333",
+        "https://freya.fitness:3334",
+        "https://www.freya.fitness:3334",
+        "https://freya.fitness:3335",
+        "https://www.freya.fitness:3335",
+
         "https://127.0.0.1:3333",
         "https://localhost:3333",
         "https://127.0.0.1:9443",
