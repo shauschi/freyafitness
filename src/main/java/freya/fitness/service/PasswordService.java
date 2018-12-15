@@ -73,7 +73,7 @@ public class PasswordService {
     final PasswordResetToken resetToken = createPasswordResetToken(user);
     final String port = getPortFromRequest(request);
     final String appUrl = request.getScheme() + "://" + request.getServerName() + port;
-    return appUrl + "/?resetPasswordToken=" + resetToken.getToken();
+    return appUrl + "/#/home/m/password/reset/" + resetToken.getToken();
   }
 
   private PasswordResetToken createPasswordResetToken(User user) {
