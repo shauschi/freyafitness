@@ -75,3 +75,5 @@ mail:
       hours: 24
   contact:
     receiver: freyraum@freya.fitness
+  account_created:
+    receiver: freyraum@freya.fitness

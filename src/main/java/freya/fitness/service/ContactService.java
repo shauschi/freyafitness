@@ -29,9 +29,18 @@ public class ContactService {
 
   public void sendContactRequest(final ContactDto contactDto) {
     LOGGER.info("Handle contact request from {} {}", contactDto.getFirstname(), contactDto.getLastname());
-    final CreateEmail event = new CreateEmail("CONTACT");
-    event.setTo(Collections.singletonList(emailTo));
 
+    final CreateEmail event = new CreateEmail(
+        "CONTACT",
+        getContactParams(contactDto),
+        Collections.singletonList(emailTo),
+        Collections.emptyList(),
+        Collections.emptyList());
+
+    emailProxy.createEmail(event);
+  }
+
+  private Map<String, String> getContactParams(ContactDto contactDto) {
     final Map<String, String> params = new HashMap<>();
     params.put("firstname", contactDto.getFirstname());
     params.put("lastname", contactDto.getLastname());
@@ -41,10 +50,7 @@ public class ContactService {
     final String message = contactDto.getMessage();
     final String replacedMessage = message.replaceAll("\n", "<br/>");
     params.put("message", replacedMessage);
-
-    event.setParameters(params);
-
-    emailProxy.createEmail(event);
+    return params;
   }
 
 }

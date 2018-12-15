@@ -54,15 +54,18 @@ public class PasswordService {
   public void processForgotPassword(
       final String userEmail, final HttpServletRequest request) throws UserNotFoundException {
     final User user = userService.getUserByEmail(userEmail);
-    final CreateEmail event = new CreateEmail("RESET_PASSWORD");
-    event.setTo(Collections.singletonList(user.getEmail()));
 
     final Map<String, String> params = new HashMap<>();
     params.put("firstname", user.getFirstName());
     params.put("lastname", user.getFamilyName());
     final String resetUrl = getResetUrl(request, user);
     params.put("resetUrl", resetUrl);
-    event.setParameters(params);
+    final CreateEmail event = new CreateEmail(
+        "RESET_PASSWORD",
+        params,
+        Collections.singletonList(user.getEmail()),
+        Collections.emptyList(),
+        Collections.emptyList());
 
     emailProxy.createEmail(event);
   }

@@ -3,6 +3,7 @@ package freya.fitness.service;
 import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.proxy.EmailProxy;
 import freya.fitness.repository.jpa.RoleRepository;
 import freya.fitness.repository.jpa.UserRepository;
 import freya.fitness.utils.exception.RoleNotFoundException;
@@ -53,6 +54,9 @@ public class UserServiceTest {
 
   @Mock
   private RoleRepository roleRepository;
+
+  @Mock
+  private EmailProxy emailProxy;
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
