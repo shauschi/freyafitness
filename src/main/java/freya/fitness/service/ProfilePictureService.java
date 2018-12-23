@@ -38,7 +38,7 @@ public class ProfilePictureService {
     this.pictureRepository = pictureRepository;
   }
 
-  public byte[] getProfilePictureData(final UUID userId, final Size size) throws IOException {
+  public byte[] getProfilePictureData(final UUID userId, final Size size) {
     final User currentUser = userService.getCurrentUser();
     boolean showAll = currentUser.getRoles().stream()
         .map(Role::getAuthority)

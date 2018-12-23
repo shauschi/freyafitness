@@ -16,13 +16,16 @@ zuul:
     - /coursetypes/**
     - /memberships/**
     - /membershiptypes/**
-    - /news/**
     - /participations/**
     - /password/**
     - /preferences/**
     - /profile/**
     - /statistics/**
   routes:
+    news:
+      sensitiveHeaders:
+      path: /news/**
+      url: ${NEWS_URL}
     frontend:
       sensitiveHeaders:
       path: /**
