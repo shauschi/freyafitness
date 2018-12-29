@@ -25,7 +25,7 @@ zuul:
     news:
       sensitiveHeaders:
       path: /news/**
-      url: ${NEWS_URL}
+      url: ${NEWS_URL}/news/
     frontend:
       sensitiveHeaders:
       path: /**
