@@ -9,12 +9,10 @@ import freya.fitness.domain.jpa.UserPreference;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -59,11 +57,8 @@ public class StatisticsService {
     final StatisticDto stats = new StatisticDto();
     stats.setUserId(userId);
 
-    final Map.Entry<CourseType, Long> maximum = getMaximumCourseParticipation(participations);
-    if (maximum != null) {
-      stats.setFavouriteCourseTypeId(maximum.getKey().getId());
-      stats.setFavouriteCourseParticipations(maximum.getValue());
-    }
+    stats.setParticipationsPerType(
+        getCourseParticipationsPerType(participations));
 
     final Map<LocalDate, Long> participationsPerMonth = getParticipationsPerMonth(participations);
     for (int i = 0; i < 5; i++) {
@@ -97,36 +92,28 @@ public class StatisticsService {
   }
 
   /**
-   * Get the UUID of the {@link freya.fitness.domain.jpa.CourseType} with the most
+   * Get the UUID of the {@link freya.fitness.domain.jpa.CourseType} and the
    * occurences in a given List of {@link Participation}.
-   * Also the count will be returned in the same Map.Entry.
    *
    * @param participations given {@link Participation}s
-   * @return Map.Entry with UUID of the course type and count
+   * @return Map with UUID of the course type and count
    */
-  private Map.Entry<CourseType, Long> getMaximumCourseParticipation(
+  private Map<UUID, Long> getCourseParticipationsPerType(
       final List<Participation> participations) {
 
-    final Map<CourseType, Long> countByType = new HashMap<>();
+    final Map<UUID, Long> countByType = new HashMap<>();
     for (Participation participation : participations) {
       final Course course = participation.getCourse();
       final CourseType courseType = course.getType();
+      final UUID courseTypeId = courseType.getId();
       long count = 1;
-      if (countByType.containsKey(courseType)) {
-        count = countByType.get(courseType) + 1;
+      if (countByType.containsKey(courseTypeId)) {
+        count = countByType.get(courseTypeId) + 1;
       }
-      countByType.put(courseType, count);
+      countByType.put(courseTypeId, count);
     }
 
-    return countByType.entrySet().stream()
-        .max(compareByCountAndThenName())
-        .orElse(null);
-  }
-
-  private Comparator<? super Map.Entry<CourseType, Long>> compareByCountAndThenName() {
-    return Comparator.comparing((Function<Map.Entry<CourseType, Long>, Long>) Map.Entry::getValue)
-        .thenComparing(Comparator.comparing(
-            (Map.Entry<CourseType, Long> e) -> e.getKey().getName()).reversed());
+    return countByType;
   }
 
   private LocalDateTime getStartForLastSixMonths() {

@@ -21,3 +21,9 @@ databaseChangeLog:
         path: db/changelog/007__user_preferences/
     - includeAll:
         path: db/changelog/008__pictures/
+    - includeAll:
+        path: db/changelog/009__course_type_colors/
+    - includeAll:
+        path: db/changelog/010__drop_table_news/
+    - includeAll:
+        path: db/changelog/011__add_participation_status

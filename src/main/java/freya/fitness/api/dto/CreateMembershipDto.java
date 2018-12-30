@@ -10,7 +10,7 @@ public class CreateMembershipDto {
 
   @NotNull
   @NotEmpty
-  private UUID userId;
+  private ProfileDto user;
 
   @NotNull
   @NotEmpty

@@ -1,11 +1,13 @@
 package freya.fitness.api.mapping;
 
 import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.CourseTypeDto;
 import freya.fitness.api.dto.ProfileDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.CourseType;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.Participation;
+import freya.fitness.domain.jpa.ParticipationStatus;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.domain.jpa.UserPreference;
@@ -14,6 +16,7 @@ import freya.fitness.service.UserPreferencesService;
 import freya.fitness.service.UserService;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -47,11 +50,10 @@ public class CourseMapper {
     final Course course = Optional.ofNullable(existingCourse).orElseGet(Course::new);
 
     course.setType(
-        courseTypeRepository.findById(courseDto.getCourseTypeId())
+        courseTypeRepository.findById(courseDto.getCourseType().getId())
         .orElse(null));
     course.setStart(courseDto.getStart());
     course.setMinutes(courseDto.getMinutes());
-    // TODO am DTO nur die ID speichern
     final User instructor = userService.getUser(courseDto.getInstructor().getId());
     course.setInstructor(instructor);
     course.setMaxParticipants(courseDto.getMaxParticipants());
@@ -68,7 +70,7 @@ public class CourseMapper {
     final CourseDto dto = new CourseDto();
     dto.setId(course.getId());
     final CourseType type = course.getType();
-    dto.setCourseTypeId(type != null ? type.getId() : null);
+    dto.setCourseType(type != null ? new CourseTypeDto(type) : new CourseTypeDto());
     dto.setStart(course.getStart());
     dto.setMinutes(course.getMinutes());
     final User instructor = course.getInstructor();
@@ -80,12 +82,13 @@ public class CourseMapper {
     dto.setAttendees(attendees);
 
     final UUID userId = userService.getCurrentUser().getId();
-    boolean signedIn = course.getParticipantions().stream()
-        .map(Participation::getMembership)
-        .map(Membership::getUser)
-        .map(User::getId)
-        .anyMatch(Predicate.isEqual(userId));
-    dto.setSignedIn(signedIn);
+    final ParticipationStatus status = course.getParticipantions().stream()
+        .filter(p -> p.getMembership().getUser().getId().equals(userId))
+        .map(Participation::getParticipationStatus)
+        .filter(Objects::nonNull)
+        .findFirst()
+        .orElse(null);
+    dto.setParticipationStatus(status);
 
     return dto;
   }
@@ -99,10 +102,16 @@ public class CourseMapper {
 
     return course.getParticipantions().stream()
         .sorted(Comparator.comparing(Participation::getSignInTime))
+        .filter(this::isSignedInOrOnWaitlist)
         .map(Participation::getMembership)
         .map(Membership::getUser)
         .map(user -> mapAttendee(user, currentUserId, showAll))
         .collect(Collectors.toList());
+  }
+
+  private boolean isSignedInOrOnWaitlist(final Participation participation) {
+    return participation.getParticipationStatus() == ParticipationStatus.SIGNED_IN
+        || participation.getParticipationStatus() == ParticipationStatus.ON_WAITLIST;
   }
 
   private ProfileDto mapAttendee(final User user, final UUID currentUserId, boolean showAll) {

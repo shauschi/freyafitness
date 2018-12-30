@@ -9,9 +9,8 @@ import lombok.Data;
 @Data
 public class StatisticDto {
 
-    private UUID userId;
-    private UUID favouriteCourseTypeId;
-    private Long favouriteCourseParticipations;
-    private Map<LocalDate, Long> participationsPerMonth = Collections.emptyMap();
+  private UUID userId;
+  private Map<UUID, Long> participationsPerType;
+  private Map<LocalDate, Long> participationsPerMonth = Collections.emptyMap();
 
 }

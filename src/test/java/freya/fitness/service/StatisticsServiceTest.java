@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.apache.tomcat.jni.Local;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -170,8 +169,7 @@ public class StatisticsServiceTest {
     // then
     assertThat(result, notNullValue());
     assertThat(result.getUserId(), is(USER_ID));
-    assertThat(result.getFavouriteCourseParticipations(), is(5L));
-    assertThat(result.getFavouriteCourseTypeId(), is(EASY_ID));
+    assertThat(result.getParticipationsPerType().get(EASY_ID), is(5L));
 
     final Map<LocalDate, Long> participationsPerMonth = result.getParticipationsPerMonth();
     assertThat(participationsPerMonth, notNullValue());

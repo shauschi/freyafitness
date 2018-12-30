@@ -1,16 +1,17 @@
 package freya.fitness.domain.jpa;
 
-import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
@@ -32,6 +33,9 @@ public class Participation {
   @ManyToOne
   @JoinColumn(name = "membership_id")
   private Membership membership;
+
+  @Enumerated(EnumType.STRING)
+  private ParticipationStatus participationStatus;
 
   private LocalDateTime signInTime;
 
