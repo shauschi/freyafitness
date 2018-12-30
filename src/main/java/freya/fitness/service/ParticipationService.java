@@ -31,8 +31,8 @@ public class ParticipationService {
 
   public List<Participation> getParticipationsBetween(
       final UUID userId, final LocalDateTime from, final LocalDateTime to) {
-    return participationRepository
-        .findByMembershipUserIdAndCourseStartBetween(userId, from, to);
+    return participationRepository.findByMembershipUserIdAndCourseStartBetweenAndParticipationStatus(
+            userId, from, to, ParticipationStatus.SIGNED_IN);
   }
 
   public Long getParticipationCount(final Membership membership) {

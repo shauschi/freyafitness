@@ -2,6 +2,7 @@ package freya.fitness.repository.jpa;
 
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.Participation;
+import freya.fitness.domain.jpa.ParticipationStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +24,8 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
 
   Optional<Participation> findByMembershipUserIdAndCourseId(final UUID userId, final UUID courseId);
 
-  List<Participation> findByMembershipUserIdAndCourseStartBetween(
-      final UUID id, final LocalDateTime from, final LocalDateTime to);
+  List<Participation> findByMembershipUserIdAndCourseStartBetweenAndParticipationStatus(
+      final UUID id, final LocalDateTime from, final LocalDateTime to, final ParticipationStatus participationStatus);
 
   List<Participation> findByMembershipId(final UUID membershipId);
 
