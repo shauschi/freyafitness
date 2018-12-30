@@ -59,6 +59,13 @@ def mapBranchToMailUrl(branch) {
   return 'http://freya.fitness:9700'
 }
 
+def mapBranchToNewsUrl(branch) {
+  if (branch == 'master') {
+    return 'http://freya.fitness:7800'
+  }
+  return 'http://freya.fitness:9800'
+}
+
 def mapBranchToFrontendUrl(branch) {
   if (branch == 'master') {
     return 'http://freya.fitness:3333'
@@ -83,6 +90,7 @@ pipeline {
     DB_URL = "jdbc:postgresql://93.90.205.170/${APP_NAME}"
 
     MAIL_URL   = mapBranchToMailUrl("${BRANCH_NAME}")
+    NEWS_URL   = mapBranchToNewsUrl("${BRANCH_NAME}")
     FRONTEND_URL = mapBranchToFrontendUrl("${BRANCH_NAME}")
     APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
     APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
@@ -154,6 +162,7 @@ pipeline {
             -e DB_PSW=${DB_PSW} \
             -e BRANCH=${BRANCH} \
             -e MAIL_URL=${MAIL_URL} \
+            -e NEWS_URL=${NEWS_URL} \
             -e FRONTEND_URL=${FRONTEND_URL} \
             -p ${APP_PORT}:9000 \
             -p ${APP_PORT_S}:${APP_PORT_S} \
