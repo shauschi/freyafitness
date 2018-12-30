@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 25
+      author: hauschildt
+      changes:
+      - addColumn:
+          columns:
+          - column:
+              name: participation_status
+              type: varchar(255)
+              defaultValue: null
+          schemaName: public
+          tableName: participation

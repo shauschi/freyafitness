@@ -21,16 +21,6 @@ def mapBranchToAppName(branch) {
   return appName + '_tst'
 }
 
-def mapBranchToNpm(branch) {
-  if (branch == 'master') {
-    return 'build_production'
-  }
-  if (branch == 'develop') {
-    return 'build_int'
-  }
-  return 'build_tst'
-}
-
 def mapBranchToPort(branch) {
   if (branch == 'master') {
     return 80
@@ -69,6 +59,23 @@ def mapBranchToMailUrl(branch) {
   return 'http://freya.fitness:9700'
 }
 
+def mapBranchToNewsUrl(branch) {
+  if (branch == 'master') {
+    return 'http://freya.fitness:7800'
+  }
+  return 'http://freya.fitness:9800'
+}
+
+def mapBranchToFrontendUrl(branch) {
+  if (branch == 'master') {
+    return 'http://freya.fitness:3333'
+  }
+  if (branch == 'develop') {
+    return 'http://freya.fitness:3334'
+  }
+  return 'http://freya.fitness:3335'
+}
+
 pipeline {
   agent none
   options {
@@ -78,15 +85,13 @@ pipeline {
     ENV_NAME = mapBranchToEnvironment("${BRANCH_NAME}")
     APP_NAME = mapBranchToAppName("${BRANCH_NAME}")
     DOCKER_IMAGE = mapBranchToDockerImage("${BRANCH_NAME}")
-    NPM_CMD = mapBranchToNpm("${BRANCH_NAME}")
     BRANCH = "${BRANCH_NAME}"
     DB = credentials('db')
     DB_URL = "jdbc:postgresql://93.90.205.170/${APP_NAME}"
-    MONGO      = credentials('mongo')
-    MONGO_HOST = '93.90.205.170'
-    MONGO_PORT = 27017
 
     MAIL_URL   = mapBranchToMailUrl("${BRANCH_NAME}")
+    NEWS_URL   = mapBranchToNewsUrl("${BRANCH_NAME}")
+    FRONTEND_URL = mapBranchToFrontendUrl("${BRANCH_NAME}")
     APP_PORT   = mapBranchToPort("${BRANCH_NAME}")
     APP_PORT_S = mapBranchToPortHttps("${BRANCH_NAME}")
   }
@@ -98,39 +103,12 @@ pipeline {
       }
     }
 
-    stage('npm install') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
-      steps {
-        sh 'npm install'
-      }
-    }
-
-    stage('npm test') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
-      steps {
-        sh 'npm test'
-      }
-    }
-
-    stage('npm build production') {
-      agent {
-        docker { image 'node:9-alpine' }
-      }
-      steps {
-        sh 'npm run ${NPM_CMD}'
-      }
-    }
-
     stage('build application') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
-        sh './gradlew clean build'
+        sh './gradlew clean build -x test'
       }
     }
 
@@ -182,13 +160,10 @@ pipeline {
             -e DB_URL=${DB_URL} \
             -e DB_USR=${DB_USR} \
             -e DB_PSW=${DB_PSW} \
-            -e MONGO_DB_NAME=${APP_NAME} \
-            -e MONGO_USR=${MONGO_USR} \
-            -e MONGO_PSW=${MONGO_PSW} \
-            -e MONGO_HOST=${MONGO_HOST} \
-            -e MONGO_PORT=${MONGO_PORT} \
             -e BRANCH=${BRANCH} \
             -e MAIL_URL=${MAIL_URL} \
+            -e NEWS_URL=${NEWS_URL} \
+            -e FRONTEND_URL=${FRONTEND_URL} \
             -p ${APP_PORT}:9000 \
             -p ${APP_PORT_S}:${APP_PORT_S} \
             --restart=always \

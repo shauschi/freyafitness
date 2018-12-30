@@ -3,6 +3,8 @@ package freya.fitness.service;
 import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.proxy.CreateEmail;
+import freya.fitness.proxy.EmailProxy;
 import freya.fitness.repository.jpa.RoleRepository;
 import freya.fitness.repository.jpa.UserRepository;
 import freya.fitness.utils.exception.RoleNotFoundException;
@@ -10,11 +12,16 @@ import freya.fitness.utils.exception.UserAllreadyExistsException;
 import freya.fitness.utils.exception.UserNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,18 +33,26 @@ import org.springframework.stereotype.Service;
 @Service("userService")
 public class UserService implements UserDetailsService {
 
+  private static final Logger LOGGER = LogManager.getLogger(UserService.class);
+
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final RoleRepository roleRepository;
+  private final EmailProxy emailProxy;
+
+  @Value("${mail.account_created.receiver}")
+  private String emailTo;
 
   @Autowired
   public UserService(
       final UserRepository userRepository,
       final PasswordEncoder passwordEncoder,
-      final RoleRepository roleRepository) {
+      final RoleRepository roleRepository,
+      final EmailProxy emailProxy) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.roleRepository = roleRepository;
+    this.emailProxy = emailProxy;
   }
 
   @Override
@@ -111,7 +126,24 @@ public class UserService implements UserDetailsService {
         .orElseThrow(() -> new RoleNotFoundException("USER"));
     newUser.setRoles(Collections.singleton(role));
 
-    return userRepository.save(newUser);
+    final User savedUser = userRepository.save(newUser);
+    LOGGER.info("New account created {}", savedUser);
+    sendAccountCreatedMail(savedUser);
+    return savedUser;
+  }
+
+  private void sendAccountCreatedMail(final User user) {
+    final Map<String, String> parameters = new HashMap<>();
+    parameters.put("firstname", user.getFirstName());
+    parameters.put("lastname", user.getFamilyName());
+    parameters.put("email", user.getEmail());
+
+    emailProxy.createEmail(new CreateEmail(
+        "ACCOUNT_CREATED",
+        parameters,
+        Collections.singletonList(emailTo),
+        null,
+        null));
   }
 
 }

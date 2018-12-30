@@ -8,6 +8,28 @@ server:
   session:
     cookie:
       name: UISESSION
+zuul:
+  ignoredPatterns:
+    - /oauth/**
+    - /contact/**
+    - /courses/**
+    - /coursetypes/**
+    - /memberships/**
+    - /membershiptypes/**
+    - /participations/**
+    - /password/**
+    - /preferences/**
+    - /profile/**
+    - /statistics/**
+  routes:
+    news:
+      sensitiveHeaders:
+      path: /news/**
+      url: ${NEWS_URL}/news/
+    frontend:
+      sensitiveHeaders:
+      path: /**
+      url: ${FRONTEND_URL}
 spring:
   data:
     rest:
@@ -55,4 +77,6 @@ mail:
     validity:
       hours: 24
   contact:
+    receiver: freyraum@freya.fitness
+  account_created:
     receiver: freyraum@freya.fitness
