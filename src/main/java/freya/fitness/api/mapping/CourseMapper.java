@@ -7,6 +7,7 @@ import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.CourseType;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.Participation;
+import freya.fitness.domain.jpa.ParticipationStatus;
 import freya.fitness.domain.jpa.Role;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.domain.jpa.UserPreference;
@@ -15,6 +16,7 @@ import freya.fitness.service.UserPreferencesService;
 import freya.fitness.service.UserService;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -80,12 +82,13 @@ public class CourseMapper {
     dto.setAttendees(attendees);
 
     final UUID userId = userService.getCurrentUser().getId();
-    boolean signedIn = course.getParticipantions().stream()
-        .map(Participation::getMembership)
-        .map(Membership::getUser)
-        .map(User::getId)
-        .anyMatch(Predicate.isEqual(userId));
-    dto.setSignedIn(signedIn);
+    final ParticipationStatus status = course.getParticipantions().stream()
+        .filter(p -> p.getMembership().getUser().getId().equals(userId))
+        .map(Participation::getParticipationStatus)
+        .filter(Objects::nonNull)
+        .findFirst()
+        .orElse(null);
+    dto.setParticipationStatus(status);
 
     return dto;
   }
@@ -99,10 +102,16 @@ public class CourseMapper {
 
     return course.getParticipantions().stream()
         .sorted(Comparator.comparing(Participation::getSignInTime))
+        .filter(this::isSignedInOrOnWaitlist)
         .map(Participation::getMembership)
         .map(Membership::getUser)
         .map(user -> mapAttendee(user, currentUserId, showAll))
         .collect(Collectors.toList());
+  }
+
+  private boolean isSignedInOrOnWaitlist(final Participation participation) {
+    return participation.getParticipationStatus() == ParticipationStatus.SIGNED_IN
+        || participation.getParticipationStatus() == ParticipationStatus.ON_WAITLIST;
   }
 
   private ProfileDto mapAttendee(final User user, final UUID currentUserId, boolean showAll) {

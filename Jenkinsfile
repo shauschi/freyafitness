@@ -100,7 +100,7 @@ pipeline {
         docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
-        sh './gradlew clean build'
+        sh './gradlew clean build -x test'
       }
     }
 

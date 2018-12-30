@@ -3,9 +3,11 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.Participation;
+import freya.fitness.domain.jpa.ParticipationStatus;
 import freya.fitness.repository.jpa.ParticipationRepository;
 import freya.fitness.utils.exception.CourseNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,7 +36,7 @@ public class ParticipationService {
   }
 
   public Long getParticipationCount(final Membership membership) {
-    return participationRepository.countByMembership(membership);
+    return participationRepository.countParticipationsForMembership(membership, LocalDateTime.now());
   }
 
   public boolean hasFreeCapacityOnMembership(final Membership membership) {
@@ -56,34 +58,66 @@ public class ParticipationService {
   public Course addUserToCourse(final Membership membership, final UUID courseId)
       throws CourseNotFoundException {
     final Course course = courseService.getCourse(courseId);
-    final Optional<Participation> existingParticipation =
-        participationRepository.findByMembershipUserIdAndCourseId(
-            membership.getUser().getId(), courseId);
-    if (existingParticipation.isPresent()) {
-      return course;
-    }
-
-    final Participation participation = new Participation();
+    final Participation participation = participationRepository
+            .findByMembershipUserIdAndCourseId(membership.getUser().getId(), courseId)
+            .orElseGet(Participation::new);
     participation.setCourse(course);
     participation.setMembership(membership);
+    participation.setParticipationStatus(ParticipationStatus.SIGNED_IN);
     participation.setSignInTime(LocalDateTime.now());
 
-    course.getParticipantions().add(participation);
     participationRepository.save(participation);
-    return courseService.save(course);
+    updateWaitlist(course.getId());
+    return courseService.getCourse(courseId);
   }
 
   public Course removeUserFromCourse(final UUID userId, final UUID courseId) {
-    final Course course = courseService.getCourse(courseId);
     final Optional<Participation> existingParticipation =
         participationRepository.findByMembershipUserIdAndCourseId(userId, courseId);
     if (existingParticipation.isPresent()) {
       final Participation entity = existingParticipation.get();
-      course.getParticipantions().remove(entity);
-      participationRepository.delete(entity);
-      return courseService.save(course);
+      entity.setParticipationStatus(ParticipationStatus.SIGNED_OUT);
+      participationRepository.save(entity);
+      updateWaitlist(courseId);
     }
-    return course;
+
+    return courseService.getCourse(courseId);
+  }
+
+  public void updateWaitlist(final UUID courseId) {
+    final Course course = courseService.getCourse(courseId);
+    final int max = course.getMaxParticipants();
+    final List<Participation> participations = participationRepository.findByCourseId(courseId);
+    participations.sort(Comparator.comparing(Participation::getSignInTime));
+    int signedIn = 0;
+    for (final Participation participation : participations) {
+      switch (participation.getParticipationStatus()) {
+        case SIGNED_IN:
+          if (signedIn == max) {
+            participation.setParticipationStatus(ParticipationStatus.ON_WAITLIST);
+          } else {
+            signedIn++;
+          }
+          break;
+        case SIGNED_OUT:
+          break;
+        case ON_WAITLIST:
+          if (signedIn < max) {
+            signedIn++;
+            participation.setParticipationStatus(ParticipationStatus.SIGNED_IN);
+          }
+          break;
+        default:
+          if (signedIn == max) {
+            participation.setParticipationStatus(ParticipationStatus.ON_WAITLIST);
+          } else {
+            participation.setParticipationStatus(ParticipationStatus.SIGNED_IN);
+            signedIn++;
+          }
+          break;
+      }
+    }
+    participationRepository.saveAll(participations);
   }
 
   public List<Participation> getParticipations(final UUID membershipId) {

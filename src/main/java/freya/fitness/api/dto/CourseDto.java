@@ -1,6 +1,7 @@
 package freya.fitness.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import freya.fitness.domain.jpa.ParticipationStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class CourseDto {
   @NotNull
   private Integer minutes;
   private ProfileDto instructor;
-  private boolean signedIn;
+  private ParticipationStatus participationStatus;
   @NotNull
   private Integer maxParticipants;
   private boolean canceled;

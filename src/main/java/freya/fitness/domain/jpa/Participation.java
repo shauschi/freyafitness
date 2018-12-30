@@ -3,6 +3,8 @@ package freya.fitness.domain.jpa;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,6 +33,9 @@ public class Participation {
   @ManyToOne
   @JoinColumn(name = "membership_id")
   private Membership membership;
+
+  @Enumerated(EnumType.STRING)
+  private ParticipationStatus participationStatus;
 
   private LocalDateTime signInTime;
 
