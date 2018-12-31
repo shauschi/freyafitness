@@ -68,6 +68,7 @@ public class ParticipationService {
 
     participationRepository.save(participation);
     updateWaitlist(course.getId());
+    participationRepository.flush();
     return courseService.getCourse(courseId);
   }
 
