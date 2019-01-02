@@ -9,6 +9,7 @@ import freya.fitness.domain.jpa.UserPreference;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -140,9 +141,9 @@ public class StatisticsServiceTest {
 
   @Test
   public void shouldMapStatistics() {
-    final LocalDateTime now = LocalDateTime.now();
+    final LocalDateTime now = LocalDateTime.now().minusMonths(1);
     final int year = now.getYear();
-    final int month = now.getMonth().getValue() -1;
+    final Month month = now.getMonth();
     // given
     List<Participation> participations = Arrays.asList(
         givenParticipation(LocalDate.of(year, month, 10).minusMonths(4), EASY),
