@@ -65,30 +65,31 @@ public class ParticipationService {
     participation.setMembership(membership);
     participation.setParticipationStatus(ParticipationStatus.SIGNED_IN);
     participation.setSignInTime(LocalDateTime.now());
-
+    if (participation.getId() == null) {
+      course.getParticipantions().add(participation);
+    }
     participationRepository.save(participation);
-    updateWaitlist(course.getId());
-    participationRepository.flush();
-    return courseService.getCourse(courseId);
+    updateWaitlist(course);
+    return course;
   }
 
   public Course removeUserFromCourse(final UUID userId, final UUID courseId) {
     final Optional<Participation> existingParticipation =
         participationRepository.findByMembershipUserIdAndCourseId(userId, courseId);
+    final Course course = courseService.getCourse(courseId);
     if (existingParticipation.isPresent()) {
       final Participation entity = existingParticipation.get();
       entity.setParticipationStatus(ParticipationStatus.SIGNED_OUT);
       participationRepository.save(entity);
-      updateWaitlist(courseId);
+      updateWaitlist(course);
     }
 
-    return courseService.getCourse(courseId);
+    return course;
   }
 
-  public void updateWaitlist(final UUID courseId) {
-    final Course course = courseService.getCourse(courseId);
+  public void updateWaitlist(final Course course) {
     final int max = course.getMaxParticipants();
-    final List<Participation> participations = participationRepository.findByCourseId(courseId);
+    final List<Participation> participations = participationRepository.findByCourseId(course.getId());
     participations.sort(Comparator.comparing(Participation::getSignInTime));
     int signedIn = 0;
     for (final Participation participation : participations) {
