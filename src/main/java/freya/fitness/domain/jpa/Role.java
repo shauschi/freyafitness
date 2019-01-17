@@ -1,17 +1,16 @@
 package freya.fitness.domain.jpa;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "role", schema="public")
+@Table(name = "role", schema = "public")
 public class Role extends BusinessObject implements GrantedAuthority {
 
   @NotEmpty
