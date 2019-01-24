@@ -56,7 +56,10 @@ dependencies {
   compile group: 'org.liquibase', name: 'liquibase-core'
   runtime group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 
-  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+  testImplementation group: 'org.hibernate', name: 'hibernate-testing', version: '5.2.15.Final'
+  testImplementation group: 'com.h2database', name: 'h2', version: '1.4.196'
+  testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.7.3'
 }
 
 dependencyManagement {

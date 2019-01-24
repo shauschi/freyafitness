@@ -52,9 +52,6 @@ spring:
     serialization:
       write_dates_as_timestamps: false
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USR}
-    password: ${DB_PSW}
     driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
@@ -73,7 +70,7 @@ course:
     minutes: 60
     maxParticipants: 12
 mail:
-  url: ${MAIL_URL}
+  url: http;//localhost:8080/mail
   sender: FreyRaum <admin@freya.fitness>
   develop:
     receiver: develop@freya.fitness

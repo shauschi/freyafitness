@@ -17,7 +17,7 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
   @Query("SELECT COUNT(p) FROM Participation p"
       + " WHERE p.membership=:membership"
       + " AND p.participationStatus='SIGNED_IN'"
-      + " OR (p.participationStatus='ON_WAITLIST' AND p.signInTime>:localDateTime)")
+      + " OR (p.participationStatus='ON_WAITLIST' AND p.course.start>:localDateTime)")
   Long countParticipationsForMembership(final Membership membership, final LocalDateTime localDateTime);
 
   Long countByMembership(final Membership membership);
