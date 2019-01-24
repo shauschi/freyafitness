@@ -112,15 +112,21 @@ pipeline {
       }
     }
 
-    stage('test application') {
+    stage('unit tests') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
-        parallel(
-          unit: { sh './gradlew test' },
-          testcontainers: { sh './gradlew testcontainerTest' },
-        )
+        sh './gradlew test'
+      }
+    }
+
+    stage('testcontainer tests') {
+      agent {
+        docker { image 'openjdk:8-jdk-alpine' }
+      }
+      steps {
+        sh './gradlew testcontainerTest'
       }
     }
 
