@@ -117,7 +117,10 @@ pipeline {
         docker { image 'openjdk:8-jdk-alpine' }
       }
       steps {
-        sh './gradlew test'
+        parallel(
+          unit: { sh './gradlew test' },
+          testcontainers: { sh './gradlew testcontainerTest' },
+        )
       }
     }
 

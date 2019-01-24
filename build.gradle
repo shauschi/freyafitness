@@ -67,3 +67,15 @@ dependencyManagement {
     mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
   }
 }
+
+test {
+  useJUnit {
+    excludeCategories 'freya.fitness.TestcontainerTest'
+  }
+}
+
+task testcontainerTest(type: Test) {
+  useJUnit {
+    includeCategories 'freya.fitness.TestcontainerTest'
+  }
+}

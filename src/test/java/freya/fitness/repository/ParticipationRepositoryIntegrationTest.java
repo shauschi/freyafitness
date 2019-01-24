@@ -1,5 +1,6 @@
-package freya.fitness.service;
+package freya.fitness.repository;
 
+import freya.fitness.TestcontainerTest;
 import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Membership;
@@ -15,6 +16,7 @@ import freya.fitness.repository.jpa.MembershipRepository;
 import freya.fitness.repository.jpa.MembershipTypeRepository;
 import freya.fitness.repository.jpa.ParticipationRepository;
 import freya.fitness.repository.jpa.UserRepository;
+import freya.fitness.service.UserService;
 import freya.fitness.utils.exception.UserAllreadyExistsException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,10 +39,11 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
+@Category(TestcontainerTest.class)
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ContextConfiguration(initializers = {MembershipServiceIntegrationTest.Initializer.class})
-public class MembershipServiceIntegrationTest {
+@ContextConfiguration(initializers = {ParticipationRepositoryIntegrationTest.Initializer.class})
+public class ParticipationRepositoryIntegrationTest {
 
   @ClassRule
   public static PostgreSQLContainer postgreSQLContainer =
