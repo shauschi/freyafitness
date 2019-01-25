@@ -150,6 +150,18 @@ public class ParticipationRepositoryIntegrationTest {
     assertThat(result).isEqualTo(2L);
   }
 
+  @Test
+  public void beingSignedOutDoesNotCount() {
+    Membership membership = aMembershipExistsFor(tobiTester);
+    theUserIsSignedOut(membership, baseCourseNextWeek, LocalDateTime.now().minusDays(2));
+    theUserIsSignedOut(membership, teamCourseInTwoWeeks, LocalDateTime.now().minusDays(1));
+    theUserIsSignedOut(membership, baseCourseLastWeek, LocalDateTime.now().minusDays(1));
+
+    Long result = participationRepository.countParticipationsForMembership(membership, LocalDateTime.now());
+
+    assertThat(result).isEqualTo(0L);
+  }
+
   static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
       TestPropertyValues.of(
@@ -197,6 +209,10 @@ public class ParticipationRepositoryIntegrationTest {
 
   private Participation theUserIsSignedIn(Membership membership, Course course, LocalDateTime signInTime) {
     return getParticipation(membership, course, signInTime, ParticipationStatus.SIGNED_IN);
+  }
+
+  private Participation theUserIsSignedOut(Membership membership, Course course, LocalDateTime signInTime) {
+    return getParticipation(membership, course, signInTime, ParticipationStatus.SIGNED_OUT);
   }
 
   private Participation theUserIsOnWaitlist(Membership membership, Course course, LocalDateTime signInTime) {
