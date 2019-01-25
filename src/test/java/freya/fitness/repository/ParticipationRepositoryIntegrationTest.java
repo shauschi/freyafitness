@@ -78,6 +78,7 @@ public class ParticipationRepositoryIntegrationTest {
   private CourseTypeRepository courseTypeRepository;
 
   private User tobiTester;
+  private User fredFoo;
 
   private Course baseCourseNextWeek;
   private Course baseCourseLastWeek;
@@ -91,6 +92,7 @@ public class ParticipationRepositoryIntegrationTest {
     userRepository.deleteAll();
 
     tobiTester = aTestUserExists("Tobi", "Tester");
+    fredFoo = aTestUserExists("Fred", "Foo");
 
     LocalDateTime now = LocalDateTime.now();
     baseCourseLastWeek = aCourseExists("FUN.BASE", now.minusWeeks(1));
@@ -160,6 +162,24 @@ public class ParticipationRepositoryIntegrationTest {
     Long result = participationRepository.countParticipationsForMembership(membership, LocalDateTime.now());
 
     assertThat(result).isEqualTo(0L);
+  }
+
+  @Test
+  public void doNotCountParticipationsOfOtherUsers() {
+    Membership membershipTobi = aMembershipExistsFor(tobiTester);
+    theUserIsSignedIn(membershipTobi, baseCourseNextWeek, LocalDateTime.now().minusDays(2));
+    theUserIsOnWaitlist(membershipTobi, teamCourseInTwoWeeks, LocalDateTime.now().minusDays(1));
+
+    Membership membershipFred = aMembershipExistsFor(fredFoo);
+    theUserIsSignedIn(membershipFred, baseCourseNextWeek, LocalDateTime.now().minusDays(7));
+    theUserIsSignedIn(membershipFred, teamCourseInTwoWeeks, LocalDateTime.now().minusDays(10));
+    theUserIsSignedIn(membershipFred, baseCourseLastWeek, LocalDateTime.now().minusDays(12));
+
+    Long resultTobi = participationRepository.countParticipationsForMembership(membershipTobi, LocalDateTime.now());
+    Long resultFred = participationRepository.countParticipationsForMembership(membershipFred, LocalDateTime.now());
+
+    assertThat(resultTobi).isEqualTo(2L);
+    assertThat(resultFred).isEqualTo(3L);
   }
 
   static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
