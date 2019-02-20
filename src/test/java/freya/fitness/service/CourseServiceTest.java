@@ -127,7 +127,7 @@ public class CourseServiceTest {
   @Test
   public void test_create_null() {
     // given
-    when(courseDtoToCourseMapper.map(any(), any(Course.class))).thenReturn(null);
+    when(courseDtoToCourseMapper.map((CourseDto) null, null)).thenReturn(null);
 
     // when
     Course result = testee.create(null);

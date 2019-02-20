@@ -13,7 +13,11 @@ buildscript {
   }
 }
 
+plugins {
+  id 'org.unbroken-dome.test-sets' version '2.1.1'
+}
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -38,6 +42,11 @@ ext {
   springCloudVersion = 'Finchley.SR2'
 }
 
+testSets {
+  componentTest
+  integrationTest
+}
+
 dependencies {
   compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
 
@@ -60,22 +69,16 @@ dependencies {
   testImplementation group: 'org.hibernate', name: 'hibernate-testing', version: '5.2.15.Final'
   testImplementation group: 'com.h2database', name: 'h2', version: '1.4.196'
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.7.3'
+
+  componentTestCompile sourceSets.main.output
+  componentTestCompile sourceSets.test.output
+
+  integrationTestCompile sourceSets.main.output
+  integrationTestCompile sourceSets.test.output
 }
 
 dependencyManagement {
   imports {
     mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-  }
-}
-
-test {
-  useJUnit {
-    excludeCategories 'freya.fitness.TestcontainerTest'
-  }
-}
-
-task testcontainerTest(type: Test) {
-  useJUnit {
-    includeCategories 'freya.fitness.TestcontainerTest'
   }
 }

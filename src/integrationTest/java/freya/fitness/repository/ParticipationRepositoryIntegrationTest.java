@@ -1,6 +1,5 @@
 package freya.fitness.repository;
 
-import freya.fitness.TestcontainerTest;
 import freya.fitness.api.dto.CreateAccountDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Membership;
@@ -24,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,7 +37,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-@Category(TestcontainerTest.class)
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ContextConfiguration(initializers = {ParticipationRepositoryIntegrationTest.Initializer.class})
