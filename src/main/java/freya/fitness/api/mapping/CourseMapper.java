@@ -1,6 +1,7 @@
 package freya.fitness.api.mapping;
 
 import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.CourseOverviewDto;
 import freya.fitness.api.dto.CourseTypeDto;
 import freya.fitness.api.dto.ProfileDto;
 import freya.fitness.domain.jpa.Course;
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,6 +60,21 @@ public class CourseMapper {
     course.setCanceled(courseDto.isCanceled());
 
     return course;
+  }
+
+  public CourseOverviewDto map(final Course course, final Participation participation) {
+    if (course == null) {
+      return null;
+    }
+
+    final CourseOverviewDto dto = new CourseOverviewDto();
+    dto.setId(course.getId());
+    final CourseType type = course.getType();
+    dto.setCourseType(type != null ? new CourseTypeDto(type) : new CourseTypeDto());
+    dto.setStart(course.getStart());
+    dto.setParticipationStatus(participation.getParticipationStatus());
+
+    return dto;
   }
 
   public CourseDto map(final Course course) {

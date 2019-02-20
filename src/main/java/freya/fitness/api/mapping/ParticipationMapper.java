@@ -1,11 +1,9 @@
 package freya.fitness.api.mapping;
 
-import freya.fitness.api.dto.CourseDto;
+import freya.fitness.api.dto.CourseOverviewDto;
 import freya.fitness.api.dto.ParticipationDto;
-import freya.fitness.api.dto.ProfileDto;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Participation;
-import freya.fitness.domain.jpa.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +21,7 @@ public class ParticipationMapper {
     final ParticipationDto dto = new ParticipationDto();
     dto.setId(participation.getId());
     final Course course = participation.getCourse();
-    final CourseDto courseDto = courseMapper.map(course);
+    final CourseOverviewDto courseDto = courseMapper.map(course, participation);
     dto.setCourse(courseDto);
 
     return dto;

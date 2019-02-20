@@ -1,8 +1,8 @@
 package freya.fitness.service;
 
 import freya.fitness.api.dto.CourseDto;
-import freya.fitness.domain.jpa.Course;
 import freya.fitness.api.mapping.CourseMapper;
+import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.jpa.CourseRepository;
 import java.time.LocalDate;
@@ -111,7 +111,7 @@ public class CourseServiceTest {
     Course course = new Course();
     course.setId(uuid);
     when(courseRepository.save(any())).thenReturn(course);
-    when(courseDtoToCourseMapper.map(any(), any())).thenReturn(course);
+    when(courseDtoToCourseMapper.map(any(CourseDto.class), isNull())).thenReturn(course);
 
     // when
     Course result = testee.update(null, courseDto);
@@ -127,14 +127,13 @@ public class CourseServiceTest {
   @Test
   public void test_create_null() {
     // given
-    when(courseDtoToCourseMapper.map(isNull(), any())).thenReturn(null);
+    when(courseDtoToCourseMapper.map(any(), any(Course.class))).thenReturn(null);
 
     // when
     Course result = testee.create(null);
 
     // then
     assertThat(result, nullValue());
-    verify(courseDtoToCourseMapper).map(isNull(), any());
   }
 
   @Test

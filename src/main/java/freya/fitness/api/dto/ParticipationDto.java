@@ -8,6 +8,6 @@ public class ParticipationDto {
 
   private UUID id;
 
-  private CourseDto course;
+  private CourseOverviewDto course;
 
 }
