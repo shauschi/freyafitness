@@ -121,15 +121,6 @@ pipeline {
       }
     }
 
-    stage('testcontainer tests') {
-      agent {
-        docker { image 'openjdk:8-jdk-alpine' }
-      }
-      steps {
-        sh './gradlew testcontainerTest'
-      }
-    }
-
     stage('build jar') {
       agent {
         docker { image 'openjdk:8-jdk-alpine' }
