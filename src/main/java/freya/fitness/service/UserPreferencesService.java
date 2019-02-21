@@ -3,14 +3,25 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.jpa.UserPreferencesRepository;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserPreferencesService {
 
+  private final UserPreferencesRepository userPreferencesRepository;
+
   @Autowired
-  private UserPreferencesRepository userPreferencesRepository;
+  public UserPreferencesService(
+      final UserPreferencesRepository userPreferencesRepository) {
+    this.userPreferencesRepository = userPreferencesRepository;
+  }
+
+  public List<UserPreference> getUserPreferences(final UUID userId) {
+    return userPreferencesRepository.findByUserId(userId);
+  }
 
   public UserPreference save(final UserPreference userPreferences) {
     if (userPreferences == null) {
@@ -19,16 +30,14 @@ public class UserPreferencesService {
     return userPreferencesRepository.save(userPreferences);
   }
 
-  public boolean checkUserPreferences(
-      final User user,
-      final String preferenceKey,
-      final String exprectedValue) {
-    return user.getPreferences().stream()
-        .filter(userPreference -> preferenceKey.equals(userPreference.getKey()))
-        .findFirst()
-        .map(UserPreference::getValue)
-        .filter(exprectedValue::equalsIgnoreCase)
-        .isPresent();
+  public boolean checkUserPreferences(final User user, final String preferenceKey, final String expectedValue) {
+    for (UserPreference preference : user.getPreferences()) {
+      if (preferenceKey.equals(preference.getKey())
+          && expectedValue.equals(preference.getValue())) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }
