@@ -3,14 +3,14 @@ package freya.fitness.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freya.fitness.api.dto.ContactDto;
 import freya.fitness.service.ContactService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.doThrow;
@@ -20,10 +20,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(ContactController.class)
 @AutoConfigureMockMvc(secure = false)
-public class ContactControllerTest {
+class ContactControllerTest {
 
   @MockBean
   private ContactService contactService;
@@ -35,7 +35,7 @@ public class ContactControllerTest {
   private MockMvc mvc;
 
   @Test
-  public void shouldPassContactRequestToService() throws Exception {
+  void shouldPassContactRequestToService() throws Exception {
     // given
     final ContactDto contactDto = givenContactDto();
     final String json = mapper.writeValueAsString(contactDto);
@@ -52,7 +52,7 @@ public class ContactControllerTest {
   }
 
   @Test
-  public void shouldNotAcceptContactRequestWithoutName() throws Exception {
+  void shouldNotAcceptContactRequestWithoutName() throws Exception {
     // given
     final ContactDto contactDto = givenContactDto();
     contactDto.setFirstname("");
@@ -67,7 +67,7 @@ public class ContactControllerTest {
   }
 
   @Test
-  public void shouldNotAcceptContactRequestWithInvalidEmail() throws Exception {
+  void shouldNotAcceptContactRequestWithInvalidEmail() throws Exception {
     // given
     final ContactDto contactDto = givenContactDto();
     contactDto.setEmail("invalid");
@@ -82,7 +82,7 @@ public class ContactControllerTest {
   }
 
   @Test
-  public void shouldReturnErrorMessageWhenSendingMailFails() throws Exception {
+  void shouldReturnErrorMessageWhenSendingMailFails() throws Exception {
     // given
     final ContactDto contactDto = givenContactDto();
     final String json = mapper.writeValueAsString(contactDto);

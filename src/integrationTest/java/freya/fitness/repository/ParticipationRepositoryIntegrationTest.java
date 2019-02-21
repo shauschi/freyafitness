@@ -20,10 +20,11 @@ import freya.fitness.utils.exception.UserAllreadyExistsException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,24 +32,33 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(initializers = {ParticipationRepositoryIntegrationTest.Initializer.class})
-public class ParticipationRepositoryIntegrationTest {
+class ParticipationRepositoryIntegrationTest {
 
-  @ClassRule
-  public static PostgreSQLContainer postgreSQLContainer =
+  private static PostgreSQLContainer postgreSQLContainer =
       (PostgreSQLContainer) new PostgreSQLContainer("postgres:10.4")
           .withDatabaseName("freyafitness")
           .withUsername("testuser")
           .withPassword("testpassword")
           .withStartupTimeout(Duration.ofSeconds(600));
+
+  @BeforeAll
+  public static void setUp() {
+    postgreSQLContainer.start();
+  }
+
+  @AfterAll
+  public static void tearDown() {
+    postgreSQLContainer.stop();
+  }
 
   @Autowired
   private UserService userService;
@@ -81,7 +91,7 @@ public class ParticipationRepositoryIntegrationTest {
   private Course baseCourseLastWeek;
   private Course teamCourseInTwoWeeks;
 
-  @Before
+  @BeforeEach
   public void setUpTest() {
     participationRepository.deleteAll();
     membershipRepository.deleteAll();
@@ -98,7 +108,7 @@ public class ParticipationRepositoryIntegrationTest {
   }
 
   @Test
-  public void beingSignedInInThePastCountsAsParticipation() {
+  void beingSignedInInThePastCountsAsParticipation() {
     Membership membership = aMembershipExistsFor(tobiTester);
     theUserIsSignedIn(membership, baseCourseLastWeek, LocalDateTime.now().minusDays(2));
 
@@ -108,7 +118,7 @@ public class ParticipationRepositoryIntegrationTest {
   }
 
   @Test
-  public void beingSignedInInTheFututeCountsAsParticipation() {
+  void beingSignedInInTheFututeCountsAsParticipation() {
     Membership membership = aMembershipExistsFor(tobiTester);
     theUserIsSignedIn(membership, baseCourseNextWeek, LocalDateTime.now().minusDays(2));
 
@@ -118,7 +128,7 @@ public class ParticipationRepositoryIntegrationTest {
   }
 
   @Test
-  public void beingOnWaitlistInTheFutureCountsAsParticipation() {
+  void beingOnWaitlistInTheFutureCountsAsParticipation() {
     Membership membership = aMembershipExistsFor(tobiTester);
     theUserIsOnWaitlist(membership, baseCourseNextWeek, LocalDateTime.now().minusDays(2));
 
@@ -128,7 +138,7 @@ public class ParticipationRepositoryIntegrationTest {
   }
 
   @Test
-  public void beingOnWaitlistInThePastDoesNotCountsAsParticipation() {
+  void beingOnWaitlistInThePastDoesNotCountsAsParticipation() {
     Membership membership = aMembershipExistsFor(tobiTester);
     theUserIsOnWaitlist(membership, baseCourseLastWeek, LocalDateTime.now().minusDays(2));
 
@@ -138,7 +148,7 @@ public class ParticipationRepositoryIntegrationTest {
   }
 
   @Test
-  public void countSignedInAndOnWaitlist() {
+  void countSignedInAndOnWaitlist() {
     Membership membership = aMembershipExistsFor(tobiTester);
     theUserIsSignedIn(membership, baseCourseNextWeek, LocalDateTime.now().minusDays(2));
     theUserIsOnWaitlist(membership, teamCourseInTwoWeeks, LocalDateTime.now().minusDays(1));
@@ -150,7 +160,7 @@ public class ParticipationRepositoryIntegrationTest {
   }
 
   @Test
-  public void beingSignedOutDoesNotCount() {
+  void beingSignedOutDoesNotCount() {
     Membership membership = aMembershipExistsFor(tobiTester);
     theUserIsSignedOut(membership, baseCourseNextWeek, LocalDateTime.now().minusDays(2));
     theUserIsSignedOut(membership, teamCourseInTwoWeeks, LocalDateTime.now().minusDays(1));
@@ -162,7 +172,7 @@ public class ParticipationRepositoryIntegrationTest {
   }
 
   @Test
-  public void doNotCountParticipationsOfOtherUsers() {
+  void doNotCountParticipationsOfOtherUsers() {
     Membership membershipTobi = aMembershipExistsFor(tobiTester);
     theUserIsSignedIn(membershipTobi, baseCourseNextWeek, LocalDateTime.now().minusDays(2));
     theUserIsOnWaitlist(membershipTobi, teamCourseInTwoWeeks, LocalDateTime.now().minusDays(1));

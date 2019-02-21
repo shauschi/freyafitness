@@ -6,17 +6,16 @@ import freya.fitness.domain.jpa.UserPreference;
 import freya.fitness.repository.jpa.PictureRepository;
 import freya.fitness.utils.Size;
 import freya.fitness.utils.exception.UserNotFoundException;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
@@ -43,10 +42,15 @@ public class ProfilePictureServiceTest {
   @Mock
   private UserService userService;
 
-  @Spy
+  @Mock
   private UserPreferencesService userPreferencesService;
 
   private static final UUID userId = UUID.randomUUID();
+
+  @Before
+  public void setUp() {
+    when(userPreferencesService.checkUserPreferences(any(), any(), any())).thenCallRealMethod();
+  }
 
   @Test
   public void test_getProfilePictureData() throws IOException {
@@ -118,7 +122,7 @@ public class ProfilePictureServiceTest {
   private byte[] getTestFileBytes() throws IOException {
     final InputStream inputStream =
         getClass().getClassLoader().getResourceAsStream("logo.png");
-    final byte[] data = new byte[(int) inputStream.available()];
+    final byte[] data = new byte[inputStream.available()];
     inputStream.read(data);
     return data;
   }

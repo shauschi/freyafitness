@@ -4,29 +4,29 @@ import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.service.PasswordResetTokenService;
 import freya.fitness.utils.exception.InvalidResetTokenException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.time.LocalDateTime;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.servlet.ModelAndView;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class HomeControllerTest {
+@ExtendWith({MockitoExtension.class})
+class HomeControllerTest {
 
   private static final String INVALID_TOKEN = "foo_bar_token";
   private static final String EXPIRED_TOKEN = "expired_token";
@@ -38,27 +38,8 @@ public class HomeControllerTest {
   @Mock
   private PasswordResetTokenService passwordResetTokenService;
 
-  @Before
-  public void setUp() throws InvalidResetTokenException {
-    final PasswordResetToken token = new PasswordResetToken();
-    token.setToken(VALID_TOKEN);
-    token.setExpiryTime(LocalDateTime.now().plusHours(24));
-    final User user = new User();
-    user.setFirstName("Test");
-    token.setUser(user);
-    when(passwordResetTokenService.findByToken(VALID_TOKEN)).thenReturn(token);
-
-    final PasswordResetToken expiredToken = new PasswordResetToken();
-    expiredToken.setToken(EXPIRED_TOKEN);
-    expiredToken.setExpiryTime(LocalDateTime.now().minusHours(12));
-    when(passwordResetTokenService.findByToken(EXPIRED_TOKEN)).thenReturn(expiredToken);
-
-    when(passwordResetTokenService.findByToken(INVALID_TOKEN))
-        .thenThrow(new InvalidResetTokenException(INVALID_TOKEN));
-  }
-
   @Test
-  public void shouldReturnModelAndViewForLandingPage() throws InvalidResetTokenException {
+  void shouldReturnModelAndViewForLandingPage() throws InvalidResetTokenException {
 
     // when
     ModelAndView modelAndView = testee.index(null);
@@ -73,8 +54,9 @@ public class HomeControllerTest {
   }
 
   @Test
-  public void shouldSetErrorMessageInModelForInvalidToken() throws InvalidResetTokenException {
-
+  void shouldSetErrorMessageInModelForInvalidToken() throws InvalidResetTokenException {
+    // given
+    doThrow(new InvalidResetTokenException(INVALID_TOKEN)).when(passwordResetTokenService).findByToken(INVALID_TOKEN);
     // when
     ModelAndView modelAndView = testee.index(INVALID_TOKEN);
 
@@ -89,7 +71,13 @@ public class HomeControllerTest {
   }
 
   @Test
-  public void shouldSetErrorMessageInModelForExpiredToken() throws InvalidResetTokenException {
+  void shouldSetErrorMessageInModelForExpiredToken() throws InvalidResetTokenException {
+    // given
+    final PasswordResetToken expiredToken = new PasswordResetToken();
+    expiredToken.setToken(EXPIRED_TOKEN);
+    expiredToken.setExpiryTime(LocalDateTime.now().minusHours(12));
+    doReturn(expiredToken).when(passwordResetTokenService).findByToken(EXPIRED_TOKEN);
+
 
     // when
     ModelAndView modelAndView = testee.index(EXPIRED_TOKEN);
@@ -105,7 +93,16 @@ public class HomeControllerTest {
   }
 
   @Test
-  public void shouldSetResetPasswordTokenInModelForValidToken() throws InvalidResetTokenException {
+  void shouldSetResetPasswordTokenInModelForValidToken() throws InvalidResetTokenException {
+    // given
+    final PasswordResetToken token = new PasswordResetToken();
+    token.setToken(VALID_TOKEN);
+    token.setExpiryTime(LocalDateTime.now().plusHours(24));
+    final User user = new User();
+    user.setFirstName("Test");
+    token.setUser(user);
+    doReturn(token).when(passwordResetTokenService).findByToken(VALID_TOKEN);
+
     // when
     ModelAndView modelAndView = testee.index(VALID_TOKEN);
 
