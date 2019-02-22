@@ -55,8 +55,15 @@ integrationTest {
   useJUnitPlatform()
 }
 
+tasks.withType(Test) {
+  testLogging {
+    events "passed", "skipped", "failed"
+  }
+}
+
 dependencies {
-  compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
+  annotationProcessor 'org.projectlombok:lombok:1.18.6'
 
   compile group: 'org.apache.commons', name: 'commons-lang3'
   compile group: 'org.springframework.boot', name: 'spring-boot-devtools'
