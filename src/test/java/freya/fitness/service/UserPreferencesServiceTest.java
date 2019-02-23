@@ -8,20 +8,23 @@ import freya.fitness.repository.jpa.UserPreferencesRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UserPreferencesServiceTest {
+@ExtendWith({MockitoExtension.class})
+@MockitoSettings(strictness = Strictness.LENIENT)
+class UserPreferencesServiceTest {
 
   @InjectMocks
   private UserPreferencesService testee;
@@ -31,8 +34,8 @@ public class UserPreferencesServiceTest {
   private UUID testUserId;
   private List<UserPreference> testUserPreferences;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     testUserId = UUID.randomUUID();
     UserPreference preference1 = new UserPreference();
     preference1.setKey("FOO");
@@ -49,14 +52,14 @@ public class UserPreferencesServiceTest {
   }
 
   @Test
-  public void getUserPreferences() {
+  void getUserPreferences() {
     List<UserPreference> preferences = testee.getUserPreferences(testUserId);
 
     assertThat(preferences).hasSize(testUserPreferences.size());
   }
 
   @Test
-  public void saveIsPassedToRepository() {
+  void saveIsPassedToRepository() {
     UserPreference preference = new UserPreference();
     preference.setUser(TestUtils.testUser());
     preference.setKey("FOO");
@@ -69,7 +72,7 @@ public class UserPreferencesServiceTest {
   }
 
   @Test
-  public void checkUserPreferences() {
+  void checkUserPreferences() {
     UserPreference preference1 = new UserPreference();
     preference1.setKey("FOO");
     preference1.setValue("true");

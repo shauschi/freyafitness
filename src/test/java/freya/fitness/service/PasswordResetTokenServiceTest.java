@@ -3,24 +3,20 @@ package freya.fitness.service;
 import freya.fitness.domain.jpa.PasswordResetToken;
 import freya.fitness.repository.jpa.PasswordResetTokenRepository;
 import freya.fitness.utils.exception.InvalidResetTokenException;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.contains;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PasswordResetTokenServiceTest {
+@ExtendWith({MockitoExtension.class})
+class PasswordResetTokenServiceTest {
 
   @InjectMocks
   private PasswordResetTokenService testee;
@@ -28,11 +24,8 @@ public class PasswordResetTokenServiceTest {
   @Mock
   private PasswordResetTokenRepository repository;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
   @Test
-  public void test_save_callsRepositorySave() {
+  void test_save_callsRepositorySave() {
     final PasswordResetToken anyToken = new PasswordResetToken();
 
     testee.save(anyToken);
@@ -41,7 +34,7 @@ public class PasswordResetTokenServiceTest {
   }
 
   @Test
-  public void test_delete_callsRepositoryDelete() {
+  void test_delete_callsRepositoryDelete() {
     final PasswordResetToken anyToken = new PasswordResetToken();
 
     testee.delete(anyToken);
@@ -50,23 +43,22 @@ public class PasswordResetTokenServiceTest {
   }
 
   @Test
-  public void test_findByToken_callsRepositoryFindByToken() throws InvalidResetTokenException {
+  void test_findByToken_callsRepositoryFindByToken() throws InvalidResetTokenException {
     final PasswordResetToken anyToken = new PasswordResetToken();
     when(repository.findByToken("anyToken")).thenReturn(Optional.of(anyToken));
 
     PasswordResetToken result = testee.findByToken("anyToken");
 
-    assertThat(result, equalTo(anyToken));
+    assertThat(result).isEqualTo(anyToken);
     verify(repository).findByToken("anyToken");
   }
 
   @Test
-  public void test_findByToken_throwsExceptionOnInvalidToken()
-      throws InvalidResetTokenException {
-    expectedException.expect(InvalidResetTokenException.class);
-    expectedException.expectMessage(contains("anyToken"));
+  void test_findByToken_throwsExceptionOnInvalidToken() {
     when(repository.findByToken("anyToken")).thenReturn(Optional.empty());
 
-    testee.findByToken("anyToken");
+    assertThatExceptionOfType(InvalidResetTokenException.class).isThrownBy(
+        () -> testee.findByToken("anyToken")
+    ).withMessageContaining("anyToken");
   }
 }

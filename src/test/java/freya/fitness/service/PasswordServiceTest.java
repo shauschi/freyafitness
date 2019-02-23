@@ -8,26 +8,25 @@ import freya.fitness.utils.exception.InvalidResetTokenException;
 import freya.fitness.utils.exception.UserNotFoundException;
 import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PasswordServiceTest {
+@ExtendWith({MockitoExtension.class})
+class PasswordServiceTest {
 
   @InjectMocks
   private PasswordService testee;
@@ -44,26 +43,23 @@ public class PasswordServiceTest {
   @Mock
   private PasswordResetTokenService passwordResetTokenService;
 
-  @Rule
-  public ExpectedException expectedExeption = ExpectedException.none();
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     ReflectionTestUtils.setField(testee, "subject", "testing password service");
     ReflectionTestUtils.setField(testee, "validityHours", 3);
   }
 
   @Test
-  public void test_processForgotPassword_userNotFound() throws UserNotFoundException {
-    HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-    expectedExeption.expect(UserNotFoundException.class);
+  void test_processForgotPassword_userNotFound() throws UserNotFoundException {
     when(userService.getUserByEmail(any())).thenThrow(UserNotFoundException.withEmail(""));
 
-    testee.processForgotPassword("user@test.mail", mockRequest);
+    assertThatExceptionOfType(UserNotFoundException.class).isThrownBy(
+        () -> testee.processForgotPassword("user@test.mail", mock(HttpServletRequest.class))
+    );
   }
 
   @Test
-  public void test_processForgotPassword() throws UserNotFoundException {
+  void test_processForgotPassword() throws UserNotFoundException {
     HttpServletRequest mockRequest = mock(HttpServletRequest.class);
     when(mockRequest.getScheme()).thenReturn("http");
     when(mockRequest.getServerName()).thenReturn("test.server");
@@ -86,18 +82,18 @@ public class PasswordServiceTest {
   }
 
   @Test
-  public void test_processResetPassword_invalidToken() throws InvalidResetTokenException {
+  void test_processResetPassword_invalidToken() throws InvalidResetTokenException {
     String newToken = "newToken";
-    expectedExeption.expect(InvalidResetTokenException.class);
-    expectedExeption.expectMessage(newToken);
     when(passwordResetTokenService.findByToken(newToken))
         .thenThrow(new InvalidResetTokenException(newToken));
 
-    testee.processResetPassword(newToken, "anyPassword");
+    assertThatExceptionOfType(InvalidResetTokenException.class).isThrownBy(
+        () -> testee.processResetPassword(newToken, "anyPassword")
+    ).withMessageContaining(newToken);
   }
 
   @Test
-  public void test_processResetPassword_userNotFound() throws InvalidResetTokenException{
+  void test_processResetPassword_userNotFound() throws InvalidResetTokenException{
     User user = new User();
     String newToken = "newToken";
     PasswordResetToken passwordResetToken = new PasswordResetToken();

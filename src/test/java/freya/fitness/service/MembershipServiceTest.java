@@ -10,25 +10,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import static freya.fitness.TestUtils.givenMembership;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MembershipServiceTest {
+@ExtendWith({MockitoExtension.class})
+@MockitoSettings(strictness = Strictness.LENIENT)
+class MembershipServiceTest {
 
   @InjectMocks
   private MembershipService testee;
@@ -39,11 +39,8 @@ public class MembershipServiceTest {
   @Mock
   private ParticipationService participationService;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
   @Test
-  public void shouldCallFindAllFromRepository() {
+  void shouldCallFindAllFromRepository() {
     // given
     final List<Membership> list = Arrays.asList(new Membership(), new Membership(), new Membership());
     when(membershipRepository.findAll()).thenReturn(list);
@@ -52,12 +49,12 @@ public class MembershipServiceTest {
     final List<Membership> result = testee.getAllMemberships();
 
     // then
-    assertThat(result, is(list));
+    assertThat(result).isEqualTo(list);
     verify(membershipRepository).findAll();
   }
 
   @Test
-  public void shouldReturnMembership() {
+  void shouldReturnMembership() {
     // given
     final UUID id = UUID.randomUUID();
     final Membership membership = new Membership();
@@ -67,83 +64,54 @@ public class MembershipServiceTest {
     final Membership result = testee.getMembership(id);
 
     // then
-    assertThat(result, is(membership));
+    assertThat(result).isEqualTo(membership);
     verify(membershipRepository).findById(id);
   }
 
   @Test
-  public void shouldThrowMembershipNotFoundException() {
-    // given
+  void shouldThrowMembershipNotFoundException() {
     final UUID id = UUID.randomUUID();
 
-    // expected exception
-    expectedException.expect(MembershipNotFoundException.class);
-    expectedException.expectMessage(containsString(id.toString()));
-
-    // when
-    testee.getMembership(id);
-
-    // then
-    // see expected exception
+    assertThatExceptionOfType(MembershipNotFoundException.class).isThrownBy(
+        () -> testee.getMembership(id)
+    ).withMessageContaining(id.toString());
   }
 
 
-
   @Test
-  public void shouldThrowExceptionWhenNoMembershipExists() throws MembershipException {
-    // expected exception
-    expectedException.expect(MembershipException.class);
-    expectedException.expectMessage("Keine aktive Mitgliedschaft gefunden");
-
-    // given
+  void shouldThrowExceptionWhenNoMembershipExists() {
     final UUID id = UUID.randomUUID();
     when(membershipRepository.findByUserId(id)).thenReturn(Collections.emptyList());
 
-    // when
-    testee.getCurrentMembershipForUser(id, LocalDateTime.now());
-
-    // then
-    // see expected exception
+    assertThatExceptionOfType(MembershipException.class).isThrownBy(
+        () -> testee.getCurrentMembershipForUser(id, LocalDateTime.now())
+    ).withMessage("Keine aktive Mitgliedschaft gefunden");
   }
 
   @Test
-  public void shouldThrowExceptionWhenNoValidMembershipExists() throws MembershipException {
-    // expected exception
-    expectedException.expect(MembershipException.class);
-    expectedException.expectMessage("Keine aktive Mitgliedschaft gefunden");
-
-    // given
+  void shouldThrowExceptionWhenNoValidMembershipExists() {
     final UUID id = UUID.randomUUID();
     final Membership membership = givenMembership(false, 10);
     when(membershipRepository.findByUserId(id)).thenReturn(Collections.singletonList(membership));
 
-    // when
-    testee.getCurrentMembershipForUser(id, LocalDateTime.now());
-
-    // then
-    // see expected exception
+    assertThatExceptionOfType(MembershipException.class).isThrownBy(
+        () -> testee.getCurrentMembershipForUser(id, LocalDateTime.now())
+    ).withMessage("Keine aktive Mitgliedschaft gefunden");
   }
 
   @Test
-  public void shouldThrowExceptionWhenNoValidMembershipWithFreeCapacityExists() throws MembershipException {
-    // expected exception
-    expectedException.expect(MembershipException.class);
-    expectedException.expectMessage("Karte voll");
-
-    // given
+  void shouldThrowExceptionWhenNoValidMembershipWithFreeCapacityExists() {
     final UUID id = UUID.randomUUID();
     final Membership membership = givenMembership(true, 10);
     when(membershipRepository.findByUserId(id)).thenReturn(Collections.singletonList(membership));
 
-    // when
-    testee.getCurrentMembershipForUser(id, LocalDateTime.now());
-
-    // then
-    // see expected exception
+    assertThatExceptionOfType(MembershipException.class).isThrownBy(
+        () -> testee.getCurrentMembershipForUser(id, LocalDateTime.now())
+    ).withMessage("Karte voll");
   }
 
   @Test
-  public void shouldReturnMembershipWithUnlimitedAccessFirst() throws MembershipException {
+  void shouldReturnMembershipWithUnlimitedAccessFirst() throws MembershipException {
     // given
     final UUID id = UUID.randomUUID();
     final Membership membership1 = givenMembership(true, 10);
@@ -158,7 +126,7 @@ public class MembershipServiceTest {
     final Membership result = testee.getCurrentMembershipForUser(id, LocalDateTime.now());
 
     // then
-    assertThat(result, is(membership2));
+    assertThat(result).isEqualTo(membership2);
     verify(membershipRepository).findByUserId(id);
   }
 

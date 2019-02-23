@@ -12,20 +12,18 @@ import java.time.Month;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -34,8 +32,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CourseServiceTest {
+@ExtendWith({MockitoExtension.class})
+@MockitoSettings(strictness = Strictness.LENIENT)
+class CourseServiceTest {
 
   @InjectMocks
   private CourseService testee;
@@ -46,17 +45,14 @@ public class CourseServiceTest {
   @Mock
   private CourseMapper courseDtoToCourseMapper;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     ReflectionTestUtils.setField(testee, "minutes", 72);
     ReflectionTestUtils.setField(testee, "maxParticipants", 7);
   }
 
   @Test
-  public void test_getCourses() {
+  void test_getCourses() {
     // given
     Course course = new Course();
     UUID uuid = UUID.randomUUID();
@@ -72,15 +68,16 @@ public class CourseServiceTest {
 
     // then
     verify(courseRepository).findByStartBetween(
-        LocalDateTime.of(start, LocalTime.of(0, 0,0)),
+        LocalDateTime.of(start, LocalTime.of(0, 0, 0)),
         LocalDateTime.of(end, LocalTime.of(23, 59, 59)));
-    assertThat(result, notNullValue());
-    assertThat(result.size(), equalTo(1));
-    assertThat(result.get(0).getId(), equalTo(uuid));
+    assertThat(result)
+        .isNotNull()
+        .hasSize(1);
+    assertThat(result.get(0).getId()).isEqualTo(uuid);
   }
 
   @Test
-  public void test_getCoursesFrom() {
+  void test_getCoursesFrom() {
     // given
     LocalDate start = LocalDate.of(2017, Month.DECEMBER, 7);
 
@@ -93,18 +90,18 @@ public class CourseServiceTest {
   }
 
   @Test
-  public void test_update_withNullValue() {
+  void test_update_withNullValue() {
     // when
     Course result = testee.update(null, null);
 
     // then
-    assertThat(result, nullValue());
+    assertThat(result).isNull();
     verify(courseRepository, never()).findById(any());
     verify(courseRepository, never()).save(any());
   }
 
   @Test
-  public void test_update_noCourseId() {
+  void test_update_noCourseId() {
     // given
     UUID uuid = UUID.randomUUID();
     CourseDto courseDto = new CourseDto();
@@ -117,15 +114,15 @@ public class CourseServiceTest {
     Course result = testee.update(null, courseDto);
 
     // then
-    assertThat(result, notNullValue());
-    assertThat(result.getId(), equalTo(uuid));
+    assertThat(result).isNotNull();
+    assertThat(result.getId()).isEqualTo(uuid);
     verify(courseRepository, never()).findById(any());
     verify(courseDtoToCourseMapper).map(courseDto, null);
     verify(courseRepository).save(any());
   }
 
   @Test
-  public void test_create_null() {
+  void test_create_null() {
     // given
     when(courseDtoToCourseMapper.map((CourseDto) null, null)).thenReturn(null);
 
@@ -133,11 +130,11 @@ public class CourseServiceTest {
     Course result = testee.create(null);
 
     // then
-    assertThat(result, nullValue());
+    assertThat(result).isNull();
   }
 
   @Test
-  public void test_create() {
+  void test_create() {
     // given
     CourseDto dto = new CourseDto();
     Course expectedResult = new Course();
@@ -148,13 +145,12 @@ public class CourseServiceTest {
     Course result = testee.create(dto);
 
     // then
-    assertThat(result, notNullValue());
-    assertThat(result, equalTo(expectedResult));
+    assertThat(result).isNotNull().isEqualTo(expectedResult);
     verify(courseDtoToCourseMapper).map(eq(dto), isNull());
   }
 
   @Test
-  public void test_createEmptyCourse() {
+  void test_createEmptyCourse() {
     // given
     final User instructor = new User();
     instructor.setFirstName("Testuser");
@@ -163,20 +159,20 @@ public class CourseServiceTest {
     Course result = testee.createEmptyCourse(instructor);
 
     // then
-    assertThat(result, notNullValue());
+    assertThat(result).isNotNull();
     User resultInstructor = result.getInstructor();
-    assertThat(resultInstructor, notNullValue());
-    assertThat(resultInstructor.getFirstName(), equalTo("Testuser"));
-    assertThat(result.getMinutes(), equalTo(72));
-    assertThat(result.getMaxParticipants(), equalTo(7));
+    assertThat(resultInstructor).isNotNull();
+    assertThat(resultInstructor.getFirstName()).isEqualTo("Testuser");
+    assertThat(result.getMinutes()).isEqualTo(72);
+    assertThat(result.getMaxParticipants()).isEqualTo(7);
     LocalDateTime start = result.getStart();
-    assertThat(start, notNullValue());
-    assertThat(start.getMinute(), equalTo(0));
-    assertThat(result.isCanceled(), equalTo(false));
+    assertThat(start).isNotNull();
+    assertThat(start.getMinute()).isEqualTo(0);
+    assertThat(result.isCanceled()).isFalse();
   }
 
   @Test
-  public void shouldCallRepositoryDeleteOnDelete() {
+  void shouldCallRepositoryDeleteOnDelete() {
     // given
     UUID courseId = UUID.randomUUID();
 
@@ -188,17 +184,14 @@ public class CourseServiceTest {
   }
 
   @Test
-  public void shouldThrowIllegalArgumentExceptionWhenDeletingInvalidCourseId() {
-    // expected excpetion
-    expectedException.expect(IllegalArgumentException.class);
+  void shouldThrowIllegalArgumentExceptionWhenDeletingInvalidCourseId() {
+    assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> {
+      // given
+      doThrow(new IllegalArgumentException()).when(courseRepository).deleteById(any());
 
-    // given
-    doThrow(new IllegalArgumentException()).when(courseRepository).deleteById(any());
-
-    // when
-    testee.delete(UUID.randomUUID());
-
-    // then see expected excpetion
+      // when
+      testee.delete(UUID.randomUUID());
+    });
   }
 
 }

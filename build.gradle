@@ -47,15 +47,8 @@ testSets {
   integrationTest
 }
 
-componentTest {
-  useJUnitPlatform()
-}
-
-integrationTest {
-  useJUnitPlatform()
-}
-
 tasks.withType(Test) {
+  useJUnitPlatform()
   testLogging {
     events "passed", "skipped", "failed"
   }
@@ -89,7 +82,7 @@ dependencies {
 
   componentTestCompile sourceSets.main.output
   componentTestCompile sourceSets.test.output
-  componentTestImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.23.0'
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.23.0'
 
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output

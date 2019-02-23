@@ -3,22 +3,19 @@ package freya.fitness.service;
 import freya.fitness.api.dto.ContactDto;
 import freya.fitness.proxy.CreateEmail;
 import freya.fitness.proxy.EmailProxy;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ContactServiceTest {
+@ExtendWith({MockitoExtension.class})
+class ContactServiceTest {
 
   @InjectMocks
   private ContactService testee;
@@ -26,16 +23,13 @@ public class ContactServiceTest {
   @Mock
   private EmailProxy emailProxy;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     ReflectionTestUtils.setField(testee, "emailTo", "testee@mail.com");
   }
 
   @Test
-  public void shouldSendFormattedMail() {
+  void shouldSendFormattedMail() {
     // given
     final ContactDto contactRequest = new ContactDto();
     contactRequest.setFirstname("Max");

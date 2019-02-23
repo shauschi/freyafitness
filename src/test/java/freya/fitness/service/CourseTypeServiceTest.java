@@ -2,22 +2,20 @@ package freya.fitness.service;
 
 import freya.fitness.domain.jpa.CourseType;
 import freya.fitness.repository.jpa.CourseTypeRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CourseTypeServiceTest {
+@ExtendWith({MockitoExtension.class})
+class CourseTypeServiceTest {
 
   @InjectMocks
   private CourseTypeService testee;
@@ -26,7 +24,7 @@ public class CourseTypeServiceTest {
   private CourseTypeRepository courseTypeRepository;
 
   @Test
-  public void test_getValidCourseTypes() {
+  void test_getValidCourseTypes() {
     CourseType course1 = new CourseType();
     course1.setName("Test 1");
     CourseType course2 = new CourseType();
@@ -37,9 +35,9 @@ public class CourseTypeServiceTest {
 
     List<CourseType> result = testee.getValidCourseTypes();
 
-    assertThat(result.size(), equalTo(2));
-    assertThat(result.get(0).getName(), equalTo("Test 1"));
-    assertThat(result.get(1).getName(), equalTo("Test 2"));
+    assertThat(result).hasSize(2)
+        .extracting(CourseType::getName)
+        .containsExactly("Test 1", "Test 2");
   }
 
 }

@@ -13,14 +13,14 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -29,19 +29,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UserServiceTest {
+@ExtendWith({MockitoExtension.class})
+@MockitoSettings(strictness = Strictness.LENIENT)
+class UserServiceTest {
 
   @InjectMocks
   private UserService testee;
@@ -58,15 +56,12 @@ public class UserServiceTest {
   @Mock
   private EmailProxy emailProxy;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
   private User user;
   private Role roleUser;
   private UUID uuid = UUID.randomUUID();
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     user = new User();
     user.setId(uuid);
     user.setFirstName("Test");
@@ -85,57 +80,56 @@ public class UserServiceTest {
   }
 
   @Test
-  public void test_getUser_userNotFound_idIsNull() throws UserNotFoundException {
-    expectedException.expect(UserNotFoundException.class);
-
-    testee.getUser(null);
+  void test_getUser_userNotFound_idIsNull() {
+    assertThatExceptionOfType(UserNotFoundException.class).isThrownBy(
+        () -> testee.getUser(null)
+    );
   }
 
   @Test
-  public void test_getUser_userNotFound() throws UserNotFoundException {
-    expectedException.expect(UserNotFoundException.class);
-
-    testee.getUser(UUID.randomUUID());
+  void test_getUser_userNotFound() {
+    assertThatExceptionOfType(UserNotFoundException.class).isThrownBy(
+        () -> testee.getUser(UUID.randomUUID())
+    );
   }
 
   @Test
-  public void test_getUser() throws UserNotFoundException {
+  void test_getUser() {
     User result = testee.getUser(uuid);
 
-    assertThat(result, equalTo(user));
+    assertThat(result).isEqualTo(user);
   }
 
   @Test
-  public void test_getUserByEmail_userNotFound_emailIsNull() throws UserNotFoundException {
-    expectedException.expect(UserNotFoundException.class);
-
-    testee.getUserByEmail(null);
+  void test_getUserByEmail_userNotFound_emailIsNull() {
+    assertThatExceptionOfType(UserNotFoundException.class).isThrownBy(
+        () -> testee.getUserByEmail(null)
+    );
   }
 
   @Test
-  public void test_getUserByEmail_userNotFound() throws UserNotFoundException {
-    expectedException.expect(UserNotFoundException.class);
-
-    testee.getUserByEmail("invalid@test.mail");
+  void test_getUserByEmail_userNotFound() {
+    assertThatExceptionOfType(UserNotFoundException.class).isThrownBy(
+        () -> testee.getUserByEmail("invalid@test.mail")
+    );
   }
 
   @Test
-  public void test_getUserByEmail() throws UserNotFoundException {
+  void test_getUserByEmail() throws UserNotFoundException {
     User result = testee.getUserByEmail("test.user@test.mail");
 
-    assertThat(result, equalTo(user));
+    assertThat(result).isEqualTo(user);
   }
 
   @Test
-  public void test_createAccount_userAllreadyExists()
-      throws UserAllreadyExistsException, RoleNotFoundException {
-    expectedException.expect(UserAllreadyExistsException.class);
-
-    testee.createAccount(createAccountDto("any", "any", user.getEmail(), "any"));
+  void test_createAccount_userAllreadyExists() {
+    assertThatExceptionOfType(UserAllreadyExistsException.class).isThrownBy(
+        () -> testee.createAccount(createAccountDto("any", "any", user.getEmail(), "any"))
+    );
   }
 
   @Test
-  public void test_createAccount()
+  void test_createAccount()
       throws UserAllreadyExistsException, RoleNotFoundException {
     final User newUser = new User();
     newUser.setFirstName("New");
@@ -148,41 +142,41 @@ public class UserServiceTest {
         newUser.getFirstName(), newUser.getFamilyName(),
         newUser.getEmail(), newUser.getPassword()));
 
-    assertThat(result.getFirstName(), equalTo(newUser.getFirstName()));
-    assertThat(result.getFamilyName(), equalTo(newUser.getFamilyName()));
-    assertThat(result.getEmail(), equalTo(newUser.getEmail()));
-    assertThat(result.getPassword(), equalTo(newUser.getPassword()));
+    assertThat(result.getFirstName()).isEqualTo(newUser.getFirstName());
+    assertThat(result.getFamilyName()).isEqualTo(newUser.getFamilyName());
+    assertThat(result.getEmail()).isEqualTo(newUser.getEmail());
+    assertThat(result.getPassword()).isEqualTo(newUser.getPassword());
     Set<Role> roles = result.getRoles();
-    assertThat(roles, hasSize(1));
-    assertThat(roles.contains(roleUser), equalTo(true));
+    assertThat(roles).hasSize(1)
+        .containsExactly(roleUser);
 
     // Beim Speichern wurde die Rolle ergänzt
     newUser.setRoles(roles);
-
     verify(userRepository).save(argThat(user -> user.getFirstName().equals(newUser.getFirstName())));
   }
 
   @Test
-  public void test_saveUser() {
+  void test_saveUser() {
     final User user = new User();
     when(userRepository.save(any())).thenAnswer(invocation -> invocation.getArguments()[0]);
 
     User result = testee.saveUser(user);
 
     verify(userRepository).save(user);
-    assertThat(result, equalTo(user));
+    assertThat(result).isEqualTo(user);
   }
 
   @Test
-  public void test_loadUserByUsername_userNotFound() {
-    expectedException.expect(UsernameNotFoundException.class);
+  void test_loadUserByUsername_userNotFound() {
     when(userRepository.findByEmailIgnoreCase(any())).thenReturn(Optional.empty());
 
-    testee.loadUserByUsername("any@test.mail");
+    assertThatExceptionOfType(UsernameNotFoundException.class).isThrownBy(
+        () -> testee.loadUserByUsername("any@test.mail")
+    );
   }
 
   @Test
-  public void test_loadUserByUsername() {
+  void test_loadUserByUsername() {
     final String username = "any@test.mail";
     final User user = new User();
     user.setEmail(username);
@@ -193,14 +187,14 @@ public class UserServiceTest {
     UserDetails result = testee.loadUserByUsername(username);
 
     verify(userRepository).findByEmailIgnoreCase(username);
-    assertThat(result, notNullValue());
-    assertThat(result.getUsername(), equalTo(username));
-    assertThat(result.getPassword(), equalTo(user.getPassword()));
-    assertThat(result.getAuthorities().size(), equalTo(1));
+    assertThat(result).isNotNull();
+    assertThat(result.getUsername()).isEqualTo(username);
+    assertThat(result.getPassword()).isEqualTo(user.getPassword());
+    assertThat(result.getAuthorities()).hasSize(1);
   }
 
   @Test
-  public void test_getCurrentUser_anonymousUser() {
+  void test_getCurrentUser_anonymousUser() {
     Authentication auth = mock(Authentication.class);
     when(auth.getPrincipal()).thenReturn("anonymousUser");
     SecurityContext mockContext = mock(SecurityContext.class);
@@ -209,11 +203,11 @@ public class UserServiceTest {
 
     User result = testee.getCurrentUser();
 
-    assertThat(result, nullValue());
+    assertThat(result).isNull();
   }
 
   @Test
-  public void test_getCurrentUser() {
+  void test_getCurrentUser() {
     org.springframework.security.core.userdetails.User principal =
         new org.springframework.security.core.userdetails.User(
             user.getEmail(),
@@ -227,7 +221,7 @@ public class UserServiceTest {
 
     User result = testee.getCurrentUser();
 
-    assertThat(result, equalTo(user));
+    assertThat(result).isEqualTo(user);
   }
 
   private CreateAccountDto createAccountDto(

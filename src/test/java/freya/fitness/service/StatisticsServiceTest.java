@@ -16,28 +16,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.access.AccessDeniedException;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class StatisticsServiceTest {
+@ExtendWith({MockitoExtension.class})
+@MockitoSettings(strictness = Strictness.LENIENT)
+class StatisticsServiceTest {
 
   private static final UUID CURRENT_USER_ID = UUID.fromString("8cb8f839-ad40-481f-b1b5-d4d6ff646d6c");
   private static final UUID USER_ID = UUID.fromString("8ee055a8-eb9a-4802-9cbc-1ec354bee77c");
@@ -62,11 +62,8 @@ public class StatisticsServiceTest {
   @Mock
   private UserPreferencesService userPreferencesService;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     COURSE_TYPE_ID.put(EASY, EASY_ID);
     COURSE_TYPE_ID.put(MED, MED_ID);
 
@@ -88,35 +85,25 @@ public class StatisticsServiceTest {
   }
 
   @Test
-  public void shouldDenyAccessWhenNoUserIsSignedIn() {
-    expectedException.expect(AccessDeniedException.class);
-
-    // given
+  void shouldDenyAccessWhenNoUserIsSignedIn() {
     when(userService.getCurrentUser()).thenReturn(null);
 
-    // when
-    testee.getUserStats(USER_ID);
-
-    // then
-    // see expected exception
+    assertThatExceptionOfType(AccessDeniedException.class).isThrownBy(
+        () -> testee.getUserStats(USER_ID)
+    );
   }
 
   @Test
-  public void shouldDenyAccessWhenUserWantsPrivacy() {
-    expectedException.expect(AccessDeniedException.class);
-
-    // given
+  void shouldDenyAccessWhenUserWantsPrivacy() {
     user.setPreferences(Collections.emptySet());
 
-    // when
-    testee.getUserStats(USER_ID);
-
-    // then
-    // see expected exception
+    assertThatExceptionOfType(AccessDeniedException.class).isThrownBy(
+        () -> testee.getUserStats(USER_ID)
+    );
   }
 
   @Test
-  public void shouldNotCheckForPrivacyWhenUserIsCurrentUser() {
+  void shouldNotCheckForPrivacyWhenUserIsCurrentUser() {
     // given
     user.setPreferences(Collections.emptySet());
 
@@ -128,19 +115,19 @@ public class StatisticsServiceTest {
   }
 
   @Test
-  public void shouldReturnEmptyStatisticsWhenUserDidNotAttendAnyCourses() {
+  void shouldReturnEmptyStatisticsWhenUserDidNotAttendAnyCourses() {
 
     // when
     final StatisticDto result = testee.getUserStats(USER_ID);
 
     // then
-    assertThat(result, notNullValue());
-    assertThat(result.getUserId(), is(USER_ID));
-    assertThat(result.getParticipationsPerMonth(), notNullValue());
+    assertThat(result).isNotNull();
+    assertThat(result.getUserId()).isEqualTo(USER_ID);
+    assertThat(result.getParticipationsPerMonth()).isNotNull();
   }
 
   @Test
-  public void shouldMapStatistics() {
+  void shouldMapStatistics() {
     final LocalDateTime now = LocalDateTime.now().minusMonths(1);
     final int year = now.getYear();
     final Month month = now.getMonth();
@@ -168,24 +155,18 @@ public class StatisticsServiceTest {
     final StatisticDto result = testee.getUserStats(USER_ID);
 
     // then
-    assertThat(result, notNullValue());
-    assertThat(result.getUserId(), is(USER_ID));
-    assertThat(result.getParticipationsPerType().get(EASY_ID), is(5L));
+    assertThat(result).isNotNull();
+    assertThat(result.getUserId()).isEqualTo(USER_ID);
+    assertThat(result.getParticipationsPerType().get(EASY_ID)).isEqualTo(5L);
 
     final Map<LocalDate, Long> participationsPerMonth = result.getParticipationsPerMonth();
-    assertThat(participationsPerMonth, notNullValue());
-    assertThat(participationsPerMonth.size(), is(5));
+    assertThat(participationsPerMonth).hasSize(5);
     final LocalDate begOfMonth = LocalDate.of(year, month, 1);
-    assertThat(
-        participationsPerMonth.get(begOfMonth.minusMonths(4)), is(3L));
-    assertThat(
-        participationsPerMonth.get(begOfMonth.minusMonths(3)), is(1L));
-    assertThat(
-        participationsPerMonth.get(begOfMonth.minusMonths(2)), is(2L));
-    assertThat(
-        participationsPerMonth.get(begOfMonth.minusMonths(1)), is(0L));
-    assertThat(
-        participationsPerMonth.get(begOfMonth), is(4L));
+    assertThat(participationsPerMonth.get(begOfMonth.minusMonths(4))).isEqualTo(3L);
+    assertThat(participationsPerMonth.get(begOfMonth.minusMonths(3))).isEqualTo(1L);
+    assertThat(participationsPerMonth.get(begOfMonth.minusMonths(2))).isEqualTo(2L);
+    assertThat(participationsPerMonth.get(begOfMonth.minusMonths(1))).isEqualTo(0L);
+    assertThat(participationsPerMonth.get(begOfMonth)).isEqualTo(4L);
   }
 
   private Participation givenParticipation(final LocalDate courseStart, final String courseType) {
