@@ -77,9 +77,7 @@ def mapBranchToFrontendUrl(branch) {
 }
 
 pipeline {
-  agent {
-    docker { image 'openjdk:8-jdk-alpine' }
-  }
+  agent any
   options {
     skipDefaultCheckout()
   }
@@ -167,10 +165,10 @@ pipeline {
 
   post {
     success {
-      slackSend(color: "#BDFFC3", message: "${ENV_NAME} Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>")
+      slackSend(color: "#BDFFC3", message: "${APP_NAME} ${ENV_NAME} Started docker container successfully - ${env.BRANCH} <https://freya.fitness:${APP_PORT_S}|freya.fitness>")
     }
     failure {
-      slackSend(color: "#FF9FA1", message: "${ENV_NAME} build failed - ${env.BRANCH} ${env.BUILD_NUMBER}")
+      slackSend(color: "#FF9FA1", message: "${APP_NAME} ${ENV_NAME} build failed - ${env.BRANCH} ${env.BUILD_NUMBER}")
     }
   }
 }
