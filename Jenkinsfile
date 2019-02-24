@@ -77,7 +77,9 @@ def mapBranchToFrontendUrl(branch) {
 }
 
 pipeline {
-  agent none
+  agent {
+    docker { image 'openjdk:8-jdk-alpine' }
+  }
   options {
     skipDefaultCheckout()
   }
@@ -97,44 +99,25 @@ pipeline {
   }
   stages {
     stage('checkout') {
-      agent any
-      steps {
-        checkout scm
-      }
+      steps { checkout scm }
     }
 
     stage('build application') {
-      agent {
-        docker { image 'openjdk:8-jdk-alpine' }
-      }
-      steps {
-        sh './gradlew clean build -x test'
-      }
+      steps { sh './gradlew clean build -x test' }
     }
 
-    stage('unit tests') {
-      agent {
-        docker { image 'openjdk:8-jdk-alpine' }
-      }
-      steps {
-        sh './gradlew test'
-      }
-    }
-
-    stage('component tests') {
-      agent {
-        docker { image 'openjdk:8-jdk-alpine' }
-      }
-      steps {
-        sh './gradlew componentTest'
+    stage('tests') {
+      parallel {
+        stage('unit tests') {
+          steps { sh './gradlew test' }
+        }
+        stage('component tests') {
+          steps { sh './gradlew componentTest' }
+        }
       }
     }
 
     stage('build jar') {
-      agent {
-        docker { image 'openjdk:8-jdk-alpine' }
-      }
-
       steps {
         withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
                                                keystoreVariable: 'SSL_CERTIFICATE', \
@@ -147,7 +130,6 @@ pipeline {
     }
 
     stage('containerize') {
-      agent any
       steps {
         sh 'docker build . -f Dockerfile -t ${APP_NAME}'
         sh 'docker tag ${APP_NAME} localhost:5000/${DOCKER_IMAGE}'
@@ -156,7 +138,6 @@ pipeline {
     }
 
     stage('run container') {
-      agent any
       steps {
         withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
                                                keystoreVariable: 'SSL_CERTIFICATE', \
