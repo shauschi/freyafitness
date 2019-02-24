@@ -104,15 +104,12 @@ pipeline {
       steps { sh './gradlew clean build -x test' }
     }
 
-    stage('tests') {
-      parallel {
-        stage('unit tests') {
-          steps { sh './gradlew test' }
-        }
-        stage('component tests') {
-          steps { sh './gradlew componentTest' }
-        }
-      }
+    stage('unit tests') {
+      steps { sh './gradlew test' }
+    }
+
+    stage('component tests') {
+      steps { sh './gradlew componentTest' }
     }
 
     stage('build jar') {
