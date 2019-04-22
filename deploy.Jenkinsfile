@@ -32,7 +32,7 @@ pipeline {
     }
     stage('run app') {
       steps {
-        withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
+        withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificate', \
                                                keystoreVariable: 'SSL_CERTIFICATE', \
                                                passwordVariable: 'SSL_PSW')]) {
           sh '''

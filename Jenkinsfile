@@ -25,7 +25,7 @@ pipeline {
 
     stage('build release candidate') {
       steps {
-        withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificat', \
+        withCredentials(bindings: [certificate(credentialsId: 'freyafitness-ssl-certificate', \
                                                keystoreVariable: 'SSL_CERTIFICATE', \
                                                passwordVariable: 'SSL_PSW')]) {
 
