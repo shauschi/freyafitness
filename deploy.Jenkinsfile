@@ -7,13 +7,12 @@ pipeline {
   parameters {
     choice(name: 'TAG', choices: ['ok', 'rc'], description: 'docker image tag')
     string(name: 'APP_NAME', defaultValue: 'freyafitness', description: 'container name')
-    string(name: 'APP_PORT', defaultValue: '433', description: 'container port')
+    string(name: 'APP_PORT', defaultValue: '80', description: 'container port')
+    string(name: 'APP_PORT_S', defaultValue: '443', description: 'container https port')
   }
   environment {
     SPRING_PROFILES_ACTIVE = "prod"
     DOCKER_REGISTRY = "localhost:5000"
-    APP_PORT = "80"
-    APP_PORT_S = "443"
     DB = credentials('db')
   }
   stages {
