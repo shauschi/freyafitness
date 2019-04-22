@@ -1,0 +1,12 @@
+server:
+  ssl:
+    key-store-password: test
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:freyraum-user
+    username: admin
+    password: admin
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect

@@ -1,0 +1,20 @@
+server:
+  ssl:
+    key-store-password: ${SSL_PSW}
+
+spring:
+  datasource:
+    url: "jdbc:postgresql://93.90.205.170/freyraum-news"
+    username: ${DB_USR}
+    password: ${DB_PSW}
+
+zuul:
+  routes:
+    news:
+      url: http://localhost:7800/news/
+    exercises:
+      url: http://localhost:7800/exercises/
+    frontend:
+      url: http://localhost:3333/
+mail:
+  url: http://freya.fitness:7700

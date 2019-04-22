@@ -1,8 +1,8 @@
 server:
-  port: ${APP_PORT_S:9443}
+  port: 9443
   ssl:
     key-store: classpath:my.p12
-    key-store-password: ${SSL_PSW}
+    key-store-password: test
     key-store-type: PKCS12
     key-alias: freyafitness
   session:
@@ -26,15 +26,11 @@ zuul:
     news:
       sensitiveHeaders:
       path: /news/**
-      url: ${NEWS_URL}/news/
-    exercises:
-      sensitiveHeaders:
-      path: /exercises/**
-      url: ${EXERCISES_URL}/exercises/
+      url: http://localhost:7800/news/
     frontend:
       sensitiveHeaders:
       path: /**
-      url: ${FRONTEND_URL}
+      url: http://localhost:3333
 spring:
   data:
     rest:
@@ -52,9 +48,9 @@ spring:
     serialization:
       write_dates_as_timestamps: false
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USR}
-    password: ${DB_PSW}
+    url: jdbc:postgresql://localhost/freyafitness
+    username: postgres
+    password: postgres
     driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
@@ -73,7 +69,7 @@ course:
     minutes: 60
     maxParticipants: 12
 mail:
-  url: ${MAIL_URL}
+  url: http://freya.fitness:7700
   sender: FreyRaum <admin@freya.fitness>
   develop:
     receiver: develop@freya.fitness
