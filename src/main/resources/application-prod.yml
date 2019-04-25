@@ -11,10 +11,10 @@ spring:
 zuul:
   routes:
     news:
-      url: http://localhost:7800/news/
+      url: http://freya.fitness:7800/news/
     exercises:
-      url: http://localhost:7800/exercises/
+      url: http://freya.fitness:7800/exercises/
     frontend:
-      url: http://localhost:3333/
+      url: http://freya.fitness:3333/
 mail:
   url: http://freya.fitness:7700
