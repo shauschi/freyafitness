@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: "jdbc:postgresql://93.90.205.170/freyraum-news"
+    url: "jdbc:postgresql://93.90.205.170/freyafitness"
     username: ${DB_USR}
     password: ${DB_PSW}
 
