@@ -29,3 +29,5 @@ databaseChangeLog:
         path: db/changelog/011__add_participation_status/
     - includeAll:
         path: db/changelog/012__add_course_type_open_gym/
+    - includeAll:
+        path: db/changelog/013__add_course_type_hyrox_running/
