@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,7 +19,9 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
       + " WHERE p.membership=:membership"
       + " AND (p.participationStatus='SIGNED_IN'"
       + " OR (p.participationStatus='ON_WAITLIST' AND p.course.start>:localDateTime))")
-  Long countParticipationsForMembership(final Membership membership, final LocalDateTime localDateTime);
+  Long countParticipationsForMembership(
+      @Param("membership") final Membership membership,
+      @Param("localDateTime") final LocalDateTime localDateTime);
 
   Long countByMembership(final Membership membership);
 
@@ -31,4 +34,5 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
 
   List<Participation> findByCourseId(final UUID courseId);
 
+  void deleteByCourseId(final UUID courseId);
 }

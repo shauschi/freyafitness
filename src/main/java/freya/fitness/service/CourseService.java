@@ -5,6 +5,7 @@ import freya.fitness.api.mapping.CourseMapper;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.jpa.CourseRepository;
+import freya.fitness.repository.jpa.ParticipationRepository;
 import freya.fitness.utils.exception.CourseNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,13 +30,16 @@ public class CourseService {
 
   private final CourseRepository courseRepository;
   private final CourseMapper courseDtoToCourseMapper;
+  private final ParticipationRepository participationRepository;
 
   @Autowired
   public CourseService(
       final CourseRepository courseRepository,
-      final CourseMapper courseDtoToCourseMapper) {
+      final CourseMapper courseDtoToCourseMapper,
+      final ParticipationRepository participationRepository) {
     this.courseRepository = courseRepository;
     this.courseDtoToCourseMapper = courseDtoToCourseMapper;
+    this.participationRepository = participationRepository;
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -64,7 +68,9 @@ public class CourseService {
     return save(course);
   }
 
+  @Transactional
   public void delete(final UUID courseId) {
+    participationRepository.deleteByCourseId(courseId);
     courseRepository.deleteById(courseId);
   }
 
