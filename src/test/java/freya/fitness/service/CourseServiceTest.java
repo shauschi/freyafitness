@@ -5,6 +5,7 @@ import freya.fitness.api.mapping.CourseMapper;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.User;
 import freya.fitness.repository.jpa.CourseRepository;
+import freya.fitness.repository.jpa.ParticipationRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,6 +42,9 @@ class CourseServiceTest {
 
   @Mock
   private CourseRepository courseRepository;
+
+  @Mock
+  private ParticipationRepository participationRepository;
 
   @Mock
   private CourseMapper courseDtoToCourseMapper;
