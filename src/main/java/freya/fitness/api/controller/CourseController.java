@@ -2,10 +2,13 @@ package freya.fitness.api.controller;
 
 import freya.fitness.api.dto.CourseDto;
 import freya.fitness.api.dto.MessageDto;
+import freya.fitness.api.dto.ReasonDto;
 import freya.fitness.api.mapping.CourseMapper;
 import freya.fitness.domain.jpa.Course;
 import freya.fitness.domain.jpa.Membership;
 import freya.fitness.domain.jpa.User;
+import freya.fitness.proxy.CreateEmail;
+import freya.fitness.proxy.EmailProxy;
 import freya.fitness.service.CourseService;
 import freya.fitness.service.MembershipService;
 import freya.fitness.service.ParticipationService;
@@ -17,11 +20,14 @@ import freya.fitness.utils.exception.UserNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +47,10 @@ public class CourseController {
   private final ParticipationService participationService;
   private final MembershipService membershipService;
   private final CourseMapper courseMapper;
+  private final EmailProxy emailProxy;
+
+  @Value("${mail.contact.receiver}")
+  private String emailTo;
 
   @Autowired
   public CourseController(
@@ -48,12 +58,14 @@ public class CourseController {
       final UserService userService,
       final ParticipationService participationService,
       final MembershipService membershipService,
-      final CourseMapper courseMapper) {
+      final CourseMapper courseMapper,
+      final EmailProxy emailProxy) {
     this.courseService = courseService;
     this.userService = userService;
     this.participationService = participationService;
     this.membershipService = membershipService;
     this.courseMapper = courseMapper;
+    this.emailProxy = emailProxy;
   }
 
   @PreAuthorize("hasAnyAuthority('USER', 'TRAINER', 'ADMIN')")
@@ -129,7 +141,9 @@ public class CourseController {
 
   @PreAuthorize("hasAuthority('USER')")
   @PutMapping("{courseId}/signout")
-  public CourseDto signOut(@PathVariable("courseId") final UUID courseId) throws ActionNotAllowedException {
+  public CourseDto signOut(
+      @PathVariable("courseId") final UUID courseId,
+      @RequestBody final ReasonDto reason) throws ActionNotAllowedException {
     final User user = userService.getCurrentUser();
     final Course course = courseService.getCourse(courseId);
     if (course.getStart().isBefore(LocalDateTime.now(ZoneId.of("Europe/Paris")).plusHours(3))) {
@@ -137,7 +151,30 @@ public class CourseController {
           "Abmeldungen sind nur bis 3 Stunden vor Kursstart erlaubt.");
     }
     final Course updatedCourse = participationService.removeUserFromCourse(user.getId(), courseId);
+    informFreyaAboutSignOut(user, course, reason);
     return courseMapper.map(updatedCourse);
+  }
+
+  private void informFreyaAboutSignOut(final User user, final Course course, final ReasonDto reason) {
+    HashMap<String, String> params = new HashMap<>();
+    params.put("course_start_date", course.getStart().format(DateTimeFormatter.ofPattern("DD.MM.YYYY")));
+    params.put("course_start_time", course.getStart().format(DateTimeFormatter.ofPattern("HH:mm")));
+    params.put("course_type", course.getType().getName());
+    params.put("user_firstname", user.getFirstName());
+    params.put("user_lastname", user.getFamilyName());
+    params.put("user_mail", user.getEmail());
+    params.put("reason", reason.getReason());
+    try {
+      final CreateEmail mail = new CreateEmail(
+          "CANCELLATION",
+          params,
+          Collections.singletonList(emailTo),
+          Collections.emptyList(),
+          Collections.emptyList());
+      emailProxy.createEmail(mail);
+    } catch (Exception e) {
+      // not good, but not too bad also
+    }
   }
 
   @PreAuthorize("hasAnyAuthority('TRAINER', 'ADMIN')")
