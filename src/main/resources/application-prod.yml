@@ -3,6 +3,8 @@ server:
     key-store-password: ${SSL_PSW}
 
 spring:
+  jpa:
+    show-sql: false
   datasource:
     url: "jdbc:postgresql://93.90.205.170/freyafitness"
     username: ${DB_USR}
