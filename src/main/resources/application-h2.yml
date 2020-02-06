@@ -1,6 +1,3 @@
-server:
-  ssl:
-    key-store-password: test
 
 spring:
   datasource:

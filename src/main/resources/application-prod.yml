@@ -1,6 +1,5 @@
 server:
-  ssl:
-    key-store-password: ${SSL_PSW}
+  port: 80
 
 spring:
   jpa:
@@ -10,13 +9,5 @@ spring:
     username: ${DB_USR}
     password: ${DB_PSW}
 
-zuul:
-  routes:
-    news:
-      url: http://freya.fitness:7800/news/
-    exercises:
-      url: http://freya.fitness:7800/exercises/
-    frontend:
-      url: http://freya.fitness:3333/
 mail:
   url: http://freya.fitness:7700

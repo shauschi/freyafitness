@@ -1,49 +1,14 @@
 server:
-  port: 9443
-  ssl:
-    key-store: classpath:my.p12
-    key-store-password: test
-    key-store-type: PKCS12
-    key-alias: freyafitness
+  port: 8080
   session:
     cookie:
       name: UISESSION
-zuul:
-  ignoredPatterns:
-    - /oauth/**
-    - /user/**
-    - /contact/**
-    - /courses/**
-    - /coursetypes/**
-    - /memberships/**
-    - /membershiptypes/**
-    - /participations/**
-    - /password/**
-    - /preferences/**
-    - /profile/**
-    - /statistics/**
-  routes:
-    news:
-      sensitiveHeaders:
-      path: /news/**
-      url: http://localhost:7800/news/
-    frontend:
-      sensitiveHeaders:
-      path: /**
-      url: http://localhost:3333
+
 spring:
-  data:
-    rest:
-      base-path: /api
   servlet:
     multipart:
       max-file-size: 10Mb
       max-request-size: 10Mb
-  thymeleaf:
-    check-template: true
-    check-template-location: true
-    prefix: classpath:/static/
-    cache: false
   jackson:
     serialization:
       write_dates_as_timestamps: false
@@ -64,10 +29,12 @@ spring:
           use_jdbc_metadata_defaults: false
     # Because detection is disabled you have to set correct dialect by hand.
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
 course:
   create:
     minutes: 60
     maxParticipants: 12
+
 mail:
   url: http://localhost:7700
   sender: FreyRaum <admin@freya.fitness>
