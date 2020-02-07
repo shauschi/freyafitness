@@ -18,7 +18,7 @@ pipeline {
         message "Confirm update"
         ok "update container"
       }
-      steps { sh 'docker pull ${DOCKER_REGISTRY}/${APP_NAME}' }
+      steps { sh 'docker pull ${DOCKER_REGISTRY}/${APP_NAME}:ok' }
     }
 
     stage('stop and remove app') {
