@@ -22,8 +22,10 @@ pipeline {
     }
 
     stage('stop and remove app') {
-      steps { sh 'docker stop ${APP_NAME} || true' }
-      steps { sh 'docker rm ${APP_NAME} || true' }
+      steps {
+        sh 'docker stop ${APP_NAME} || true'
+        sh 'docker rm ${APP_NAME} || true'
+      }
     }
 
     stage('run app') {
