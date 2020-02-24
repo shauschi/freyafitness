@@ -1,6 +1,6 @@
 package freya.fitness.proxy;
 
-import freya.fitness.api.dto.MessageDto;
+import freya.fitness.api.common.MessageDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

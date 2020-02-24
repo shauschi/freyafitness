@@ -1,6 +1,6 @@
 package freya.fitness.utils.validator;
 
-import freya.fitness.api.dto.CreateAccountDto;
+import freya.fitness.api.user.CreateAccountDto;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

@@ -1,9 +1,9 @@
 package freya.fitness;
 
-import freya.fitness.domain.jpa.Course;
-import freya.fitness.domain.jpa.Membership;
-import freya.fitness.domain.jpa.MembershipType;
-import freya.fitness.domain.jpa.User;
+import freya.fitness.api.course.Course;
+import freya.fitness.api.membership.Membership;
+import freya.fitness.api.membership.MembershipType;
+import freya.fitness.api.user.User;
 import java.util.Optional;
 import org.mockito.stubbing.Answer;
 

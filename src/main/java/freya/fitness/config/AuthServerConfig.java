@@ -1,6 +1,6 @@
 package freya.fitness.config;
 
-import freya.fitness.service.UserService;
+import freya.fitness.api.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
