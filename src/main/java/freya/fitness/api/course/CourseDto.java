@@ -30,5 +30,5 @@ public class CourseDto {
   private Integer maxParticipants;
   private boolean canceled;
   private List<ProfileDto> attendees;
-
+  private String text;
 }

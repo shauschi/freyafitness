@@ -53,6 +53,7 @@ public class CourseMapper {
     course.setInstructor(instructor);
     course.setMaxParticipants(courseDto.getMaxParticipants());
     course.setCanceled(courseDto.isCanceled());
+    course.setText(courseDto.getText());
 
     return course;
   }
@@ -99,6 +100,7 @@ public class CourseMapper {
         .findFirst()
         .orElse(null);
     dto.setParticipationStatus(status);
+    dto.setText(course.getText());
 
     return dto;
   }

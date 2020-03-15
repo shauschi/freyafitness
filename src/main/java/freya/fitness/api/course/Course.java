@@ -50,6 +50,8 @@ public class Course {
 
   private boolean canceled;
 
+  private String text;
+
   @Setter(AccessLevel.NONE)
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
   private Set<Participation> participantions = Collections.emptySet();

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 28
+      author: hauschildt
+      changes:
+      - addColumn:
+          columns:
+          - column:
+              name: text
+              type: varchar(10000)
+              defaultValue: null
+          schemaName: public
+          tableName: course
