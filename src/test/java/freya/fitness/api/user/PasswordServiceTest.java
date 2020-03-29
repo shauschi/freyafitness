@@ -5,7 +5,6 @@ import freya.fitness.proxy.EmailProxy;
 import freya.fitness.utils.exception.InvalidResetTokenException;
 import freya.fitness.utils.exception.UserNotFoundException;
 import java.time.LocalDateTime;
-import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -52,15 +50,12 @@ class PasswordServiceTest {
     when(userService.getUserByEmail(any())).thenThrow(UserNotFoundException.withEmail(""));
 
     assertThatExceptionOfType(UserNotFoundException.class).isThrownBy(
-        () -> testee.processForgotPassword("user@test.mail", mock(HttpServletRequest.class))
+        () -> testee.processForgotPassword("user@test.mail")
     );
   }
 
   @Test
   void test_processForgotPassword() throws UserNotFoundException {
-    HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-    when(mockRequest.getScheme()).thenReturn("http");
-    when(mockRequest.getServerName()).thenReturn("test.server");
     User user = new User();
     user.setEmail("user@test.mail");
     user.setFirstName("Testuser");
@@ -68,7 +63,7 @@ class PasswordServiceTest {
     when(userService.getUserByEmail(user.getEmail())).thenReturn(user);
 
     // when
-    testee.processForgotPassword(user.getEmail(), mockRequest);
+    testee.processForgotPassword(user.getEmail());
 
     // then
     ArgumentMatcher<PasswordResetToken> expectedToken = token ->

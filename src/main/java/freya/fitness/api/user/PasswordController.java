@@ -32,11 +32,10 @@ public class PasswordController {
   }
 
   @PostMapping("/forgot")
-  public MessageDto forgotPassword(
-      @RequestBody @Valid final EmailDto email, final HttpServletRequest request)
+  public MessageDto forgotPassword(@RequestBody @Valid final EmailDto email)
       throws UserNotFoundException {
     final String value = email.getEmail();
-    passwordService.processForgotPassword(value, request);
+    passwordService.processForgotPassword(value);
     return MessageDto.formatted(successMessage, value);
   }
 

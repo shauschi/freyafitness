@@ -49,14 +49,13 @@ public class PasswordService {
     this.passwordResetTokenService = passwordResetTokenService;
   }
 
-  public void processForgotPassword(
-      final String userEmail, final HttpServletRequest request) throws UserNotFoundException {
+  public void processForgotPassword(final String userEmail) throws UserNotFoundException {
     final User user = userService.getUserByEmail(userEmail);
 
     final Map<String, String> params = new HashMap<>();
     params.put("firstname", user.getFirstName());
     params.put("lastname", user.getFamilyName());
-    final String resetUrl = getResetUrl(request, user);
+    final String resetUrl = getResetUrl(user);
     params.put("resetUrl", resetUrl);
     final CreateEmail event = new CreateEmail(
         "RESET_PASSWORD",
@@ -68,13 +67,9 @@ public class PasswordService {
     emailProxy.createEmail(event);
   }
 
-  private String getResetUrl(
-      final HttpServletRequest request,
-      final User user) {
+  private String getResetUrl(final User user)  {
     final PasswordResetToken resetToken = createPasswordResetToken(user);
-    final String port = getPortFromRequest(request);
-    final String appUrl = request.getScheme() + "://" + request.getServerName() + port;
-    return appUrl + "/#/home/m/password/reset/" + resetToken.getToken();
+    return "https://freya.fitness/#/home/m/password/reset/" + resetToken.getToken();
   }
 
   private PasswordResetToken createPasswordResetToken(User user) {
@@ -85,14 +80,6 @@ public class PasswordService {
     resetToken.setExpiryTime(now.plusHours(validityHours));
     passwordResetTokenService.save(resetToken);
     return resetToken;
-  }
-
-  private String getPortFromRequest(HttpServletRequest request) {
-    int serverPort = request.getServerPort();
-    if (80 == serverPort || 443 == serverPort) {
-      return "";
-    }
-    return ":" + serverPort;
   }
 
   public void processResetPassword(final String token, final String newPasswordRaw)
