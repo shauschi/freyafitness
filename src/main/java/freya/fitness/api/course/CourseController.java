@@ -152,7 +152,7 @@ public class CourseController {
 
   private void informFreyaAboutSignOut(final User user, final Course course, final ReasonDto reason) {
     HashMap<String, String> params = new HashMap<>();
-    params.put("course_start_date", course.getStart().format(DateTimeFormatter.ofPattern("DD.MM.YYYY")));
+    params.put("course_start_date", course.getStart().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
     params.put("course_start_time", course.getStart().format(DateTimeFormatter.ofPattern("HH:mm")));
     params.put("course_type", course.getType().getName());
     params.put("user_firstname", user.getFirstName());
